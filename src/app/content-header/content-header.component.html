@@ -1,0 +1,49 @@
+
+<p-sidebar [(visible)]="sidebarVisible" [style]="{width: '250px', padding: '0'}">
+     <app-sidebar ></app-sidebar>
+ </p-sidebar>
+
+
+<div class="top-bar">
+     
+     <div class="left-topbar">
+          <span class="material-symbols-outlined cursor-pointer mr-3 wide-screen-menu" (click)="toggleWideScreen()">
+               menu
+          </span>
+
+          <span class="material-symbols-outlined cursor-pointer mr-3 mobile-screen-menu" (click)="toggleMobileSidebar()">
+               menu
+          </span>
+
+          <div class="p-2">
+               <span class="text-base font-semibold">{{title}}</span>
+          </div>
+     </div>
+
+     <!-- <div class="right-top-bar">
+
+          <p-inputSwitch (onChange)="toggleNightModle()" [(ngModel)]="isNightMode"/>
+
+          <p-avatar 
+               label="{{ transform(user.username) }}" 
+               styleClass="mr-2"  
+               [style]="{ 'background-color': '#dee9fc', color: '#1a2551' , 'text-transform': 'capitalize', height: '35px', width: '35px'}" 
+               shape="circle" 
+          />
+
+          <span class="detail">
+               <span class="name">
+                    {{ user.username }}
+               </span>
+
+               <span class="department">
+                    {{ getUserModule() }}
+               </span>
+          </span>
+
+          <div class="flex align-items-center ml-2">
+               <i class="pi pi-angle-down"></i>
+          </div>
+          
+     </div> -->
+</div>

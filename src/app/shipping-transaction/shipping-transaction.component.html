@@ -1,0 +1,245 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- ==== TITLE ==== -->
+<h1 class="title">Shipping Transaction</h1>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Transaction</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div>
+
+
+<!-- ===== TABLE ====== -->
+<div class="table">
+    <p-table #dt1 [value]="shippingTransaction" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial']">
+      <ng-template pTemplate="header">
+          <tr class="thead">
+              <th>SPSIC Number</th>
+              <th>Validity</th>
+              <th>BL Number</th>
+              <th>Shipping Line</th>
+              <th>Container Type</th>
+              <th>No Of Container</th>
+              <th>Supplier</th>
+              <th>Raw Materials</th>
+              <th>Port Of Discharge</th>
+              <th>ETD</th>
+              <th>ETA</th>
+              <th>Document Status</th>
+              <th>Date Document Received</th>
+              <th>Broker</th>
+              <th>Import Clearance Bai</th>
+              <th>Import Clearance BPI</th>
+              <th>Bank</th>
+              <th>Availability</th>
+              <th>Pickup</th>
+              <th>Shipment Period</th>
+              <th>Actions</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr>
+              <td data-title="SPSIC Number">{{ row.SPSICNumber }}</td>
+              <td data-title="Validity">{{ row.Validity }}</td>
+              <td data-title="BL Number">{{ row.BLNumber }}</td>
+              <td data-title="Shipping Line">{{ row.ShippingLine }}</td>
+              <td data-title="Container Type">{{ row.Container }}</td>
+              <td data-title="No Of Container">{{ row.NoOfContainer }}</td>
+              <td data-title="Supplier">{{ row.Supplier }}</td>
+              <td data-title="Raw Materials">{{ row.RawMaterial }}</td>
+              <td data-title="Port Of Discharge">{{ row.PortOfDischargeID }}</td>
+              <td data-title="Estimated Time Departure">{{ row.EstimatedTimeDeparture.date | date: 'MM/dd/yyyy' }}</td>
+              <td data-title="Estimated Time Arrival">{{ row.EstimatedTimeArrival.date | date: 'MM/dd/yyyy' }}</td>
+              <td data-title="Document Status">{{ row.DocumentStatus }}</td>
+              <td data-title="DateDocumentReceived">{{ row.DateDocumentReceived.date  | date: 'MM/dd/yyyy'}}</td>
+              <td data-title="Broker">{{ row.Broker }}</td>
+              <td data-title="Import Clearance Bai Date">{{ row.ImportClearanceBaiDate.date | date: 'MM/dd/yyyy' }}</td>
+              <td data-title="Import Clearance BPI Date">{{ row.ImportClearanceBPIDate.date | date: 'MM/dd/yyyy' }}</td>
+              <td data-title="Bank">{{ row.BankID }}</td>
+              <td data-title="Bank">{{ row.AvailabilityDate.date | date: 'MM/dd/yyyy' }}</td>
+              <td data-title="Pickup Date">{{ row.PickupDate.date | date: 'MM/dd/yyyy' }}</td>
+              <td data-title="Shipment Period">{{ row.ShipmentPeriod }}</td>
+              <td data-title="Action">
+                <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round"><i class='bx bx-trash' ></i></button>
+              </td>
+          </tr>
+      </ng-template>
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+</div>
+
+
+<!-- ======= MODAL FORM ======== -->
+<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="shippingTransactionForm" class="p-fluid" (ngSubmit)="onSubmit()" >  
+  
+      <div class="grid">
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >SPSIC Number</label>
+                <input pInputText formControlName="SPSICNumber" autocomplete="off" class="input">
+            </div>
+        </div>
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Validity</label>
+                <input pInputText formControlName="Validity" autocomplete="off" class="input">
+            </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold" >BL Number</label>
+        <input pInputText formControlName="BLNumber" autocomplete="off" class="input">
+      </div>
+
+      <div class="field">
+        <label class="font-semibold" >Shipping Line</label>
+        <div class="card flex justify-content-center">
+            <p-dropdown [options]="shippingLine" formControlName="ShippingLineID" optionLabel="ShippingLine" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Shipping Line"></p-dropdown>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Container Type</label>
+                <div class="card flex justify-content-center">
+                    <p-dropdown [options]="containerType" formControlName="ContainerTypeID" optionLabel="Container" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Container Type"></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >No Of Container</label>
+                <input pInputText formControlName="NoOfContainer" autocomplete="off" class="input">
+            </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Supplier</label>
+                <div class="card flex justify-content-center">
+                    <p-dropdown [options]="supplier" formControlName="SupplierID" optionLabel="Supplier" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Supplier"></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Raw Material</label>
+                <div class="card flex justify-content-center">
+                    <p-dropdown [options]="rawMaterial" formControlName="RawMaterialID" optionLabel="RawMaterial" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Raw Material"></p-dropdown>
+                </div>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="field">
+        <label class="font-semibold" >Port Of Discharge</label>
+        <input pInputText formControlName="PortOfDischargeID" autocomplete="off" class="input">
+      </div>
+
+      <div class="grid">
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold">ETD</label>
+                <p-calendar formControlName="EstimatedTimeDeparture" [showIcon]="true" placeholder="mm/dd/yyyy" appendTo="body"></p-calendar>
+            </div>
+        </div>
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >ETA</label>
+                <p-calendar formControlName="EstimatedTimeArrival" [showIcon]="true" placeholder="mm/dd/yyyy"  appendTo="body"></p-calendar>
+            </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold" >Document Status</label>
+        <input pInputText formControlName="DocumentStatus" autocomplete="off" class="input">
+      </div> 
+
+      <div class="field">
+        <label class="font-semibold" > Document Received</label>
+        <p-calendar formControlName="DateDocumentReceived" [showIcon]="true" placeholder="mm/dd/yyyy"  appendTo="body"></p-calendar>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold" >Broker</label>
+        <!-- <input pInputText formControlName="BrokerID" autocomplete="off" class="input"> -->
+        <div class="card flex justify-content-center">
+            <p-dropdown [options]="broker" formControlName="BrokerID" optionLabel="Broker" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Broker"></p-dropdown>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold" >Date Docs Received By Broker</label>
+        <p-calendar formControlName="DateDocsReceivedByBroker" [showIcon]="true" placeholder="mm/dd/yyyy"  appendTo="body"></p-calendar>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Import Clearance Bai </label>
+                <p-calendar formControlName="ImportClearanceBaiDate" [showIcon]="true" placeholder="mm/dd/yyyy"  appendTo="body"></p-calendar>
+            </div>
+        </div>
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Import Clearance BPI </label>
+                <p-calendar formControlName="ImportClearanceBPIDate" [showIcon]="true" placeholder="mm/dd/yyyy"  appendTo="body"></p-calendar>
+              </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Bank</label>
+                <input pInputText formControlName="BankID" autocomplete="off" class="input">
+              </div> 
+        </div>
+
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Availability </label>
+                <p-calendar formControlName="AvailabilityDate" [showIcon]="true" placeholder="mm/dd/yyyy"  appendTo="body"></p-calendar>
+              </div>
+        </div>
+
+        <div class="col">
+            <div class="field">
+                <label class="font-semibold" >Pickup</label>
+                <p-calendar formControlName="PickupDate" [showIcon]="true" placeholder="mm/dd/yyyy" appendTo="body"></p-calendar>
+            </div> 
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold" >Shipment Period</label>
+        <input pInputText formControlName="ShipmentPeriod" autocomplete="off" class="input">
+      </div> 
+
+      <div class="field">
+        <label class="font-semibold" >Remarks</label>
+        <input pInputText formControlName="Remarks" autocomplete="off" class="input">
+      </div>
+
+      <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!shippingTransactionForm.valid"></button>
+  
+    </form>
+  </p-dialog>

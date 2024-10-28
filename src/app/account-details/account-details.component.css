@@ -1,0 +1,43 @@
+span {
+    color: green;
+}
+
+label {
+    color: var(--font-color);
+    font-size: var(--font-sm);
+    font-weight: var(--font-500);
+    margin-bottom: 5px;
+}
+
+input {
+    border: var(--card-border);
+    box-shadow: var(--card-box-shadow);
+    color: var(--font-color);
+    transition: none;
+}
+
+li {
+    cursor: pointer;
+    /* background: var(--first-color); */
+    padding: 2px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* li img {
+    transition: .3s all ease;
+} */
+
+/* li img:hover  { */
+    /* transition: .3s all ease; */
+    /* scale: 1.1; */
+    /* border: 2px solid var(--first-color);
+    border-radius: 50%; */
+/* } */
+
+.selectedAvatar {
+    border: 2px solid var(--first-color);
+    border-radius: 50%;
+}

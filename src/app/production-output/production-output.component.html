@@ -1,0 +1,136 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- ==== TITLE ==== -->
+<!-- <h1 class="title">Production Output</h1> -->
+<app-content-header [title]="'Production Output'"></app-content-header>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
+    <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+    <button pButton pRipple class="p-button-info export__btn" *ngIf="generateReport"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div>
+
+
+<!-- ===== TABLE ====== -->
+<div class="table">
+    <p-table #dt1 [value]="productionOutput" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial']">
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>Plant</th>
+                <th>LineNumber</th>  
+                <th>FinishProduct</th>  
+                <th>Warehouse</th>  
+                <th>WarehousePartition</th>
+                <th>DateTimeOutput</th>
+                <th>DateOutput</th>
+                <th>Quantity</th>
+                <th>Weight</th>
+                <th *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td data-title="PlantID">{{ row.PlantName }}</td>
+                <td data-title="LineNumber">{{ row.LineNumber }}</td>
+                <td data-title="FinishProductID">{{ row.FinishProduct }}</td>
+                <td data-title="WarehouseID">{{ row.Warehouse_Name }}</td>
+                <td data-title="WarehousePartitionID">{{ row.WarehousePartitionName }}</td>
+                <td data-title="DateTimeOutput">{{ row.DateTimeOutput.date | date: 'MM/dd/yyyy' }}</td>
+                <td data-title="DateOutput">{{ row.DateOutput.date | date: 'MM/dd/yyyy' }}</td>
+                <td data-title="Quantity">{{ row.Quantity }}</td>
+                <td data-title="Weight">{{ row.Weight }}</td>
+                <td data-title="Action" *ngIf="edit">
+                    <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                    <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round"><i class='bx bx-trash' ></i></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+</div>
+
+
+<!-- ======= MODAL FORM ======== -->
+<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="productionOutputForm" class="p-fluid" (ngSubmit)="onSubmit()" >  
+  
+        <div class="field">
+            <label class="font-semibold" >Plant</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="plant" formControlName="PlantID" optionLabel="PlantName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Plant"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Line Number</label>
+            <input pInputText formControlName="LineNumber" autocomplete="off" class="input" placeholder="Enter line number">
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >FinishProduct</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="finishProduct" formControlName="FinishProductID" optionLabel="FinishProduct" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Finish Product"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Warehouse</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown [options]="warehouse" formControlName="WarehouseID" optionLabel="LocationName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Warehouse" (ngModelChange)="onSelectWarehouse($event)"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >WarehousePartition</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown [options]="selectedPartition" formControlName="WarehousePartitionID" optionLabel="WarehousePartitionName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Partition"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Date & Time Output</label>
+                    <p-calendar  formControlName="DateTimeOutput" [showIcon]="true" placeholder="mm/dd/yyyy" appendTo="body" pTooltip="select or input date" tooltipPosition="top" [showTime]="true" hourFormat="24"></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >DateOutput</label>
+                    <p-calendar formControlName="DateOutput" [showIcon]="true" placeholder="mm/dd/yyyy" appendTo="body"  pTooltip="select or input date" tooltipPosition="top"></p-calendar>
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="field">
+            <label class="font-semibold" >Quantity</label>
+            <p-inputNumber formControlName="Quantity" inputId="integeronly" autocomplete="off" placeholder="No. of bags"></p-inputNumber> 
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Weight</label>
+            <p-inputNumber formControlName="Weight" inputId="integeronly" autocomplete="off" placeholder="No. of kg"></p-inputNumber> 
+        </div>
+
+
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!productionOutputForm.valid"></button>
+  
+    </form>
+</p-dialog>

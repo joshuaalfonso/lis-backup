@@ -1,0 +1,59 @@
+.title {
+    font-weight: var(--font-medium);
+    margin-bottom: 40px;
+    position: relative;
+    font-size: 2rem;
+}
+
+/* ==== SEARCH, ADD, EXPORT ==== */
+.controls {
+    margin-bottom: 30px;
+}
+
+.input__search {
+    padding: 6px 0;
+    margin-right: 20px;
+}
+
+.add__btn {
+    /* background: var(--first-color); */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.export__btn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+}
+
+
+/* ==== TABLE ==== */
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-500);
+}
+
+
+input {
+    padding: 7px 10px;
+}
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+}

@@ -1,0 +1,684 @@
+<div class="topbar">
+    <div class="topbar__container">
+        <div class="menu__icon">
+            <span class="material-symbols-outlined nav__close" [class.navCloseOn]="sideBar">
+                close
+                </span>
+            <span class="material-symbols-outlined nav__open" [class.navOpenoff]="sideBar" (click)="toggleTopBar()">
+                menu
+            </span>
+        </div>
+        <div class="user__icon">
+            <span class="material-symbols-outlined">
+                account_circle
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar-container">
+
+    <div class="logo">
+        <div class="logo-img">
+            <span>LIS</span>
+        </div>
+
+        <div class="logo-title">
+            <span>Logistics</span>
+            <span>Information System</span>
+        </div>
+    </div>
+
+    <div class="navigation">
+
+        <!-- <div class="menu">
+            <p class="title">Main</p>
+            <ul>
+                <li>  
+                    <a  routerLink="/dashboard" routerLinkActive="link-active" >
+                        <img src="assets/icons/icon-dashboard.svg" alt="dashboard" >
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="menu">
+            <p class="title">Master</p>
+            <ul>
+                <li>  
+                    <a (click)="rawMatsSubMenu = !rawMatsSubMenu">
+                        <img src="assets/icons/icon-products.svg" alt="products" >
+                        <span class="text">Products</span>
+                        <img src="assets/icons/icon-arrow-down.svg" alt="arrow-down" >
+                    </a>
+                    <ul class="sub-menu" [class.submenu-active]="rawMatsSubMenu">
+                        <li>
+                            <a routerLink="/raw-materials" routerLinkActive="link-active">
+                                <span class="text">Raw Material</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/finish-product" routerLinkActive="link-active">
+                                <span class="text">Finish Product</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul>
+                <li>  
+                    <a (click)="rawMatsSubMenu = !rawMatsSubMenu">
+                        <img src="assets/icons/icon-inventory.svg" alt="products" >
+                        <span class="text">Inventory</span>
+                        <img src="assets/icons/icon-arrow-down.svg" alt="arrow-down" >
+                    </a>
+                    <ul class="sub-menu" [class.submenu-active]="rawMatsSubMenu">
+                        <li>
+                            <a routerLink="/inventory" routerLinkActive="link-active">
+                                <span class="text">Raw Material</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/finish-product-inventory" routerLinkActive="link-active">
+                                <span class="text">Finish Product</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div> -->
+
+        <div *ngFor="let menu of menus" class="menu">
+
+            <ul class="mb-3" *ngIf="menu.view">
+                <p class="title">{{ menu.title }}</p>
+
+                <li *ngFor="let item of menu.subMenu">
+
+                    <a (click)="item.isCollapse = !item.isCollapse" [routerLink]="item.routerLink" routerLinkActive="link-active" *ngIf="item.view">
+                        <img [src]="item.icon" alt="{{ item.title }}" *ngIf="item.icon">
+                        <!-- <svg width="20px" height="20px" >
+                            <use href="assets/icons/icon-grid.svg#Layer_1"></use>
+                        </svg> -->
+                        <span class="text">{{ item.title }}</span>
+                        <img *ngIf="item.subMenu && item.subMenu.length > 0" src="assets/icons/icon-arrow-down.svg" alt="arrow-down">
+                    </a>
+
+                    <ul class="sub-menu" [class.submenu-active]="item.isCollapse == true">
+                        <li *ngFor="let subItem of item.subMenu">
+                        <a [routerLink]="subItem.routerLink" routerLinkActive="link-active" *ngIf="subItem.view">
+                            <span class="text">{{ subItem.title }}</span>
+                        </a>
+                        </li>
+                    </ul>
+
+                </li>
+            </ul>
+
+        </div>
+
+
+    </div>
+
+    <div class="profile-container" (click)="profile.toggle($event)" appendTo="body">
+         <!-- <a href="#" class="nav__link mt-4"  (click)="onLogout()" *ngIf="isAuthenticated"> -->
+            <img [src]="avatarList[user?.avatar].avatarUrl" alt="avatar" width="40px">
+            <span>
+                {{ user?.username}}
+                <p class="sub-text">{{ getUserModule() }}</p>
+            </span>
+         <!-- </a> -->
+    </div>
+
+</div>
+
+<p-overlayPanel #profile>
+    <div class="profile-overlay">
+        <p (click)="onLogout()" class="logout ">
+            <!-- <img src="assets/icons/icon-power.svg" alt="avatar" width="15px"> -->
+             <svg  width="15px" height="15px">
+                <use href="assets/icons/icon-power.svg#Outline"></use>
+            </svg>
+            Log out
+        </p>
+        <p (click)="toggleNightMode()">
+            <img src="assets/icons/icon-moon.svg" alt="avatar" width="15px">
+            Night Mode
+        </p>
+        <p routerLink="/settings">
+            <img src="assets/icons/icon-profile.svg" alt="avatar" width="15px">
+            Profile
+        </p>
+    </div>
+</p-overlayPanel>
+
+<!-- <div class="nav" id="navbar" [class.SideBarOn]="sideBar">
+
+    <div class="nav__container">
+        <div>
+
+            <div class="logo">
+                <div class="logo-img">
+                    <span>LIS</span>
+                </div>
+
+                <div class="logo-title">
+                    <span>Logistics</span>
+                    <span>Information System</span>
+                </div>
+            </div>
+
+            <div class="nav__list">
+
+                <div class="nav__items">
+                    <h3 class="nav__subtitle">Main</h3>
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/dashboard" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated"
+                    >
+                        <span class="material-symbols-outlined nav__icon">
+                            grid_view
+                        </span>
+                        <span class="nav__name">
+                            Dashboard
+                        </span>
+                    </a>
+                </div>
+
+                <div 
+                    class="nav__items" 
+                    *ngIf="RawMatView || FinishProductView || RawMatInventoryView || FinishProductInventoryView || WarehouseNameView || WarehouseLocationView || WarehousePartitionView"
+                >
+                    <h3 class="nav__subtitle">
+                        Master
+                    </h3>
+
+                    <div 
+                        class="nav__dropdown" 
+                        [class.active]="rawMatsSubMenu" 
+                        *ngIf="RawMatView || FinishProductView"
+                    >
+
+                        <a 
+                            class="nav__link" 
+                            (click)="toggleRawMats()"
+                        >
+                            <span class="material-symbols-outlined nav__icon">
+                                garden_cart
+                            </span>
+                            <span class="nav__name">
+                                Products
+                            </span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a 
+                                    class="nav__dropdown-item nav__hover"  
+                                    routerLink="/raw-materials" 
+                                    routerLinkActive="active" 
+                                    (click)="toggleTopBar()" 
+                                    *ngIf="isAuthenticated && RawMatView" 
+                                    [class.not-allowed]="!RawMatView"
+                                >
+                                    •  Raw Materials
+                                </a>
+
+                                <a 
+                                    class="nav__dropdown-item nav__hover" 
+                                    routerLink="/finish-product" 
+                                    routerLinkActive="active" 
+                                    (click)="toggleTopBar()" 
+                                    *ngIf="isAuthenticated && FinishProductView" 
+                                    [class.not-allowed]="!FinishProductView"
+                                >
+                                    • Finish Product
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="nav__dropdown" 
+                        [class.active]="finishProdSubMenu" 
+                        *ngIf="RawMatInventoryView || FinishProductInventoryView"
+                    >
+                        <a class="nav__link" (click)="toggleFinishProduct()">
+                            <span class="material-symbols-outlined nav__icon">
+                                inventory
+                            </span>
+                            <span class="nav__name">
+                                Inventory
+                            </span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a 
+                                    class="nav__dropdown-item nav__hover" 
+                                    routerLink="/inventory" 
+                                    routerLinkActive="active" 
+                                    (click)="toggleTopBar()" 
+                                    *ngIf="isAuthenticated && RawMatInventoryView" 
+                                    [class.not-allowed]="!RawMatInventoryView"
+                                >
+                                    •  Raw Material
+                                </a>
+                                <a 
+                                    class="nav__dropdown-item nav__hover" 
+                                    routerLink="/finish-product-inventory" 
+                                    routerLinkActive="active" 
+                                    (click)="toggleTopBar()" 
+                                    *ngIf="isAuthenticated && FinishProductInventoryView" 
+                                    [class.not-allowed]="!FinishProductInventoryView"
+                                >
+                                    • Finish Product 
+                                </a>
+
+                                <a 
+                                class="nav__dropdown-item nav__hover" 
+                                routerLink="/warehouse-inventory" 
+                                routerLinkActive="active" 
+                                (click)="toggleTopBar()" 
+                                *ngIf="isAuthenticated" 
+                                [class.not-allowed]="!FinishProductInventoryView"
+                            >
+                                • Warehouse 
+                            </a>
+                       
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav__dropdown" [class.active]="warehouseSubMenu" *ngIf="WarehouseNameView || WarehouseLocationView || WarehousePartitionView">
+                        <a 
+                            class="nav__link" 
+                            (click)="toggleWarehouse()"
+                        >
+                            <span class="material-symbols-outlined nav__icon">
+                                warehouse
+                            </span>
+                            <span class="nav__name">
+                                Warehouse
+                            </span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a class="nav__dropdown-item nav__hover" routerLink="/warehouse" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated && WarehouseNameView" [class.not-allowed]="!WarehouseNameView">• Name</a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/warehouse-location" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated && WarehouseLocationView" [class.not-allowed]="!WarehouseLocationView">• Location</a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/warehouse-partition" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated && WarehousePartitionView" [class.not-allowed]="!WarehousePartitionView">• Partition</a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/weighing-transaction" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            monitor_weight
+                        </span>
+                        <span class="nav__name">Weighing Transaction</span>
+                    </a>
+
+                    <a class="nav__link nav__hover" routerLink="/weighing-transaction-detail" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            monitor_weight
+                        </span>
+                        <span class="nav__name"> Transaction Detail</span>
+                    </a> -->
+               
+                <!-- </div> 
+
+                <div class="nav__items">
+                    <h3 class="nav__subtitle">Transaction</h3>
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/contract-po" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && RawMatsPOView" 
+                        [class.not-allowed]="!RawMatsPOView"
+                    >
+                        <span class="material-symbols-outlined nav__icon">
+                            list_alt
+                        </span>
+
+                        <span class="nav__name">
+                            RawMats P.O
+                        </span>
+                    </a> 
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/contract-performa" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && ContractPerformaView" 
+                        [class.not-allowed]="!ContractPerformaView"
+                    > 
+                        <span class="material-symbols-outlined nav__icon">
+                            directions_boat
+                        </span> 
+
+                        <span class="nav__name">
+                            Importation
+                        </span>
+                    </a>  -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/shipping-transaction" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            contract_edit
+                        </span>
+                        <span class="nav__name">Shipping Transaction</span>
+                    </a>  -->
+
+                    <!-- <div class="nav__dropdown" [class.active]="weighingSubMenu">
+                        <a class="nav__link" (click)="toggleWeighing()">
+                            <span class="material-symbols-outlined nav__icon">
+                                monitor_weight
+                            </span>
+                            <span class="nav__name">Weighing</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a class="nav__dropdown-item nav__hover" routerLink="/weighing-transaction" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">•  Transaction</a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/weighing-transaction-detail" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">•  Transaction Details</a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/unloading-transaction" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && UnloadingView" 
+                        [class.not-allowed]="!UnloadingView"
+                    >
+                        <span class="material-symbols-outlined nav__icon">
+                            local_shipping
+                        </span>
+                        <span class="nav__name">
+                            Unloading
+                        </span>
+                    </a> 
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/binload" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && BinloadView" 
+                        [class.not-allowed]="!BinloadView"
+                    >
+
+                        <span class="material-symbols-outlined nav__icon">
+                            front_loader
+                        </span>
+                        <span class="nav__name ">
+                            Binloading 
+                        </span>
+                    </a> 
+
+                    <div class="nav__dropdown" [class.active]="transferSubMenu" *ngIf="RawMatsTransferView || FinishProductTransferView">
+                        <a class="nav__link" (click)="toggleTransfer()">
+                            <span class="material-symbols-outlined nav__icon">
+                                move_up
+                            </span>
+                            <span class="nav__name">Transfer</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse" *ngIf="RawMatsTransferView || FinishProductTransferView">
+                            <div class="nav__dropdown-content">
+                                <a 
+                                    class="nav__dropdown-item nav__hover" 
+                                    routerLink="/transfer" 
+                                    routerLinkActive="active" 
+                                    (click)="toggleTopBar()" 
+                                    *ngIf="isAuthenticated && RawMatsTransferView" 
+                                    [class.not-allowed]="!RawMatsTransferView"
+                                >
+                                    • Raw Material
+                                </a> 
+
+                                <a 
+                                    class="nav__dropdown-item nav__hover" 
+                                    routerLink="/finish-product-transfer" 
+                                    routerLinkActive="active" 
+                                    (click)="toggleTopBar()" 
+                                    *ngIf="isAuthenticated && FinishProductTransferView" 
+                                    [class.not-allowed]="!FinishProductTransferView"
+                                >
+                                    • Finish Product 
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/production-output" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && ProductionOutputView"  
+                        [class.not-allowed]="!ProductionOutputView"
+                    >
+                        <span class="material-symbols-outlined nav__icon">
+                            conveyor_belt
+                        </span>
+                        <span class="nav__name"> 
+                            Production Output
+                        </span>
+                    </a>
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/delivery-schedule" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && DeliveryScheduleView"  
+                        [class.not-allowed]="!DeliveryScheduleView"
+                    >
+                        <span class="material-symbols-outlined nav__icon">
+                            calendar_month
+                        </span>
+
+                        <span class="nav__name">
+                            Delivery Schedule
+                        </span>
+                    </a> 
+
+                    <a 
+                        class="nav__link nav__hover" 
+                        routerLink="/delivery" 
+                        routerLinkActive="active" 
+                        (click)="toggleTopBar()" 
+                        *ngIf="isAuthenticated && DeliveryView" 
+                        [class.not-allowed]="!DeliveryView"
+                    >
+                        <span class="material-symbols-outlined nav__icon">
+                            send
+                        </span>
+                        <span class="nav__name">
+                            Delivery
+                        </span>
+                    </a> -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/delivery-detail" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            list_alt
+                        </span>
+                        <span class="nav__name">Delivery Detail</span>
+                    </a>  -->
+
+                <!-- </div>
+
+                <div class="nav__items" *ngIf="ProfileView">
+                    <h3 class="nav__subtitle">Profile</h3>
+
+
+                    <div class="nav__dropdown" [class.active]="UsersSubMenu">
+                        <a class="nav__link" (click)="toggleUsers()"> 
+                            <span class="material-symbols-outlined nav__icon">
+                                group
+                            </span>
+                            <span class="nav__name">User</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a class="nav__dropdown-item nav__hover" routerLink="/users" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Accounts </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/module" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Module </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav__dropdown" [class.active]="legal">
+                        <a class="nav__link" (click)="toggleLegal()"> 
+                            <span class="material-symbols-outlined nav__icon">
+                                directions_boat
+                            </span>
+                            <span class="nav__name">Legal</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a class="nav__dropdown-item nav__hover" routerLink="/sales-agent" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Sales Agent </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/shipping-line" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Shipping Line </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/port-of-discharge" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Port of Discharge </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/bank" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Bank </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/supplier" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Supplier </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/broker" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Broker </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/container-type" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Container Type </a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/shipping-document" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            article
+                        </span>
+                        <span class="nav__name">Shipping Document</span>
+                    </a>  -->
+
+
+                    <!-- <div class="nav__dropdown" [class.active]="checkerSubMenu">
+                        <a class="nav__link" (click)="toggleChecker()"> 
+                            <span class="material-symbols-outlined nav__icon">
+                                person_search
+                            </span>
+                            <span class="nav__name">Checker</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a class="nav__dropdown-item nav__hover" routerLink="/checker" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Checker </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/checker-type" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Checker Type </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/checker-schedule" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Checker Schedule </a>
+                            </div>
+                        </div>
+                    </div> -->
+         
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/weigher" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            weight
+                        </span>
+                        <span class="nav__name">Weigher</span>
+                    </a> -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/dispatcher" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            forward_to_inbox
+                            </span>
+                        <span class="nav__name">Dispatcher</span>
+                    </a>  -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/customer" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+
+                        <span class="material-symbols-outlined nav__icon">
+                            group
+                        </span>
+                        <span class="nav__name">Customer</span>
+                    </a>  -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/driver" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+
+                        <span class="material-symbols-outlined nav__icon">
+                            directions_car
+                        </span>
+                        <span class="nav__name">Driver</span>
+                    </a>  -->
+
+                    <!-- <div class="nav__dropdown" [class.active]="truckSubMenu">
+                        <a class="nav__link" (click)="toggleTruck()"> 
+                            <span class="material-symbols-outlined nav__icon">
+                                local_shipping
+                            </span>
+                            <span class="nav__name">Transportation</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a class="nav__dropdown-item nav__hover" routerLink="/truck" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Truck Name</a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/trucking" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Trucking </a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/truck-type" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Truck Type</a>
+                                <a class="nav__dropdown-item nav__hover" routerLink="/driver" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">• Driver</a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- <a class="nav__link nav__hover" routerLink="/indentor" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+
+                        <span class="material-symbols-outlined nav__icon">
+                            attach_money
+                        </span>
+                        <span class="nav__name">Indentor</span>
+                    </a>  -->
+                   
+                <!-- </div> -->
+
+                <!-- <div class="nav__items">
+                    <h3 class="nav__subtitle">Preference</h3>
+
+
+                    <a class="nav__link nav__hover" routerLink="/plant" routerLinkActive="active" (click)="toggleTopBar()" *ngIf="isAuthenticated">
+                        <span class="material-symbols-outlined nav__icon">
+                            factory
+                        </span>
+                        <span class="nav__name">Plant</span>
+                    </a>
+                           
+                </div> -->
+
+            <!-- </div>
+        </div>
+
+
+    </div> -->
+
+    <!-- <a href="#" class="nav__link mt-4"  (click)="onLogout()" *ngIf="isAuthenticated">
+        <img src="assets/icons/icon-dashboard.svg" alt="dashboard" class=" text-gray-400 nav__icon">
+        <span class="nav__name">Logout</span>
+    </a> -->
+    
+
+
+<!-- </div> -->

@@ -1,0 +1,2106 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<!-- <p-confirmPopup></p-confirmPopup> -->
+
+<!-- <h1 class="title">Transfer</h1> -->
+<app-content-header [title]="'Transfer / Raw Material'"></app-content-header>
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<div class="controls">
+    <!-- (input)="onGlobalFilter(dt1, $event)" -->
+    <input 
+        pInputText 
+        type="text" 
+        class="p-inputtext-lg pl-3 input__search" 
+        placeholder="Search" 
+    />
+
+    <button 
+        pButton 
+        pRipple 
+        class="add__btn" 
+        (click)="showTransferRequestDialog()" 
+        *ngIf="insert"
+    >
+        <i class='bx bx-plus'></i> 
+        <span>New Request</span>
+    </button>
+    <!-- <button pButton pRipple class="p-button-info export__btn" *ngIf="generateReport"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button> -->
+</div>
+
+
+<div class="radio-inputs" >
+
+    <ng-template ngFor let-row [ngForOf]="stateOptions" let-i="index" >
+        
+        <label class="radio">
+            <input checked="" name="radio" type="radio" [value]="row.value" [(ngModel)]="value"  (ngModelChange)="getData()"/>
+            <span class="name" [class.active]="value == row.value"> {{ row.label }} </span>
+        </label>
+
+    </ng-template>
+
+    <!-- <label class="radio" *ngIf="dispatcherView">
+            <input checked="" name="radio" type="radio" value="0" [(ngModel)]="value"  (ngModelChange)="getData()"/>
+            <span class="name" [class.active]="value == 0"> Preparation </span>
+    </label>
+    <label class="radio" *ngIf="sourceCheckerView">
+            <input name="radio" type="radio" value="1" [(ngModel)]="value"  (ngModelChange)="getData()"/>
+            <span class="name" [class.active]="value == 1"> Source </span>
+    </label>
+    <label class="radio" *ngIf="destinationView">
+            <input name="radio" type="radio" value="2" [(ngModel)]="value"  (ngModelChange)="getData()"/>
+            <span class="name" [class.active]="value == 2"> Destination </span>
+    </label>
+    <label class="radio" *ngIf="completedView">
+            <input name="radio" type="radio" value="3" [(ngModel)]="value"  (ngModelChange)="getData()"/>
+            <span class="name" [class.active]="value == 3"> Completed </span>
+    </label> -->
+</div>
+
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <div class="table-view">
+        <p-selectButton 
+            [options]="viewOptions" 
+            [(ngModel)]="viewValue" 
+            optionLabel="label" 
+            optionValue="value"
+        >
+            <ng-template pTemplate="item" let-option>
+                <i [ngClass]="option.icon"></i>
+            </ng-template>
+        </p-selectButton>
+    </div>
+
+    <!-- ======= Dispatcher Request Table ======= -->
+    <p-table  
+        #dt1 
+        [value]="transferRequest" 
+        dataKey="DispatcherRequestID" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['PlantName']" 
+        *ngIf="value == 0  && viewValue == 'table' && !isLoading"
+    >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th style="width: 5rem"></th>
+                <th>Request Date</th>
+                <th>Raw Material</th>
+                <th>Request Weight</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Status</th>
+                <!-- <th>Progress</th> -->
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button 
+                        pRipple 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                    />
+                </td>
+                <td data-title="RequestDate">
+                    {{ row.RequestDate.date | date: 'MM/dd/yyyy' }}
+                </td>
+                <td data-title="RawMaterial">
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="RequestWeight">
+                    {{ row.RequestWeight | number}}
+                </td>
+                <td data-title="FromWarehouseLocation">
+                    {{ row.FromWarehouseLocation }}
+                </td>
+                <td data-title="ToWarehouseLocation">
+                    {{ row.ToWarehouseLocation }}
+                </td>
+                <td data-title="Status">
+                    <!-- {{ row.TransferDetail.length == 0 ? 'Pending' : 'On Going'}} -->
+                    <p-tag severity="{{row.Status == 0 ? 'warning' : 'info'}}">
+                        {{ row.Status == 0 ? 'Pending' : 'Completed'}}
+                    </p-tag>
+                </td>
+                <!-- <td>
+                    <p-progressBar [value]="(row.Served / row.RequestWeight) * 100" />
+                </td> -->
+                <td data-title="Actions">
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onEditTransferRequest(row)"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-primary p-2 border-round mr-2" 
+                        (click)="onAddTransfer(row)"
+                    >
+                        <i class='bx bx-plus'></i>
+                    </button>
+                    <!-- <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round"><i class='bx bx-trash' ></i></button> -->
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-transferRequest>
+            <tr>
+                <td colspan="12">
+                    <div class="">
+                        <p-table [value]="transferRequest.TransferDetail" dataKey="TransferCode">
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 5rem"></th>
+                                    <th>Transfer Code</th>
+                                    <th>Transfer Date</th>
+                                    <th>Transfer Type</th>
+                                    <th>Plate No</th>
+                                    <th>Driver </th>
+                                    <th>Dispatcher </th>
+                                   
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-detail let-index="index">
+                                <tr>
+                                    <td></td>
+                                    <td> 
+                                        {{ detail.TransferCode }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.DateTransfer.date | date: 'MM/dd/yyyy' }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.TransferTypeID == 1 ? 'Partial' : 'Full'}}
+                                    </td>
+                                    <td> 
+                                        {{ detail.PlateNo }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.DriverName }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.DispatcherName }}
+                                    </td>
+                                    
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="2">There is no transfer for this request yet.</td>
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+
+    <!-- Dispatcher Card View -->
+    <div 
+        class="card-container" 
+        *ngIf="value == 0 && viewValue == 'card' && !isLoading"
+    >
+        <ng-template ngFor let-row [ngForOf]="transferRequest" let-i="index">
+            <div pRipple class="card">
+                <div class="card-title">
+                    <span>{{row.RequestWeight}} KG</span>
+                    <div>
+                        <p-overlayPanel #menu appendTo="body">
+                            <!-- <span (click)="onSourceCheckerForm(row)" ><i class='bx bx-plus'></i>Add Source</span>
+                            <span (click)="onDestinationForm(row)"><i class='bx bx-plus'></i>Add Destination</span> -->
+                            <div class="flex flex-column">
+                                <span (click)="onAddTransfer(row)" class="overlay-bttn">
+                                    <i class='pi pi-plus mr-2'></i>
+                                    New Transfer
+                                </span>
+                                <span (click)="onEditTransferRequest(row)" class="overlay-bttn">
+                                    <i class='pi pi-pencil mr-2'></i>
+                                    Edit
+                                </span>
+                            </div>
+                        </p-overlayPanel>
+                        <i class="pi pi-ellipsis-v" (click)="menu.toggle($event)"></i>
+                    </div>
+                </div>
+        
+                <div class="card-subtitle">
+                    <span>
+                        <i class="pi pi-calendar"></i>
+                        {{row.RequestDate.date | date: 'MM/dd/yyyy'}}
+                    </span>
+                </div>
+        
+                <div class="card-content">
+                    <p class="tag">
+                        <i class="pi pi-tag"></i>
+                        {{ row.RawMaterial }}
+                        <p-tag severity="{{row.Status == 0 ? 'warning' : 'info'}}" class="ml-3 font-sm">
+                            {{ row.Status == 0 ? 'Pending' : 'Completed'}}
+                        </p-tag>
+                    </p>
+                    <!-- <p>
+                        <span>Request Weight: &nbsp;</span>
+                        {{row.RequestWeight}} &nbsp;
+                    </p> -->
+                    <p>
+                        <!-- {{row.RequestWeight}} 
+                        <span>Source &nbsp;</span>  -->
+                        {{row.FromWarehouseLocation}} 
+                        <span>Source &nbsp; → &nbsp;</span> 
+                        {{row.ToWarehouseLocation}} 
+                        <span>Destination &nbsp;</span> 
+                    </p>
+                    <!-- <p class="mt-3">
+                        <p-progressBar 
+                            [value]="(row.Served / row.RequestWeight) * 100" 
+                            [showValue]="false" 
+                            [style]="{ height: '6px' }"
+                        />
+                    </p> -->
+                    <!-- <p>
+                        {{row.RequestWeight}} 
+                        <span>Weight &nbsp;</span> 
+                    </p> -->
+
+                </div>
+        
+            </div>
+        </ng-template>    
+
+    
+    </div>
+
+    <!-- Source Destination Table View -->
+    <p-table 
+        #dt1 
+        [value]="transfer" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['TransferCode','DateTransfer.date', 'RawMaterial']" 
+        *ngIf="(value == 1 || value == 2) && viewValue == 'table'"
+    >
+        <!-- <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+
+                <div>
+                    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/>
+                    <button pButton pRipple class="p-button-info export__btn" *ngIf="generateReport"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+                </div>
+                <div>
+                    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/>
+                    <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert && value == 0"><i class='bx bx-plus'></i> <span>New Transfer</span></button>
+                </div>
+            </div>
+        </ng-template> -->
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>Transfer Code</th>
+                <th>Date Transfer</th>
+                <th>Transfer Type</th>
+                <th>Raw Material</th>
+                <th *ngIf="value == 1">Source</th>
+                <th *ngIf="value == 2">Destination</th>
+                <th>Plate No</th>
+                <th>Driver</th>
+            
+                <!-- <th>Status</th> -->
+            
+                <th *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr *ngIf="!isLoading">
+                <td data-title="ToWarehouse">
+                    {{row.TransferCode}}
+                </td>
+                <td data-title="Date Transfer">
+                    {{ row.DateTransfer.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td data-title="Transfer Type">
+                    {{ row.TransferTypeID == 1 ? 'Partial' : 'Full'}}
+                </td>
+                <td data-title="Raw Material">
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="From Location" *ngIf="value == 1">
+                    {{ row.FromWarehouseLocation }}
+                </td>
+                <td data-title="From Location" *ngIf="value == 2">
+                    {{ row.ToWarehouseLocation }}
+                </td>
+               
+                <td data-title="ToWarehouse">
+                    {{row.PlateNo}}
+                </td>
+                <td data-title="DriverName">
+                    {{row.DriverName}}
+                </td>
+               
+
+                <!-- <td>
+                    {{
+                        row.Status === 0 ? 'New' : 
+                        row.Status === 1 ? 'Arrived':
+                        row.Status === 2 ? '':
+                        'unknown'
+                    }}
+                </td> -->
+               
+                
+                <td data-title="Actions" *ngIf="edit">
+                    <!-- <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button> -->
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="delete__btn" 
+                        class="p-button-info p-2 border-round" 
+                        pTooltip="Arrived" 
+                        tooltipPosition="bottom" 
+                        *ngIf="sourceCheckerView && row.Status == 0" 
+                        (click)="onSourceArrived(row)"
+                    >
+                        <i class='pi pi-check'></i>
+                    </button>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="delete__btn" 
+                        class="p-button-info p-2 border-round" 
+                        pTooltip="Add Source" 
+                        tooltipPosition="bottom" 
+                        *ngIf="row.Status === 1" 
+                        (click)="onSourceCheckerForm(row)"
+                    >
+                        <i class='pi pi-plus'></i>
+                    </button>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="delete__btn" 
+                        class="p-button-info p-2 border-round" 
+                        pTooltip="Add Destination" 
+                        tooltipPosition="bottom" 
+                        *ngIf="value === 2" 
+                        (click)="onDestinationForm(destinationDialog, row)"
+                    >
+                        <i class='pi pi-plus'></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+
+    <!-- Source / Destination Card View -->
+    <div 
+        class="card-container" 
+        *ngIf="(value == 1 || value == 2) && viewValue == 'card' && !isLoading"
+    >
+        <ng-template ngFor let-row [ngForOf]="transfer" let-i="index">
+            <div class="card">
+                <div class="card-title">
+                    <span>{{row.TransferCode}}</span>
+                    <div class="flex flex-column">
+                        <p-overlayPanel #menu>
+                            <span class="overlay-bttn" (click)="onSourceArrived(row)" *ngIf="row.Status == 0">
+                                <i class='bx bx-check mr-2'></i>Arrived
+                            </span>
+                            <span class="overlay-bttn" (click)="onSourceCheckerForm(row)" *ngIf="row.Status == 1">
+                                <i class='bx bx-plus mr-2'></i>Add Source
+                            </span>
+                            <span class="overlay-bttn" (click)="onDestinationForm(destinationDialog, row)" *ngIf="row.Status == 2">
+                                <i class='bx bx-plus mr-2'></i>Add Destination
+                            </span>
+                        </p-overlayPanel>
+                        <i class="pi pi-ellipsis-v" (click)="menu.toggle($event)"></i>
+                    </div>
+                </div>
+        
+                <div class="card-subtitle">
+                    <span>
+                        <i class="pi pi-calendar"></i>
+                        {{row.DateTransfer.date | date: 'MM/dd/yyyy'}}
+                    </span>
+                </div>
+        
+                <div class="card-content">
+                    <p class="tag">
+                        <i class="pi pi-tag"></i>
+                        {{ row.RawMaterial }}
+                    </p>
+
+                    <p *ngIf="value == 1">
+                        <span>Source: &nbsp;</span> 
+                        {{row.FromWarehouseLocation}} - {{row.FromWarehouse}} - {{row.FromWarehousePartitionName}}
+                    </p>
+
+                    <p *ngIf="value == 2">
+                        <span>Destination: &nbsp;</span> 
+                        {{row.ToWarehouseLocation}} - {{row.ToWarehouse}} - {{row.ToWarehousePartitionName}}
+                    </p>
+
+                    <p>
+                        <span>Plate No: &nbsp;</span>
+                        {{row.PlateNo}} &nbsp;
+                        <span>Driver: &nbsp;</span>
+                        {{row.DriverName}} 
+                    </p>
+
+                </div>
+        
+            </div>
+        </ng-template>    
+    </div>
+
+
+    <!-- ======= Completed Table ======= -->
+    <p-table  
+        #dt1 
+        [value]="transfer" 
+        dataKey="DispatcherRequestID" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['PlantName']" 
+        *ngIf="value == 3  && viewValue == 'table' && !isLoading"
+    >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th [style]="{width: '1rem'}"></th>
+                <th>Request Date</th>
+                <th>Raw Material</th>
+                <!-- <th>Request Weight</th> -->
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Status</th>
+                <th>Served</th>
+                <th>Progress</th>
+                <!-- <th>Progress</th> -->
+                <!-- <th>Actions</th> -->
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button 
+                        pRipple 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                    />
+                </td>
+                <td data-title="Request Date">
+                    {{ row.RequestDate.date | date: 'MM/dd/yyyy' }}
+                </td>
+                <td data-title="Raw Material">
+                    {{ row.RawMaterial }}
+                </td>
+                <!-- <td data-title="Request Weight">{{ row.RequestWeight | number }}</td> -->
+                <!-- <td data-title="Served">{{ row.Served }}</td> -->
+                <td data-title="From Warehouse Location">
+                    {{ row.FromWarehouseLocation }}
+                </td>
+                <td data-title="To Warehouse Location">
+                    {{ row.ToWarehouseLocation }}
+                </td>
+                <td data-title="Status">
+                    <p-tag severity="{{row.Status == 0 ? 'warning' : 'info'}}">
+                        {{ row.Status == 0 ? 'Pending' : 'Completed'}}
+                    </p-tag>
+                </td>
+                <td data-title="Served">
+                    {{ row.Served | number }} KG / {{ row.RequestWeight | number }} KG
+                </td>
+                <td>
+                    <p-progressBar 
+                        [value]="getRoundedPercentage(row.Served, row.RequestWeight, 1)"
+                    /> 
+                </td>
+                <!-- <td class="flex">
+                    <p-progressBar [value]="(row.Served / row.RequestWeight) * 100" class="flex-1 mr-1"/> 25
+                </td> -->
+                <!-- <td data-title="Actions">
+                    <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onEditTransferRequest(row)"><i class='bx bx-edit-alt'></i></button>
+                    <button pButton pRipple class="edit__btn" class="p-button-primary p-2 border-round mr-2" (click)="onAddTransfer(row)"><i class='bx bx-plus'></i></button>
+                </td> -->
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-transferRequest>
+            <tr>
+                <td colspan="12">
+                    <div class="">
+                        <p-table 
+                            [value]="transferRequest.TransferDetail" 
+                            dataKey="TransferCode" 
+                            class="transferDetail" 
+                            [scrollable]="true" 
+                        >
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th style="width: 5rem"></th> -->
+                                    <th>Transfer Code</th>
+                                    <th>Transfer Date</th>
+                                    <th>Quantity</th>
+                                    <th>Weight</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Interval </th>
+                                    <!-- <th>Dispatcher </th> -->
+                                    <th>Plate No</th>
+                                    <th>Status</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-detail let-index="index">
+                                <tr>
+                                    <!-- <td></td> -->
+                                    <td> 
+                                        {{ detail.TransferCode }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.DateTransfer.date | date: 'MM/dd/yyyy'}}
+                                    </td>
+                                    <td>
+                                        {{ detail.Quantity }}
+                                    </td>
+                                    <td>
+                                        {{ detail.Weight }}
+                                    </td>
+                                    <td>
+                                        {{ detail.FromWarehouse + ' - ' + detail.FromWarehousePartitionName}}
+                                    </td>
+                                    <td>
+                                        {{ detail.ToWarehouse + ' - ' + detail.ToWarehousePartitionName}}
+                                    </td>
+                                    <td> 
+                                        {{ detail.IntervalTime }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.PlateNo }}
+                                    </td>
+                                    <!-- <td> 
+                                        {{ detail.DispatcherName }}
+                                    </td> -->
+                                    <td>
+                                        <p-tag severity="{{detail.Status == 3 ? 'info' : 'warning'}}">
+                                            {{ detail.Status == 0 ? 'Pending' : 'Completed'}}
+                                        </p-tag>
+                                    </td>
+
+                                    <td>
+                                        <button 
+                                            type="button" 
+                                            pButton 
+                                            pRipple 
+                                            icon="pi pi-eye" 
+                                            label="" 
+                                            [style]="{width: 'auto'}"
+                                            class="p-button-text"
+                                            (click)="viewTransfer(detail)"
+                                        >
+                                        </button>
+
+                                    </td>
+                                    
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="2">There is no transfer for this request yet.</td>
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+
+     <!-- Completed Card View -->
+    <div 
+        class="card-container" 
+        *ngIf="value == 3 && viewValue == 'card' && !isLoading"
+    >
+        <ng-template ngFor let-row [ngForOf]="transfer" let-i="index">
+            <div pRipple class="card">
+                
+                <div class="card-title">
+                    <span>
+                        {{row.RequestWeight | number}} KG
+                    </span>
+                    <div>
+                        <p-overlayPanel #menu appendTo="body">
+                           
+                        </p-overlayPanel>
+                    </div>
+                </div>
+        
+                <div class="card-subtitle">
+                    <span>
+                        <i class="pi pi-calendar"></i>
+                        {{row.RequestDate.date | date: 'MM/dd/yyyy'}}
+                    </span>
+                </div>
+        
+                <div class="card-content">
+
+                    <p class="tag">
+                        <i class="pi pi-tag"></i>
+                        {{ row.RawMaterial }}
+                        <p-tag severity="{{row.Status == 0 ? 'warning' : 'info'}}" class="ml-3">
+                            {{ row.Status == 0 ? 'Pending' : 'Completed'}}
+                        </p-tag>
+                    </p>
+
+                    <p>
+                        {{row.FromWarehouseLocation}} 
+                        <span>Source &nbsp; → &nbsp;</span> 
+                        {{row.ToWarehouseLocation}} 
+                        <span>Destination &nbsp;</span> 
+                    </p>
+
+                    <p>
+                        {{row.Served | number }} 
+                        <span>KG &nbsp; / &nbsp;</span> 
+                        {{row.RequestWeight | number}} 
+                        <span>KG &nbsp;</span> 
+                    </p>
+
+                    <p class="mt-3">
+                        <p-progressBar 
+                            [value]="(row.Served / row.RequestWeight) * 100" 
+                            [showValue]="false" 
+                            [style]="{ height: '6px' }"
+                        />
+                    </p>
+
+                </div>
+        
+            </div>
+        </ng-template>     
+    </div>
+
+
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+    
+</div>
+
+
+<p-sidebar 
+    [(visible)]="sidebarVisible2" 
+    position="right" 
+    styleClass="w-30rem" 
+    *ngIf="transferDetails"
+>
+    <form [formGroup]="transferForm" class="p-fluid pointer-events-none">
+        
+        <div class="field">
+            <label class="font-semibold">
+                Code Transfer
+            </label>
+            <input 
+                type="text" 
+                pInputText 
+                [value]="transferDetails.TransferCode"
+            />
+        </div>
+        
+        <div class="field">
+            <label class="font-semibold" >
+                Date Transfer
+            </label>
+            <input 
+                type="text" 
+                pInputText 
+                [value]="transferDetails.DateTransfer?.date | date: 'MM/dd/yyyy'"
+            >  
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Transfer Type
+            </label>
+            <input 
+                type="text" 
+                pInputText 
+                [value]="transferDetails.TransferTypeID == 1 ? 'Partial' : 'Full'"
+            >
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material
+            </label>
+            <input 
+                type="text" 
+                pInputText 
+                [value]="transferDetails.RawMaterial"
+            >
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        Quantity
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.Quantity"
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        Weight
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.Weight"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid" *ngIf="transferDetails.TransferTypeID == 2">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        Loss Quantity
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.LossQuantity"
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        Loss Weight
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.LossWeight"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid" *ngIf="transferDetails.TransferTypeID == 2">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        Over Quantity
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.OverQuantity"
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        Over Weight
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.OverWeight"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold">Source</label>
+            <input 
+                type="text" 
+                pInputText 
+                [value]="
+                    transferDetails.FromWarehouseLocation + 
+                    ' - ' + 
+                    transferDetails.FromWarehouse + 
+                    ' - ' + 
+                    transferDetails.FromWarehousePartitionName
+                "
+            />
+        </div>
+
+        <div class="field">
+            <label class="font-semibold">Destination</label>
+            <input 
+                type="text" 
+                pInputText 
+                [value]="
+                    transferDetails.ToWarehouseLocation + 
+                    ' - ' + 
+                    transferDetails.ToWarehouse + 
+                    ' - ' + 
+                    transferDetails.ToWarehousePartitionName
+                "
+            />
+        </div>
+
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Plate #
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.PlateNo"
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Driver
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.DriverName"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" >
+                Dispatcher
+            </label>
+            <!-- <input pInputText formControlName="CheckerID" autocomplete="off" class="input"> -->
+            <input 
+                type="text" 
+                pInputText 
+                [value]="transferDetails.DispatcherName"
+            />
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Checker
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.CheckerName"
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Guard
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.GuardName"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Time Out
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.FeedmixDeparture?.date | date: 'MM/dd/yyyy HH:mm' "
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Time In
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.FeedmixArrival?.date | date: 'MM/dd/yyyy HH:mm' "
+                    />
+                </div>
+            </div>
+
+       </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Source Arrival
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.SourceArrival?.date | date: 'MM/dd/yyyy HH:mm' "
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Source Departure
+                    </label>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [value]="transferDetails.SourceDeparture?.date | date: 'MM/dd/yyyy HH:mm' "
+                    />
+                </div>
+            </div>
+
+       </div>
+
+    </form>
+</p-sidebar>
+
+
+<!-- ========= TRANSFER REQUEST MODAL FORM ========== -->
+<p-dialog 
+    header="{{dialogHeader}}" 
+    [(visible)]="visibleTransferRequest" 
+    [modal]="true"  
+    [breakpoints]="{ '1430px': '550px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form 
+        [formGroup]="transferRequestForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmitTransactionRequest()"
+    >  
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Date Request
+                <span class="text-red-500">*</span>
+            </label>
+
+            <p-calendar 
+                formControlName="RequestDate" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy" 
+                appendTo="body"
+            ></p-calendar>
+            
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Raw Material
+                <span class="text-red-500">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="rawMaterials" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material" 
+                    appendTo="body"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Source Location<span class="text-red-500">*</span>
+                    </label>
+
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="warehouseLocation" 
+                            formControlName="FromWarehouseLocationID" 
+                            optionLabel="WarehouseLocation" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true" 
+                            (ngModelChange)="onSelectFromLocation($event)" 
+                            appendTo="body"
+                        >
+                        </p-dropdown>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold">
+                        Destination Location
+                        <span class="text-red-500">*</span>
+                    </label>
+
+                    <div class="card flex justify-content-center">
+                      <p-dropdown 
+                        [options]="warehouseLocation" 
+                        formControlName="ToWarehouseLocationID" 
+                        optionLabel="WarehouseLocation" 
+                        [style]="{'height': '40px', 'border': '1px solid white'}" 
+                        placeholder="Select Location" 
+                        [showClear]="true" 
+                        appendTo="body"
+                    ></p-dropdown>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Weight
+            </label>
+            <p-inputNumber 
+                formControlName="RequestWeight" 
+                inputId="integeronly" 
+                autocomplete="off" 
+                placeholder="No. of bags"
+            ></p-inputNumber> 
+        </div>
+
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit"
+        ></button>
+
+    </form>
+</p-dialog>
+
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog 
+    header="{{dialogHeader}}" 
+    [(visible)]="visible" 
+    [modal]="true"  
+    [breakpoints]="{ '1430px': '550px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #transferDialog
+>
+    <form 
+        [formGroup]="transferForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()"
+    >  
+
+        <div class="field">
+            <label class="font-semibold" >
+                Date Transfer
+                <span class="text-red-500">*</span>
+            </label>
+            <p-calendar 
+                formControlName="DateTransfer" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy" 
+                appendTo="body"
+            ></p-calendar>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Transfer Type
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="transferType" 
+                    optionLabel="TransferType" 
+                    formControlName="TransferTypeID" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Transfer Type" 
+                    appendTo="body"
+                ></p-dropdown>
+            </div>
+
+            <!-- <div *ngFor="let category of categories" class="field-checkbox">
+                <p-radioButton 
+                    [inputId]="category.TransferTypeID" 
+                    [value]="category"
+                    formControlName="TransferTypeID" 
+                />
+                <label [for]="category.TransferTypeID" class="ml-2">
+                    {{ category.name }}
+                </label>
+            </div> -->
+
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material
+            </label>
+            <div class="card flex justify-content-center disabled">
+                <p-dropdown 
+                    [options]="rawMaterials" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material" 
+                    appendTo="body"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Source Location
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="warehouseLocation" 
+                            formControlName="FromWarehouseLocationID" 
+                            optionLabel="WarehouseLocation" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true" 
+                            (ngModelChange)="onSelectFromLocation($event)"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Destination Location
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="warehouseLocation" 
+                            formControlName="ToWarehouseLocationID" 
+                            optionLabel="WarehouseLocation" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true" 
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Plate #
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="truck" 
+                    formControlName="TruckID" 
+                    optionLabel="PlateNo" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select plate #"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Driver
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="driver" 
+                    formControlName="DriverID" 
+                    optionLabel="DriverName" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select driver"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Dispatcher
+                <span class="text-red-500">*</span>
+            </label>
+            <!-- <input pInputText formControlName="CheckerID" autocomplete="off" class="input"> -->
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="dispatcher" 
+                    formControlName="DispatcherID" 
+                    optionLabel="DispatcherName" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select dispatcher" 
+                    appendTo="body"
+                ></p-dropdown>
+            </div>
+        </div>
+
+
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!transferForm.valid"
+        ></button>
+
+    </form>
+</p-dialog>
+
+
+
+<!-- Source Modal -->
+<p-dialog 
+    header="Add Source Detail" 
+    [(visible)]="visibleCheckerSource" 
+    [modal]="true"  
+    [breakpoints]="{ '1430px': '550px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #sourceDialog
+>
+    <form [formGroup]="sourceCheckerForm" class="p-fluid" >  
+
+        <div class="field">
+            <label class="font-semibold" >
+                Transfer Code
+            </label>
+            <fieldset [disabled]="true">
+                <input 
+                    pInputText 
+                    formControlName="TransferCode" 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 " 
+                />
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Date Transfer
+            </label>
+            <fieldset [disabled]="true">
+                <p-calendar 
+                    formControlName="DateTransfer" 
+                    [showIcon]="true" 
+                    placeholder="mm/dd/yyyy"
+                ></p-calendar>
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Transfer Type
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="card flex justify-content-center disabled">
+                <p-dropdown 
+                    [options]="transferType" 
+                    optionLabel="TransferType" 
+                    formControlName="TransferTypeID" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Transfer Type"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material
+            </label>
+            <div class="card flex justify-content-center disabled">
+                <p-dropdown 
+                    [options]="rawMaterials" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material" 
+                    [class.disabled]="true"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Source Location
+            </label>
+            <div class="card flex justify-content-center disabled">
+                <p-dropdown 
+                    [options]="warehouseLocation" 
+                    formControlName="FromWarehouseLocationID" 
+                    optionLabel="WarehouseLocation" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    placeholder="Select Location" 
+                    [showClear]="true" 
+                    (ngModelChange)="onSelectFromLocation($event)" 
+                >
+              </p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                From Warehouse
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    formControlName="FromWarehouseID" 
+                    [options]="fromWarehouse" 
+                    optionLabel="LocationName" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    placeholder="Select Warehouse" 
+                    [showClear]="true" 
+                    (onChange)="selectFromWarehouse($event)"
+                >
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                From Partition
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="card flex justify-content-center ">
+                <p-dropdown 
+                    formControlName="FromWarehousePartitionID" 
+                    [options]="fromWarehousePartition" 
+                    optionLabel="WarehousePartitionName" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    placeholder="Select Location" 
+                    [showClear]="true"
+                >
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Checker
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            formControlName="CheckerID" 
+                            [options]="checker" 
+                            optionLabel="CheckerName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Truck"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Guard
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            formControlName="GuardID" 
+                            [options]="guard" 
+                            optionLabel="GuardName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Truck" 
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Truck
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Truck" 
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Driver
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="driver" 
+                            formControlName="DriverID" 
+                            optionLabel="DriverName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Driver"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <input type="text" style="display: none;"/>
+
+
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!sourceCheckerForm.valid" 
+            (click)="onSubmitSourceForm()"
+        ></button>
+
+    </form>
+</p-dialog>
+
+
+<!-- Destination Modal -->
+<p-dialog 
+    header="Add Destination" 
+    [(visible)]="visibleDestination" 
+    [modal]="true"  
+    [breakpoints]="{ '1430px': '550px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    [maximizable]="true" 
+    #destinationDialog
+>
+    <form [formGroup]="destinationForm" class="p-fluid" >  
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Transfer Code
+                    </label>
+                    <fieldset [disabled]="true">
+                        <input 
+                            pInputText 
+                            formControlName="TransferCode" 
+                            type="text" 
+                            class="p-inputtext-lg pl-3 " 
+                        />
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Transfer
+                    </label>
+                    <fieldset [disabled]="true">
+                        <p-calendar 
+                            formControlName="DateTransfer" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Transfer Type
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="transferType" 
+                            optionLabel="TransferType" 
+                            formControlName="TransferTypeID" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Transfer Type"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Raw Material
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="rawMaterials" 
+                            formControlName="RawMaterialID" 
+                            optionLabel="RawMaterial" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Raw Material" 
+                            [class.disabled]="true"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="col hidden">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Source Location
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="warehouseLocation" 
+                            formControlName="FromWarehouseLocationID" 
+                            optionLabel="WarehouseLocation" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true" 
+                            (ngModelChange)="onSelectFromLocation($event)" 
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col hidden">
+                <div class="field">
+                    <label class="font-semibold" >
+                        From Warehouse
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            formControlName="FromWarehouseID" 
+                            [options]="fromWarehouse" 
+                            optionLabel="LocationName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Warehouse" 
+                            [showClear]="true" 
+                            (onChange)="selectFromWarehouse($event)"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Destination
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="warehouseLocation" 
+                            formControlName="ToWarehouseLocationID" 
+                            optionLabel="WarehouseLocation" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true" 
+                            (ngModelChange)="onSelectToLocation($event)" 
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col hidden">
+                <div class="field">
+                    <label class="font-semibold" >
+                        From Partition
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            formControlName="FromWarehousePartitionID" 
+                            [options]="fromWarehousePartition" 
+                            optionLabel="WarehousePartitionName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        To Warehouse
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            formControlName="ToWarehouseID" 
+                            [options]="toWarehouse" 
+                            optionLabel="LocationName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true" 
+                            (ngModelChange)="onSelectToWarehouse($event)"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        To Partition
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            formControlName="ToWarehousePartitionID" 
+                            [options]="toWarehousePartition" 
+                            optionLabel="WarehousePartitionName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            placeholder="Select Location" 
+                            [showClear]="true"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Quantity
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        type="number" 
+                        formControlName="Quantity" 
+                        (change)="onComputeQuantityLossAndOver($event)" 
+                        placeholder="Type here" 
+                    />
+                </div>
+            </div>
+  
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Weight
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        type="number" 
+                        formControlName="Weight" 
+                        (change)="onComputeWeightLossAndOver($event)" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg"
+                    /> 
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid" *ngIf="destinationForm.value.TransferTypeID?.TransferTypeID == 2">
+
+            <div class="col">
+                <div class="field disabled">
+                    <label class="font-semibold" > 
+                        Loss Quantity
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        type="number" 
+                        formControlName="LossQuantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg"
+                    /> 
+                  </div>
+            </div>
+
+            <div class="col">
+                <div class="field disabled">
+                    <label class="font-semibold" > 
+                        Loss Weight
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        type="number" 
+                        formControlName="LossWeight" 
+                        placeholder="Type here" 
+                    />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid" *ngIf="destinationForm.value.TransferTypeID?.TransferTypeID == 2">
+            <div class="col">
+                <div class="field disabled">
+                    <label class="font-semibold" > 
+                        Over Quantity
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        type="number" 
+                        formControlName="OverQuantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg"
+                    /> 
+                  </div>
+            </div>
+
+            <div class="col">
+                <div class="field disabled">
+                    <label class="font-semibold" > 
+                        Over Weight
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        type="number" 
+                        formControlName="OverWeight" 
+                        placeholder="Type here" 
+                    />
+                </div>
+            </div>
+
+        </div>
+
+       <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Time In<span class="text-red-500">*</span></label>
+                    <p-calendar 
+                        [showIcon]="true" placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="24" 
+                        [maxDate]="maxDate"
+                        formControlName="FeedmixArrival"
+                        appendTo="body"
+                    />
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Time Out<span class="text-red-500">*</span></label>
+                    <p-calendar 
+                        [showIcon]="true" placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="24" 
+                        [maxDate]="maxDate"
+                        formControlName="FeedmixDeparture"
+                        appendTo="body"
+                    />
+                </div>
+            </div>
+       </div>
+
+
+       <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Truck
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Truck" 
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Driver
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="driver" 
+                            formControlName="DriverID" 
+                            optionLabel="DriverName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Driver"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+       </div>
+
+
+
+       <div class="flex justify-content-end">
+
+            <button 
+                type="button" 
+                pButton 
+                pRipple 
+                icon="pi pi-times" 
+                label="Dismiss" 
+                [style]="{width: 'auto', padding: '3px auto'}"
+                class="p-button-text"
+                (click)="visibleDestination = false"
+            >
+            </button>
+
+            <button 
+                type="button" 
+                pButton 
+                pRipple 
+                icon="pi pi-check" 
+                label="Submit" 
+                [style]="{width: 'auto'}"
+                (click)="onSubmitDestinationForm()"
+                [disabled]="!destinationForm.valid"
+                class="p-button-text">
+            </button>
+
+            <!-- <button 
+                pButton 
+                pRipple 
+                label="Submit" 
+                class="bg-indigo-500 border-round border-none submit px-2" 
+                [disabled]="!destinationForm.valid" 
+                (click)="onSubmitDestinationForm()"
+                [style]="{width: 'auto'}"
+            ></button> -->
+       </div>
+
+     
+
+    </form>
+</p-dialog>
+
+
+
+<!-- ========= WAREHOUSE PARTITION| STOCK MODAL FORM ========== -->
+<p-dialog 
+    header="Warehouse Partition Stock" 
+    [(visible)]="partitionModal" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '45vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    [maximizable]="true"
+>
+    <form 
+        class="w-full mb-3" 
+    >  
+
+        <p-table #dt_orders [value]="warehousePartitionStock">
+            <ng-template pTemplate="header">
+                <tr class="thead">
+                    <th style="width: 4rem"></th>
+                    <th> Stocking Date </th>
+                    <th> Raw Material </th>
+                    <th> Warehouse</th>
+                    <th> Partition </th>
+                    <th> Quantity </th>   
+                    <th> Weight </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr class="text-left">
+                <td>
+                    <p-tableRadioButton 
+                        [value]="row" 
+                        (click)="onSelectPartitionStock(row)"
+                    >
+                    </p-tableRadioButton>
+                </td>
+                <td data-title="Stocking Date ">
+                    {{row.StockingDate.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td data-title="Raw Material ">
+                    {{row.RawMaterial}}
+                </td>
+                <td data-title="Warehouse ">
+                    {{row.WarehouseLocation}} - {{row.Warehouse_Name}}
+                </td>
+                <td data-title="Warehouse Partition ">
+                    {{row.WarehousePartitionName}}
+                </td>
+                <td data-title="Finish Product Quantity ">
+                    {{row.RawMatsQty}}
+                </td>
+                <td data-title="Finish Product Weight ">
+                    {{row.RawMatsWeight}}
+                </td>
+
+            </tr>
+            </ng-template>
+
+        </p-table>
+
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="text-right mt-3">
+            <button 
+                pButton 
+                pRipple 
+                label="Okay" 
+                class="bg-indigo-500 border-round border-none submit px-3" 
+                (click)="showPartitionStockDialog()"
+            ></button>
+        </div>
+    </ng-template>
+
+</p-dialog>

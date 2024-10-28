@@ -1,0 +1,48 @@
+
+label {
+    font-size: var(--font-sm);
+    font-weight: var(--font-500);
+    color: var(--font-color);
+}
+
+/* input {
+    border: var(--card-border);
+    box-shadow: var(--card-box-shadow);
+    color: var(--font-color);
+} */
+
+:host ::ng-deep .p-inputtext {
+    border: var(--card-border);
+    box-shadow: var(--card-box-shadow);
+    color: var(--font-color);
+    transition: none;
+}
+
+:host ::ng-deep .p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+:host ::ng-deep .p-message-wrapper {
+    background: none;
+    height: 50px;
+}
+
+:host ::ng-deep .p-message-detail {
+    flex: 1;
+    font-size: var(--font-sm);
+    font-weight: var(--font-500);
+}
+
+:host ::ng-deep .p-message-icon {
+    display: flex;
+    font-size: var(--font-sm);
+}
+
+:host ::ng-deep .p-message-close-icon {
+    font-size: var(--font-sm);
+    width: 15px;
+}
+
+/* :host ::ng-deep .p-message {
+    height: 30px;
+} */

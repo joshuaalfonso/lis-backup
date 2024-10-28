@@ -1,0 +1,355 @@
+.top-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.title {
+    padding: 5px;
+    display: grid;
+    align-content: center;
+}
+
+/* ==== SEARCH, ADD, EXPORT ==== */
+.controls {
+    margin-bottom: 15px;
+}
+
+.input__search {
+    padding: 6px 0;
+    margin-right: 20px;
+}
+
+.add__btn {
+    /* background: var(--first-color); */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.export__btn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+}
+
+/* :host ::ng-deep .p-component {
+    margin-bottom: 10px;
+} */
+
+:host ::ng-deep .p-buttonset .p-button{
+    padding: 5px 10px;
+}
+
+/* :host ::ng-deep .p-buttonset .p-button:last-of-type {
+    padding: 5px 10px;
+} */
+
+
+
+/* tab */
+.radio-inputs {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 0.2rem;
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--card-box-shadow);
+    padding: 0.25rem;
+    /* width: 200px; */
+    min-width: 50px;
+    display: inline-block;
+    font-size: var(--font-sm);
+    margin-bottom: 15px;
+  }
+  
+  .radio-inputs .radio {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+  
+  .radio-inputs .radio input {
+    display: none;
+  }
+  
+  .radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.2rem;
+    border: none;
+    padding: 3px 10px;
+    color: var(--font-color);
+    transition: all .15s ease-in-out;
+    font-weight: var(--font-500);
+  }
+  
+  .radio-inputs .radio .name.active {
+    background: #6366f1;
+    font-weight: 500;
+    color: #eee;
+  }
+
+  .supplier {
+    /* white-space: nowrap; */
+    /* text-overflow: ellipsis; */
+    white-space: nowrap; 
+    width: 150px !important; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+
+
+/* ==== TABLE ==== */
+/* .table, .ship-trans-table {
+    border: 1px solid #E5E7EB;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 40px;
+    max-height: 325px;
+    overflow-y: auto;
+    position: relative;
+} */
+
+/* .table {
+    border: 1px solid #E5E7EB;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    overflow-y: auto;
+    position: relative;
+    background: white;
+    box-shadow:  0px 4px 30px rgba(221, 224, 255, .54);
+    transition: .3s all ease;
+}
+.table:hover {
+    box-shadow: none;
+} */
+
+:host ::ng-deep .p-datatable .p-datatable-header {
+    border: none;
+    margin-bottom: 5px;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-wrapper{ 
+    /* background: red;
+    overflow-y: visible !important;
+    max-height: 345px; */
+    padding: 0;
+}
+
+
+/* Styling the scrollbar */
+:host ::ng-deep ::-webkit-scrollbar {
+    width: 10px;
+    height: 8px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-thumb {
+    background: #bebdbd;
+    border-radius: 5px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-thumb:hover {
+    background: #818181;
+}
+
+
+td, th {
+    padding: 10px 10px;
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+th {
+    white-space: nowrap;
+}
+
+td {
+    /* color: 	#808080; */
+    color: var(--font-color);
+    /* border: 1px lightgray; */
+    /* border-bottom-style: dotted; */
+    font-weight: var(--font-500);
+    /* white-space: nowrap; */
+}
+
+
+.contract_table tr:hover {
+    background: #f1f5f9;
+    cursor: pointer;
+}
+
+.ship-trans-table th,td {
+    min-width: 100px; 
+}
+
+.selected {
+    background: #ececfa;
+}
+
+.selected td {
+    color: var(--first-color);
+}
+
+.red {
+    background: #F08080;
+    color: white;
+    border-right: 1px dotted lightgray;
+}
+
+
+
+/* ==== MODAL FORM ==== */
+/* input {
+    padding: 7px 10px;
+}
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+}
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+} */
+.required {
+    color: rgb(228, 84, 84);
+}
+
+.disabled {
+    opacity: 0.4;
+    pointer-events: none; /* prevents interactions */
+}
+
+.landed {
+    /* background: #F0F8FF; */
+    background: #dce9f5;
+}
+
+.pullout {
+    background: rgb(216, 243, 216);
+}
+/* .landed td {
+    color: #5d9bd4;
+} */
+
+:host ::ng-deep .p-calendar {
+    height: 41px;
+}
+
+:host ::ng-deep .p-calendar button{
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+:host ::ng-deep .p-dropdown-items {
+    padding: 0;
+}
+
+input {
+    padding: 7px 10px;
+}
+
+p-inputNumber ::ng-deep input {
+    padding: 7px 10px;
+}
+
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+}
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+
+
+
+/* @media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+} */
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.6rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}
+
+
+
+
+
+

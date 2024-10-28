@@ -1,0 +1,553 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- <h1 class="title">Raw Material P.O</h1> -->
+<app-content-header [title]="'Raw Material P.O'"></app-content-header>
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<!-- <div class="controls">
+
+    <input 
+        pInputText 
+        type="text" 
+        class="p-inputtext-lg pl-3 input__search" 
+        placeholder="Search"  
+        (input)="onGlobalFilter(dt1, $event)" 
+    />
+
+    <button 
+        pButton 
+        pRipple 
+        class="add__btn" 
+        (click)="showDialog(rawMatsPOModal)" 
+        *ngIf="insert"
+    >
+        <i class='bx bx-plus'></i> 
+        <span>Add Item</span>
+    </button>
+
+    <button 
+        pButton 
+        pRipple 
+        class="p-button-info export__btn" 
+        *ngIf="generateReport"
+    >
+        <i class='bx bx-file mr-1' ></i>  
+        <span>Export File</span>
+    </button>
+
+</div> -->
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <p-table  
+        #dt1 
+        [value]="rawMatsPO" 
+        dataKey="PONo" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['PONo', 'PODate.date', 'Terms', 'DeliveryDate.date', 'PRNumber', 'SupplierAddress']" 
+    >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search"  
+                    (input)="onGlobalFilter(dt1, $event)" 
+                />
+
+                <button 
+                    pButton 
+                    pRipple 
+                    class="add__btn" 
+                    (click)="showDialog(rawMatsPOModal)" 
+                    *ngIf="insert"
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Add Item</span>
+                </button>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th style="width: 5rem"></th>
+                <th>PO #</th>
+                <!-- <th>PO Date</th> -->
+                <th>Terms</th>
+                <th>Delivery Date</th>
+                <th>PR #</th>
+                <th>Supplier</th>
+                <!-- <th>Supplier Address</th> -->
+                <!-- <th>Item</th> -->
+                <th>Total Quantity</th>
+                <th>Total Amount</th>
+                <th *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button 
+                        pRipple 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                    />
+                </td>
+                <td  data-title="PONo"> 
+                    <span class="">{{ row.PONo }}</span> 
+                    <span class="block text-xs text-gray-500"> 
+                        {{ row.PODate.date | date: 'MMM dd, yyyy' }} 
+                    </span>
+                </td>
+                <!-- <td  data-title="PODate"> 
+                    {{ row.PODate.date | date: 'MM/dd/yyyy' }} 
+                </td> -->
+                <td  data-title="Terms"> 
+                    {{ row.Terms }} 
+                </td>
+                <td  data-title="PODate"> 
+                    {{ row.DeliveryDate.date | date: 'MMM dd, yyyy' }} 
+                </td>
+                <td  data-title="PRNumber"> 
+                    {{ row.PRNumber }} 
+                </td>
+                <td  data-title="Supplier">  
+                    <!-- {{ row.Supplier}}  -->
+                    <span class="">{{ row.Supplier }}</span> 
+                    <span class="block text-xs text-gray-500">
+                        {{ row.SupplierAddress }} 
+                    </span>
+                </td>
+                <!-- <td  data-title="Supplier"> 
+                    {{ row.SupplierAddress }} 
+                </td> -->
+                <!-- <td data-title="Item">
+                    <span class=" "> {{ getOrderItem(row.OrderDetail) }} </span>
+                </td> -->
+
+                <td  data-title="TotalWeight"> 
+                    {{ row.TotalQuantity | number }} 
+                </td>
+                <td  data-title="TotalWeight"> 
+                    {{ row.TotalAmount |number }} 
+                </td>
+                <td  data-title="Actions" *ngIf="edit">
+                    <!-- <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelect(row, rawMatsPOModal)" 
+                        [disabled]="!edit"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="delete__btn" 
+                        class="p-button-danger p-2 border-round" 
+                        [disabled]="!edit"
+                    >
+                        <i class='bx bx-trash' ></i>
+                    </button> -->
+
+                    <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
+                    <p-overlayPanel #action>
+                        <div class="actions-overlay">
+                            <p (click)="onSelect(row, rawMatsPOModal)">
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                                </svg>
+                                Edit
+                            </p>
+                            <p >
+                                <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                            </svg>
+                            Delete
+                        </p>
+                        </div>
+                    </p-overlayPanel>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" *ngIf="!isLoading">
+            <tr>
+                <td colspan="3">There is no data found.</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-PO>
+            <tr>
+                <td colspan="12">
+                    <div class="">
+                        <p-table [value]="PO.OrderDetail" dataKey="PO">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 5rem"></th>
+                                    <th>Material Code</th>
+                                    <th>Description</th>
+                                    <th>Ordered Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-detail let-index="index">
+                                <tr>
+                                    <td></td>
+                                    <td> 
+                                        {{ detail.MaterialCode }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.RawMaterial }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.Quantity | number }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.UnitPrice | number }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.Amount | number }}
+                                    </td>
+                                    
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no containers for this MBL yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+    
+</div>
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #rawMatsPOModal
+>
+    <form [formGroup]="rawMatsPOForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+
+        <div class="field">
+            <label class="font-semibold" >
+                P.O #
+            </label>
+            <input 
+                pInputText 
+                formControlName="PONo" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter PO #"
+            >
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        P.O Date
+                    </label>
+                    <p-calendar 
+                        formControlName="PODate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Terms
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="Terms" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Terms"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Delivery Date
+                    </label>
+                    <p-calendar 
+                        formControlName="DeliveryDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        PR #
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="PRNumber" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter PR #"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Supplier
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="supplier" 
+                            formControlName="SupplierID" 
+                            optionLabel="Supplier" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Supplier" 
+                            (onChange)="onSelectSupplier($event)"
+                            [filter]="true"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Supplier Address
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="SupplierAddress" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Supplier Address"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Purchase Order Details
+            </label>
+            <p-table #dt_orders [value]="OrderDetail"  [tableStyle]="{ 'width': '100%'}">
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th> Material Code </th>
+                        <th> Description </th>  
+                        <th> Ordered Qty </th>  
+                        <th> Unit Price </th>  
+                        <th> Amount </th>
+                        <th class="text-center"> Remove </th>   
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+                    <tr>
+                
+                        <td data-title="MaterialCode">
+                                <input 
+                                pInputText 
+                                autocomplete="off" 
+                                class="input" 
+                                placeholder="Enter Material Code"
+                                [ngModelOptions]="{standalone: true}" 
+                                [(ngModel)]="data.MaterialCode" 
+                            >
+                        </td>
+
+                       <!-- <td>
+                            <input 
+                                pInputText 
+                                autocomplete="off" 
+                                class="input" 
+                                placeholder="Enter Material Code"
+                                [ngModelOptions]="{standalone: true}" 
+                                [(ngModel)]="data.MaterialCode" 
+                            >
+                       </td> -->
+
+                       <td>
+                            <p-dropdown 
+                            [options]="rawMaterial" 
+                            [(ngModel)]="data.RawMaterialID" 
+                            [ngModelOptions]="{standalone: true}" 
+                            optionLabel="RawMaterial" 
+                            [style]="{'height': '40px'}" 
+                            placeholder="Select Raw Material" 
+                            appendTo="body" 
+                            [showClear]="true"
+                            optionValue="RawMaterialID"
+                        >
+                        </p-dropdown>
+                       </td>
+
+                        <td data-title="Quantity">
+                            <p-inputNumber 
+                                [(ngModel)]="data.Quantity" 
+                                [ngModelOptions]="{standalone: true}" 
+                                (ngModelChange)="onComputeAmount()"
+                                [minFractionDigits]="2" 
+                            />                               
+                        </td>
+
+                        <td data-title="UnitPrice">
+                            <p-inputNumber 
+                                [(ngModel)]="data.UnitPrice" 
+                                [ngModelOptions]="{standalone: true}" 
+                                (ngModelChange)="onComputeAmount()"
+                                [minFractionDigits]="2" 
+                            />                               
+                        </td>
+
+                        <td data-title="Amount">
+                            <fieldset [disabled]="true">
+                                <p-inputNumber 
+                                    [(ngModel)]="data.Amount" 
+                                    [ngModelOptions]="{standalone: true}" 
+                                    [minFractionDigits]="2" 
+                                />                               
+                            </fieldset>
+                        </td>
+                        
+                    
+                        <td class="text-center" data-title="Remove">
+                            <ng-container>
+                                <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removeOrder(rowIndex)"></i>
+                            </ng-container> 
+                        </td>
+
+                    </tr>
+                </ng-template>
+
+
+            </p-table>
+        </div>
+
+        <!-- <div class="field text-right">
+
+            <button pButton pRipple 
+                label="Add row" 
+                type="button" 
+                class="bg-indigo-500 border-round border-none submit w-2" 
+                (click)="addOrder()"
+            >
+            </button>
+
+        </div> -->
+
+        <!-- <div class="flex justify-content-end">
+            <button 
+                type="button" 
+                pButton 
+                pRipple 
+                icon="bx bx-plus" 
+                label="Add row" 
+                [style]="{width: 'auto'}"
+                class="p-button-text p-2 border-round"
+                (click)="addOrder()"
+                >
+            </button>
+        </div> -->
+
+        <div class="field">
+            <label class="font-semibold" >Total Quantity</label>
+            <fieldset [disabled]="true">
+                <p-inputNumber 
+                    formControlName="TotalQuantity" 
+                    inputId="integeronly" 
+                    autocomplete="off" 
+                    placeholder="Enter Total Amount" 
+                    [minFractionDigits]="2" 
+                ></p-inputNumber> 
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Total Amount</label>
+            <fieldset [disabled]="true">
+                <p-inputNumber 
+                    formControlName="TotalAmount" 
+                    inputId="integeronly" 
+                    autocomplete="off" 
+                    placeholder="Enter Total Amount" 
+                    [minFractionDigits]="2" 
+                ></p-inputNumber> 
+            </fieldset>
+        </div>
+
+        <!-- <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!rawMatsPOForm.valid"
+        ></button> -->
+
+        <div class="flex justify-content-end">
+            <button 
+                type="button" 
+                pButton 
+                pRipple 
+                icon="bx check" 
+                label="Submit" 
+                [style]="{width: 'auto'}"
+                class="p-button-primary p-2 border-round"
+                [disabled]="!rawMatsPOForm.valid"
+                (click)="onSubmit()"
+                >
+            </button>
+        </div>
+
+    </form>
+</p-dialog>

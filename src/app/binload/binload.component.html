@@ -1,0 +1,1170 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- ==== TITLE ==== -->
+<!-- <h1 class="title">Binloading</h1> -->
+<app-content-header [title]="'Binloading'"></app-content-header>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<div class="controls">
+
+    <input 
+        pInputText 
+        type="text" 
+        class="p-inputtext-lg pl-3 input__search" 
+        placeholder="Search" 
+        (input)="onGlobalFilter(dt2, $event)" 
+    />
+
+    <!-- <button 
+        pButton 
+        pRipple 
+        class="add__btn" 
+        (click)="showDialog(dialog)" 
+        *ngIf="insert"
+    >
+        <i class='bx bx-plus'></i> 
+        <span>Add Item</span>
+    </button> -->
+
+    <button 
+        pButton 
+        pRipple 
+        class="add__btn" 
+        (click)="showRequestDialog(requestDialog)" 
+        *ngIf="insert"
+    >
+        <i class='bx bx-plus'></i> 
+        <span>Add Request</span>
+    </button>
+
+    <button 
+        pButton 
+        pRipple 
+        class="p-button-info export__btn" 
+        *ngIf="insert"
+    >
+        <i class='bx bx-file mr-1' ></i> 
+        <span>Export File</span>
+    </button>
+
+</div>
+
+
+<!-- ===== TABLE ====== -->
+<div class="table">
+    <!-- <p-table #dt1 [value]="binload" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial', 'PlantName']" >
+      <ng-template pTemplate="header">
+            <tr class="thead white-space-nowrap">
+                <th>Control #</th>
+                <th>Binload Date</th>
+                <th>Raw Material</th>
+                <th>Plant</th>
+                <th>Warehouse</th>
+                <th>Partition</th>
+                <th>Intake</th>
+                <th>Quantity</th>
+                <th>Weight</th>
+                <th>Driver</th>
+                <th>Plate #</th>
+                <th>Checker</th>
+                <th>Verified</th>
+                <th *ngIf="edit">Actions</th>
+            </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr>
+              <td data-title="ControlNo">{{ row.ControlNo }}</td>
+              <td data-title="BinloadDate">{{ row.BinloadingDate.date | date: 'MM/dd/yyyy'}}</td>
+              <td data-title="RawMaterialID">{{ row.RawMaterial }}</td>
+              <td data-title="PlantID">{{ row.PlantName }}</td>
+              <td data-title="WarehouseID">{{ row.Warehouse_Name }}</td>
+              <td data-title="WarehousePartitionID">{{ row.WarehousePartitionName }}</td>
+              <td data-title="WarehousePartitionID">{{ row.IntakeID }}</td>
+              <td data-title="Quantity">{{ row.Quantity }}</td>
+              <td data-title="Weight">{{ row.Weight }}</td>
+              <td data-title="DriverName">{{ row.DriverName }}</td>
+              <td data-title="PlateNo">{{ row.PlateNo }}</td>
+              <td data-title="CheckerID">{{ row.CheckerName }}</td>
+              <td data-title="CheckerID">
+                <i class="pi pi-check-circle text-green-400" *ngIf="row.Status == 3"></i>
+                <i class="pi pi-times-circle text-red-400" *ngIf="row.Status == 0"></i>
+              </td>
+              <td data-title="Action" *ngIf="edit" class="text-left">
+                <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row, dialog)"><i class='bx bx-edit-alt'></i></button>
+                <button pButton pRipple class="delete__btn" class="p-button-primary p-2 border-round" (click)="onVerified(row)" *ngIf="row.Status == 0"><i class='bx bx-check' ></i></button>
+              </td>
+          </tr>
+      </ng-template>
+    </p-table> -->
+
+    <p-table 
+        #dt2 
+        [value]="binloadRequest" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RequestDate', 'RawMaterial', 'PlantName', 'WarehouseLocation', 'PlateNo', 'DriverName']" 
+        dataKey="BinloadRequestID"
+    >
+
+        <ng-template pTemplate="header">
+            <tr class="thead white-space-nowrap">
+                <th style="width: 5rem"></th>
+                <th>Request Date</th>
+                <th>Plant</th>
+                <th>Raw Material</th>
+                <!-- <th>Request Quantity</th> -->
+                <th>Request</th>
+                <th>Location</th>
+                <th>Plate #</th>
+                <!-- <th>Driver</th> -->
+                <th *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr *ngIf="!isLoading">
+                <td>
+                    <p-button 
+                        type="button" 
+                        pRipple 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}"
+                    />
+                </td>
+                <td data-title="Request Date"> 
+                    {{ row.RequestDate.date | date: 'MM/dd/yyyy' }} 
+                </td>
+                <td data-title="Plant Name"> 
+                    {{ row.PlantName }} 
+                </td>
+                <td data-title="Raw Material"> 
+                    {{ row.RawMaterial }} 
+                </td>
+                <!-- <td data-title="Quantity"> 
+                    {{ row.Quantity }} 
+                </td> -->
+                <td data-title="Weight"> 
+                    <!-- {{ row.Weight }}  -->
+                    <span class="">{{ row.Weight}} KG</span> 
+                    <span class="sub-text"> {{ row.Quantity}} Bag</span>
+                </td>
+                <td data-title="Warehouse Location"> 
+                    <!-- {{ row.WarehouseLocation }}  -->
+                    <span class="">{{ row.WarehouseLocation }} </span> 
+                    <span class="sub-text"> {{ row.Warehouse_Name}} - {{ row.WarehousePartitionName }}</span>
+                </td>
+                <td data-title="Plate No"> 
+                    <!-- {{ row.PlateNo }}  -->
+                    <span class="">{{ row.PlateNo}} </span> 
+                    <span class="sub-text"> {{ row.DriverName}} </span>
+                </td>
+                <!-- <td data-title="Driver Name"> 
+                    {{ row.DriverName }} 
+                </td> -->
+                <td data-title="Action" *ngIf="edit" class="">
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onEditBinloadRequest(row, requestDialog)"
+                        *ngIf="row.Binloading.length == 0"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-primary p-2 border-round mr-2" 
+                        (click)="onAddBinload(row, dialog)"
+                        *ngIf="row.Binloading.length == 0"
+                    >
+                        <i class='bx bx-plus'></i>
+                    </button>
+
+                  <!-- <button pButton pRipple class="delete__btn" class="p-button-primary p-2 border-round" (click)="onVerified(row)" *ngIf="row.Status == 0"><i class='bx bx-check' ></i></button> -->
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-binloadRequest>
+            <tr>
+                <td colspan="10">
+                    <div class="p-3">
+                        <p-table [value]="binloadRequest.Binloading" dataKey="id">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th> Binloading Date </th>
+                                    <th> Control # </th>
+                                    <th> Intake </th>
+                                    <th> Quantity </th>
+                                    <th> Weight </th>
+                                    <th> Checker </th>
+                                    <th style="width: 4rem"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row>
+                                <tr>
+                                    <td>{{ row.BinloadingDate.date | date: 'MM/dd/yyyy' }}</td>
+                                    <td> {{ row.ControlNo }}</td>
+                                    <td> {{ row.IntakeID }}</td>
+                                    <td> {{ row.Quantity }}</td>
+                                    <td> {{ row.Weight }}</td>
+                                    <td> {{ row.CheckerName }}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no order for this product yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+
+            <ng-template pTemplate=emptymessage>
+                No binload for this request.
+            </ng-template>
+
+        </ng-template>
+
+
+        <!-- <ng-template pTemplate=emptymessage>
+            There are no binload request yet.
+        </ng-template> -->
+    
+
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+
+</div>
+
+
+
+
+<!-- ======= BINLOAD REQUEST MODAL FORM ======== -->
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visibleRequestModal" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #requestDialog
+>
+    <form [formGroup]="binloadRequestForm" class="" (ngSubmit)="onSubmitBinloadRequest()">  
+     
+        <!-- <div class="field">
+            <label class="font-semibold" >Control No</label>
+            <input pInputText formControlName="ControlNo" autocomplete="off" class="input">
+        </div> -->
+
+        <div class="field">
+            <label class="font-semibold" > Request Date <span class="required">*</span></label>
+            <p-calendar 
+                formControlName="RequestDate" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy" 
+                [showTime]="true" 
+                hourFormat="12" 
+                appendTo="body" 
+                [style]="{'width': '100%'}"
+            ></p-calendar>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Plant <span class="required">*</span></label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="plant" 
+                    formControlName="PlantID" 
+                    optionLabel="PlantName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Plant" 
+                    optionValue="PlantID"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material 
+                <span class="required">*</span>
+            </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="rawMaterial" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white' , 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material"
+                    optionValue="RawMaterialID"
+                    [filter]="true"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > 
+                Location 
+                <span class="required">*</span>
+            </label>
+            <div class="card flex justify-content-center" [class.disabled]="binloadRequestForm.value.RawMaterialID == null">
+                <p-dropdown 
+                    [options]="warehouseLocation" 
+                    formControlName="WarehouseLocationID" 
+                    optionLabel="WarehouseLocation" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Location" 
+                    (onChange)="onSelectLocation($event.value)"
+                    optionValue="WarehouseLocationID"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <!-- <div class="field">
+            <label class="font-semibold" > Warehouse <span class="required">*</span></label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="warehouse" formControlName="WarehouseID" optionLabel="LocationName" [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" [showClear]="true" placeholder="Select Warehouse"></p-dropdown>
+            </div>
+        </div> -->
+
+        <!-- <div class="field">
+
+            <label class="font-semibold" > 
+                Detail <span class="required">*</span>
+            </label>
+
+            <p-table [value]="binloadDetail" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-left">Warehouse <span class="required">*</span></th>
+                        <th class="text-left">Partition <span class="required">*</span></th>
+                        <th class="text-left">Quantity</th>
+                        <th class="text-left">Weight</th>
+                        <th class="text-left"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-index="rowIndex">
+                    <tr>
+                        <td>
+                            <div class="card flex justify-content-center">
+                                <p-dropdown 
+                                    [options]="selectedWarehouse" 
+                                    optionLabel="LocationName" 
+                                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                                    [showClear]="true" 
+                                    placeholder="Select Warehouse" 
+                                    appendTo="body" 
+                                    [disabled]="selectedWarehouse.length == 0" 
+                                    (onChange)="onSelectWarehouse($event, index)"
+                                    [(ngModel)]="row.WarehouseID"
+                                    [ngModelOptions]="{standalone: true}"
+                                    optionValue="WarehouseID"
+                                ></p-dropdown>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="card flex justify-content-center">
+                                <p-dropdown 
+                                    [options]="warehousePartition" 
+                                    optionLabel="WarehousePartitionName" 
+                                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                                    [showClear]="true" 
+                                    placeholder="Select Partition" 
+                                    appendTo="body" 
+                                    [class.disabled]="selectedPartition.length == 0" 
+                                    [(ngModel)]="row.WarehousePartitionID"
+                                    [ngModelOptions]="{standalone: true}"
+                                    optionValue="WarehousePartitionID"
+                                ></p-dropdown>
+                            </div>
+                        </td>
+
+                        <td>
+                            <p-inputNumber 
+                                class="block"
+                                [class.ng-invalid]="row.Quantity > row.MaxQuantity"
+                                [disabled]="row.MaxQuantity === 0"
+                                inputId="integeronly" 
+                                autocomplete="off" 
+                                placeholder="No of bags" 
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="row.Quantity"
+                                [ngModelOptions]="{standalone: true}"
+                                (ngModelChange)="onComputeTotalQuantity()"
+                                suffix=" {{row.MaxQuantity ? '/ ' + row.MaxQuantity : null}}"
+                            ></p-inputNumber> 
+                        </td>
+                        <td>
+                            <p-inputNumber 
+                                class="block"
+                                [class.ng-invalid]="row.Weight > row.MaxWeight" 
+                                [disabled]="row.MaxQuantity > 0 || row.MaxWeight === 0"
+                                inputId="integeronly" 
+                                autocomplete="off" 
+                                placeholder="No of kg" 
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="row.Weight"
+                                [ngModelOptions]="{standalone: true}"
+                                (ngModelChange)="onComputeTotalWeight()"
+                                suffix=" {{row.MaxWeight ? '/ ' + row.MaxWeight : null}}"
+                            ></p-inputNumber> 
+                        </td>
+
+                        <td>
+                            <i class="pi pi-times hover:text-red-500 cursor-pointer " (click)="removeRow(index)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div> -->
+
+        <!-- <div class="flex justify-content-end">
+            <button 
+                type="button" 
+                pButton 
+                pRipple 
+                icon="bx bx-plus" 
+                label="Add row" 
+                [style]="{width: 'auto'}"
+                class="p-button-text p-2 border-round"
+                (click)="addRow()"
+                >
+            </button>
+        </div> -->
+
+        <div class="field">
+            <label class="font-semibold">Warehouse</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    formControlName="WarehouseID"
+                    [options]="selectedWarehouse" 
+                    optionLabel="LocationName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Warehouse" 
+                    appendTo="body" 
+                    (onChange)="onSelectWarehouse($event)"
+                    [class.disabled]="selectedWarehouse.length == 0" 
+                    optionValue="WarehouseID"
+                />
+            </div>
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold">Partition</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    formControlName="WarehousePartitionID"
+                    [options]="warehousePartition" 
+                    optionLabel="WarehousePartitionName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Partition" 
+                    appendTo="body" 
+                    [class.disabled]="selectedPartition.length == 0" 
+                    optionValue="WarehousePartitionID"
+                ></p-dropdown>
+            </div>
+        </div>
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Quantity 
+                        <span class="required">*</span>
+                    </label>
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of bags" 
+                        [style]="{'width': '100%'}"
+                    ></p-inputNumber> 
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Weight 
+                        <span class="required">*</span>
+                    </label>
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="Weight" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg" 
+                        [style]="{'width': '100%'}"
+                    ></p-inputNumber> 
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Driver 
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="driver" 
+                            formControlName="DriverID" 
+                            optionLabel="DriverName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Driver"
+                            optionValue="DriverID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Plate No 
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plate No." 
+                            optionValue="TruckID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+      <!-- <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [style]="{'width': '100%'}"></button> -->
+        <div class="flex justify-content-end">
+            <button 
+                pButton 
+                pRipple 
+                icon="pi pi-check" 
+                label="Submit" 
+                [style]="{width: 'auto'}"
+                class="p-button-primary border-round p-2"
+                [disabled]="!binloadRequestForm.valid"    
+            >
+            </button>
+
+            <!-- <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [style]="{'width': '100%'}"></button> -->
+        </div>
+
+  
+    </form>
+</p-dialog>
+
+
+
+<!-- ======= BINLOAD MODAL FORM ======== -->
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #dialog
+>
+    <form [formGroup]="binloadForm" class="" (ngSubmit)="onSubmitBinload()">  
+
+        <div class="field">
+            <label class="font-semibold" > Request Date </label>
+            <p-calendar 
+                formControlName="RequestDate" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy" 
+                [showTime]="true" 
+                hourFormat="12" 
+                appendTo="body" 
+                [style]="{'width': '100%'}"
+                class="disabled"
+            ></p-calendar>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Plant</label>
+            <div class="card flex justify-content-center disabled">
+                <p-dropdown 
+                    [options]="plant" 
+                    formControlName="PlantID" 
+                    optionLabel="PlantName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Plant" 
+                    optionValue="PlantID"
+                    class="disabled"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material 
+            </label>
+            <div class="card flex justify-content-center disabled">
+                <p-dropdown 
+                    [options]="rawMaterial" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white' , 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material"
+                    optionValue="RawMaterialID"
+                    [filter]="true"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > Location </label>
+            <div class="card flex justify-content-center" [class.disabled]="true">
+                <p-dropdown 
+                    [options]="warehouseLocation" 
+                    formControlName="WarehouseLocationID" 
+                    optionLabel="WarehouseLocation" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Location" 
+                    (onChange)="onSelectLocation($event.value)"
+                    optionValue="WarehouseLocationID"
+                ></p-dropdown>
+            </div>
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" > Warehouse </label>
+            <div class="card flex justify-content-center" [class.disabled]="true">
+                <p-dropdown 
+                    [options]="warehouse" 
+                    formControlName="WarehouseID" 
+                    optionLabel="Warehouse_Name" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Warehouse" 
+                    (onChange)="onSelectLocation($event.value)"
+                    optionValue="WarehouseID"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > Partition </label>
+            <div class="card flex justify-content-center" [class.disabled]="true">
+                <p-dropdown 
+                    [options]="warehousePartition" 
+                    formControlName="WarehousePartitionID" 
+                    optionLabel="WarehousePartitionName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Partition" 
+                    (onChange)="onSelectLocation($event.value)"
+                    optionValue="WarehousePartitionID"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Request Quantity </label>
+                    <p-inputNumber 
+                        class="block disabled" 
+                        formControlName="RequestQuantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of bags" 
+                        [style]="{'width': '100%'}"
+                    ></p-inputNumber> 
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Request Weight </label>
+                    <p-inputNumber 
+                        class="block disabled" 
+                        formControlName="RequestWeight" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg" 
+                        [style]="{'width': '100%'}"
+                    ></p-inputNumber> 
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Driver</label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="driver" 
+                            formControlName="DriverID" 
+                            optionLabel="DriverName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Driver"
+                            optionValue="DriverID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Plate No</label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plate No." 
+                            optionValue="TruckID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+     
+        <!-- <div class="field">
+            <label class="font-semibold" >Control No</label>
+            <input pInputText formControlName="ControlNo" autocomplete="off" class="input">
+        </div> -->
+
+        <!-- <div class="field">
+
+            <label class="font-semibold" > 
+                Control No 
+                <span class="required">*</span>
+            </label>
+
+
+            <input 
+                type="text" 
+                pInputText 
+                class="block" 
+                formControlName="ControlNo" 
+                inputId="integeronly" 
+                autocomplete="off" 
+                placeholder="Enter Control No" 
+                [style]="{'width': '100%'}"
+            />
+
+        </div> -->
+
+        <!-- <div class="field">
+
+            <label class="font-semibold" >
+                Plant 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="plant" 
+                    formControlName="PlantID" 
+                    optionLabel="PlantName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Plant">
+                </p-dropdown>
+            </div>
+
+        </div> -->
+
+        <!-- <div class="field">
+
+            <label class="font-semibold" >
+                Checker 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="checker" 
+                    formControlName="CheckerID" 
+                    optionLabel="CheckerName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Checker"
+                ></p-dropdown>
+            </div>
+
+        </div> -->
+
+        <!-- <div class="grid">
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Driver 
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="driver" 
+                            formControlName="DriverID" 
+                            optionLabel="DriverName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Driver"
+                        ></p-dropdown>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Plate No 
+                        <span class="required">*</span>
+                    </label>
+                    
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plate No." 
+                        ></p-dropdown>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div> -->
+
+        <div class="grid">
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Binload Date 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-calendar 
+                        formControlName="BinloadingDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [style]="{'width': '100%'}"
+                    ></p-calendar>
+                </div> 
+
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Binload Date & Time 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-calendar 
+                        formControlName="BinloadingDateTime" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="24" 
+                        appendTo="body" 
+                        [style]="{'width': '100%'}"
+                    ></p-calendar>
+
+                </div>
+                
+            </div>
+
+        </div>
+
+        <!-- <div class="field">
+
+            <label class="font-semibold" >
+                Raw Material 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="rawMaterial" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white' , 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material" 
+                    (onChange)="onSelectRawMaterial($event)"
+                ></p-dropdown>
+            </div>
+
+        </div> -->
+
+        <div class="grid">
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Quantity 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of bags" 
+                        [style]="{'width': '100%'}">
+                    </p-inputNumber> 
+
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Weight 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="Weight" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg" 
+                        [style]="{'width': '100%'}"
+                    ></p-inputNumber> 
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- [class.ng-dirty]="binloadForm.value.RequestWeight > binloadForm.value.RequestWeight" -->
+        <span *ngIf="binloadForm.value.RequestWeight > binloadForm.value.RequestWeight">zxc</span>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Intake 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="intake" 
+                    formControlName="IntakeID" 
+                    optionLabel="IntakeID" 
+                    [style]="{'height': '40px', 'border': '1px solid white' , 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Intake"
+                    optionValue="IntakeID"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Checker 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="checker" 
+                    formControlName="CheckerID" 
+                    optionLabel="CheckerName" 
+                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                    [showClear]="true" 
+                    placeholder="Select Checker"
+                    optionValue="CheckerTypeID"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="flex justify-content-end">
+            <button 
+                pButton 
+                pRipple 
+                icon="pi pi-check" 
+                label="Submit" 
+                [style]="{width: 'auto'}"
+                class="p-button-primary border-round p-2"
+                [disabled]="!binloadForm.valid"    
+            >
+            </button>
+
+        </div>
+  
+        <!-- <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!binloadForm.valid" 
+            [style]="{'width': '100%'}"
+        ></button> -->
+  
+    </form>
+</p-dialog>
+
+
+
+<!-- ========= WAREHOUSE PARTITION| STOCK MODAL FORM ========== -->
+<p-dialog 
+    header="Partition Stock" 
+    [(visible)]="partitionModal" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '60vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    [maximizable]="true"
+    selectionMode="single" 
+>
+    <form 
+        class="w-full mb-3" 
+    >  
+
+        <div class="zxc">
+            <p-table #dt_orders [value]="rawMatsPartitionStock"   [scrollable]="true"    scrollHeight="flex" >
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th style="width: 4rem"></th>
+                        <th> Stocking Date </th>
+                        <th> Raw Material </th>
+                        <th> Warehouse</th>
+                        <th> Partition </th>
+                        <th> Quantity </th>   
+                        <th> Weight </th>
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                <tr>
+                    <td>
+                        <p-tableRadioButton 
+                            [value]="row" 
+                            (click)="onSelectPartitionStock(row)"
+                        >
+                        </p-tableRadioButton>
+                    </td>
+                    <td data-title="Stocking Date ">
+                        {{row.StockingDate.date | date: 'MM/dd/yyyy'}}
+                    </td>
+                    <td data-title="Stocking Date ">
+                        {{row.RawMaterial}}
+                    </td>
+                    <td data-title="Warehouse ">
+                        {{row.WarehouseLocation}} - {{row.Warehouse_Name}}
+                    </td>
+                    <td data-title="Warehouse Partition ">
+                        {{row.WarehousePartitionName}}
+                    </td>
+                    <td data-title="Finish Product Quantity ">
+                        {{row.RawMatsQty}}
+                    </td>
+                    <td data-title="Finish Product Weight ">
+                        {{row.RawMatsWeight}}
+                    </td>
+    
+                </tr>
+                </ng-template>
+    
+            </p-table>
+        </div>
+
+        
+        <!-- <div class="text-right mt-3">
+            <button pButton pRipple label="Okay" class="bg-indigo-500 border-round border-none submit px-3" (click)="showPartitionStockDialog()"></button>
+        </div> -->
+
+    </form>
+
+    <ng-template pTemplate="footer">
+        <!-- <div class="text-right mt-3">
+            <button pButton pRipple label="Okay" class="bg-indigo-500 border-round border-none submit px-3" (click)="showPartitionStockDialog()"></button>
+        </div> -->
+        <button 
+            type="button" 
+            pButton 
+            pRipple 
+            icon="pi pi-times" 
+            (click)="partitionModal=false" 
+            label="Dismiss" 
+            class="p-button-text">
+        </button>
+    </ng-template>
+
+</p-dialog>

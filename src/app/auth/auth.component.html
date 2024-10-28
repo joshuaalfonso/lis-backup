@@ -1,0 +1,45 @@
+<div class="login__container">
+
+    <!-- <img src="assets/login.gif" alt="" style="width: 300px; height: 300px;"> -->
+    <div class="form__container">
+
+        <div class="left-col">
+            <img src="/lis/assets/Logistics.gif" alt="Logistcs" style="width: 100%;">
+        </div>
+
+        <form  
+            [formGroup]="loginForm" 
+            (ngSubmit)="onLogin()" 
+            class="right-col"
+        >
+            <h1>Login</h1>
+
+            <label>Username</label>
+            <input 
+                pInputText 
+                formControlName="username" 
+                autocomplete="off" 
+                class="input"
+            >
+
+            <label>Password</label>
+            <p-password 
+                formControlName="password" 
+                [toggleMask]="true" 
+                [feedback]="false" 
+                [style]="{'width':'100%'}"
+            ></p-password>
+
+            <p-button type="submit" [loading]="loading"> 
+                <span *ngIf="!loading">Log in</span>
+            </p-button>
+
+        </form>
+
+    </div>
+
+</div> 
+
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+

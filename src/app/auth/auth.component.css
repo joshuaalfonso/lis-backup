@@ -1,0 +1,121 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.login__container {
+    width: 100%;
+    height: 100dvh;
+    /* background: #F5F5F5; */
+    /* background: #f9fafb; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    /* background: #f9fafb; */
+    background: var(--body-color);
+    /* background: red; */
+    /* background: red; */
+}
+
+.form__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    /* box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1); */
+    padding: 20px;
+    border-radius: 30px;
+    width: 1000px;
+    /* background: #fff; */
+    background: var(--surface-color);
+    box-shadow:  var(--card-box-shadow);
+    border: var(--card-border);
+    transition: .3s all ease;
+}
+/* .form__container:hover {
+    box-shadow: none;
+} */
+
+.right-col {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.form:hover {
+    box-shadow: none;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    color: #6C737F;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border: 1px solid #E5E7EB;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 16px;
+    /* background: #f9fafb; */
+    /* background: red; */
+}
+
+:host ::ng-deep p-password input{
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid #E5E7EB;
+    padding-left: 10px;
+}
+
+
+/* .loginBtn {
+    width: 100%;
+    border: none;
+    padding: 10px 0;
+    background: #6366F1;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .3s all ease;
+    margin-top: 20px;
+} */
+
+.loginBtn:hover {
+    background: #4043f5;
+}
+
+:host ::ng-deep .p-button {
+    width: 100%;
+    /* padding: 10px 10px; */
+    height: 45px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-weight: 500;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+@media (max-width: 800px){
+    .left-col {
+        display: none;
+    }
+    .form__container {
+        grid-template-columns: 1fr;
+        padding: 0;
+    }
+}

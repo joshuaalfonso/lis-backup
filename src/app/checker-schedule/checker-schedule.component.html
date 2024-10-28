@@ -1,0 +1,193 @@
+<app-content-header [title]="'Checker Schedule'"></app-content-header>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<!-- <div class="controls">
+
+  <input 
+    pInputText 
+    type="text" 
+    class="p-inputtext-lg pl-3 input__search" 
+    placeholder="Search" 
+  />
+
+  <button 
+    pButton 
+    pRipple 
+    class="add__btn" 
+    (click)="showDialog()"
+  >
+    <i class='bx bx-plus'></i> 
+    <span>Add Item</span>
+  </button>
+
+  <button 
+    pButton 
+    pRipple 
+    class="p-button-info export__btn" 
+  >
+    <i class='bx bx-file mr-1' ></i> 
+    <span>Export File</span>
+  </button>
+
+</div> -->
+
+<!-- ===== TABLE ====== -->
+<div class="table" >
+    <p-table 
+      #dt1 
+      [value]="checkerSchedule" 
+      [tableStyle]="{ 'width': '100%' }" 
+      [globalFilterFields]="['RawMaterial']"
+    >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                />
+            
+                <button 
+                    pButton 
+                    pRipple 
+                    class="add__btn" 
+                    (click)="showDialog()"
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Add Item</span>
+                </button>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th></th>
+                <th>Name</th>
+                <th>Warehouse Location</th>
+                <th>Date Rotation</th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+            <td data-title="#">{{ rowIndex + 1 }}</td>
+            <td data-title="UserID">{{ row.Name }}</td>
+            <td data-title="Warehouse Location">{{ row.WarehouseLocation }}</td>
+          <td data-title="DateRotation">{{ row.DateRotation.date | date: 'MM/dd/yyyy' }}</td>
+
+          <td data-title="Action">
+            <!-- <button 
+              pButton 
+              pRipple 
+              class="edit__btn" 
+              class="p-button-success p-2 border-round mr-2" 
+              (click)="onSelect(row)"
+            >
+              <i class='bx bx-edit-alt'></i>
+            </button> -->
+            <!-- <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" (click)="confirm2($event, row.RawMaterialID)" [disabled]="!edit"><i class='bx bx-trash' ></i></button> -->
+
+            <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
+            <p-overlayPanel #action>
+                <div class="actions-overlay">
+                    <p (click)="onSelect(row)">
+                        <svg  width="15px" height="15px">
+                            <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                        </svg>
+                        Edit
+                    </p>
+                    <p>
+                        <svg  width="15px" height="15px">
+                        <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                    </svg>
+                    Delete
+                </p>
+                </div>
+            </p-overlayPanel>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+
+  </div>
+
+
+  <!-- <p-calendar formControlName="BinloadingDateTime" [showIcon]="true" placeholder="mm/dd/yyyy" [showTime]="true" hourFormat="12" appendTo="body" [style]="{'width': '100%'}"></p-calendar>
+  <div class="card flex justify-content-center" [class.disabled]="true">
+      <p-dropdown [options]="warehouse" formControlName="WarehouseID" optionLabel="LocationName" [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" [showClear]="true" placeholder="Select Warehouse" (ngModelChange)="onSelectWarehouse($event)" ></p-dropdown>
+  </div> -->
+
+
+  <!-- ======= MODAL FORM ======== -->
+<p-dialog header="{{ modalHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="checkerScheduleForm" class="p-fluid" (ngSubmit)="onSubmit()" >  
+  
+      <div class="field">
+        <label class="font-semibold">Checker</label>
+        <div class="card flex justify-content-center">
+            <p-dropdown 
+                [options]="checker" 
+                optionLabel="Name" 
+                formControlName="UserID" 
+                [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                [showClear]="true" 
+                placeholder="Select Checker" 
+            ></p-dropdown>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold">Warehouse Location</label>
+        <div class="card flex justify-content-center">
+            <p-dropdown 
+                [options]="warehouseLocation" 
+                optionLabel="WarehouseLocation" 
+                formControlName="WarehouseLocationID" 
+                [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                [showClear]="true" 
+                appendTo="body" 
+                placeholder="Select Checker" 
+            ></p-dropdown>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="font-semibold">Date Rotation</label>
+        <div class="card flex justify-content-center">
+            <p-calendar 
+                formControlName="DateRotation" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy" 
+                appendTo="body" 
+                [style]="{'width': '100%'}"
+            ></p-calendar>
+        </div>
+      </div>
+
+
+
+  
+      <!-- <div class="field">
+          <label class="font-semibold">Minimum Quantity</label>
+          <p-inputNumber formControlName="MinimumQuantity" inputId="integeronly" autocomplete="off" placeholder="Enter minimun quantity"></p-inputNumber> 
+      </div>
+  
+      <div class="field">
+        <label class="font-semibold">Minimum Weight</label>
+        <p-inputNumber formControlName="MinimumWeight" inputId="integeronly" autocomplete="off" placeholder="Enter maximum quantity"></p-inputNumber> 
+      </div> -->
+  
+      <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!checkerScheduleForm.valid"></button>
+  
+    </form>
+  </p-dialog>

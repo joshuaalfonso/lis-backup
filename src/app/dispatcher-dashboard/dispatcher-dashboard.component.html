@@ -1,0 +1,170 @@
+
+
+<div class="cards__container">
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title"> Available vehicles</h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    98 
+                </span>
+
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+
+            <div class="icon">
+                <img src="assets/check.png" alt="route" width="25px">
+            </div>
+    
+        </div>
+    
+    </div>
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title"> Vehicles with errors </h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    10  
+                </span>
+
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+
+            <div class="icon">
+                <img src="assets/cross.png" alt="route" width="25px">
+            </div>
+
+        </div>
+    
+    </div>
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title">On route vehicles</h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    6
+                </span>
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+            <div class="icon">
+                <!-- <img src="assets/cross.png" alt="route" width="25px"> -->
+                <img src="assets/navigation.png" alt="route" width="25px">
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title">Late vehicles</h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    15  
+                </span>
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+            <div class="icon">
+                <img src="assets/clock.png" alt="route" width="25px">
+            </div>
+        </div>
+    
+    </div>
+
+</div>
+
+
+
+<div class="grid">
+
+    <div class="col-12 lg:col-6 xl:col-9">
+        <div class="surface-container">
+    
+            <p class="card__title">
+                On route vehicles
+            </p>
+        
+            <!-- <p-chart type="doughnut" [data]="data" [options]="options" /> -->
+            <div>
+                <p-table [value]="products" [tableStyle]="{ 'width': '100%' }" responsiveLayout="stack" [breakpoint]="'960px'">
+                    <!-- <ng-template pTemplate="header">
+                        <tr>
+                            <th>Vehicle</th>
+                            <th>Transaction</th>
+                            <th>Raw Material</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </ng-template> -->
+                    <ng-template pTemplate="body" let-product>
+                        <tr>
+                            <td>  
+                                <span class="p-column-title">vehicle :</span> 
+                                <div class="vehicle">
+                                    <i class="pi pi-truck truck-icon"></i>
+                                    {{ product.vehicle }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="p-column-title">Transaction :</span> 
+                                {{ product.transaction }}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Raw Material :</span> 
+                                {{ product.rawMaterial }}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Quantity :</span> 
+                                {{ product.quantity | number }} kg
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-3">
+        <div class="surface-container flex flex-column ">
+            <p class="card__title">
+                Vehicles overview
+            </p>
+
+            <div class="overflow-y-hidden flex align-items-center justify-content-center flex-1 ">
+                <p-chart type="doughnut" [data]="data" [options]="options" />
+            </div>
+        </div>
+    </div>
+
+</div>
+

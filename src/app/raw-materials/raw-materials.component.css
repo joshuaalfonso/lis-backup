@@ -1,0 +1,120 @@
+
+/* :host ::ng-deep .p-datatable-header {
+    border: none;
+    background: var(--surface-color);
+} */
+
+th, td {
+    font-size: var(--font-sm);
+}
+th {
+    font-weight: var(--font-700);
+}
+td {
+    font-weight: var(--font-500);
+}
+
+:host ::ng-deep  .p-menu .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
+    color: red;
+}
+
+td .in-stock {
+    background: var(--font-green-light);
+    color: var(--font-green);
+    padding: 3px 8px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    font-size: var(--font-xs);
+    font-weight: var(--font-600);
+}
+
+td .low-stock {
+    background: var(--font-yellow-light);
+    color: var(--font-yellow);
+    padding: 3px 8px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    font-size: var(--font-xs);
+    font-weight: var(--font-600);
+    
+}
+
+td .no-stock {
+    background: var(--font-red-light);
+    color: var(--font-red);
+    padding: 3px 8px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    font-size: var(--font-xs);
+    font-weight: var(--font-600);
+}
+
+/* input {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+} */
+
+:host ::ng-deep .p-inputtext {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+}
+
+:host ::ng-deep .p-button {
+    width: auto;
+    border-radius: 5px;
+    padding: 8px 10px;
+}
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+        /* border: none; */
+    }
+    td::before {
+        content: attr(data-title) " : ";
+        float: left;
+        font-weight: 500;
+        /* color: var(--font-color-dark); */
+    }
+    tr:nth-child(even) {
+        /* background: #f8f9fa; */
+        background: var(--body-color);
+    }
+    /* tr {
+        border: 1px solid red;
+        background: red;
+    } */
+    /* tr:hover {
+        background: none;
+    } */
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}
+
+
+
+
+
+

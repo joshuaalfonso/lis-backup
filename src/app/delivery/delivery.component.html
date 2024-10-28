@@ -1,0 +1,598 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- <h1 class="title">Delivery</h1> -->
+<app-content-header [title]="'Delivery'"></app-content-header>
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<div class="controls">
+
+    <input pInputText 
+        type="text" 
+        class="p-inputtext-lg pl-3 input__search" 
+        placeholder="Search" 
+        (input)="onGlobalFilter(dt1, $event)"
+    />
+
+    <button pButton pRipple 
+        class="add__btn" 
+        (click)="showDialog(dialog)"
+        *ngIf="insert"
+    >
+        <i class='bx bx-plus'></i><span>Add Delivery</span>
+    </button>
+
+    <button pButton pRipple 
+        class="p-button-info export__btn"
+        *ngIf="generateReport"
+    >
+        <i class='bx bx-file mr-1' ></i> <span>Export File</span>
+    </button>
+
+</div>
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <p-table  #dt1 
+        [value]="delivery" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['DeliveryNo', 'PurchaseOrderNo', 'DeliveryDate.date', 'CustomerID']" 
+    >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>SO Number</th>
+                <th>Delivery No</th>
+                <th>Purchase Order No</th>
+                <th>Delivery Date</th>
+                <th>Customer </th>
+                <th>TotalQty</th>
+                <th *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td data-title="SO Number">{{ row.SONumber}}</td>
+                <td data-title="Delivery No">{{ row.DeliveryNo }}</td>
+                <td data-title="Purchase Order No">{{ row.PurchaseOrderNo }}</td>
+                <td data-title="Delivery Date">{{ row.DeliveryDate.date | date: 'MM/dd/yyyy'}}</td>
+                <td data-title="Customer">{{ row.CustomerName }}</td>
+                <td data-title="KiloPerBag">{{ row.TotalQty }}</td>
+                <td data-title="Action" *ngIf="edit">
+
+                    <button pButton pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelect(row, dialog)"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+
+                    <button pButton pRipple 
+                        class="delete__btn" 
+                        class="p-button-danger p-2 border-round" 
+                        (click)="confirm2($event, row.DeliveryID)"
+                    >
+                        <i class='bx bx-trash' ></i>
+                    </button>
+
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div 
+        class="text-center my-3" 
+        *ngIf="isLoading"
+    >
+        <app-loader></app-loader>
+    </div>
+</div>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+
+<!-- ========= DELIVERY MODAL FORM ========== -->
+<p-dialog 
+    header="{{dialogHeader}}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="true" [maximizable]="true" #dialog
+>
+    <form 
+        [formGroup]="deliveryForm" 
+        class="" 
+        (ngSubmit)="onSubmit()"
+    >  
+
+        <div class="field">
+            <label class="font-semibold" >SO Number</label>
+                <div class="p-inputgroup">
+                    <input pInputText  
+                        formControlName="SONumber"
+                        autocomplete="off" 
+                        class="input" 
+                    >
+                    <button type="button" pButton icon="pi pi-search" styleClass="p-button-warn" class="so-bttn" (click)="onShowDeliverySchedule()"></button>
+                </div>
+                <!-- <input pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                    [ngModelOptions]="{standalone: true}" 
+                    [(ngModel)]="datax.Partition"
+                /> -->
+        </div>
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Address</label>
+                    <input pInputText 
+                        formControlName="Address" 
+                        autocomplete="off" 
+                        [style]="{width: '100%'}"
+                    >
+                </div>
+            </div>
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Plate No.</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Truck" 
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Deliver No </label>
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="DeliveryNo" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        [useGrouping]="false" 
+                        [style]="{width: '100%'}"
+                    >
+                    </p-inputNumber> 
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Purchase Order No</label>
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="PurchaseOrderNo" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        [useGrouping]="false" 
+                        [style]="{width: '100%'}"
+                    >
+                    </p-inputNumber> 
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Delivery Date</label>
+                    <p-calendar 
+                        formControlName="DeliveryDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        [style]="{width: '100%'}"
+                    >
+                    </p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Customer</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="customer" 
+                            formControlName="CustomerID" 
+                            optionLabel="CustomerName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Customer" 
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" >Delivery Details</label>
+            <p-table #dt_orders [value]="DeliveryDetail" dataKey="Index" [tableStyle]="{ 'width': '100%'}">
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th style="width: 3rem"></th>
+                        <th> Finish Product </th>
+                        <th> Quantity </th>  
+                        <th class="text-center"> </th>   
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-data let-expanded="expanded" let-DetailIndex="rowIndex">
+                <tr>
+
+                    <td>
+                        <button 
+                            pButton pRipple [pRowToggler]="data" 
+                            class="p-button-text p-button-rounded p-button-plain" 
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                        >
+                        </button>
+                    </td>
+              
+                    <td data-title="FinishProduct">
+                        <p-dropdown 
+                            [options]="finishProduct" 
+                            [(ngModel)]="data.FinishProductID" 
+                            optionLabel="FinishProduct" 
+                            [style]="{'height': '40px'}" 
+                            placeholder="Select" 
+                            appendTo="body" 
+                            [ngModelOptions]="{standalone: true}" 
+                            [disabled]="true"
+                        >
+                        </p-dropdown>
+                    </td>
+                       
+                    <td data-title="Quantity">
+                        <p-inputNumber 
+                            [(ngModel)]="data.Quantity" 
+                            (ngModelChange)="ComputeTotalQuantity()" 
+                            [ngModelOptions]="{standalone: true}" 
+                            [max]="data.MaxInputQuantity"
+                            [disabled]="true"
+                        />                               
+                        <p 
+                            id="username-help" 
+                            class="p-error text-xs" 
+                            *ngIf="data.Quantity>data.MaxInputQuantity"
+                        >
+                            Exceeds stock.
+                        </p> 
+                    </td>
+
+                    <td>
+                        <button type="button" pButton pRipple pTooltip="Insert Row" icon="pi pi-plus" class="p-button-success bttn" (click)="insertRow(DetailIndex)"></button>
+                    </td>
+
+
+                </tr>
+                </ng-template>
+
+                <ng-template pTemplate="rowexpansion" let-data let-expansionIndex="rowIndex">
+                    <tr class="p-selectable-row">
+                      <td colspan="3">
+                        <div class="p-3 mx-5">
+                          <p-table [value]="data.Orders" dataKey="rowIndex" styleClass="p-datatable">
+                            <ng-template pTemplate="header">
+                              <tr>
+                                <th>Location</th>
+                                <th>Partition</th>
+                                <th>Qty</th>
+                                <!-- <th>Weight</th>
+                                <th>Net Weight</th> -->
+                                <th></th>
+                              </tr>
+                            </ng-template>
+                
+                            <ng-template pTemplate="body" let-datax let-rowIndex="rowIndex">
+                              <tr>
+                                <td>
+                                    <!-- <input pInputText 
+                                        type="text" 
+                                        class="p-inputtext-lg pl-3 input__search" 
+                                        placeholder="Search" 
+                                        [ngModelOptions]="{standalone: true}" 
+                                        [(ngModel)]="datax.Location"
+                                    /> -->
+                                    {{datax.WarehouseLocation}} - {{datax.Warehouse_Name}}
+                                </td>
+    
+                                <td>
+                                    <!-- <input pInputText 
+                                        type="text" 
+                                        class="p-inputtext-lg pl-3 input__search" 
+                                        placeholder="Search" 
+                                        [ngModelOptions]="{standalone: true}" 
+                                        [(ngModel)]="datax.Partition"
+                                    /> -->
+                                    {{datax.WarehousePartitionName}}
+                                </td>
+
+                                <td>
+                                    <p-inputNumber 
+                                        type="text" 
+                                        class="p-inputtext-lg pl-3 input__search" 
+                                        placeholder="Search" 
+                                        [ngModelOptions]="{standalone: true}" 
+                                        [(ngModel)]="datax.Quantity"
+                                        (ngModelChange)="ComputeTotalQuantity()"
+                                        [max]="datax.AvailStock"
+                                    />
+                                    
+                                    <p-message *ngIf="datax.Quantity > datax.AvailStock" severity="error" text="Exceeds available stock"></p-message>
+                                </td>
+
+                                <!-- <td>
+                                    <p-inputNumber 
+                                        type="text" 
+                                        class="p-inputtext-lg pl-3 input__search" 
+                                        placeholder="Search" 
+                                        [ngModelOptions]="{standalone: true}" 
+                                        [(ngModel)]="datax.Weight"
+                                        (ngModelChange)="ComputeTotalWeight()"
+                                    />
+                                    
+                                    <p-message *ngIf="datax.Weight > datax.AvailWeight" severity="error" text="Exceeds available weight"></p-message>
+                                </td>
+
+                                <td>
+                                    {{datax.Weight * datax.Quantity}}
+                                </td> -->
+
+                                <td class="text-center">
+                                    <ng-container>
+                                        <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removeOrderRow(expansionIndex,rowIndex)"></i>
+                                    </ng-container>
+                                </td>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                              <tr>
+                                  <td colspan="3">There are no delivery for this product yet.</td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </div>
+                      </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+
+        <input 
+            pInputText 
+            formControlName="DeliverySchedTotalQty" 
+            [style]="{width: '100%'}"
+            [hidden]="true"
+        > 
+        
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+
+                    <label 
+                        class="font-semibold"
+                    >
+                        Total Quantity
+                    </label>
+        
+                    <input 
+                        pInputText 
+                        formControlName="TotalQty" 
+                        [(ngModel)]="totalQuantity" 
+                        [style]="{width: '100%'}"
+                    >    
+        
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="field">
+
+                    <label 
+                        class="font-semibold"
+                    >
+                        Total Weight
+                    </label>
+        
+                    <input 
+                        pInputText 
+                        [(ngModel)]="totalWeight" 
+                        formControlName="TotalWeight" 
+                        [style]="{width: '100%'}"
+                    >    
+        
+                </div>
+            </div>
+        </div>
+
+        
+
+        <button pButton pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!deliveryForm.valid" 
+            [style]="{width: '100%'}"
+        >
+        </button>
+
+    </form>
+</p-dialog>
+
+
+<!-- ========= DELIVERY SCHEDULE MODAL FORM ========== -->
+<p-dialog 
+    header="Delivery Schedule" 
+    [(visible)]="DeliveryScheduleModal" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '40vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    [maximizable]="true"
+>
+    <form 
+        [formGroup]="deliveryForm" 
+        class="w-full mb-3" 
+        (ngSubmit)="onSubmit()"
+    >  
+
+        <p-table #dt_orders [value]="deliverySchedule">
+            <ng-template pTemplate="header">
+                <tr class="thead">
+                    <th style="width: 4rem"></th>
+                    <th> SO Number </th>
+                    <th> Customer </th>
+                    <th> Address </th>
+                    <th> Truck </th>
+                    <th> TotalQty </th>
+                    <th> Date Schedule </th>   
+                    <th> Status </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td>
+                    <p-tableRadioButton 
+                        [value]="row" 
+                        (click)="onSelectSoNumber(row)"
+                    >
+                    </p-tableRadioButton>
+                </td>
+                <td data-title="SONumber ">
+                    {{row.SONumber}}
+                </td>
+                <td data-title="Customer ">
+                    {{row.CustomerName}}
+                </td>
+                <td data-title="Address ">
+                    {{row.Address}}
+                </td>
+                <td data-title="Truck ">
+                    {{row.PlateNo}}
+                </td>
+                <td>
+                     {{row.TotalQty}} 
+                </td>
+                <td>
+                    {{row.DateSchedule.date | date: 'mm/dd/yyyy' }}
+                </td>
+                <td>
+                    <p-tag severity="warning">{{ row.Status }}</p-tag>
+                </td>
+
+            </tr>
+            </ng-template>
+
+
+
+        </p-table>
+        
+    </form>
+
+    <div class="text-right">
+        <button pButton pRipple 
+            label="Okay" 
+            type="button" 
+            class="bg-indigo-500 border-round border-none submit w-2" 
+            (click)="showDeliveryScheduleDialog()"
+        >
+        </button>
+    </div>
+
+</p-dialog>
+
+
+<!-- ========= WAREHOUSE PARTITION| STOCK MODAL FORM ========== -->
+<p-dialog 
+    header="Warehouse Partition Stock" 
+    [(visible)]="partitionModal" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '40vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    [maximizable]="true"
+>
+    <form 
+        [formGroup]="deliveryForm" 
+        class="w-full mb-3" 
+        (ngSubmit)="onSubmit()"
+    >  
+
+        <p-table #dt_orders [value]="warehousePartitionStock">
+            <ng-template pTemplate="header">
+                <tr class="thead">
+                    <th style="width: 4rem"></th>
+                    <th> StockingDate </th>
+                    <th> Warehouse</th>
+                    <th> WarehousePartitionID </th>
+                    <th> FinProdQty </th>   
+                    <th> FinProdWeight </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td>
+                    <p-tableRadioButton 
+                        [value]="row" 
+                        (click)="onSelectPartition(row)"
+                    >
+                    </p-tableRadioButton>
+                </td>
+                <td data-title="Stocking Date ">
+                    {{row.StockingDate.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td data-title="Warehouse ">
+                    {{row.WarehouseLocation}} - {{row.Warehouse_Name}}
+                </td>
+                <td data-title="Warehouse Partition ">
+                    {{row.WarehousePartitionName}}
+                </td>
+                <td data-title="Finish Product Quantity ">
+                    {{row.FinProdQty}}
+                </td>
+                <td data-title="Finish Product Weight ">
+                    {{row.FinProdWeight}}
+                </td>
+
+            </tr>
+            </ng-template>
+
+        </p-table>
+        
+    </form>
+
+    <div class="text-right">
+        <button pButton pRipple 
+            label="Okay" 
+            type="button" 
+            class="bg-indigo-500 border-round border-none submit w-2" 
+            (click)="showPartitionDialog()"
+        >
+        </button>
+    </div>
+
+</p-dialog>

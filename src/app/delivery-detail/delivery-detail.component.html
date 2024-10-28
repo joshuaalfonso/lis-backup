@@ -1,0 +1,68 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+
+<h1 class="title">Delivery Detail</h1>
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/>
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div>
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <p-table  #dt1 [value]="deliveryDetail" [tableStyle]="{ 'width': '100%'}" [globalFilterFields]="['DeliveryID', 'FinishProductID']" >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>Delivery</th>
+                <th>Finish Product</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td data-title="Delivery ID">{{ row.DeliveryNo }}</td>
+                <td data-title="Finish Product ID">{{ row.FinishProductID }}</td>
+                <td data-title="Quantity">{{ row.Quantity }}</td>
+                <td data-title="Actions">
+                    <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                    <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" ><i class='bx bx-trash' ></i></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+</div>
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog header="{{dialogHeader}}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="deliverDetailForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+
+        <div class="field">
+          <label class="font-semibold" > Delivery No </label>
+          <div class="card flex justify-content-center">
+            <p-dropdown [options]="delivery" formControlName="DeliveryID" optionLabel="DeliveryNo" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Delivery"></p-dropdown>
+          </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > Finish Product ID </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="finishProduct" formControlName="FinishProductID" optionLabel="FinishProduct" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Finish Product"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > Quantity </label>
+            <p-inputNumber formControlName="Quantity" inputId="integeronly" autocomplete="off" ></p-inputNumber> 
+        </div>
+
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!deliverDetailForm.valid"></button>
+
+    </form>
+</p-dialog>

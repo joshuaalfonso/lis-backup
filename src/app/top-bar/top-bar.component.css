@@ -1,0 +1,22 @@
+.topbar {
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: none;
+    border-bottom: 1px solid lightgray;
+}
+
+.topbar__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    color: var(--text-color);
+}
+
+@media screen and (max-width: 600px) {
+    .topbar {
+        display: block;
+    }
+}

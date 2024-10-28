@@ -1,0 +1,124 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- <h1 class="title">Finish Product Transfer</h1> -->
+<app-content-header [title]="'Transfer / Finish Product'"></app-content-header>
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/>
+    <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add Transfer</span></button>
+    <button pButton pRipple class="p-button-info export__btn" *ngIf="generateReport"><i class='bx bx-file mr-1'></i> <span>Export File</span></button>
+</div>
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <p-table  #dt1 [value]="transfer" [tableStyle]="{ 'width': '100%'}" [globalFilterFields]="['DateTransfer.date', 'FinishProductID']" >
+        <ng-template pTemplate="header">
+            <tr  class="thead">
+                <th>Date Transfer </th>
+                <th>From</th>
+                <th>To</th>
+                <!-- <th>ToWarehouseID </th>
+                <th>ToWarehousePartitionID</th> -->
+                <th>Finish Product</th>
+                <th>Checker</th>
+                <th>Quantity</th>
+                <th *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td data-title="Date Transfer">{{ row.DateTransfer.date | date: 'MM/dd/yyyy'}}</td>
+                <td data-title="From Warehouse">{{ row.FromWarehouse + " - " + row.FromPartitionName }}</td>
+                <td data-title="From Partition">{{ row.ToWarehouse + " - " + row.ToWarehousePartitionName}}</td>
+                <!-- <td data-title="To Warehouse">{{ row.ToWarehouse }}</td>
+                <td data-title="To Partition">{{ row.ToWarehousePartitionName }}</td> -->
+                <td data-title="Finish Product">{{ row.FinishProduct }}</td>
+                <td data-title="CheckerID">{{ row.CheckerName }}</td>
+                <td data-title="Quantity">{{ row.Quantity }}</td>
+                <td data-title="Action" *ngIf="edit">
+                    <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                    <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" (click)="confirm2($event, row.FinishProductTransferID)"><i class='bx bx-trash' ></i></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+</div>
+
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog header="{{dialogHeader}}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="transferForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+
+        <div class="field">
+            <label class="font-semibold" >Date Transfer</label>
+            <p-calendar formControlName="DateTransfer" [showIcon]="true" placeholder="mm/dd/yyyy"></p-calendar>
+        </div>
+
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >From Warehouse</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown [options]="warehouse" formControlName="FromWarehouseID" optionLabel="LocationName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Warehouse" (ngModelChange)="onSelectFromWarehouse($event)"></p-dropdown>
+                    </div>
+                </div>
+        
+                <div class="field">
+                    <label class="font-semibold" >From Warehouse Partition</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown [options]="selectedFromWarehouse" formControlName="FromWarehousePartitionID" optionLabel="WarehousePartitionName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Partition" [class.disabled]="selectedFromWarehouse.length == 0"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >ToWarehouse</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown [options]="warehouse" formControlName="ToWarehouseID" optionLabel="LocationName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Warehouse" (ngModelChange)="onSelectToWarehouse($event)"></p-dropdown>
+                    </div>
+                </div>
+        
+                <div class="field">
+                    <label class="font-semibold" >To Warehouse Partition</label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown [options]="selectedToWarehouse" formControlName="ToWarehousePartitionID" optionLabel="WarehousePartitionName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Partition" [class.disabled]="selectedToWarehouse.length == 0"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+
+        <div class="field">
+            <label class="font-semibold" > FinishProductID </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="finishProduct" formControlName="FinishProductID" optionLabel="FinishProduct" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Finish Product"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Checker</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="checker" formControlName="CheckerID" optionLabel="CheckerName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Checker" appendTo="body"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > Quantity </label>
+            <p-inputNumber formControlName="Quantity" inputId="integeronly" autocomplete="off" placeholder="No. of bags"></p-inputNumber> 
+        </div>
+
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!transferForm.valid"></button>
+
+    </form>
+</p-dialog>

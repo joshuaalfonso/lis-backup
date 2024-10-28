@@ -1,0 +1,253 @@
+.title {
+    font-weight: var(--font-medium);
+    margin-bottom: 40px;
+    position: relative;
+    font-size: 2rem;
+}
+
+/* ==== SEARCH, ADD, EXPORT ==== */
+.controls {
+    margin-bottom: 15px;
+}
+
+.input__search {
+    padding: 6px 0;
+    margin-right: 20px;
+}
+
+.add__btn {
+    /* background: var(--first-color); */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.export__btn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+}
+
+:host ::ng-deep .p-buttonset .p-button{
+    padding: 5px 10px;
+    margin-bottom: 15px;
+}
+
+:host ::ng-deep .p-dialog .p-button {
+    padding: 7px 10px;
+    border-radius: 5px;
+} 
+
+:host ::ng-deep .p-fileupload-buttonbar p-button {
+    display: none;
+}
+
+/* tab */
+.radio-inputs {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 0.2rem;
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--card-box-shadow);
+    padding: 0.25rem;
+    width: 200px;
+    font-size: var(--font-sm);
+    margin-bottom: 15px;
+  }
+  
+  .radio-inputs .radio {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+  
+  .radio-inputs .radio input {
+    display: none;
+  }
+  
+  .radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.2rem;
+    border: none;
+    padding: 3px 0;
+    color: var(--font-color);
+    transition: all .15s ease-in-out;
+    font-weight: var(--font-500);
+  }
+  
+  .radio-inputs .radio .name.active {
+    background: #6366f1;
+    font-weight: 500;
+    color: #eee;
+  }
+
+
+
+
+/* ==== TABLE ==== */
+/* .table {
+    border: 1.2px solid #E5E7EB;
+    padding: 10px;
+    border-radius: 10px;
+    background: white;
+    margin-top: 15px;
+    box-shadow:  0px 4px 30px rgba(221, 224, 255, .54);
+    transition: .3s all ease;
+}
+.table:hover{
+    box-shadow: none;
+}
+
+.p-datatable-table {
+    border-spacing: 0px;
+    width: 200px;
+    background: blue;
+}
+td, th {
+    padding: 10px 5px;
+}
+
+td {
+    color: 	#808080;
+    border: 1px lightgray;
+    border-bottom-style: dotted;
+}
+tr:hover {
+    background: #f8f9fa;
+} */
+
+td, th {
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+/* td {
+    color: var(--font-color);
+    font-weight: 500;
+    font-size: var(--font-sm);
+} */
+
+td {
+    color: var(--font-color);
+    font-weight: var(--font-500);
+    /* color: #808080; */
+    /* font-weight: 500; */
+    /* font-size: var(--font-sm); */
+}
+
+/* ==== MODAL FORM ==== */
+
+.disabled {
+    opacity: 0.4;
+    pointer-events: none; /* prevents interactions */
+}
+
+.required {
+    color: rgb(228, 84, 84);
+}
+
+:host ::ng-deep .p-calendar {
+    height: 41px;
+}
+
+:host ::ng-deep .p-calendar button{
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+input {
+    padding: 7px 10px;
+}
+
+p-inputNumber ::ng-deep input {
+    padding: 7px 10px;
+}
+
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+    width: auto;
+}
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+        font-weight: 600;
+        color: #343a40;
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+    tr:hover {
+        background: none;
+    }
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}
+
+
+
+
+
+

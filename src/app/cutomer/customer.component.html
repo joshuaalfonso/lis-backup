@@ -1,0 +1,76 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<app-content-header [title]="'Profile / Customer'"></app-content-header>
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/>
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i>  <span>Export File</span></button>
+</div>
+
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <p-table  #dt1 [value]="customer" [tableStyle]="{ 'width': '100%'}" [globalFilterFields]="['SalesAgentID', 'CustomerName', 'Address', 'ContactNo']" >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>Sale Agent</th>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Contact No</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td  data-title="Checker Name">{{ row.SalesAgentID }}</td>
+                <td  data-title="Checker Name">{{ row.CustomerName }}</td>
+                <td  data-title="Checker Name">{{ row.Address }}</td>
+                <td  data-title="Checker Name">{{ row.ContactNo }}</td>
+                <td  data-title="Actions">
+                    <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                    <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" (click)="confirm2($event, row.SalesAgentID)"><i class='bx bx-trash' ></i></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+</div>
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="customerForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+
+        <div class="field">
+          <label class="font-semibold" >Sales Agent</label>
+          <div class="card flex justify-content-center">
+            <p-dropdown [options]="salesAgent" formControlName="SalesAgentID" optionLabel="SalesAgent" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Sales Agent"></p-dropdown>
+          </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Customer Name</label>
+            <input pInputText formControlName="CustomerName" autocomplete="off" class="input">
+          </div>
+
+          <div class="field">
+            <label class="font-semibold" >Address</label>
+            <input pInputText formControlName="Address" autocomplete="off" class="input">
+          </div>
+
+          <div class="field">
+            <label class="font-semibold" >Contact No</label>
+            <p-inputNumber formControlName="ContactNo" inputId="integeronly" autocomplete="off" [useGrouping]="false"></p-inputNumber> 
+          </div>
+
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!customerForm.valid"></button>
+
+    </form>
+</p-dialog>

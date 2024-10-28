@@ -1,0 +1,62 @@
+.title {
+    font-weight: var(--font-medium);
+    margin-bottom: 40px;
+    position: relative;
+    font-size: 2rem;
+}
+
+/* ==== SEARCH, ADD, EXPORT ==== */
+.controls {
+    margin-bottom: 15px;
+}
+
+.input__search {
+    padding: 6px 0;
+    margin-right: 20px;
+}
+
+/* .add__btn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.export__btn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+} */
+.bttn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+:host ::ng-deep .p-buttonset .p-button:first-of-type {
+    padding: 5px 10px;
+}
+
+:host ::ng-deep .p-buttonset .p-button:last-of-type {
+    padding: 5px 10px;
+}
+
+:host ::ng-deep .p-buttonset .p-button:not(:first-of-type):not(:last-of-type) {
+    padding: 5px 10px;
+}
+
+
+/* ==== TABLE ==== */
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-500);
+}
+

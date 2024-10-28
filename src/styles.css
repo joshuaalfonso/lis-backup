@@ -1,0 +1,379 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    font-family: 'Poppins', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+body {
+    padding: 0;
+}
+
+/* button {
+    padding: 7px 10px;
+    border-radius: 5px !important;
+} */
+
+:root {
+    --header-height: 3.5rem;
+    --nam-width: 219px;
+
+    /* ========= Colors ======== */
+    /* --first-color: #5855fe; */
+    --first-color: #6366f1;
+    --first-color-light: #f4f0fa;
+    --title-color: #19181b;
+
+    --font-color: #58555e;
+    --font-color-dark: #424242;
+    --font-green-light: #caf1d8;
+    --font-green-dark: #1da750;
+    --font-green: #22c55e;
+    --font-red-light: #ffd0ce;
+    --font-yellow-light: hsl(39, 100%, 50%, 0.2);
+    --font-yellow: hsl(39, 100%, 50%);
+    --font-red: #ff3d32;
+    --body-color: #f9fafb;
+    --container-color: #ffffff;
+    --light: #fefefe;
+    /* --light: #313131; */
+
+    --surface-color: #fefefe;
+    --tab-color: #f1f5f9;
+
+    /* =========== Font ========== */
+    --body-font: 'Poppins', sans-serif;
+    --normal-font-size: .938rem;
+    --small-font-size: .9rem;
+    --smaller-font-size: .8rem;
+    --font-xs: .75rem;
+    --font-sm: .875rem;
+    --font-base: 1rem;
+    --font-lg: 1.125rem;
+    --font-xl: 1.25rem;
+    --font-2xl: 1.5rem;
+    --font-3xl: 1.75rem;
+
+
+    /* ========== Font Weight ======== */
+    --font-medium: 500;
+    --font-semi-bold: 600; 
+
+    --font-400: 400;
+    --font-500: 500;
+    --font-600: 600;
+    --font-700: 700;
+    --font-800: 800;
+    --font-900: 900;
+
+    --card-box-shadow: 0px 4px 30px rgba(221, 224, 255, .54);
+    --sidebar-box-shadow: 0px 4px 50px #D9DDFC;
+    --input-box-shadow: none;
+    --card-border: 1px solid #E5E7EB;
+    --border-bottom: 1px lightgray;
+    --transition-3s: .3s all ease;
+    --divider-border: #dee2e6;
+    --tab-active: #fff;
+}
+
+[data-theme="dark"] {
+
+    --light: #f9fafb;
+
+    --font-color: #bfbfbf;
+    --body-color: #202020;
+
+    --font-color-dark: #757575;
+    --font-green-light: hsla(130, 91%, 78%, .1);
+    --font-green: #35974f;
+    --font-yellow-light: hsl(39, 100%, 50%, 0.1);
+    --font-yellow: hsl(39, 100%, 40%);
+    --font-red-light: hsla(354, 80%, 73%, .1);
+    --font-red: #be423b;
+
+    --surface-color: #262626;
+
+    
+    --sidebar-box-shadow: 
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    
+    2px 0 0.4px hsla(0, 0%, 0%, 0.02),   
+    3px 0 1.5px hsla(0, 0%, 0%, 0.045),  
+    5px 0 6px hsla(0, 0%, 0%, 0.09);   
+
+    --card-border: none;
+
+    --card-box-shadow: inset 0 0 0.5px 1px hsla(0, 0%,  
+    100%, 0.075),
+
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+
+    --input-box-shadow: inset 0 0 0.5px 1px hsla(0, 0%,  
+    100%, 0.075),
+
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+
+    --border-bottom: 1px rgb(105, 103, 103);
+
+    --divider-border: #333232;
+    --tab-color: #333232;
+    --tab-active: #6366f1;
+}
+
+/* ==== SEARCH, ADD, EXPORT ==== */
+
+.controls {
+    margin-bottom: 30px;
+    /* background-color: red; */
+}
+
+.input__search {
+    /* padding: 7px 0; */
+    margin-right: 20px;
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--card-box-shadow);
+}
+
+.add__btn {
+    /* background: var(--first-color); */
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.export__btn {
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 5px;
+}
+
+/* ==== TABLE ==== */
+.table {
+    padding: 20px;
+    border-radius: 10px;
+    background: var(--surface-color);
+    box-shadow:  var(--card-box-shadow);
+    border: var(--card-border);
+    /* transition: var(--transition-3s); */
+}
+/* .table:hover {
+    box-shadow: none;
+} */
+
+
+.p-datatable .p-datatable-wrapper{ 
+    padding: 0;
+    /* background: red; */
+}
+
+.table td, th {
+    padding: 10px 5px;
+    background: var(--surface-color);
+}
+
+.table th {
+    color: var(--font-color-dark);
+    /* background: var(--tab-color);
+    text-transform: uppercase; */
+}
+
+.table td {
+    /* color: 	#808080; */
+    color: var(--font-color);
+    /* border: var(--border-bottom); */
+    border: 1px var(--divider-border);
+    border-bottom-style: dotted;
+    background: var(--surface-color);
+}
+
+.p-frozen-column {
+    border-bottom: 1px solid var(--divider-border);
+    border-bottom-style: dotted;
+}
+/* .table tr:hover {
+    background: #f8f9fa;
+} */
+
+
+
+.p-menu-overlay ul{
+    padding: 0;
+    /* background: red; */
+}
+
+.p-menu-overlay ul a {
+    text-decoration: none;
+    list-style: none;
+}
+
+.p-overlaypanel .p-overlaypanel-content {
+    padding: 5px;
+}
+
+.p-datatable-header {
+    border: none;
+    background: var(--surface-color) !important;
+}
+
+.sub-text {
+    display: block;
+    font-weight: 400;
+    font-size: var(--font-xs);
+    color: #9e9e9e;
+}
+
+/* Modal  */
+input {
+    padding: 7px 10px;
+    background: var(--surface-color);
+    /* border: none; */
+}
+
+/* p-inputNumber ::ng-deep input {
+    padding: 7px 10px;
+} */
+.submit {
+    padding: 7px 0;
+}
+
+.p-calendar {
+    height: 41px;
+    /* background: red; */
+}
+
+.p-calendar button{
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+    /* background: red; */
+}
+/* .p-inputtext.ng-dirty.ng-invalid {
+    color: red;
+} */
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+.disabled {
+    opacity: 0.6;
+    pointer-events: none; /* prevents interactions */
+}
+
+.p-dropdown-items {
+    /* background: gray; */
+    padding: 0;
+}
+.p-sidebar-content {
+    padding: 0;
+}
+.p-sidebar .p-sidebar-header, .p-sidebar .p-sidebar-footer {
+    padding: 0;
+    display: none;
+}
+
+.p-overlaypanel{
+    background: var(--surface-color);
+    box-shadow: var(--card-box-shadow);
+    border: var(--card-border);
+}
+
+.p-overlaypanel:after {
+    /* background: var(--surface-color) */
+    display: none;
+}
+.p-overlaypanel:before {
+    /* border: solid blue; */
+    display: none;
+}
+
+.p-skeleton.p-component {
+    background: var(--tab-color)
+}
+
+.p-dialog .p-dialog-content,  .p-dialog .p-dialog-header{
+    background: var(--surface-color);
+}
+
+.p-dialog .p-dialog-header span {
+    color: var(--font-color-dark);
+}
+
+.p-dialog label {
+    color: var(--font-color);
+}
+
+
+/* Actions Overlay */
+.actions-overlay {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 160px;
+    padding: 3px;
+}
+.actions-overlay p {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--font-color);
+    font-size: var(--font-sm);
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0;
+}
+
+.actions-overlay p:hover {
+    background: var(--tab-color);
+}
+
+.p-paginator {
+    background: var(--surface-color);
+}
+
+.p-paginator button {
+    color: var(--font-color-dark);
+}
+
+.p-paginator-bottom {
+    background: green !important;
+}
+
+/* .p-highlight {
+    background: var(--tab-color)
+} */
+
+
+/* .p-menuitem{
+    background: blue
+} */
+
+/* .p-focus {
+    background: red !important;
+}
+
+.p-menu .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
+    color: red;
+} */
+
+@media screens and (min-width: 1024px) {
+        
+}
+
+

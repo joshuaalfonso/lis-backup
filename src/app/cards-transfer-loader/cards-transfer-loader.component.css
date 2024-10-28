@@ -1,0 +1,43 @@
+.transfer__detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.indigo {
+    color: #8183f4;
+    margin-bottom: 0;
+    font-size: var(--font-sm);
+    font-weight: var(--font-600);
+}
+
+.sub-text {
+    display: block;
+    font-weight: 400;
+    font-size: var(--font-xs);
+    color: #9e9e9e;
+}
+
+.transfer__tags {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.text-small {
+    font-size: var(--font-sm);
+    color: var(--font-color);
+    font-weight: var(--font-500);
+}
+
+.greent-tag {
+    font-size: var(--font-xs);
+    font-weight: var(--font-600);
+    color: var(--font-green-dark);
+    background: var(--font-green-light);
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+

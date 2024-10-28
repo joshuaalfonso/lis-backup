@@ -1,0 +1,21 @@
+a {
+    list-style: none;
+    text-decoration: none;
+    color: var(--font-color);
+    font-size: var(--font-sm);
+}
+
+.link-active {
+    background: var(--first-color);
+    /* background: var(--tab-color); */
+}
+
+.link-active a {
+    color: white;
+}
+
+.account-details {
+    background: var(--surface-color);
+    box-shadow:  var(--card-box-shadow);
+    border: var(--card-border);
+}

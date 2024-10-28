@@ -1,0 +1,702 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- ==== TITLE ==== -->
+<!-- <h1 class="title">Unloading Transaction</h1> -->
+<app-content-header [title]="'Unloading Transaction'"></app-content-header>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<!-- <div class="controls">
+
+  <button 
+    pButton pRipple 
+    class="add__btn" 
+    (click)="showDialog(unloadingModal)" 
+    *ngIf="insert"
+  >
+    <i class='bx bx-plus'></i> 
+    <span>Add Item</span>
+  </button>
+
+  <button pButton pRipple 
+    class="p-button-info export__btn" 
+    *ngIf="generateReport"
+  >
+    <i class='bx bx-file mr-1'>
+    </i> <span>Export File</span>
+  </button>
+
+</div> -->
+
+<div class="radio-inputs">
+    <label class="radio">
+        <input checked="" name="radio" type="radio" value="1" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
+        <span class="name" [class.active]="value == 1"> Local </span>
+    </label>
+    <label class="radio">
+        <input name="radio" type="radio" value="2" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
+        <span class="name" [class.active]="value == 2"> Import </span>
+    </label>
+</div>
+
+
+<!-- ===== TABLE ====== -->
+<div class="table">
+    <p-table #dt1 
+        [value]="unloadingTransaction" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['PONo', 'MBL', 'RawMaterial', 'ContainerNumber', 'DrNumber', 'Supplier', 'CheckerName']" 
+        [scrollable]="true" 
+        scrollHeight="600px" 
+    >
+
+        <ng-template pTemplate="caption">
+                
+            <div class="flex justify-content-between gap-2 mb-4 ">
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search"  
+                    (input)="onGlobalFilter(dt1, $event)"
+                />
+                <button 
+                    pButton pRipple 
+                    class="add__btn" 
+                    (click)="showDialog(unloadingModal)" 
+                    *ngIf="insert"
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Add Item</span>
+                </button>
+            </div>
+
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th> Date Unload </th>
+                <th *ngIf="value == 1"> P.O # </th>
+                <th *ngIf="value == 2"> MBL </th>
+                <th  *ngIf="value == 2"> Packaging  </th>
+                <th> Dr # </th>
+                <th> Raw Material </th>
+
+                <th> Weight </th>
+                <th> Warehouse </th>
+                <th> Checker </th>
+                <th *ngIf="edit"> Actions </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr *ngIf="!isLoading">
+                <td data-title="DateUnload">
+                    <span class="text"> {{ row.DateUnload.date | date: 'MMM dd, yyyy'}}</span> 
+                    <span class="sub-text"> {{ row.DateUnload.date | date: 'EEEE' }} </span>
+                </td>
+                <td data-title="PO" *ngIf="value == 1">
+                    <span class="">{{ row.PONo}} </span> 
+                    <span 
+                        class="sub-text white-space-nowrap overflow-hidden text-overflow-ellipsis" 
+                        style="width: 150px;" 
+                        pTooltip="{{ row.Supplier }}"  
+                        tooltipPosition="top" 
+                    > 
+                        {{ row.Supplier }} 
+                    </span>
+                </td>
+                <td data-title="BL" *ngIf="value == 2">
+                    <span class="">{{ row.MBL}} </span> 
+                    <span class="sub-text  white-space-nowrap overflow-hidden text-overflow-ellipsis" style="width: 150px;"> {{ row.Supplier }} </span>
+                </td>
+                <td data-title="Packaging"  *ngIf="value == 2">
+                    <span class="">  {{ row.Packaging == 1 ? 'Containerized' : 'Bulk'}} </span> 
+                    <span class="sub-text">   {{ row.ContainerNumber == null ? '-' : row.ContainerNumber}} </span>
+                </td>
+                <td data-title="DrNumber">
+                    <span class="">{{ row.DrNumber}} </span> 
+                    <span class="sub-text"> {{ row.PlateNo }} </span>
+                </td>
+                    <td data-title="RawMaterial">
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="Weight"> 
+                    <span class="">{{ row.Weight}} KG</span> 
+                    <span class="sub-text"> {{ row.Quantity }} Bags </span>
+                </td>
+                <td data-title="Warehouse">
+                    <span class="">  {{ row.Warehouse_Name}} ({{ row.WarehousePartitionName }})</span> 
+                    <span class="sub-text"> {{ row.WarehouseLocation}} </span>
+                </td>
+                <td data-title="CheckerID">
+                    {{ row.CheckerName }}
+                </td>
+                <td data-title="Action" *ngIf="edit">
+                    <button 
+                        pButton pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelect(row, unloadingModal)" 
+                        *ngIf="row.Status == 0"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+
+                    <button pButton pRipple 
+                        class="delete__btn" 
+                        class="p-button-danger p-2 border-round mr-2"
+                    >
+                        <i class='bx bx-trash' ></i>
+                    </button>
+
+                    <button pButton pRipple 
+                        class="delete__btn" 
+                        class="p-button-primay p-2 border-round" 
+                        (click)="onAprrove(row)"  
+                        *ngIf="row.Status == 0"
+                        pTooltip="Verify"
+                        tooltipPosition="top"
+                    >
+                        <i class='pi pi-check' ></i>
+                    </button>
+
+                    <button pButton pRipple 
+                        class="p-button-info p-2 border-round" 
+                        (click)="getImage(row)"  
+                        pTooltip="Images"
+                        tooltipPosition="top"
+                    >
+                        <i class='pi pi pi-image' ></i>
+                    </button>           
+
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+
+</div>
+
+
+<!-- ======= MODAL FORM ======== -->
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #unloadingModal
+>
+    <form 
+        [formGroup]="unloadingTransactionForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()" 
+    >  
+
+        <!-- <div class="field">
+
+            <label class="font-semibold" >Transaction</label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="transaction" 
+                    optionLabel="Label" 
+                    formControlName="isTransactionID" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Transaction" 
+                    (onChange)="onSelectTransaction($event)" 
+                    appendTo="body"
+                ></p-dropdown>
+            </div>
+
+        </div> -->
+
+        <div class="field" *ngIf="value == 1">
+
+            <label class="font-semibold" >
+                PO 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="po" 
+                    formControlName="PO" 
+                    optionLabel="PONo" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select or Enter PO" 
+                    (onChange)="onSelectPO($event.value)"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value == 2">
+
+            <label class="font-semibold" >
+                BL 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="bl" 
+                    formControlName="BL" 
+                    optionLabel="BlPackaging" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select BL" 
+                    (ngModelChange)="onSelectBL($event)" 
+                    [filter]="true"
+                ></p-dropdown>
+            </div>
+
+        </div>
+      
+
+        <div class="field" *ngIf="value == 2 && selectedPackaging === 1">
+
+            <label class="font-semibold" >
+                Container # 
+                <span class="required">*</span>
+            </label>
+        
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="containerNumber" 
+                    formControlName="ContainerNumber" 
+                    optionLabel="ContainerNumber" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Container #"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+
+        <div class="grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Unload 
+                        <span class="required">*</span>
+                    </label>
+                    <p-calendar 
+                        formControlName="DateUnload" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        appendTo="body" 
+                        [maxDate]="maxDate"
+                    ></p-calendar>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date & Time Unload 
+                        <span class="required">*</span>
+                    </label>
+                    <p-calendar 
+                        formControlName="DateTimeUnload" 
+                        [showIcon]="true" placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="24" 
+                        [style]="{'width': '100%'}"
+                        [maxDate]="maxDate"
+                    >
+                    </p-calendar>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value != 0">
+            <label class="font-semibold" >
+                Dr Number 
+                <span class="required">*</span>
+            </label>
+
+            <input 
+                pInputText 
+                formControlName="DrNumber" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter Dr Number"
+            >
+        </div>
+
+        <div class="grid nested-grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Supplier 
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                        [options]="supplier" 
+                        formControlName="SupplierID" 
+                        optionLabel="Supplier" 
+                        [style]="{'height': '40px', 'border': '1px solid white'}" 
+                        [showClear]="true" 
+                        placeholder="Select Supplier" 
+                        [filter]="true"
+                        ></p-dropdown>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Plate No. 
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="flex">
+
+                        <div class="card flex justify-content-center flex-1 mr-2">
+                            <p-dropdown 
+                                [options]="truck" 
+                                formControlName="TruckID" 
+                                optionLabel="PlateNo" 
+                                [style]="{'height': '40px', 'border': '1px solid white'}" 
+                                [showClear]="true" 
+                                placeholder="Select Plate No" 
+                                [filter]="true"
+                            ></p-dropdown>
+                        </div>
+
+                        <p-button 
+                            icon="pi pi-plus" 
+                            (click)="showTruckDialog()" 
+                            *ngIf="selectedTransaction != 0"
+                            pTooltip="New Truck" 
+                            tooltipPosition="left"
+                        />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+      
+
+        <div class="grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Warehouse 
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="warehouse" 
+                            formControlName="WarehouseID" 
+                            optionLabel="LocationName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Warehouse" 
+                            (onChange)="onSelectWarehouse($event.value)"
+                        ></p-dropdown>
+                    </div>
+                </div> 
+            </div>
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Warehouse Partition 
+                        <span class="required">*</span>
+                    </label>
+
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                        [options]="selectedWarehouse" 
+                        formControlName="WarehousePartitionID" 
+                        optionLabel="WarehousePartitionName" 
+                        [style]="{'height': '40px', 'border': '1px solid white'}" 
+                        [showClear]="true" 
+                        placeholder="Select Warehouse"
+                        ></p-dropdown>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value != 0">
+
+            <label class="font-semibold" > 
+                Raw Material 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="rawMaterial" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Quantity 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-inputNumber 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of bags"
+                    ></p-inputNumber> 
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Weight 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-inputNumber 
+                        formControlName="Weight" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg"
+                    ></p-inputNumber> 
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value != 0">
+
+            <label class="font-semibold" >
+                Checker 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="checker" 
+                    formControlName="CheckerID" 
+                    optionLabel="CheckerName" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Checker"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value != 0">
+
+            <label class="font-semibold" >
+                Image 
+                <span class="required">*</span>
+            </label>
+
+            <p-fileUpload 
+                
+                chooseLabel="Choose" 
+                [customUpload]="true"
+                chooseIcon="pi pi-upload"
+                accept="image/*" 
+                [multiple]="true"
+                [maxFileSize]="1000000"
+                (onSelect)="onUpload($event)" 
+            >
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size }} bytes
+                        </li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+
+        </div>
+
+        <div class="field" *ngIf="BeforeImage">
+            <p-image 
+                src="{{BeforeImage}}" 
+                alt="Image" 
+                width="250" 
+                [preview]="true" 
+            />
+        </div>
+
+        <div class="flex justify-content-end">
+            <button 
+                pButton 
+                pRipple 
+                label="Submit" 
+                icon="pi pi-check"
+                class="bg-indigo-500 border-round border-none submit" 
+                [disabled]="!unloadingTransactionForm.valid || files.length != 3"
+            ></button>
+        </div>
+
+    </form>
+</p-dialog>
+
+
+  <!-- ========= NEW TRUCK MODAL FORM ========== -->
+<p-dialog 
+    header="Add Truck" 
+    [(visible)]="visibleTruckModal" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form [formGroup]="truckForm" class="p-fluid" (ngSubmit)="onSubmitTruckDialog()">  
+
+        <div class="field">
+            <label class="font-semibold" >
+                Trucking 
+                <span class="required">*</span>
+            </label>
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                [options]="trucking" 
+                formControlName="TruckingID" 
+                optionLabel="TruckingName" 
+                [style]="{'height': '40px', 'border': '1px solid white'}" 
+                [showClear]="true" 
+                placeholder="Select Trucking"
+                ></p-dropdown>
+            </div>
+        
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Truck Type 
+                <span class="required">*</span>
+            </label>
+
+            <div class="card flex justify-content-center">
+                <p-dropdown 
+                    [options]="truckType" 
+                    formControlName="TruckTypeID" 
+                    optionLabel="TruckType" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Truck Type"
+                ></p-dropdown>
+            </div>
+
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Plate No 
+                <span class="required">*</span>
+            </label>
+
+            <input 
+                pInputText 
+                formControlName="PlateNo" 
+                autocomplete="off" 
+                class="input"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Description
+            </label>
+
+            <input 
+                pInputText 
+                formControlName="Description" 
+                autocomplete="off" 
+                class="input"
+            >
+
+        </div>
+
+        <div>
+            <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!truckForm.valid"
+            ></button>
+        </div>
+
+    </form>
+  
+</p-dialog>
+
+
+<p-galleria
+    [value]="images"
+    [(visible)]="displayBasic"
+    [responsiveOptions]="responsiveOptions"
+    [containerStyle]="{ 'max-width': '50%' }"
+    [numVisible]="7"
+    [circular]="true"
+    [fullScreen]="true"
+    [showItemNavigators]="true"
+    [showThumbnails]="false"
+>
+    <ng-template pTemplate="item" let-item>
+        <img 
+            [src]="displayImage(item.ImageUrl)" 
+            style="width: 70%; display: block;" 
+        />
+    </ng-template>
+
+</p-galleria>

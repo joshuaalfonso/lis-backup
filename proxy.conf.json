@@ -1,0 +1,12 @@
+{
+  "/api/*": {
+    "target": "http://10.10.2.110/",
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  }
+  }
+  

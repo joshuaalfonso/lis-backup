@@ -1,0 +1,131 @@
+
+/* inline-flex align-items-center border-dotted border-primary-500 p-2 */
+.filter-container {
+    /* background: lightblue; */
+    padding: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    border: 2px solid var(--divider-border);
+    border-style: dotted;
+    margin-right: 10px;
+}
+
+.filter-container .title {
+    color: var(--font-color-dark);
+    margin-right: 10px;
+    font-size: var(--font-sm);
+    font-weight: var(--font-500);
+}
+
+.bttn {
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+th, td {
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+.sub-text {
+    display: block;
+    font-weight: 400;
+    font-size: var(--font-xs);
+    color: #9e9e9e;
+}
+
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: 1px solid var(--divider-border);
+}
+
+:host ::ng-deep .p-dropdown-label {
+    /* font-size: var(--font-sm); */
+    color: var(--font-color);
+}
+
+:host ::ng-deep .p-datepicker, :host ::ng-deep .p-datepicker-header {
+    background: var(--surface-color);
+}
+
+:host ::ng-deep .p-datepicker-header {
+    border-bottom: 1px solid var(--divider-border);
+}
+
+
+:host ::ng-deep input {
+    border: 1px solid var(--divider-border);
+    color: var(--font-color);
+}
+
+:host ::ng-deep .p-chip {
+    background: var(--tab-color);
+}
+
+:host ::ng-deep .p-chip .p-chip-text {
+    font-size: var(--font-sm); /* Adjust this value as needed */
+    color: var(--font-color);
+}
+
+:host ::ng-deep  .p-chip .p-chip-icon {
+    font-size: var(--font-sm);
+    color: var(--font-color);
+}
+
+:host ::ng-deep .p-datatable-header label {
+    /* color: red; */
+    color: var(--font-color);
+    font-weight: 400;
+    font-size: var(--font-sm);
+}
+
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+        font-weight: 600;
+        color: #343a40;
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+    .field label {
+        font-size: 11px;
+    }
+}
+
+
+
+
+
+

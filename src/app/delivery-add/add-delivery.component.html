@@ -1,0 +1,139 @@
+<!-- <h1>Add Delivery</h1> -->
+
+<div class="form-container">
+
+    <form [formGroup]="deliveryForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+        <h1>Add Delivery</h1>
+        <div class="field">
+            <label class="font-semibold" > Deliver No </label>
+            <p-inputNumber formControlName="DeliveryNo" inputId="integeronly" autocomplete="off" [useGrouping]="false"></p-inputNumber> 
+        </div>
+        
+        <div class="field">
+            <label class="font-semibold" >Purchase Order No</label>
+            <p-inputNumber formControlName="PurchaseOrderNo" inputId="integeronly" autocomplete="off" [useGrouping]="false"></p-inputNumber> 
+        </div>
+        
+        <div class="field">
+            <label class="font-semibold" >Delivery Date</label>
+            <p-calendar formControlName="DeliveryDate" [showIcon]="true" placeholder="mm/dd/yyyy" ></p-calendar>
+        </div>
+        
+        <div class="field">
+            <label class="font-semibold" >Customer</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="customer" formControlName="CustomerID" optionLabel="CustomerName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Customer"></p-dropdown>
+            </div>
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" >Order Details</label>
+            <p-table #dt_orders [value]="DeliveryDetail">
+                <ng-template pTemplate="header">
+                    <tr class="text-base">
+                        <th> Finish Product </th>
+                        <th> Stocking Date </th>
+                        <th> Partition </th>
+                        <th> Quantity </th>  
+                        <th class="text-center"> Remove </th>   
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+                <tr>
+              
+                    <td data-label="FinishProduct">
+                        <p-dropdown [options]="finishProduct" [(ngModel)]="data.FinishProductID" optionLabel="FinishProduct" [style]="{'height': '40px', width: '120px'}" [showClear]="true" placeholder="Select" appendTo="body" [ngModelOptions]="{standalone: true}" (onChange)="onSelectFinishProduct(rowIndex)"></p-dropdown>
+                    </td>
+
+                    <td>
+                        <input pInputText  [(ngModel)]="data.StockingDate" autocomplete="off" class="input" [ngModelOptions]="{standalone: true}" [disabled]="true">
+                    </td>
+
+                    <td>
+                        <p-dropdown [options]="warehousePartition" [(ngModel)]="data.WarehousePartitionID" optionLabel="WarehousePartitionName" [style]="{'height': '40px', width: '150px'}" [showClear]="true" placeholder="Select" appendTo="body" [ngModelOptions]="{standalone: true}" [disabled]="true"></p-dropdown>
+                    </td>
+                       
+                    <td data-label="Quantity">
+                        <p-inputNumber [(ngModel)]="data.Quantity" (ngModelChange)="ComputeTotalQuantity()" [ngModelOptions]="{standalone: true}" value="totalQuantity"
+                        [max]="data.MaxInputQuantity"
+                        />             
+                        <p id="username-help" class="p-error text-xs" *ngIf="data.Quantity>data.MaxInputQuantity">Exceeds stock.</p>               
+                    </td>
+                
+                    <td class="text-center" data-label="Remove">
+                        <ng-container>
+                        <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removeOrder(rowIndex)"></i>
+                        </ng-container> 
+                    </td>
+      
+                </tr>
+                   
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="field text-right">
+            <button pButton pRipple label="Add row" type="button" class="bg-indigo-500 border-round border-none submit w-2" (click)="addDelivery()"></button>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold">Total Quantity</label>
+            <input pInputText formControlName="TotalQty" [value]="totalQuantity">      
+        </div>
+        
+        <div class="text-right">
+            <a routerLink="/delivery">Cancel</a>
+        </div>
+
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit"></button>
+    </form>
+            
+</div>
+
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog header="Warehouse Partition Stock" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '40vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="deliveryForm" class="w-full mb-3" (ngSubmit)="onSubmit()">  
+
+        <!-- [(selection)]="selectedPartition" -->
+        <p-table #dt_orders [value]="warehousePartitionStock">
+            <ng-template pTemplate="header">
+                <tr class="text-base">
+                    <th style="width: 4rem"></th>
+                    <th> StockingDate </th>
+                    <th> WarehousePartitionID </th>
+                    <th> FinProdQty </th>   
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td>
+                    <p-tableRadioButton [value]="row" (click)="onSelect(row)"></p-tableRadioButton>
+                </td>
+                <td>
+                    {{row.StockingDate.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>
+                    {{row.WarehousePartitionName}}
+                </td>
+                <td>
+                    {{row.FinProdQty}}
+                </td>
+
+            </tr>
+            </ng-template>
+
+        </p-table>
+        
+    </form>
+
+    <div class="text-right">
+        <button pButton pRipple label="Okay" type="button" class="bg-indigo-500 border-round border-none submit w-2" (click)="showDialog()"></button>
+    </div>
+
+      <!-- {{selectedPartition | json}} -->
+
+</p-dialog>

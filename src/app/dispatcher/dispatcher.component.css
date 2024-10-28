@@ -1,0 +1,105 @@
+.title {
+    font-weight: var(--font-medium);
+    margin-bottom: 40px;
+    position: relative;
+    font-size: 2rem;
+}
+
+.controls {
+    margin-bottom: 30px;
+}
+
+.input__search {
+    padding: 6px 0;
+    margin-right: 20px;
+}
+
+.add__btn {
+    /* background: var(--first-color); */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.export__btn {
+    /* background: #50C878; */
+    border: none;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+
+/* ==== TABLE ==== */
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-500);
+}
+
+/* ==== MODAL ==== */
+/* :host ::ng-deep .p-dialog {
+    padding: 15px 20px;
+    background: white;
+} */
+
+/* :host ::ng-deep .p-dialog-header {
+    margin-bottom: 20px;
+} */
+
+input {
+    padding: 7px 10px;
+}
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+}
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+        /* font-weight: 500; */
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}

@@ -1,0 +1,40 @@
+
+
+<div *ngIf="!transferLoading">
+    <div class="transfer__detail">
+        <div>
+            <h6 class="indigo mb-1">#{{ row.TransferCode }}</h6>
+            <span class="sub-text"> {{ row.DateTransfer?.date | date: 'M/d/yy' }} </span>
+        </div>
+
+        <div class="greent-tag" *ngIf="row.Status === 3">
+            Completed
+        </div>
+
+    </div>
+
+    <div class="transfer__tags">
+        <span class="text-small"> {{ row.RawMaterial }} </span>
+        <span class="text-gray-500">•</span>
+        <span class="text-small">  {{ row.Weight }} kg</span>
+    </div>
+
+    <p-divider type="solid" />
+
+    <p-timeline [value]="row.events" class="" align="alternate">
+        <ng-template pTemplate="content" let-event>
+            <span class="text-small">
+                {{ event.status }}
+            </span>
+            <span class="sub-text">
+                {{ event.date?.date | date: 'M/d/yy, h:mm a' }}
+            </span>
+        </ng-template>
+    </p-timeline>
+</div>
+
+
+
+
+
+

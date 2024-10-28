@@ -1,0 +1,42 @@
+
+
+
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+        /* font-weight: 500; */
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}
+
+
+

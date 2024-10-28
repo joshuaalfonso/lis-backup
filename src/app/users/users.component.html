@@ -1,0 +1,240 @@
+
+
+
+<!-- topbar -->
+<app-content-header [title]="'Users'"></app-content-header>
+
+
+<!-- ======= SEARCH, ADD, EXPORT ======= -->
+<!-- <div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add User</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div> -->
+
+
+<!-- ======= TABLE ======= -->
+<div class="table">
+    <p-table  
+        #dt1 
+        [value]="users" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['WarehouseLocation', 'Warehouse_Name']"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]" 
+    >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+                <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
+                <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add User</span></button>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>#</th>
+                <th>Username</th>
+                <!-- <th>Password</th> -->
+                <th>Name</th>
+                <th>Contact #</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td data-title="#">
+                    {{ rowIndex + 1 }}
+                </td>
+                <td data-title="UName">
+                    {{ row.UName }}
+                    <span class="sub-text"> {{ row.ModuleName }} </span>
+                </td>
+                <!-- <td data-title="PWord">{{ row.PWord }}</td> -->
+                <td data-title="Name">
+                    {{ row.Name }}
+                    <span class="sub-text"> {{ row.Department }} </span>
+                </td>
+                <td data-title="UContactNoLevel">{{ row.ContactNo == 0 ? '-' : row.ContactNo }}</td>
+                <td data-title="EmailAdd">{{ row.EmailAdd }}</td>
+                <td data-title="Actions">
+                    <!-- <button pButton pRipple class="edit__btn"  class="p-button-primary p-2 border-round mr-2" (click)="confirm1($event, row)" pTooltip="Reset password"  tooltipPosition="top" ><i class='pi pi-refresh'></i></button>
+                    <button pButton pRipple class="edit__btn"  class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)" pTooltip="Edit" tooltipPosition="top"><i class='bx bx-edit-alt'></i></button>
+                    <button pButton pRipple class="delete__btn" class="p-button-info p-2 border-round" (click)="showAccessModal(row, accessModuleDialog)" pTooltip="Access rights" tooltipPosition="top"><i class='pi pi-unlock' ></i></button> -->
+
+                    <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
+                    <p-overlayPanel #action>
+                      <div class="actions-overlay">
+                            <p (click)="confirm1($event, row)">
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-reset.svg#Layer_1"></use>
+                                </svg>
+                                Reset
+                            </p>
+                            <p (click)="onSelect(row)">
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-pencil.svg#Outline"></use>
+                                </svg>
+                                Edit
+                            </p>
+                            <p  (click)="showAccessModal(row, accessModuleDialog)">
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-key.svg#Layer_1"></use>
+                                </svg>
+                                Access 
+                            </p>
+                      </div>
+                    </p-overlayPanel>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+</div>
+
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form  [formGroup]="userForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+
+        <div class="field">
+            <label class="font-semibold" >Username</label>
+            <input pInputText formControlName="UName" autocomplete="off" class="input" placeholder="Enter username">
+        </div>
+
+        <!-- <div class="field">
+            <label class="font-semibold" >Password</label>
+            <input pInputText formControlName="PWord" autocomplete="off" class="input" placeholder="Enter password">
+        </div> -->
+
+        <div class="field">
+            <label class="font-semibold" >Department</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="department" formControlName="DepartmentID" optionLabel="Department" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select "></p-dropdown>
+            </div>
+        </div> 
+
+        <div class="field">
+            <label class="font-semibold" >User Level</label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="module" formControlName="ULevel" optionLabel="ModuleName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select "></p-dropdown>
+            </div>
+        </div> 
+
+        <div class="field">
+            <label class="font-semibold" >Name</label>
+            <input pInputText formControlName="Name" autocomplete="off" class="input" placeholder="Enter name">
+        </div> 
+
+        <div class="field">
+            <label class="font-semibold" >Contact #</label>
+            <p-inputNumber formControlName="ContactNo" inputId="integeronly" autocomplete="off"  [useGrouping]="false" placeholder="Enter contact #"></p-inputNumber> 
+        </div> 
+
+        <div class="field">
+            <label class="font-semibold" >Email</label>
+            <input pInputText type="email" formControlName="EmailAdd" autocomplete="off" class="input" placeholder="Enter email">
+        </div> 
+
+    
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!userForm.valid"></button>
+
+    </form>
+</p-dialog>
+
+<!-- <p-pickList 
+    [source]="moduleAccess" 
+    [target]="selectedAccess" 
+    sourceHeader="Available" 
+    targetHeader="Selected" 
+    [dragdrop]="true" 
+    [responsive]="true" 
+    [sourceStyle]="{ height: '30rem' }"
+    [targetStyle]="{ height: '30rem' }"
+    breakpoint="1400px">
+        <ng-template let-product pTemplate="item">
+            <div class="flex flex-wrap p-2 align-items-center gap-3">
+                <div class="flex-1 flex flex-column gap-2">
+                    <span class="font-bold">{{ product.Access }}</span>
+                    <div class="flex align-items-center gap-2">
+                        <i class="pi pi-tag text-sm"></i>
+                        <span>
+                            {{ product.Product }}
+                        </span>
+                    </div>
+                </div>
+                <span class="font-bold text-900">
+                    {{ '$' + product.price }}
+                </span>
+            </div>
+        </ng-template>
+</p-pickList> -->
+
+
+
+<!-- ========= MODAL FORM ========== -->
+<p-dialog header="Access Module" [(visible)]="visibleAccessModue" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '45vw' }" [draggable]="false" [resizable]="false" #accessModuleDialog>
+    <form [formGroup]="userAccessForm" class="p-fluid" (ngSubmit)="onSubmitUserAccess()">
+
+        <div class="field">
+            <label class="font-semibold" >Name</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="Name" autocomplete="off" class="input" placeholder="Enter username">
+            </fieldset>
+        </div>
+
+        <div class="field">
+              <!-- <div class="card"> -->
+                <p-pickList 
+                [source]="currentModuleAccess" 
+                [target]="selectedAccess" 
+                sourceHeader="Access Module"
+                targetHeader="Access Rights" 
+                [dragdrop]="true" 
+                [responsive]="true"
+                filterBy="Category" 
+                sourceFilterPlaceholder="Search" 
+                targetFilterPlaceholder="Search" 
+                [sourceStyle]="{ height: '30rem' }" 
+                [targetStyle]="{ height: '30rem' }" 
+                breakpoint="1400px" appendTo="body">
+                    <ng-template let-row pTemplate="item" *ngIf="selectedAccess.length >= 0">
+                        <div class="flex flex-wrap p-2 align-items-center gap-3 ">
+                            <div class="flex-1 flex flex-column gap-2">
+                                <span class="font-bold">
+                                    {{ row.AccessName }}
+                                </span>
+                                <div class="flex align-items-center gap-2">
+                                    <i class="pi pi-tag text-sm"></i>
+                                    <span>
+                                        {{ row.Category }}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- <span class="font-bold text-900">
+                               <i class="pi {{row.Icon}}"></i>
+                            </span> -->
+                        </div>
+                    </ng-template>
+
+            </p-pickList>
+        <!-- </div> -->
+        </div>
+        <div class="flex justify-content-end gap-2 footer">
+            <p-button label="Cancel" severity="secondary" (click)="visibleAccessModue = false"/>
+            <p-button label="Save" type="submit" />
+        </div>
+
+        <!-- <ng-template pTemplate="footer">
+            <p-button label="Cancel" severity="secondary" (click)="visibleAccessModue = false"/>
+        </ng-template> -->
+        
+    </form>
+
+   
+
+</p-dialog>

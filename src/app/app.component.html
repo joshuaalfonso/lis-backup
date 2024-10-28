@@ -1,0 +1,26 @@
+
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- <app-sidebar *ngIf="showSidebar && wideScreen == false"></app-sidebar> -->
+
+<div class="app">
+    <div class="sidebar" [class.hideSideBar]="wideScreen" *ngIf="showSidebar && wideScreen == false">
+        <app-sidebar ></app-sidebar>
+    </div>
+    
+    
+    <!-- <app-top-bar></app-top-bar> -->
+    <!-- <div class="content" [class.full-width]="!showSidebar" [class.margin]="showSidebar"> -->
+    <div  class="content" [class.full-width]="!showSidebar" [class.wide-screen]="wideScreen" [class.margin]="showSidebar">
+        <!-- <p-button (onClick)="sidebarVisible = true" icon="pi pi-arrow-right" /> -->
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+<p-sidebar [(visible)]="sidebarVisible" [style]="{width: '250px', padding: '0'}">
+    <app-sidebar ></app-sidebar>
+</p-sidebar>

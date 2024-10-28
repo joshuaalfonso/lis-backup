@@ -1,0 +1,31 @@
+<div class="transfer__detail">
+    <div>
+        <h6 class="indigo mb-1"><p-skeleton width="7rem" height="1rem" /></h6>
+        <span class="sub-text"> <p-skeleton width="3rem" height="1rem" /> </span>
+    </div>
+
+    <span class="sub-text"> <p-skeleton width="5rem" height="1rem" /> </span>
+
+</div>
+
+<div class="transfer__tags">
+    <span class="sub-text"> <p-skeleton width="8rem" height="1rem" /> </span>
+</div>
+
+<p-divider type="solid" />
+
+<p-timeline [value]="events" class="" align="alternate">
+
+    <ng-template pTemplate="content" let-event>
+
+        <span class="text-small">
+            <p-skeleton width="8rem" height="1rem" />
+        </span>
+
+        <span class="sub-text mt-1">
+            <p-skeleton width="5rem" height="1rem" />
+        </span>
+
+    </ng-template>
+
+</p-timeline>

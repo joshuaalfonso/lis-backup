@@ -1,0 +1,323 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- ==== TITLE ==== -->
+<h1 class="title">Weighing Transaction</h1>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div>
+
+<p-selectButton [options]="stateOptions" [(ngModel)]="value" (ngModelChange)="onSelectFilter()" optionLabel="label" optionValue="value" class="mb-3"></p-selectButton>
+
+<!-- ===== TABLE ====== -->
+<div class="table">
+    <p-table #dt1 [value]="weighingTransaction" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial']">
+      <ng-template pTemplate="header">
+          <tr class="thead">
+              <th>Truck</th>
+              <th>Driver</th>
+              <th>Checker</th>
+              <th *ngIf="value === 1">Supplier</th>
+              <th *ngIf="value === 2">Customer</th>
+              <th>Dr Number</th>
+              <th>Gross Weight</th>
+              <th>Tare Weight</th>
+              <th>Net Weight</th>
+              <th *ngIf="value === 1">rm Gross Weight</th>
+              <th *ngIf="value === 1">rm Tare Weight</th>
+              <th *ngIf="value === 1">rm Net Weight</th>
+              <th>Loss Over Weight</th>
+              <th *ngIf="value === 1">Shipping</th>
+              <th>Date & Time Arrived</th>
+              <th>Weigh In Date</th>
+              <th>Weigh Out Date</th>
+              <th *ngIf="value === 3">Others</th>
+              <th *ngIf="value === 2">No Of Bags</th>
+              <!-- <th>Transaction</th> -->
+              <th>Remarks</th>
+              <th>Actions</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr *ngIf="!isLoading">
+              <td data-title="TruckID">{{ row.PlateNo }}</td>
+              <td data-title="Weight">{{ row.DriverName }}</td>
+              <td data-title="Checker">{{ row.CheckerName }}</td>
+              <td data-title="Supplier" *ngIf="value === 1">{{ row.Supplier }}</td>
+              <td data-title="Customer" *ngIf="value === 2">{{ row.CustomerName }}</td>
+              <td data-title="Dr Number">{{ row.DrNumber }}</td>
+              <td data-title="Gross Weight">{{ row.GrossWeight }}</td>
+              <td data-title="Tare Weight">{{ row.TareWeight }}</td>
+              <td data-title="Net Weight">{{ row.NetWeight }}</td>
+              <td data-title="rm Gross Weight" *ngIf="value === 1">{{ row.rmGrossWeight }}</td>
+              <td data-title="rm Tare Weight" *ngIf="value === 1">{{ row.rmTareWeight }}</td>
+              <td data-title="rm Net Weight" *ngIf="value === 1">{{ row.rmNetWeight }}</td>
+              <td data-title="Loss Over Weight">{{ row.LossOverWeight }}</td>
+              <td data-title="Shipping" *ngIf="value === 1">{{ row.ShippingID }}</td>
+              <td data-title="Date Time Arrived">{{ row.DateTimeArrived.date | date: 'MM/dd/yyyy'}}</td>
+              <td data-title="Weigh In Date">{{ row.WeighInDate.date | date: 'MM/dd/yyyy'}}</td>
+              <td data-title="Weigh Out Date">{{ row.WeighOutDate.date | date: 'MM/dd/yyyy'}}</td>
+              <td data-title="Others" *ngIf="value === 3">{{ row.Others }}</td>
+              <td data-title="NoOfBags" *ngIf="value === 2">{{ row.NoOfBags }}</td>
+              <!-- <td data-title="isTransaction">{{ row.isTransaction }}</td> -->
+              <td data-title="Remarks">{{ row.Remarks }}</td>
+              <td data-title="Action">
+                <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" (click)="onDelete(row.WeighingTransactionID)"><i class='bx bx-trash' ></i></button>
+              </td>
+          </tr>
+      </ng-template>
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+  </div>
+
+
+  <!-- ======= MODAL FORM ======== -->
+<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+
+  <form [formGroup]="weighingTransactionForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+
+    <div class="field">
+      <label class="font-semibold" >Transaction</label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="isTransaction"  formControlName="isTransaction" optionLabel="Transaction" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Transaction" (ngModelChange)="onSelectIsTransaction($event)" appendTo="body"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction && selectedTransaction === 'Raw Material'">
+      <label class="font-semibold">Raw Material<span class="required">*</span></label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="rawMaterial" formControlName="RawMaterialID" optionLabel="RawMaterial" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Raw Material"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction && selectedTransaction === 'Finish Product'">
+      <label class="font-semibold" >Weighing Transaction Details</label>
+      <p-table #dt_orders [value]="WeighingDetails" [tableStyle]="{ 'width': '100%'}">
+          <ng-template pTemplate="header">
+              <tr class="thead">
+                  <th> Finish Product </th>
+                  <th> No of bags </th>  
+                  <th class="text-center"> Remove </th>
+              </tr>
+          </ng-template>
+  
+          <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+              <tr>
+          
+                  <td data-title="FinishProduct">
+                      <p-dropdown 
+                          [options]="finishProduct" 
+                          [(ngModel)]="data.FinishProductID" 
+                          optionLabel="FinishProduct" 
+                          [style]="{'height': '40px'}" 
+                          placeholder="Select" 
+                          appendTo="body" 
+                          [ngModelOptions]="{standalone: true}"
+                      >
+                      </p-dropdown>
+                  </td>
+                  
+                  <td data-title="Quantity">
+                      <p-inputNumber 
+                          [(ngModel)]="data.NoOfBags" 
+                          [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="computeTotalQuantity()"
+                      />                               
+                  </td>
+  
+                  <td class="text-center" data-title="Remove">
+                    <ng-container>
+                    <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removeOrder(rowIndex)"></i>
+                    </ng-container> 
+                </td>
+  
+              </tr>
+          </ng-template>
+        </p-table>
+    </div>
+
+    <div class="field text-right" *ngIf="selectedTransaction === 'Finish Product'">
+  
+      <button pButton pRipple 
+          label="Add row" 
+          type="button" 
+          class="bg-indigo-500 border-round border-none submit w-2" 
+          (click)="addRow()"
+      >
+      </button>
+  
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction === 'Finish Product'" >
+      <label class="font-semibold" >Total Quantity</label>
+      <p-inputNumber formControlName="NoOfBags" inputId="integeronly" autocomplete="off" [class.disabled]="true"></p-inputNumber>
+    </div>
+
+    <div class="grid" *ngIf="selectedTransaction">
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold">Truck<span class="required">*</span></label>
+          <div class="card flex justify-content-center">
+            <p-dropdown [options]="truck" formControlName="TruckID" optionLabel="PlateNo" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Truck"></p-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" *ngIf="selectedTransaction">
+        <div class="field">
+          <label class="font-semibold" >Driver<span class="required">*</span></label>
+          <div class="card flex justify-content-center">
+            <p-dropdown [options]="driver" formControlName="DriverID" optionLabel="DriverName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Driver"></p-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction === 'Raw Material'">
+      <label class="font-semibold" >Supplier<span class="required">*</span></label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="supplier" formControlName="SupplierID" optionLabel="Supplier" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Supplier"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction === 'Raw Material'">
+      <label class="font-semibold" >Shipping Line<span class="required">*</span></label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="shippingLine" formControlName="ShippingID" optionLabel="ShippingLine" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Shipping Line"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction === 'Finish Product'">
+      <label class="font-semibold">Customer<span class="required">*</span></label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="customer" formControlName="CustomerID" optionLabel="CustomerName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Customer"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction">
+      <label class="font-semibold" >Checker<span class="required">*</span></label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="checker" formControlName="CheckerID" optionLabel="CheckerName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Checker"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction">
+      <label class="font-semibold" >Dr Number<span class="required">*</span></label>
+      <p-inputNumber formControlName="DrNumber" inputId="integeronly" autocomplete="off"></p-inputNumber> 
+    </div>
+
+
+    <div class="grid" *ngIf="selectedTransaction">
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold">Gross Weight<span class="required">*</span></label>
+          <p-inputNumber formControlName="GrossWeight" inputId="integeronly" autocomplete="off" (ngModelChange)="getGrossWeight($event)"></p-inputNumber> 
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold" >Tare Weight<span class="required">*</span></label>
+          <p-inputNumber formControlName="TareWeight" inputId="integeronly" autocomplete="off" (ngModelChange)="getTareWeight($event)"></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="col">
+        <fieldset [disabled]="true">
+          <div class="field">
+            <label class="font-semibold" >Net Weight</label>
+            <p-inputNumber formControlName="NetWeight" inputId="integeronly" autocomplete="off"></p-inputNumber>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    
+    <div class="grid" *ngIf="selectedTransaction && selectedTransaction === 'Raw Material'">
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold">rm Gross Weight<span class="required">*</span></label>
+          <p-inputNumber formControlName="rmGrossWeight" inputId="integeronly" autocomplete="off" (ngModelChange)="getRmGrossWeight($event)"></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold" >rm Tare Weight<span class="required">*</span></label>
+          <p-inputNumber formControlName="rmTareWeight" inputId="integeronly" autocomplete="off" (ngModelChange)="getRmTareWeight($event)"></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="col">
+        <fieldset [disabled]="true">
+          <div class="field">
+            <label class="font-semibold" >rm Net Weight</label>
+            <p-inputNumber formControlName="rmNetWeight" inputId="integeronly" autocomplete="off" ></p-inputNumber>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+
+    <div class="field" *ngIf="selectedTransaction">
+        <label class="font-semibold" >Loss Over Weight</label>
+        <!-- <fieldset [disabled]="true"> -->
+          <p-inputNumber formControlName="LossOverWeight" inputId="integeronly" autocomplete="off"></p-inputNumber>
+        <!-- </fieldset> -->
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction">
+      <label class="font-semibold" >Weigher<span class="required">*</span></label>
+      <div class="card flex justify-content-center">
+        <p-dropdown [options]="weigher" formControlName="WeigherID" optionLabel="WeigherName" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Weigher"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction">
+      <label class="font-semibold" >DateTimeArrived<span class="required">*</span></label>
+      <p-calendar formControlName="DateTimeArrived" [showIcon]="true"  appendTo="body" placeholder="mm/dd/yyyy"></p-calendar>
+    </div>
+
+    <div class="grid" *ngIf="selectedTransaction">
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold" >Weigh In Date<span class="required">*</span></label>
+          <p-calendar formControlName="WeighInDate" [showIcon]="true"  appendTo="body" placeholder="mm/dd/yyyy"></p-calendar>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="field">
+          <label class="font-semibold" >Weigh Out Date<span class="required">*</span></label>
+          <p-calendar formControlName="WeighOutDate" [showIcon]="true"  appendTo="body" placeholder="mm/dd/yyyy"></p-calendar>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="field" *ngIf="selectedTransaction === 'Others'">
+      <label class="font-semibold" >Others</label>
+      <input pInputText formControlName="Others" autocomplete="off" class="input">
+    </div>
+
+    <div class="field" *ngIf="selectedTransaction">
+      <label class="font-semibold" >Remarks</label>
+      <input pInputText formControlName="Remarks" autocomplete="off" class="input">
+    </div>
+
+    <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]=""></button>
+
+  </form>
+  
+</p-dialog>

@@ -1,0 +1,89 @@
+
+
+
+/* tr.red {
+    background: #e29292;
+}
+
+tr.red td {
+    color: white;
+}
+
+tr.red:hover {
+    background: #f0a1a1;
+    transition: .2s all ease;
+} */
+
+/* td, th {
+    text-align: center;
+} */
+
+th, td {
+    font-size: var(--font-sm);
+}
+th {
+    font-weight: var(--font-700);
+}
+td {
+    font-weight: var(--font-500);
+}
+
+:host ::ng-deep p-progressbar.p-element {
+    background: red !important;
+    /* height: 40px; */
+}
+
+:host ::ng-deep .p-progressbar-label {
+    opacity: 0;
+}
+
+:host ::ng-deep .p-progressbar-determinate {
+    background: var(--divider-border);
+}
+
+:host ::ng-deep .low-stock .p-progressbar-value {
+    background: var(--font-yellow) !important;
+}
+
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+        /* font-weight: 500; */
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}
+
+
+
+
+
+

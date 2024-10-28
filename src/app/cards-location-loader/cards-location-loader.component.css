@@ -1,0 +1,25 @@
+.cards__container {
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+.cards__container .cards {
+    height: 150px;
+    padding: 20px;
+    border: var(--card-border);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--surface-color);
+    box-shadow:  var(--card-box-shadow);
+    transition: var(--transition-3s)
+}
+
+/* :host ::ng-deep .p-skeleton.p-component {
+    background: var(--tab-color)
+} */

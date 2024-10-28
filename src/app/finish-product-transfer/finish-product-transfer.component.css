@@ -1,0 +1,108 @@
+
+
+
+
+/* ==== MODAL FORM ==== */
+
+.disabled {
+    opacity: 0.4;
+    pointer-events: none; /* prevents interactions */
+}
+
+:host ::ng-deep .p-calendar {
+    height: 41px;
+}
+
+:host ::ng-deep .p-calendar button{
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px;  
+}
+
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+input {
+    padding: 7px 10px;
+}
+
+p-inputNumber ::ng-deep input {
+    padding: 7px 10px;
+}
+
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+ul, ol{
+    padding: 0;
+}
+
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+}
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+
+@media (max-width: 1142px) {
+    .thead {
+        display: none;
+    }
+    td{
+        text-align: right;
+        display: block;
+    }
+    td::before {
+        content: attr(data-title) ": ";
+        float: left;
+        /* font-weight: 500; */
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+}
+
+@media (max-width: 586px) {
+    button span {
+        display: none;
+    }
+    .input__search {
+        width: 200px;
+    }
+    .add__btn {
+        font-size: 1.4rem;
+    }
+    .export__btn {
+        font-size: 1.4rem;
+    }
+    :host ::ng-deep .p-dialog-mask {
+        padding: 0 10px;
+    }
+}
+
+
+
+
+
+

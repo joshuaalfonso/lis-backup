@@ -1,0 +1,2442 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<!-- ==== TITLE ==== -->
+<!-- <h1 class="title">Importation</h1> -->
+<app-content-header [title]="'Importation'"></app-content-header>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<!-- <div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"/>
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div> -->
+
+<!-- <p-selectButton 
+    [options]="stateOptions" 
+    [(ngModel)]="value" 
+    optionLabel="label" 
+    optionValue="value" 
+    class="mb-3" 
+    (ngModelChange)="onSelectFilter()"
+>
+</p-selectButton> -->
+
+<!-- <div class="flex align-items-center justify-content-between mb-3">
+    <div>
+        <p-selectButton 
+            [options]="stateOptions" 
+            [(ngModel)]="value" 
+            optionLabel="label" 
+            optionValue="value" 
+            class="mb-3" 
+            (ngModelChange)="onSelectFilter()"
+        >
+        </p-selectButton>
+    </div>
+</div> -->
+
+<div class="radio-inputs">
+    <label class="radio">
+         <input checked="" name="radio" type="radio" value="Active" [(ngModel)]="value" (ngModelChange)="onSelectFilter()"/>
+         <span class="name" [class.active]="value == 'Active'"> Active </span>
+    </label>
+    <label class="radio">
+         <input name="radio" type="radio" value="Completed" [(ngModel)]="value" (ngModelChange)="onSelectFilter()"/>
+         <span class="name" [class.active]="value == 'Completed'"> Completed </span>
+    </label>
+  </div>
+
+
+<!-- ===== TABLE ====== -->
+<div class="table mb-4">
+
+    <p-table 
+        #dt1 
+        [value]="contractPerforma" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['ContractNo', 'RawMaterial', 'Supplier', 'Address', 'PortOfDischarge', 'CountryOfOrigin']" 
+        class="contract_table" 
+        [scrollable]="true" 
+        scrollHeight="300px"
+    >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                Contract
+                <div>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn" 
+                        (click)="showDialog()" 
+                    >
+                        <i class='bx bx-plus'></i> 
+                        <span>New Contract</span>
+                    </button>
+
+                    <input 
+                        pInputText 
+                        type="text" 
+                        (input)="onGlobalFilter(dt1, $event)" 
+                        placeholder="Search keyword" 
+                    />
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead contract_row">
+                <th pFrozenColumn>Contract #</th>
+                <th>Raw Material</th>
+                <!-- <th>Quantity</th> -->
+                <!-- <th>Est. Container</th> -->
+                <th>Served</th>
+                <!-- <th>Balance</th> -->
+                <th>Packaging</th>
+                <!-- <th>Packed In</th> -->
+                <th>Supplier</th>
+                <!-- <th>Address</th> -->
+                <th>Port Of Discharge</th>
+                <!-- <th>Shipment Period</th> -->
+                <th>Country Of Origin</th>
+                <th >Status</th>
+                <th alignFrozen="right" pFrozenColumn *ngIf="edit">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr 
+                (click)="onSelectContract(row)" 
+                [class.selected]="row.ContractPerformaID === selectedContractPerformaID"
+                *ngIf="!isLoading"
+            >
+                <td data-title="Contract No" pFrozenColumn>
+                    <!-- {{ row.ContractNo }} -->
+                    <span class="">{{ row.ContractNo }}</span> 
+                    <span class="sub-text">  {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }} </span>
+                </td>
+                <td data-title="RawMaterialID" class="white-space-nowrap">
+                    <!-- {{ row.RawMaterial }} -->
+                    <span class="">{{ row.RawMaterial}}</span> 
+                    <span class="sub-text"> {{ row.Quantity | number}} MT </span>
+                </td>
+                <!-- <td data-title="Quantity">
+                    {{ row.Quantity | number}}
+                </td> -->
+                
+                <!-- <td data-title="Estimated Container">
+                    {{ row.EstimatedContainer }}
+                </td> -->
+                
+                <td data-title="Served">
+                    <!-- {{ row.Served_Container == 0 ? '-' : row.Served_Container}} -->
+
+                    <span class="">  {{ (row.Served_Container | number) + ' / ' + (row.EstimatedContainer | number) }} </span> 
+                    <span class="sub-text">  {{ row.Balance_Container | number}} BAL </span>
+                </td>
+
+                <!-- <td data-title="Balance">
+                    {{ row.Balance_Container == 0 ? '-' : row.Balance_Container}}
+                </td> -->
+
+                <td data-title="Packaging">
+                    <!-- {{ row.Packaging == 1 ? 'Containerized' : 'Bulk'}} -->
+                    <span class="">{{ row.Packaging == 1 ? 'Containerized' : 'Bulk'}}</span> 
+                    <span class="sub-text"> {{ row.PackedIn}} </span>
+                </td>
+                <!-- <td data-title="Packaging">
+                    {{ row.PackedIn}}
+                </td> -->
+                <!-- flex flex-column align-items-start -->
+                <td data-title="SupplierID" class="">
+                    <!-- {{ row.Supplier }} -->
+                    <div class="supplier"  pTooltip="{{row.Supplier}}" tooltipPosition="top" >{{ row.Supplier }}</div> 
+                    <span class="sub-text white-space-nowrap overflow-hidden text-overflow-ellipsis"  style="width:150px" pTooltip="{{row.SupplierAddress}}" tooltipPosition="top"> 
+                        {{ row.SupplierAddress}} 
+                    </span>
+                </td>
+                <!-- <td data-title="SupplierAddress">
+                    {{ row.SupplierAddress }}
+                </td> -->
+                <td data-title="PortOfDischarge">
+                    {{ row.PortOfDischarge }}
+                </td>
+                <!-- <td data-title="ShipmentPeriod" class="white-space-nowrap">
+                    {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }}
+                </td> -->
+                <td data-title="CountryOfOrigin">
+                    {{ row.CountryOfOrigin }}
+                </td>
+                <td data-title="Status" >
+                    <p-tag [severity]="row.Status === 'Active' ? 'success' : row.Status ==='Completed' ? 'info' : ''">
+                        {{ row.Status }}
+                    </p-tag></td>
+                <!-- <p-tag [severity]="row.Status === 'Pending' ? 'warning' : row.Status ==='Completed' ? 'success' : ''">{{ row.Status }}</p-tag> -->
+                <td data-title="Action" alignFrozen="right" pFrozenColumn *ngIf="edit">
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelect($event, row)"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+                    <!-- <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round mr-2"><i class='bx bx-trash' ></i></button> -->
+                    <button pButton pRipple 
+                        class="" 
+                        class="p-button- p-2 border-round" 
+                        pTooltip="Add transaction"
+                        tooltipPosition="top"
+                        (click)="onAddTransaction($event, row, ShippingDialog)"
+                    >
+                        <i class='pi pi-plus' ></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+
+</div>
+
+
+<!-- ======= MODAL FORM ======== -->
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form [formGroup]="contractPerformaform" class="p-fluid" (ngSubmit)="onSubmit()" >  
+  
+        <div class="field">
+            <label class="font-semibold" >
+                Contract No.
+                <span class="required">*</span>
+            </label>
+            <input 
+                pInputText 
+                formControlName="ContractNo" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter Contract No"
+            >
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Raw Material
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="rawMaterial" 
+                            formControlName="RawMaterialID" 
+                            optionLabel="RawMaterial" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select "
+                        ></p-dropdown>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Quantity
+                        <span class="required">*</span>
+                    </label>
+                    <p-inputNumber 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="Enter Quantity"
+                    ></p-inputNumber> 
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Packaging
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="packaging" 
+                            formControlName="Packaging" 
+                            optionLabel="Packaging" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Packed In
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="packedIn" 
+                            formControlName="PackedInID" 
+                            optionLabel="PackedIn" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select "
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" >
+                Estimated Containers/Trucks
+                <span class="required">*</span>
+            </label>
+            <input 
+                pInputText 
+                formControlName="EstimatedContainer" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter Estimated Container"
+            >
+        </div>
+
+        <!-- <div class="field">
+            <label class="font-semibold" >Container Type<span class="required">*</span></label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="containerType" formControlName="ContainerTypeID" optionLabel="Container" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Container Type"></p-dropdown>
+            </div>
+        </div> -->
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Supplier
+                        <span class="required">*</span>
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="supplier" 
+                            formControlName="SupplierID" 
+                            optionLabel="Supplier" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select" 
+                            (onChange)="onSelectSupplier($event)"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Address
+                        <span class="required">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="SupplierAddress" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Address"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Country Of Origin
+                        <span class="required">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="CountryOfOrigin" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Country of Origin"
+                    >
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Port Of Discharge
+                        <span class="required">*</span>
+                    </label>
+                    <!-- <input pInputText formControlName="PortOfDischarge" autocomplete="off" class="input" placeholder="Enter Port of Discharge"> -->
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            formControlName="PortOfDischargeID" 
+                            [options]="portOfDischarge" 
+                            optionLabel="PortOfDischarge" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select" 
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    
+
+        <div class="field">
+            <label class="font-semibold" >
+                Shipment Period
+                <span class="required">*</span>
+            </label>
+            <!-- <input pInputText formControlName="ShipmentPeriod" autocomplete="off" class="input" placeholder="Enter Shipment Period"> -->
+            <div class="grid">
+                <div class="col">
+                    <p-calendar 
+                        formControlName="FromShipmentPeriod" 
+                        [showIcon]="true" 
+                        placeholder="From" 
+                        [showClear]="true" 
+                        appendTo="body"
+                    ></p-calendar>
+                </div>
+                <div class="col">
+                    <p-calendar 
+                        formControlName="ToShipmentPeriod" 
+                        [showIcon]="true" 
+                        placeholder="To" 
+                        [showClear]="true" 
+                        appendTo="body"
+                    ></p-calendar>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="field">
+            <label class="font-semibold" >Status</label>
+            <input pInputText formControlName="Status" autocomplete="off" class="input">
+        </div> -->
+  
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!contractPerformaform.valid"
+        ></button>
+  
+    </form>
+</p-dialog>
+
+
+
+<!-- ======= SHIPPING TRANSACTION MODAL FORM ======== -->
+<p-dialog 
+    header="Add Shipping Transaction" 
+    [(visible)]="ShipTranVisible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #ShippingDialog
+>
+    <form 
+        [formGroup]="shippingTransactionForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmitShipTran()" 
+    >  
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Contract #
+                    </label>
+                    <fieldset [disabled]="true">
+                        <input 
+                            pInputText 
+                            formControlName="ContractNo" 
+                            autocomplete="off" 
+                            class="input"
+                        >
+                        <!-- <p-inputNumber formControlName="ContractPerformaID" inputId="integeronly" autocomplete="off" placeholder="Enter"></p-inputNumber>  -->
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Lot #
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-inputNumber 
+                            formControlName="Lot" 
+                            inputId="integeronly" 
+                            autocomplete="off" 
+                            placeholder="Enter Lot #"
+                        ></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Served</label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-inputNumber formControlName="Served" inputId="integeronly" autocomplete="off" placeholder="Enter Served"></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Balance</label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-inputNumber formControlName="Balance" inputId="integeronly" autocomplete="off" placeholder="Enter Balance"></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material
+            </label>
+            <div class="card flex justify-content-center" [class.disabled]="true">
+                <p-dropdown 
+                    formControlName="RawMaterialID" 
+                    [options]="rawMaterial" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Supplier
+                    </label>
+                    <div class="card flex justify-content-center" [class.disabled]="true">
+                        <p-dropdown 
+                            formControlName="SupplierID" 
+                            [options]="supplier" 
+                            optionLabel="Supplier" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Supplier"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Address
+                    </label>
+                    <fieldset [disabled]="true">
+                        <input 
+                            pInputText 
+                            formControlName="SupplierAddress" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Address"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Packaging
+            </label>
+            <div class="card flex justify-content-center" [class.disabled]="true">
+                <p-dropdown 
+                    formControlName="Packaging" 
+                    [options]="packaging" 
+                    optionLabel="Packaging" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > 
+                Advanced Documents Received
+            </label>
+            <fieldset [disabled]="value2 === 2">
+                <p-calendar 
+                    formControlName="AdvanceDocumentsReceived" 
+                    [showIcon]="true" 
+                    placeholder="mm/dd/yyyy" 
+                    [showClear]="true" 
+                    appendTo="body"
+                ></p-calendar>
+            </fieldset>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BAI SPS IC
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <input 
+                            pInputText 
+                            formControlName="BAI_SPS_IC" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter BAI SPS IC"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BAI Validity
+                    </label>
+                    <div class="grid">
+                        <div class="col">
+                            <fieldset [disabled]="value2 === 2">
+                                <p-calendar 
+                                    formControlName="FromBAIValidity" 
+                                    placeholder="From" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+                        <div class="col">
+                            <fieldset [disabled]="value2 === 2">
+                                <p-calendar 
+                                    formControlName="ToBAIValidity" 
+                                    placeholder="To" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid" *ngIf="selectedPackaging === 2">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BPI SPS IC
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <input 
+                            pInputText 
+                            formControlName="BPI_SPS_IC" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter BAI SPS IC"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BPI Validity
+                    </label>
+                    <div class="grid">
+
+                        <div class="col">
+                            <fieldset [disabled]="value2 === 2">
+                                <p-calendar 
+                                    formControlName="FromBPIValidity" 
+                                    placeholder="From" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+
+                        <div class="col">
+                            <fieldset [disabled]="value2 === 2">
+                                <p-calendar 
+                                    formControlName="ToBPIValidity" 
+                                    placeholder="To" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+            <div class="col" *ngIf="selectedPackaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        MBL #
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <input 
+                            pInputText 
+                            formControlName="MBL" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter MBL #"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BL #
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <input 
+                            pInputText 
+                            formControlName="BL" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter MBL #"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Shipping Line
+                    </label>
+                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                        <p-dropdown 
+                            [options]="shippingLine" 
+                            formControlName="ShippingLineID" 
+                            optionLabel="ShippingLine" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Shipping Line"
+                        ></p-dropdown>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Vessel
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="Vessel" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Vessel"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid" *ngIf="selectedPackaging === 1">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        HBL #
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <input 
+                            pInputText 
+                            formControlName="HBL" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter HBL #"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Forwarder
+                        </label>
+                        <fieldset [disabled]="value2 === 2">
+                            <input 
+                                pInputText 
+                                formControlName="Forwarder" 
+                                autocomplete="off" 
+                                class="input" 
+                                placeholder="Enter Forwarder"
+                            >
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        ETD
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="ETD" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy" 
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        ETA
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="ETA" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col" *ngIf="selectedPackaging === 1">
+                <div class="field">
+                    <label class="font-semibold">
+                        Container Type
+                    </label>
+                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                        <p-dropdown 
+                            [options]="containerType" 
+                            optionLabel="Container" 
+                            formControlName="ContainerTypeID" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Container Type"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        No Of Container
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <input 
+                            pInputText 
+                            formControlName="NoOfContainer" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter No. of Container"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        # of Trucks
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-inputNumber 
+                            formControlName="NoOfTruck" 
+                            inputId="integeronly" 
+                            autocomplete="off" 
+                            placeholder="Enter No of Trucks"
+                        ></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Quantity (MT)
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-inputNumber 
+                            formControlName="Quantity" 
+                            inputId="integeronly" 
+                            autocomplete="off" 
+                            placeholder="Enter Quantity"
+                        ></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Broker
+                    </label>
+                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                        <p-dropdown 
+                            [options]="broker" 
+                            optionLabel="Broker" 
+                            formControlName="BrokerID" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Broker"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 2">
+                <div class="field">
+                    <label class="font-semibold">
+                        Date Advance Docs Received By Broker
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="DateDocsReceivedByBroker" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="grid">
+            <div class="col" *ngIf="selectedPackaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Advance Received By Broker
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="DateDocsReceivedByBroker" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                  </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BAI SPS IC (Date)
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="BAI_SPS_IC_Date" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BPI SPS IC (Date)
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="BPI_SPS_IC_Date" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Availability
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="OriginalDocsAvailavilityDate" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy" 
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Bank
+                    </label>
+                    <!-- <fieldset [disabled]="value2 === 2">
+                        <input pInputText formControlName="BankID" autocomplete="off" class="input" placeholder="Bank">
+                    </fieldset> -->
+                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                        <p-dropdown 
+                            formControlName="BankID" 
+                            [options]="bank" 
+                            optionLabel="Bank" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Bank"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Pickup
+                    </label>
+                    <fieldset [disabled]="value2 === 2">
+                        <p-calendar 
+                            formControlName="DateOfPickup" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Port Of Discharge
+            </label>
+            <fieldset [disabled]="value2 === 2">
+                <input 
+                    pInputText 
+                    formControlName="PortOfDischarge" 
+                    autocomplete="off" 
+                    class="input"
+                >
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Remarks
+            </label>
+            <fieldset [disabled]="value2 === 2">
+                <input 
+                    pInputText 
+                    formControlName="Remarks" 
+                    autocomplete="off" 
+                    class="input" 
+                    placeholder="Enter Remarks"
+                >
+            </fieldset>
+        </div>
+
+        <div class="field" *ngIf="value2 === 2">
+            <label class="font-semibold" >
+                ATA
+            </label>
+            <p-calendar 
+                formControlName="ATA" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy"  
+                appendTo="body" 
+                [showClear]="true"
+            ></p-calendar>
+        </div>
+
+        <div class="field" *ngIf="value2 === 2">
+            <label class="font-semibold" >
+                Date Of Last Discharge
+            </label>
+            <p-calendar 
+                formControlName="DateOfDischarge" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy"  
+                appendTo="body" 
+                [showClear]="true"
+            ></p-calendar>
+        </div>
+
+        <div class="grid" *ngIf="value2 === 2">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Lodgement Date
+                    </label>
+                    <p-calendar 
+                        formControlName="LodgementDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Lodgement Bank
+                    </label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            formControlName="LodgementBankID" 
+                            [options]="bank" 
+                            optionLabel="Bank" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Bank"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid" *ngIf="selectedPackaging === 1 && value2 === 2">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Gatepass Received</label>
+                    <p-calendar 
+                        formControlName="GatepassRecieved" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Acknowledged By Logistics
+                    </label>
+                    <p-calendar 
+                        formControlName="AcknowledgeByLogistics" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col" *ngIf="value2 === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Storage (LFD)
+                    </label>
+                    <p-calendar 
+                        formControlName="StorageLastFreeDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Demurrage (LFD)
+                    </label>
+                    <p-calendar 
+                        formControlName="DemurrageDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Detention (LFD)
+                    </label>
+                    <p-calendar 
+                        formControlName="DetentionDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- <div class="field text-right">
+
+            <button pButton pRipple 
+                label="Add Shipping Line" 
+                type="button" 
+                class="bg-indigo-500 border-round border-none submit w-1" 
+                (click)="showShippingLineDialog()"
+            >
+            </button>
+
+        </div> -->
+        
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]=""
+        ></button>
+        
+  
+    </form>
+</p-dialog>
+
+<!-- <div class="flex align-items-center justify-content-between mb-3">
+    <div>
+        <p-selectButton 
+            [options]="shippingTransactionFilter" 
+            [(ngModel)]="value2" 
+            optionLabel="label" 
+            optionValue="value" 
+            class="mb-3" 
+            (ngModelChange)="onFilterShippingTransaction()" 
+        >
+        </p-selectButton>
+    </div>
+</div> -->
+
+<div class="radio-inputs">
+
+    <ng-template ngFor let-row [ngForOf]="shippingTransactionFilter" let-i="index" >
+            
+        <label class="radio">
+            <input checked="" name="radio" type="radio" [value]="row.value" [(ngModel)]="value2" (ngModelChange)="onFilterShippingTransaction()"/>
+            <span class="name" [class.active]="value2 == row.value"> {{ row.label }} </span>
+        </label>
+
+    </ng-template>
+
+</div>
+
+
+<!-- <p-confirmDialog /> -->
+
+  <!-- ===== SHIPPING TRANSACTION TABLE ====== -->
+<div class="table" *ngIf="value2 != 4 && value2 != 3 && value2 !=5 && value2 !=6">
+    <p-table 
+        [value]="shippingTransaction" 
+        [scrollable]="true" 
+        scrollHeight="330px"  
+        [tableStyle]="{ 'width': '100%', 'position': 'relative' }" 
+        [globalFilterFields]="['MBL', 'BL', 'BAI_SPS_IC']" 
+        #shipingTransTable 
+        *ngIf="!isLoading2" 
+        >      
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                Shipping Transaction
+                <input 
+                    pInputText 
+                    type="text" 
+                    (input)="onGlobalFilter(shipingTransTable, $event)" 
+                    placeholder="Search keyword" 
+                />
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th *ngIf="value2 === 1" pFrozenColumn>
+                    Lot
+                </th>
+                <th *ngIf="value2 === 1" >
+                    Qty (MT)
+                </th>
+                <!-- <th>
+                    # Of Trucks
+                </th> -->
+                <!-- <th *ngIf="value2 === 1" >
+                    Served
+                </th>
+                <th *ngIf="value2 === 1" >
+                    Bal
+                </th> -->
+                <th *ngIf="value2 === 1" >
+                    BAI SPS IC
+                </th>
+                <th *ngIf="value2 === 1" >
+                    Validity (BAI)
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0" > 
+                    MBL
+                </th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0" >
+                    BL
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Shipping Line
+                </th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    Vessel
+                </th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    # Of Trucks
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    HBL
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Forwarder
+                </th>
+                <th *ngIf="value2 === 1">
+                    Status
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Cont
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Cont Type
+                </th>
+                <th *ngIf="(selectedRowPackaging === 2 || selectedRowPackaging == 0) && value2 === 1">
+                    BPI SPS IC
+                </th>
+                <th *ngIf="(selectedRowPackaging === 2 || selectedRowPackaging == 0) && value2 === 1">
+                    Validity (BPI)
+                </th>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Supplier
+                </th>
+                <th>
+                    Port Of Discharge
+                </th>
+                <th *ngIf="value2 === 1">
+                    ETD
+                </th>
+                <th *ngIf="value2 === 1">
+                    ETA
+                </th>
+                <th>
+                    Broker
+                </th>
+                <th  *ngIf="value2 === 2">
+                    ATA
+                </th>
+                <th  *ngIf="value2 === 2">
+                    Storage (LFD)
+                </th>
+                <th  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    Demurrage (LFD)
+                </th>
+                <th  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    Detention (LFD)
+                </th>
+                <th  *ngIf="value2 === 2">
+                    Date of Discharge
+                </th>
+                <th *ngIf="value2 === 1">
+                    Rcvd By Broker
+                </th>
+                <th *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 1">
+                    BAI SPSIC Date
+                </th>
+                <th  *ngIf="(selectedRowPackaging === 2 || selectedRowPackaging == 0) && value2 === 1">
+                    BPI SPSIC Date
+                </th>
+                <th >
+                    Bank
+                </th>
+                <th>
+                    Availability
+                </th>
+                <th>
+                    Date Of Pickup
+                </th>
+                <th *ngIf="value2 === 1">
+                    Adv Docs Rec
+                </th>
+                <th  *ngIf="value2 === 2">
+                    Lodgement Date
+                </th>
+                <th  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    Lodgement Bank
+                </th>
+                <th  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    Gatepass Recieved
+                </th>
+                <th  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    Acknowledged By Logistics
+                </th>
+                <th *ngIf="value2 === 1">
+                    Remarks
+                </th>
+                <th alignFrozen="right" pFrozenColumn *ngIf="edit">
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr [class.landed]="row.Status == 2 && value2 == 1" [class.pullout]="row.Status == 3 && (value2 === 1 || 2)" class="white-space-nowrap">
+                <td data-title="Lot" *ngIf="value2 === 1" pFrozenColumn>
+                    {{ row.Lot == 0 ? '-' : row.Lot}}
+                </td>
+                <td data-title="Quantity" *ngIf="value2 === 1" >
+                    {{ row.Quantity == 0 ? '-' : row.Quantity | number }}
+                </td>
+                <!-- <td data-title="NoOfTruck" >
+                    {{ row.NoOfTruck == 0 ? '-' : row.NoOfTruck }}
+                </td> -->
+                <!-- <td data-title="Validity" *ngIf="value2 === 1" >
+                    {{ row.Served == 0 ? '-' : row.Served }}
+                </td>
+                <td data-title="Balance" *ngIf="value2 === 1" >
+                    {{ row.Balance == 0 ? '-' : row.Balance}}
+                </td> -->
+                <td data-title="BAI_SPS_IC" *ngIf="value2 === 1" >
+                    {{ row.BAI_SPS_IC == '' ? '-' : row.BAI_SPS_IC}}
+                </td>
+                <td data-title="Validity" *ngIf="value2 === 1" >
+                    <!-- {{  (row.FromBAIValidity.date | date: 'MM/dd/yyyy') + '-' + (row.ToBAIValidity.date | date: 'MM/dd/yyyy') }} -->
+                    {{  getDate(row.FromBAIValidity) + ' - ' + getDate(row.ToBAIValidity)}}
+                </td>
+                <td data-title="MBL" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0" >
+                    {{ row.MBL === '' ? '-' : row.MBL}}
+                </td>
+                <td data-title="BL" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0" >
+                    {{ row.BL == '0' ? '-' : row.BL}}
+                </td>
+                <td data-title="ShippingLine" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0" >
+                    {{ row.ShippingLine === null ? '-' : row.ShippingLine}}
+                </td>
+                <td data-title="Vessel" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0" >
+                    {{ row.Vessel }}
+                </td>
+                <td data-title="NoOfTruck" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    {{ row.NoOfTruck == 0 ? '-' : row.NoOfTruck}}
+                </td>
+                <td data-title="HBL" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.HBL == '' ? '-' : row.HBL}}
+                </td>
+                <td data-title="Forwarder" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.Forwarder == '' ? '-' : row.Forwarder }}
+                </td>
+
+                <td data-title="Status" *ngIf="value2 === 1">
+                    <p-tag [severity]="getSeverity(row.Status)">
+                        {{ getStatus(row.Status) }}
+                    </p-tag>
+                </td>
+                <td data-title="NoOfContainer" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.NoOfContainer == 0 ? '-' : row.NoOfContainer}}
+                </td>
+                <td data-title="ContainerTypeID" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.Container == null ? '-' : row.Container}}
+                </td>
+                <td data-title="BPI_SPS_IC" *ngIf="(selectedRowPackaging === 2 || selectedRowPackaging == 0) && value2 === 1">
+                    {{ row.BPI_SPS_IC == null ? '-' : row.BPI_SPS_IC}}
+                </td>
+                <td data-title="Validity" *ngIf="(selectedRowPackaging === 2 || selectedRowPackaging == 0) && value2 === 1">
+                    {{ getDate(row.FromBPIValidity) + ' - ' + getDate(row.ToBPIValidity) }}
+                </td>
+                <td data-title="Shipping Line" >
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="Supplier">
+                    {{ row.Supplier }}
+                </td>
+                <td data-title="PortOfDischarge">
+                    {{ row.PortOfDischarge === '' ? '-' : row.PortOfDischarge}}
+                </td>
+                <td data-title="ETD" *ngIf="value2 === 1">
+                    {{ row.ETD == null ? '-' : (row.ETD.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="ETA" *ngIf="value2 === 1">
+                    {{ row.ETA == null ? '-' : (row.ETA.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="BrokerID">
+                    {{ row.Broker === null ? '-' : row.Broker}}
+                </td>
+                <td data-title="ATA"  *ngIf="value2 === 2">
+                    {{ row.ATA == null ? '-' : (row.ATA.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="StorageLastFreeDate"  *ngIf="value2 === 2">
+                    {{ row.StorageLastFreeDate == null ? '-' : (row.StorageLastFreeDate.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="DemurrageDate"  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    {{ row.DemurrageDate == null ? '-' : (row.DemurrageDate.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="DetentionDate"  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    {{ row.DetentionDate == null ? '-' : (row.DetentionDate.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="DateofDischarge"  *ngIf="value2 === 2">
+                    {{ row.DateofDischarge == null ? '-' : (row.DateofDischarge.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="DateDocsRecievedByBroker" *ngIf="value2 === 1">
+                    {{ row.DateDocsReceivedByBroker == null ? '-' : (row.DateDocsReceivedByBroker.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="BAI_SPS_IC_Date" *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 1">
+                    {{ row.BAI_SPS_IC_Date == null ? '-' : (row.BAI_SPS_IC_Date.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="BPI_SPS_IC_Date" *ngIf="(selectedRowPackaging === 2 || selectedRowPackaging == 0) && value2 === 1">
+                    {{ row.BPI_SPS_IC_Date == null ? '-' : (row.BPI_SPS_IC_Date.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="BankID" >
+                    {{ row.BankID == 0 ? '-' : row.Bank}}
+                </td>
+                <td data-title="OriginalDocsAvailavilityDate">
+                    {{ row.OriginalDocsAvailavilityDate == null ? '-' : (row.OriginalDocsAvailavilityDate.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="DateOfPickup" >
+                    {{ row.DateOfPickup == null ? '-' : (row.DateOfPickup.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="AdvanceDocumentsReceived" *ngIf="value2 === 1">
+                    {{ row.AdvanceDocumentsReceived == null ? '-' : (row.AdvanceDocumentsReceived.date  | date: 'MM/dd/yyyy')}}
+                </td>
+                <td data-title="LodgementDate"  *ngIf="value2 === 2">
+                    {{ row.LodgementDate == null ? '-' : (row.LodgementDate.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="LodgementBank" *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    {{ row.LodgementBankID == 0 ? '-' : row.LodgementBank}}
+                </td>
+                <td data-title="GatepassRecieved"  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    {{ row.GatepassRecieved == null ? '-' : (row.GatepassRecieved.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="AcknowledgeByLogistics"  *ngIf="(selectedRowPackaging === 1 || selectedRowPackaging == 0) && value2 === 2">
+                    {{ row.AcknowledgeByLogistics == null ? '-' : (row.AcknowledgeByLogistics.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="Remarks" *ngIf="value2 === 1">
+                    {{ row.Remarks === '' ? '-' : row.Remarks}}
+                </td>
+                <td data-title="Action" alignFrozen="right" pFrozenColumn *ngIf="edit">
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelectShipping( row, ShippingDialog)" 
+                        *ngIf="value2 === 1"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+
+                    <!-- <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round"><i class='bx bx-trash' ></i></button> -->
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="p-button- p-2 border-round" 
+                        pTooltip="Landed" 
+                        tooltipPosition="top" 
+                        (click)="showLandedForm(row)"  
+                        *ngIf="value2 == 1 && row.Status === 1"
+                    >
+                        <i class='pi pi-check' ></i>
+                    </button>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelectShipping(row, ShippingDialog)" 
+                        *ngIf="value2 === 2"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="p-button- p-2 border-round" 
+                        pTooltip="Pull Out" 
+                        (click)="onPullOut(row)" 
+                        tooltipPosition="top" 
+                        *ngIf="value2 == 2 && row.Status === 2"
+                    >
+                        <i class='pi pi-check' ></i>
+                    </button>
+                    <!-- <button pButton pRipple class="p-button- p-2 border-round" (click)="onSelectShipping(row, ShippingDialog)" pTooltip="Landed" tooltipPosition="top" *ngIf="value2 == 2">
+                        <i class='pi pi-plus' ></i>
+                    </button> -->
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-success p-2 border-round mr-2" 
+                        (click)="onSelectPullOut(row, PullOutDialog)" 
+                        *ngIf="value2 === 3"
+                    >
+                        <i class='bx bx-edit-alt'></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        
+      <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3">There is no transaction found.</td>
+            </tr>
+      </ng-template>
+
+    </p-table>
+
+    <div class="text-center my-3" *ngIf="isLoading2">
+        <app-loader></app-loader>
+    </div>
+
+   
+  
+</div>
+
+
+<!-- Pull Out Table -->
+<div class="table" *ngIf="value2 === 3">
+    <!-- <div class="pullOutTableContainer"> -->
+        <p-table 
+            #dt2 
+            [value]="shippingTransaction" 
+            dataKey="MBL" 
+            [tableStyle]="{ 'width': '100%', 'position': 'relative' }" 
+            [globalFilterFields]="['BAI_SPS_IC']" 
+            *ngIf="!isLoading2" 
+            [scrollable]="true" 
+            scrollHeight="330px"
+        >
+            <ng-template pTemplate="header">
+                <tr class="thead">
+                    <th style="width: 5rem"></th>
+                    <th>
+                        MBL
+                    </th>
+                    <th>
+                        Supplier
+                    </th>
+                    <th>
+                        Broker
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+    
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+                <tr>
+    
+                    <td>
+                        <p-button 
+                            pRipple 
+                            [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
+                            [pRowToggler]="row" 
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                        />
+                    </td>
+    
+                    <!-- <button 
+                        pButton pRipple [pRowToggler]="row" 
+                      
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                    >
+                     </button> -->
+    
+                    <td data-title="MBL" *ngIf="selectedRowPackaging === 1">
+                        {{ row.MBL }}
+                    </td>
+                    <td data-title="Supplier">
+                        {{ row.Supplier }}
+                    </td>
+                    <td data-title="BrokerID">
+                        {{ row.Broker === null ? '-' : row.Broker}}
+                    </td>
+    
+                    <td data-title="Action">
+                        <button 
+                            pButton 
+                            pRipple 
+                            class="edit__btn" 
+                            class="p-button-success p-2 border-round mr-2" 
+                            (click)="onSelectPullOut(row, PullOutDialog)"
+                        >
+                            <i class='bx bx-edit-alt'></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+    
+          <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="3">There is no transaction yet.</td>
+                </tr>
+          </ng-template>
+    
+          <ng-template pTemplate="rowexpansion" let-MBL>
+            <tr>
+                <td colspan="7">
+                    <div class="p-3">
+                        <p-table [value]="MBL.PullOutDetail" dataKey="MBL">
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Container #</th>
+                                    <th>Date Of Discharge</th>
+                                    <th>Storage (LFD)</th>
+                                    <th>Demurrage (LFD)</th>
+                                    <th>Pull Out Date</th>
+                                    <th>Date In</th>
+                                    <th>Date Out</th>
+                                    <th>Detention (LFD)</th>
+                                    <th>Return Date</th>
+                                    <th>Trucking Name</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-detail>
+                                <tr>
+                                    <td> 
+                                        {{ detail.ContainerNumber }}
+                                    </td>
+                                    <td>
+                                        {{ (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') === '01/01/1900' ? '-' : (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') }}
+                                    </td>
+                                    <td [class.red]="(detail.PullOutDate?.date || null) > (detail.Storage?.date || null) ">
+                                        {{ detail.Storage == null ? '-' : detail.Storage.date | date: 'MM/dd/yyyy' }}
+                                    </td>
+                                    <td [class.red]="(detail.PullOutDate?.date || null) > (detail.Demurrage?.date || null)">
+                                        {{ detail.Demurrage == null ? '-' : (detail.Demurrage.date | date: 'MM/dd/yyyy') }}
+                                    </td>
+                                    <td [class.red]="(detail.PullOutDate?.date || null) > (detail.Storage?.date || null)">
+                                        {{ detail.PullOutDate == null ? '-' : (detail.PullOutDate.date | date: 'MM/dd/yyyy') }}
+                                    </td>
+                                    <td>
+                                        {{ detail.DateIn == null ? '-' : detail.DateIn.date | date: 'MM/dd/yyyy' }}
+                                    </td>
+                                    <td>
+                                       {{  detail.DateOut == null ? '-' : detail.DateOut.date | date: 'MM/dd/yyyy' }}
+                                    </td>
+                                    <td [class.red]="(detail.ReturnDate?.date || null) > (detail.Detention?.date || null)">
+                                        {{ detail.Detention == null ? '-' : (detail.Detention.date | date: 'MM/dd/yyyy') }}
+                                    </td>
+                                    <td [class.red]="(detail.ReturnDate?.date || null) > (detail.Detention?.date || null)">
+                                        {{ detail.ReturnDate == null ? '-' : (detail.ReturnDate.date | date: 'MM/dd/yyyy') }}
+                                    </td>
+                                    <td>
+                                        {{ detail.TruckingName === null ? '-' : detail.TruckingName }}
+                                    </td>
+                                    <td>
+                                        {{ detail.Remarks == null ? '-' : detail.Remarks }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no containers for this MBL yet.</td>
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    
+        </p-table>
+    <!-- </div> -->
+    
+
+    <div class="text-center my-3" *ngIf="isLoading2">
+        <app-loader></app-loader>
+    </div>
+    
+  
+</div>
+
+
+
+<p-dialog 
+    header="Arrived" 
+    [(visible)]="visibleLandedForm"  
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+>
+    <form 
+        [formGroup]="landedForm" 
+        class="p-fluid" 
+        (ngSubmit)="onShippingTransLanded()"
+    >  
+  
+        <div class="field">
+            <label class="font-semibold" >ATA</label>
+            <p-calendar 
+                formControlName="ATA" 
+                placeholder="mm/dd/yyyy" 
+                appendTo="body" 
+                [showClear]="true"
+            ></p-calendar>
+        </div>
+  
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!landedForm.valid"
+        ></button>
+  
+    </form>
+</p-dialog>
+
+
+
+<p-dialog 
+    header="Add PullOut" 
+    [(visible)]="PullOutVisible" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '50vw' }" 
+    #PullOutDialog
+>
+    <form 
+        [formGroup]="pulloutForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmitPullOutForm()"
+    >  
+  
+        <div class="field">
+            <label class="font-semibold" >BL #</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="MBL" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >HBL</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="HBL" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Supplier</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="Supplier" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Broker</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="Broker" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Pull Out Details</label>
+            <p-table #dt_orders [value]="PullOutDetail" [tableStyle]="{ 'width': '100%'}" *ngIf="!isLoading3">
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th> Container # </th>  
+                        <th> Date Of Discharge </th>  
+                        <th> Storage (LFD) </th>
+                        <th> Demurrage (LFD) </th>
+                        <th> Pull Out Date </th>
+                        <th> Date In </th>
+                        <th> Date Out </th>
+                        <th> Detention (LFD)</th>
+                        <th> Return Date </th>
+                        <th> Trucking </th>
+                        <th> Remarks </th>
+                        <th> Remove </th>
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-data let-DetailIndex="rowIndex" >
+                <tr>
+
+                    <td data-title="ContainerNumber">
+                        <input 
+                            pInputText 
+                            [(ngModel)]="data.ContainerNumber"
+                            placeholder="Enter Cont. #"  
+                            autocomplete="off" 
+                            class="input"
+                            [ngModelOptions]="{standalone: true}" 
+                        >
+                    </td>
+
+                    <td data-title="Date Of Discharge">
+                        <p-calendar   
+                            [(ngModel)]="data.DateOfDischarge"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="Storage">
+                        <p-calendar   
+                            [(ngModel)]="data.Storage"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="Demurrage">
+                        <p-calendar   
+                            [(ngModel)]="data.Demurrage"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="PullOutDate">
+                        <p-calendar   
+                            [(ngModel)]="data.PullOutDate"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="DateIn">
+                        <p-calendar   
+                            [(ngModel)]="data.DateIn"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+
+                    <td data-title="DateOut">
+                        <p-calendar   
+                            [(ngModel)]="data.DateOut"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td> 
+
+                    <td data-title="Detention">
+                        <p-calendar   
+                            [(ngModel)]="data.Detention"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="ReturnDate">
+                        <p-calendar   
+                            [(ngModel)]="data.ReturnDate"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td>
+                        <p-dropdown 
+                            [options]="trucking" 
+                            optionLabel="TruckingName" 
+                            [(ngModel)]="data.TruckingID"  
+                            [showClear]="true" 
+                            placeholder="Select Trucking"
+                            [ngModelOptions]="{standalone: true}" 
+                            appendTo="body"
+                        >
+                        </p-dropdown>
+                    </td>
+
+                    <td data-title="Remarks">
+                        <input 
+                            pInputText 
+                            [(ngModel)]="data.Remarks"
+                            placeholder="Enter Remarks"  
+                            autocomplete="off" 
+                            class="input"
+                            [ngModelOptions]="{standalone: true}" 
+                        >
+                    </td>
+
+                    <td class="text-center" data-title="Remove">
+                        <ng-container>
+                        <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removePullOutRow(DetailIndex)"></i>
+                        </ng-container> 
+                    </td>
+                </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <!-- <tr> -->
+                        <td colspan="1">There is no container yet.</td>
+                    <!-- </tr> -->
+                </ng-template>
+            </p-table>
+
+            <div class="text-center my-3" *ngIf="isLoading3">
+                <app-loader></app-loader>
+            </div>
+
+        </div>
+
+        <div class="field text-right">
+
+            <button pButton pRipple 
+                label="Add row" 
+                type="button" 
+                class="bg-indigo-500 border-round border-none submit w-2" 
+                (click)="addPullOutRow()"
+            >
+            </button>
+
+        </div>
+  
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit"
+        ></button>
+  
+    </form>
+</p-dialog>
+
+
+<div class="table" *ngIf="value2 === 4" >
+    <p-table 
+        #dt3 
+        [value]="received" 
+        [scrollable]="true" 
+        scrollHeight="330px" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RawMaterial']" 
+        class="contract_table" 
+        *ngIf="!isLoading2"
+    >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    MBL
+                </th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    BL
+                </th>
+                <th>Shipping Line</th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    No Of Truck
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    No Of Container
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Container Type
+                </th>
+                <th>
+                    Raw Material
+                </th>
+                <th>
+                    Supplier
+                </th>
+                <th>
+                    Port Of Discharge
+                </th>
+                <th>
+                    Broker
+                </th>
+                <th>
+                    ATA
+                </th>
+                <th>
+                    Storage (LFD)
+                </th>
+                <!-- <th>
+                    Demurrage (LFD)
+                </th>
+                <th>
+                    Detention (LFD)
+                </th> -->
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    Balance at Port(Truck)
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Balance at Port(Container)
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Total Pulled Out
+                </th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    Withdrawn
+                </th>
+                <th *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    Unloaded Truck
+                </th>
+                <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    Unloaded Container
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr class="white-space-nowrap">
+                <td data-title="MBL" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.MBL == 0 ? '-' : row.MBL }}
+                </td>
+                <td data-title="MBL" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    {{ row.BL == 0 ? '-' : row.BL }}
+                </td>
+                <td data-title="ShippingLine">
+                    {{ row.ShippingLine === null ? '-' : row.ShippingLine }}
+                </td>
+                <td data-title="NoOfTruck" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    {{ row.NoOfTruck === 0 ? '-' : row.NoOfTruck }}
+                </td>
+                <td data-title="NoOfContainer" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.NoOfContainer === 0 ? '-' : row.NoOfContainer}}
+                </td>
+                <td data-title="Container" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.Container === null ? '-' : row.Container }}
+                </td>
+                <td data-title="RawMaterial">
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="Supplier">
+                    {{ row.Supplier }}
+                </td>
+                <td data-title="PortOfDischarge">
+                    {{ row.PortOfDischarge === '' ? '-' : row.PortOfDischarge}}
+                </td>
+                <td data-title="Broker">
+                    {{ row.Broker === null ? '-' : row.Broker }}
+                </td>
+                <td data-title="ATA">
+                    {{ row.ATA == null ? '-' : (row.ATA.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="StorageLastFreeDate">
+                    {{ row.StorageLastFreeDate == null ? '-' : (row.StorageLastFreeDate.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <!-- <td data-title="DemurrageDate">
+                    {{ (row.DemurrageDate.date | date: 'MM/dd/yyyy') === '01/01/1900' ? '-' : row.DemurrageDate.date | date: 'MM/dd/yyyy'}}
+                </td>
+                <td data-title="DetentionDate">
+                    {{ (row.DetentionDate.date | date: 'MM/dd/yyyy') === '01/01/1900' ? '-' : row.DetentionDate.date | date: 'MM/dd/yyyy'}}
+                </td> -->
+                <td data-title="DetentionDate" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    {{ row.Balance_Truck == 0 ? '-' : row.Balance_Truck }}
+                </td>
+                <td data-title="DetentionDate" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.Balance_Container == 0 ? '-' : row.Balance_Container }}
+                </td>
+                <td data-title="DetentionDate" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.Pulled_Out == 0 ? '-' : row.Pulled_Out }}
+                </td>
+                <td data-title="DetentionDate" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    {{ row.Unloaded_Truck == 0 ? '-' : row.Withdrawn}}
+                </td>
+                <td data-title="DetentionDate" *ngIf="selectedRowPackaging === 2 || selectedRowPackaging == 0">
+                    {{ row.Unloaded_Truck == 0 ? '-' : row.Unloaded_Truck}}
+                </td>
+                <td data-title="DetentionDate" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
+                    {{ row.Unloaded_Container == 0 ? '-' : row.Unloaded_Container }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading2">
+      <app-loader></app-loader>
+    </div>
+
+</div>
+
+
+<div class="table" *ngIf="value2 === 5" >
+    <p-table 
+        #dt3 
+        [value]="unloadBL2" 
+        dataKey="MBL" 
+        [scrollable]="true" 
+        scrollHeight="330px" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RawMaterial']" 
+        *ngIf="!isLoading2"
+    >
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th style="width: 5rem"></th>
+                <th>MBL</th>
+                <th>BL</th>
+                <th>Raw Material</th>
+                <th>Quantity</th>
+                <th>Supplier</th>
+                <th>No Of Unloaded</th>
+                <th>Total Weight</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button 
+                        pRipple 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                    />
+                </td>
+                <td>{{ row.MBL == 0 ? '-' : row.MBL }}</td>
+                <td>{{ row.BL == 0 ? '-' : row.BL }}</td>
+                <td>{{ row.RawMaterial }}</td>
+                <td>{{ row.Quantity | number}}</td>
+                <td>{{ row.Supplier }}</td>
+                <td>{{ row.NoofLoaded == 0 ? '-' : row.NoofLoaded }}</td>
+                <td>{{ row.TotalWeight == 0 ? '-' : row.TotalWeight | number}}</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3">There is no data found.</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-unloaded>
+            <tr>
+                <td colspan="8">
+                    <div class="p-3">
+                        <p-table [value]="unloaded.UnloadDetail" dataKey="MBL" [scrollable]="true" scrollHeight="300px">
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th> Item # </th>
+                                    <th> Date Unload </th>
+                                    <th> Container # </th>
+                                    <th> Plate # </th>
+                                    <th> Dr # </th>
+                                    <th> Weight </th>
+                                    <th> Trucking </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-detail let-rowIndex="rowIndex">
+                                <tr>
+                                    <td> {{rowIndex + 1}} </td>
+                                    <td> {{ detail.DateUnload.date | date: 'MM/dd/yyyy' }} </td>
+                                    <td> {{ detail.ContainerNumber == null ? '-' : detail.ContainerNumber }} </td>
+                                    <td> {{ detail.PlateNo }} </td>
+                                    <td> {{ detail.DrNumber }} </td>
+                                    <td> {{ detail.Weight | number }} </td>
+                                    <td> {{ detail.TruckingName == null ? '-' : detail.TruckingName }} </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no unloaded for this MBL yet.</td>
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading2">
+      <app-loader></app-loader>
+    </div>
+</div>
+
+
+<p-dialog 
+    header="Add Shipping Line" 
+    [(visible)]="visibleShippingModal" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form 
+        [formGroup]="shippingLineForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmitShippingModal()"
+    >  
+
+        <div class="field">
+            <label class="font-semibold" >
+                Shipping Line
+            </label>
+            <input 
+                pInputText 
+                formControlName="ShippingLine" 
+                autocomplete="off" 
+                class="input"
+            >
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Contact Person
+            </label>
+            <input 
+                pInputText 
+                formControlName="ContactPerson" 
+                autocomplete="off" 
+                class="input"
+            >
+          </div>
+
+          <div class="field">
+            <label class="font-semibold" >
+                Contact Number
+            </label>
+            <p-inputNumber 
+                formControlName="ContactNumber" 
+                inputId="withoutgrouping" 
+                autocomplete="off" 
+                [useGrouping]="false"
+            ></p-inputNumber> 
+          </div>
+
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!shippingLineForm.valid"
+            
+        ></button>
+
+    </form>
+</p-dialog>
+

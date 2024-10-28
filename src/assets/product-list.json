@@ -1,0 +1,70 @@
+[{
+    "id": "1000",
+    "code": "f230fh0g3",
+    "name": "G-Shock",
+    "description": "Product Description",
+    "image": "bamboo-watch.jpg",
+    "price": 5000,
+    "category": "Accessories",
+    "quantity": 24,
+    "inventoryStatus": "INSTOCK",
+    "rating": 5
+},{
+    "id": "1001",
+    "code": "zxca1q23",
+    "name": "Rolex",
+    "description": "Product Description",
+    "image": "bamboo-watch.jpg",
+    "price": 60000,
+    "category": "Accessories",
+    "quantity": 24,
+    "inventoryStatus": "INSTOCK",
+    "rating": 5
+},{
+    "id": "1002",
+    "code": "rtye345d",
+    "name": "Jansport",
+    "description": "Product Description",
+    "image": "bamboo-watch.jpg",
+    "price": 2500,
+    "category": "Accessories",
+    "quantity": 24,
+    "inventoryStatus": "INSTOCK",
+    "rating": 5
+}
+,{
+    "id": "1003",
+    "code": "df345df",
+    "name": "Penshoppe",
+    "description": "Product Description",
+    "image": "bamboo-watch.jpg",
+    "price": 600,
+    "category": "Accessories",
+    "quantity": 24,
+    "inventoryStatus": "INSTOCK",
+    "rating": 5
+}
+,{
+    "id": "1004",
+    "code": "dfe345",
+    "name": "Iphone 5s",
+    "description": "Product Description",
+    "image": "bamboo-watch.jpg",
+    "price": 300000,
+    "category": "Accessories",
+    "quantity": 24,
+    "inventoryStatus": "INSTOCK",
+    "rating": 5
+}
+,{
+    "id": "1005",
+    "code": "df345d",
+    "name": "Bamboo Watch",
+    "description": "Product Description",
+    "image": "bamboo-watch.jpg",
+    "price": 65,
+    "category": "Accessories",
+    "quantity": 24,
+    "inventoryStatus": "INSTOCK",
+    "rating": 5
+}]

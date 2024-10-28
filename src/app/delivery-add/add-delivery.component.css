@@ -1,0 +1,86 @@
+.form-container {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background-color: #F1F1F1;
+    height: 100dvh;
+}
+
+
+form {
+    width: 35vw;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+h1 {
+    font-weight: var(--font-700);
+    margin-bottom: 20px;
+    position: relative;
+    font-size: 1.2rem;
+}
+td, th {
+    padding: 10px 5px;
+}
+td {
+    color: 	#808080;
+    border: 1px lightgray;
+    border-bottom-style: dotted;
+}
+
+
+:host ::ng-deep .p-calendar {
+    height: 41px;
+}
+
+:host ::ng-deep .p-calendar button{
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+input {
+    padding: 7px 10px;
+}
+
+p-inputNumber ::ng-deep input {
+    padding: 7px 10px;
+}
+
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+
+.submit__btn {
+    background: var(--first-color);
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 7px 0;
+    border-radius: 7px;
+}
+.submit {
+    padding: 7px 0;
+}
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
