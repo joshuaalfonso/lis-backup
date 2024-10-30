@@ -98,9 +98,13 @@
     <div class="field">
         <label class="font-semibold" >Contact Number</label>
         <p-inputNumber formControlName="ContactNumber" inputId="integeronly" autocomplete="off" [useGrouping]="false" placeholder="Enter contact #"></p-inputNumber> 
-        </div>
+    </div>
 
-    <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!driverForm.valid"></button>
+
+    <app-submit-button 
+        [submitLoading]="submitLoading" 
+        [form]="driverForm" 
+    /> 
 
     </form>
 </p-dialog>

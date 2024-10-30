@@ -157,16 +157,16 @@
                 <span class="text-red-400">*</span>
             </label>
 
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     [options]="location" 
                     formControlName="WarehouseLocationID" 
                     optionLabel="WarehouseLocation" 
-                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [style]="{'height': '40px'}" 
                     [showClear]="true" 
                     placeholder="Select location"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
 
         </div>
 
@@ -225,13 +225,10 @@
 
         </div>
 
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]=""
-        ></button>
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="warehouseForm" 
+        /> 
 
     </form>
     

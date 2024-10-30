@@ -217,13 +217,13 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             insert: true,
                             edit: true
                         },
-                        {
-                            title: 'Checker Type',
-                            routerLink: '/checker-type',
-                            view: true,
-                            insert: true,
-                            edit: true
-                        },
+                        // {
+                        //     title: 'Checker Type',
+                        //     routerLink: '/checker-type',
+                        //     view: true,
+                        //     insert: true,
+                        //     edit: true
+                        // },
                         {
                             title: 'Checker Schedule',
                             routerLink: '/checker-schedule',
@@ -285,7 +285,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
             }, 
             {
                 title: 'Others',
-                view: false,
+                view: true,
                 subMenu: [
                     {
                         title: 'Account',

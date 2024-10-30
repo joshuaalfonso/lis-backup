@@ -39,6 +39,8 @@ export class UsersComponent implements OnInit, OnDestroy{
 
     department: any[] = [];
 
+    submitLoading: boolean = false;
+
     private subscription: Subscription = new Subscription;
 
     constructor(
@@ -132,6 +134,8 @@ export class UsersComponent implements OnInit, OnDestroy{
 
     onSubmit() {
 
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>
         authObs = this.UsersService.saveData
         (
@@ -146,6 +150,7 @@ export class UsersComponent implements OnInit, OnDestroy{
         )
 
         authObs.subscribe(response =>{
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.MessageService.add({ severity: 'success', summary: 'Success', detail: ' successfully recorded', life: 3000 });
@@ -164,6 +169,7 @@ export class UsersComponent implements OnInit, OnDestroy{
             }
             
         }, errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
         });
     }

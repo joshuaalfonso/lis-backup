@@ -170,16 +170,14 @@
                 formControlName="WarehouseLocation" 
                 autocomplete="off" 
                 class="input"
+                placeholder="Enter location"
             >
         </div>
 
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!warehouseLocationForm.valid"
-        ></button>
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="warehouseLocationForm" 
+        /> 
 
     </form>
 </p-dialog>

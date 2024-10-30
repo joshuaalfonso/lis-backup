@@ -214,13 +214,11 @@
             ></p-inputNumber> 
         </div>
 
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!supplierForm.valid"
-        ></button>
+
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="supplierForm" 
+        /> 
 
     </form>
 </p-dialog>

@@ -38,6 +38,8 @@ export class WarehouseComponent implements OnInit, OnDestroy{
 
     selectedFilter: number = 0;
 
+    submitLoading: boolean = false;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -57,7 +59,7 @@ export class WarehouseComponent implements OnInit, OnDestroy{
             'MinimumCapacity': new FormControl(null, Validators.required),
             'TotalQuantity': new FormControl(0),
             'TotalWeight': new FormControl(0),
-            'Remarks': new FormControl(null, Validators.required),
+            'Remarks': new FormControl(null),
             'UserID': new FormControl(0),
         })
 
@@ -186,6 +188,8 @@ export class WarehouseComponent implements OnInit, OnDestroy{
             return;
         }
 
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>;
 
         authObs = this.WarehouseService.saveData (
@@ -201,6 +205,8 @@ export class WarehouseComponent implements OnInit, OnDestroy{
         )
 
         authObs.subscribe(response =>{
+
+            this.submitLoading = false;
 
             if( response === 1) {
 
@@ -248,6 +254,7 @@ export class WarehouseComponent implements OnInit, OnDestroy{
                 detail: errorMessage, 
                 life: 3000 
             });
+            this.submitLoading = false;
         })
     }
 

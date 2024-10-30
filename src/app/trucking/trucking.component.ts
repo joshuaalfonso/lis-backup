@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
+import { AuthService } from "../auth/auth.service";
 
 
 
@@ -24,12 +25,17 @@ export class TruckingComponent implements OnInit, OnDestroy{
 
     dialogHeader?: string;
 
+    submitLoading: boolean = false;
+
+    userID: string = '';
+
     private subscription: Subscription = new Subscription();
 
     constructor(
         private TruckingService: TruckingService,
         private MessageService: MessageService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
+        private AuthService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -41,7 +47,18 @@ export class TruckingComponent implements OnInit, OnDestroy{
             'UserID': new FormControl(0)
         })
 
+        this.getUser();
         this.getData();
+    }
+
+    getUser() {
+        this.subscription.add(
+            this.AuthService.user.subscribe(user => {
+                if (user) {
+                    this.userID = user.user_id
+                }
+            })
+        )
     }
 
     getData() {
@@ -73,6 +90,14 @@ export class TruckingComponent implements OnInit, OnDestroy{
 
     onSubmit() {
 
+        if (!this.truckingForm.valid) {
+            alert('please fill all the blanks')
+            return
+        }
+
+        this.submitLoading = true;
+
+
         let authObs: Observable<ResponseData>;
         authObs = this.TruckingService.saveData
         (
@@ -80,10 +105,11 @@ export class TruckingComponent implements OnInit, OnDestroy{
             this.truckingForm.value.TruckingName,
             this.truckingForm.value.ContactPerson,
             this.truckingForm.value.ContactNumber,
-            this.truckingForm.value.UserID,
+            this.userID,
         )
 
         authObs.subscribe(response => {
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.MessageService.add({ 
@@ -117,6 +143,7 @@ export class TruckingComponent implements OnInit, OnDestroy{
             }
             
         }, errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ 
                 severity: 'error', 
                 summary: 'Danger', 

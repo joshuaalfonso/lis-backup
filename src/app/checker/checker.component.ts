@@ -40,7 +40,7 @@ export class CheckerComponent implements OnInit,OnDestroy{
         this.checkerForm = new FormGroup({
             'CheckerID': new FormControl(0),
             'CheckerName': new FormControl(null, Validators.required),
-            'CheckerTypeID': new FormControl(null, Validators.required),
+            // 'CheckerTypeID': new FormControl(null, Validators.required),
             'UserID': new FormControl(0)
         })
 
@@ -92,7 +92,7 @@ export class CheckerComponent implements OnInit,OnDestroy{
         (
             this.checkerForm.value.CheckerID, 
             this.checkerForm.value.CheckerName, 
-            this.checkerForm.value.CheckerTypeID.CheckerTypeID, 
+            // this.checkerForm.value.CheckerTypeID.CheckerTypeID, 
             this.checkerForm.value.UserID
         );
 

@@ -534,7 +534,7 @@
             [disabled]="!rawMatsPOForm.valid"
         ></button> -->
 
-        <div class="flex justify-content-end">
+        <!-- <div class="flex justify-content-end">
             <button 
                 type="button" 
                 pButton 
@@ -547,7 +547,12 @@
                 (click)="onSubmit()"
                 >
             </button>
-        </div>
+        </div> -->
+
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="rawMatsPOForm" 
+        /> 
 
     </form>
 </p-dialog>

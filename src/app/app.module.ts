@@ -162,6 +162,7 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 import { SecurityComponent } from './security/security.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-dashboard.component';
+import { SubmitButtonComponent } from './submit-button/submit-button.component';
 
 
 
@@ -227,7 +228,8 @@ import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-
     ProfileSettingsComponent,
     SecurityComponent,
     AccountDetailsComponent,
-    DispatcherDashboardComponent
+    DispatcherDashboardComponent,
+    SubmitButtonComponent
     
   ],
   imports: [

@@ -23,6 +23,8 @@ export class ModuleComponent implements OnInit, OnDestroy{
 
     dialogHeader?: string;
 
+    submitLoading: boolean = false;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -69,26 +71,33 @@ export class ModuleComponent implements OnInit, OnDestroy{
     }
 
     onSubmit() {
+
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>;
         authObs = this.ModuleService.saveData(this.moduleForm.value.ModuleID, this.moduleForm.value.ModuleName, this.moduleForm.value.UserID);
 
         authObs.subscribe(response =>{
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.MessageService.add({ severity: 'success', summary: 'Success', detail: 'Item: ' + this.moduleForm.value.ModuleName +  ' successfully recorded', life: 3000 });
                 this.getData();
                 this.clearItems();
+                this.visible = false;
             } 
             else if ( response === 2) {
                 this.MessageService.add({ severity: 'success', summary: 'Success', detail: 'Item: ' + this.moduleForm.value.ModuleName +  ' successfully updated', life: 3000 });
                 this.getData();
                 this.clearItems();
+                this.visible = false;
             }
             else if ( response === 0) {
                 this.MessageService.add({ severity: 'error', summary: 'Danger', detail: 'Item: ' + this.moduleForm.value.ModuleName +  ' already exist', life: 3000 });
             }
             
         }, errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
         });
     }

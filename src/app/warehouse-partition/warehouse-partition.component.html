@@ -220,35 +220,11 @@
             ></p-inputNumber> 
         </div>
 
-        <!-- <div class="field">
-            <label class="font-semibold" >
-                Total Weight
-            </label>
-            <p-inputNumber 
-                formControlName="TotalWeight" 
-                inputId="integeronly" 
-                autocomplete="off" 
-            ></p-inputNumber> 
-        </div>
 
-        <div class="field">
-            <label class="font-semibold" >
-                Total Quantity
-            </label>
-            <p-inputNumber 
-                formControlName="TotalQuantity" 
-                inputId="integeronly" 
-                autocomplete="off" 
-            ></p-inputNumber> 
-        </div> -->
-
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!warehousePartitionForm.valid"
-        ></button>
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="warehousePartitionForm" 
+        /> 
 
     </form>
 </p-dialog>

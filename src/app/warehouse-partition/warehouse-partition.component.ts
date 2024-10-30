@@ -40,6 +40,8 @@ export class WarehousePartition implements OnInit, OnDestroy{
 
     userID: string = '';
 
+    submitLoading: boolean = false;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -166,6 +168,8 @@ export class WarehousePartition implements OnInit, OnDestroy{
             return;
         }
 
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>;
         authObs = this.WarehousePartitionService.saveData
         (
@@ -179,6 +183,8 @@ export class WarehousePartition implements OnInit, OnDestroy{
         );
 
         authObs.subscribe(response =>{
+
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.visible = false;
@@ -220,6 +226,7 @@ export class WarehousePartition implements OnInit, OnDestroy{
                 detail: errorMessage, 
                 life: 3000 
             });
+            this.submitLoading = false;
         })
         
     }

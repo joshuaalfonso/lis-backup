@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { TruckService } from "./truck.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
+import { AuthService } from "../auth/auth.service";
 
 
 
@@ -12,7 +13,7 @@ import { Table } from "primeng/table";
     templateUrl: 'truck.component.html',
     styleUrls: ['truck.component.css']
 })
-export class TruckComponent implements OnInit{
+export class TruckComponent implements OnInit, OnDestroy{
 
     truck: any[] = [];
 
@@ -30,10 +31,15 @@ export class TruckComponent implements OnInit{
 
     userID: string = '';
 
+    submitLoading: boolean = false;
+
+    subscription: Subscription = new Subscription;
+
     constructor(
         private TruckService: TruckService,
         private MessageService: MessageService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
+        private Auth: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -46,7 +52,27 @@ export class TruckComponent implements OnInit{
             'UserID': new FormControl
         })
 
-        this.getData()
+        
+
+        this.getUser();
+        this.getData();
+        this.getTruckType();
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
+
+    getUser() {
+        this.subscription.add(
+            this.Auth.user.subscribe(
+                user => {
+                    if (user) {
+                        this.userID = user.user_id;
+                    }
+                }
+            )
+        )
     }
 
     getData() {
@@ -58,19 +84,26 @@ export class TruckComponent implements OnInit{
                 // console.log(response)
             }
         )
+    }
 
-        this.TruckService.GetTruckTypeData().subscribe(
-            response => {
-                this.truckType = response;
-                // console.log(response)
-            }
+    getTruckType() {
+        this.subscription.add(
+            this.TruckService.GetTruckTypeData().subscribe(
+                response => {
+                    this.truckType = response;
+                }
+            )
         )
+    }
 
-        this.TruckService.GetTruckingData().subscribe(
-            response => {
-                this.trucking = response;
-                // console.log(response)
-            }
+    getTrucking() {
+        this.subscription.add(
+            this.TruckService.GetTruckingData().subscribe(
+                response => {
+                    this.trucking = response;
+                    // console.log(response)
+                }
+            )
         )
     }
 
@@ -86,6 +119,15 @@ export class TruckComponent implements OnInit{
     }
 
     onSubmit() {
+
+        if (!this.truckForm.valid) {
+            alert('please fill all the blanks')
+            return 
+        }
+
+        this.submitLoading = true;
+
+
         let authObs: Observable<ResponseData>;
         authObs = this.TruckService.saveData
         (
@@ -94,16 +136,18 @@ export class TruckComponent implements OnInit{
             // this.truckForm.value.TruckTypeID,
             this.truckForm.value.PlateNo,
             this.truckForm.value.Description,
-            this.truckForm.value.UserID,
+            this.userID,
         )
 
         authObs.subscribe(response =>{
+
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.MessageService.add({ 
                     severity: 'success', 
                     summary: 'Danger', 
-                    detail: 'Item: ' + this.truckForm.value.TruckID +  ' successfully recorded', 
+                    detail: this.truckForm.value.PlateNo +  ' successfully recorded', 
                     life: 3000 
                 });
                 this.visible = false;
@@ -114,7 +158,7 @@ export class TruckComponent implements OnInit{
                 this.MessageService.add({ 
                     severity: 'success', 
                     summary: 'Danger', 
-                    detail: 'Item: ' + this.truckForm.value.TruckID +  ' successfully updated', 
+                    detail: this.truckForm.value.PlateNo +  ' successfully updated', 
                     life: 3000 
                 });
                 this.visible = false;
@@ -137,6 +181,8 @@ export class TruckComponent implements OnInit{
                 detail: errorMessage, 
                 life: 3000 
             });
+
+            this.submitLoading = false;
         })
     }
 
@@ -164,10 +210,10 @@ export class TruckComponent implements OnInit{
         this.truckForm.setValue({
             TruckID: data.TruckID,
             TruckingID: data.TruckingID,
-            TruckTypeID: data.TruckTypeID,
+            // TruckTypeID: data.TruckTypeID,
             PlateNo: data.PlateNo,
             Description: data.Description,
-            UserID: data.UserID
+            UserID: this.userID
         })
         // console.log(data);
     }

@@ -165,15 +165,13 @@
                 autocomplete="off" 
                 class="input"
             >
-          </div>
+        </div>
 
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!truckForm.valid"
-        ></button>
+
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="truckForm" 
+        /> 
 
     </form>
 </p-dialog>

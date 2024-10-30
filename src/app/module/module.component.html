@@ -72,15 +72,29 @@
 </div>
 
 <!-- ========= MODAL FORM ========== -->
-<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
-    <form [formGroup]="moduleForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form 
+        [formGroup]="moduleForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()"
+    >  
 
         <div class="field">
           <label class="font-semibold" >Module Name</label>
           <input pInputText formControlName="ModuleName" autocomplete="off" class="input">
         </div>
 
-        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!moduleForm.valid"></button>
-
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="moduleForm" 
+        /> 
     </form>
 </p-dialog>

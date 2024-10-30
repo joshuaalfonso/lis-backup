@@ -114,6 +114,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     selectedOption: number = 1;
 
+    submitLoading: boolean = false;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -152,7 +154,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             'DateTimeUnload': new FormControl(null),
             'DateUnload': new FormControl(null, Validators.required),
             'DrNumber': new FormControl(null, Validators.required),
-            'CheckerID': new FormControl(null, Validators.required),
+            // 'CheckerID': new FormControl(null, Validators.required),
             'TruckID': new FormControl(null, Validators.required),
             'RawMaterialID': new FormControl(null, Validators.required),
             'WarehouseLocationID': new FormControl(null), 
@@ -475,6 +477,9 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     onSubmit() {
 
+
+        this.submitLoading = true;
+
         const formData = new FormData();
 
         const data = { 
@@ -487,7 +492,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             DateTimeUnload: this.unloadingTransactionForm.value.DateTimeUnload.toLocaleString(),
             DateUnload: this.unloadingTransactionForm.value.DateUnload.toLocaleDateString(),
             DrNumber: this.unloadingTransactionForm.value.DrNumber,
-            CheckerID:this.unloadingTransactionForm.value.CheckerID.CheckerID,
+            // CheckerID:this.unloadingTransactionForm.value.CheckerID.CheckerID,
             TruckID: this.unloadingTransactionForm.value.TruckID.TruckID,
             RawMaterialID: this.unloadingTransactionForm.value.RawMaterialID.RawMaterialID,
             WarehouseLocationID:this.unloadingTransactionForm.value.WarehouseLocationID,
@@ -514,24 +519,41 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         )
 
         authObs.subscribe(response =>{
+            this.submitLoading = false;
 
             if( response == 1) {
-                this.MessageService.add({ severity: 'success', summary: 'Success', detail: ' successfully recorded', life: 3000 });
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully recorded', 
+                    life: 3000 
+                });
                 this.onFilterUnloading();
                 this.clearItems();
                 this.visible = false;
             } 
             else if ( response == 2) {
-                this.MessageService.add({ severity: 'success', summary: 'Success', detail: ' successfully updated', life: 3000 });
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully updated', 
+                    life: 3000 
+                });
                 this.onFilterUnloading();
                 this.clearItems();
                 this.visible = false;
             }
             else if ( response == 0) {
-                this.MessageService.add({ severity: 'error', summary: 'Danger', detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', life: 3000 });
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', 
+                    life: 3000 
+                });
             }
             
         }, errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
         })
     }
@@ -551,23 +573,43 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         authObs2.subscribe(response =>{
 
             if( response == 1) {
-                this.MessageService.add({ severity: 'success', summary: 'Success', detail: ' successfully recorded', life: 3000 });
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully recorded', 
+                    life: 3000 
+                });
                 this.getTruck();
                 this.clearTruckForm();
                 this.visibleTruckModal = false;
             } 
             else if ( response == 2) {
-                this.MessageService.add({ severity: 'success', summary: 'Success', detail: ' successfully updated', life: 3000 });
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully updated', 
+                    life: 3000 
+                });
                 this.getTruck();
                 this.clearTruckForm();
                 this.visibleTruckModal = false;
             }
             else if ( response == 0) {
-                this.MessageService.add({ severity: 'error', summary: 'Danger', detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', life: 3000 });
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', 
+                    life: 3000 
+                });
             }
             
         }, errorMessage => {
-            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
+            this.MessageService.add({ 
+                severity: 'error', 
+                summary: 'Danger', 
+                detail: errorMessage, 
+                life: 3000 
+            });
         })
     }
 
@@ -728,9 +770,6 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             this.BeforeImage = 'http://10.10.2.110/project/'+ data.BeforeImage;
             // this.BeforeImage = data.BeforeImage;
         }
-        
-
-        // console.log(data);
 
 
         this.unloadingTransactionForm.setValue({

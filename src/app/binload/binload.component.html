@@ -570,8 +570,8 @@
 
         </div>
 
-      <!-- <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [style]="{'width': '100%'}"></button> -->
-        <div class="flex justify-content-end">
+
+        <!-- <div class="flex justify-content-end">
             <button 
                 pButton 
                 pRipple 
@@ -582,9 +582,12 @@
                 [disabled]="!binloadRequestForm.valid"    
             >
             </button>
+        </div> -->
 
-            <!-- <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [style]="{'width': '100%'}"></button> -->
-        </div>
+        <app-submit-button 
+            [submitLoading]="requestSubmitLoading" 
+            [form]="binloadRequestForm" 
+        /> 
 
   
     </form>
@@ -1067,14 +1070,7 @@
 
         </div>
   
-        <!-- <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!binloadForm.valid" 
-            [style]="{'width': '100%'}"
-        ></button> -->
+       
   
     </form>
 </p-dialog>

@@ -125,8 +125,8 @@
                     {{ row.RawMaterial }}
                 </td>
                 <td data-title="Weight"> 
-                    <span class="">{{ row.Weight}} KG</span> 
-                    <span class="sub-text"> {{ row.Quantity }} Bags </span>
+                    <span class="">{{ row.Weight | number }} kg</span> 
+                    <span class="sub-text"> {{ row.Quantity | number }} bags </span>
                 </td>
                 <td data-title="Warehouse">
                     <span class="">  {{ row.Warehouse_Name}} ({{ row.WarehousePartitionName }})</span> 
@@ -513,7 +513,7 @@
 
         </div>
 
-        <div class="field" *ngIf="value != 0">
+        <!-- <div class="field" *ngIf="value != 0">
 
             <label class="font-semibold" >
                 Checker 
@@ -531,7 +531,7 @@
                 ></p-dropdown>
             </div>
 
-        </div>
+        </div> -->
 
         <div class="field" *ngIf="value != 0">
 

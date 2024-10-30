@@ -71,7 +71,8 @@
             <tr class="thead">
                 <th>#</th>
                 <th>Checker</th>
-                <th>CheckerType</th>
+                <th>Contact #</th>
+                <th>Email</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -80,7 +81,8 @@
             <tr>
                 <td  data-title="#">{{ rowIndex + 1 }}</td>
                 <td  data-title="Checker Name">{{ row.CheckerName }}</td>
-                <td  data-title="Checker Name">{{ row.CheckerType }}</td>
+                <td  data-title="Contact #">{{ row.ContactNo }}</td>
+                <td  data-title="Email">{{ row.EmailAdd }}</td>
                 <td  data-title="Actions">
                     <!-- <button 
                         pButton 
@@ -153,7 +155,7 @@
             >
         </div>
 
-        <div class="field">
+        <!-- <div class="field">
             <label class="font-semibold" >Checker Type</label>
             <div class="card flex justify-content-center">
                 <p-dropdown 
@@ -166,7 +168,7 @@
                     appendTo="body"
                 ></p-dropdown>
             </div>
-        </div>
+        </div> -->
 
         <button 
             pButton 

@@ -122,6 +122,7 @@
                 formControlName="TruckingName" 
                 autocomplete="off" 
                 class="input"
+                placeholder="Enter trucking name"
             >
         </div>
 
@@ -132,6 +133,7 @@
                 formControlName="ContactPerson" 
                 autocomplete="off" 
                 class="input"
+                placeholder="Enter contact person"
             >
         </div>
 
@@ -142,16 +144,24 @@
                 inputId="integeronly" 
                 autocomplete="off" 
                 [useGrouping]="false"
+                placeholder="Enter contact #"
             ></p-inputNumber> 
         </div>
 
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!truckingForm.valid"
-        ></button>
+        <!-- <div class="flex justify-content-end">
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check" 
+                [loading]="submitLoading" 
+                [disabled]="!truckingForm.valid"
+            />
+        </div> -->
+
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="truckingForm" 
+        /> 
 
     </form>
 </p-dialog>

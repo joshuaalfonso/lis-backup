@@ -61,6 +61,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
     UserID!: string;
 
+    requestSubmitLoading: boolean = false;
+    binloadSubmitLoading: boolean = false;
+
     constructor(
         private BinloadService: BinloadService,
         private PlantService: PlantService,
@@ -736,6 +739,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         // console.log(this.binloadRequestForm.value)
         // console.log(this.binloadDetail);
 
+        this.requestSubmitLoading = true;
+
         let binloadRequestFormValue: BinloadRequest = {
             BinloadRequestID: this.binloadRequestForm.value.BinloadRequestID,
             WarehouseLocationID: this.binloadRequestForm.value.WarehouseLocationID,
@@ -760,6 +765,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
         this.BinloadService.insertBinloadRequest(binloadRequestFormValue).subscribe(
             response => {
+
+                this.requestSubmitLoading = false;
 
                 if( response === 1) {
 
@@ -798,8 +805,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
                 }
                 
-            }, errorMessage => {
-                
+            }, errorMessage => {                
+                this.requestSubmitLoading = false;
+
                 this.MessageService.add({ 
                     severity: 'error', 
                     summary: 'Danger', 
@@ -813,19 +821,6 @@ export class BinloadingComponent implements OnInit, OnDestroy {
        
     }
     
-
-    // BinloadingDetailID : 0,
-    // StockingDate: '',
-    // WarehouseID: 0,
-    // WarehousePartitionID: 0,
-    // WarehousePartitionStockID: 0,
-    // RawMaterialID: 0,
-    // Quantity: 0,
-    // Weight: 0,
-    // MaxQuantity: 0,
-    // MaxWeight: 0,
-    // AveragePerBag: 0,
-    // Deleted: 0
 
     onEditBinloadRequest(data: any, dialog: Dialog) {
         this.binloadDetail = [];
@@ -849,22 +844,6 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             Status: data.Status,
             UserID: data.UserID,
         })
-
-        // let data = {
-        //     BinloadRequestID: 0,
-        //     BinloadingDetailID : 0,
-        //     StockingDate: '',
-        //     WarehouseID: 0,
-        //     WarehousePartitionID: 0,
-        //     WarehousePartitionStockID: 0,
-        //     RawMaterialID: 0,
-        //     Quantity: 0,
-        //     Weight: 0,
-        //     MaxQuantity: 0,
-        //     MaxWeight: 0,
-        //     AveragePerBag: 0,
-        //     Deleted: 0
-        // }
 
         data.BinloadDetail.forEach((item: any) => {
             let data = {
@@ -968,6 +947,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             return
         }
 
+        this.binloadSubmitLoading= true;
+
         // BinloadingID: number,
         // BinloadingRequestID: number,
         // ControlNo: string,
@@ -1013,6 +994,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.BinloadService.saveBinload(binloadOBJ).subscribe(
             response => {
 
+                this.binloadSubmitLoading= false;
+
                 if( response === 1) {
                     this.visible = false;
                     this.MessageService.add({ 
@@ -1051,6 +1034,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                 }
                 
             }, errorMessage => {
+                this.binloadSubmitLoading= false;
                 
                 this.MessageService.add({ 
                     severity: 'error', 

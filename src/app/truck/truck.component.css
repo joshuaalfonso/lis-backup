@@ -34,6 +34,12 @@
     margin-right: 10px;
 }
 
+:host ::ng-deep .p-button {
+    width: auto;
+    border-radius: 5px;
+    padding: 8px 10px;
+}
+
 
 /* ==== TABLE ==== */
 th, td {

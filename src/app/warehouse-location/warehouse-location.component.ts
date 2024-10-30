@@ -42,6 +42,8 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
     
     private subscription: Subscription = new Subscription();
 
+    submitLoading: boolean = false;
+
     ngOnInit(): void {
 
         this.warehouseLocationForm = new FormGroup({
@@ -112,7 +114,7 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
                     this.warehouseLocation = response;
                     this.isLoading = false;
                     // console.log(response);
-                }
+                } 
             )
         )
     }
@@ -124,7 +126,7 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
     showDialog() {
 
         if (!this.insert) {
-            this.MessageService.add({ 
+            this.MessageService.add({  
                 severity: 'error', 
                 summary: 'Danger', 
                 detail: 'You are not authorized!', 
@@ -155,6 +157,8 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
             return;
         }
 
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>;
         authObs = this.WarehouseLocationService.saveData
         (
@@ -164,6 +168,8 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
         );
 
         authObs.subscribe(response =>{
+
+            this.submitLoading = true;
 
             if( response === 1) {
                 this.visible = false;
@@ -203,6 +209,7 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
                 detail: errorMessage, 
                 life: 3000 
             });
+            this.submitLoading = false;
         })
 
     }
@@ -233,7 +240,7 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
     }
 
     onDelete(id: any) {
-        
+
         this.WarehouseLocationService.onDeleteData(id).subscribe(
             response => {
                if (response === 3 ) {

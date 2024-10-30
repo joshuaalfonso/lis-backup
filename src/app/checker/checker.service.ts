@@ -25,7 +25,7 @@ export class CheckerService {
     saveData(
         CheckerID: number,
         CheckerName: string,
-        CheckerTypeID: number,
+        // CheckerTypeID: number,
         UserID: number
     ) 
     {
@@ -35,7 +35,7 @@ export class CheckerService {
             {
                 CheckerID: CheckerID,
                 CheckerName: CheckerName,
-                CheckerTypeID: CheckerTypeID,
+                // CheckerTypeID: CheckerTypeID,
                 UserID: UserID
             }
         )

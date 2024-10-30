@@ -22,6 +22,8 @@ export class DriverComponent implements OnInit{
 
     isLoading: boolean = false;
 
+    submitLoading: boolean = false;
+
     constructor(
         private DriverService: DriverService,
         private MessageService: MessageService,
@@ -61,6 +63,14 @@ export class DriverComponent implements OnInit{
     }
 
     onSubmit() {
+
+        if(!this.driverForm.valid) {
+            alert('please fill all the blanks');
+            return
+        }
+
+        this.submitLoading = true; 
+
         let authObs: Observable<ResponseData>;
         authObs = this.DriverService.saveData
         (
@@ -71,6 +81,8 @@ export class DriverComponent implements OnInit{
         )
 
         authObs.subscribe(response =>{
+            this.submitLoading = false; 
+
 
             if( response === 1) {
                 this.MessageService.add({ 
@@ -99,6 +111,7 @@ export class DriverComponent implements OnInit{
             }
             
         }, errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
         })
     }

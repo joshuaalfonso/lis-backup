@@ -59,12 +59,7 @@ td .no-stock {
     background: var(--surface-color);
     border: var(--card-border);
     box-shadow: var(--input-box-shadow);
-}
-
-:host ::ng-deep .p-button {
-    width: auto;
-    border-radius: 5px;
-    padding: 8px 10px;
+    color: var(--font-color);
 }
 
 @media (max-width: 1142px) {

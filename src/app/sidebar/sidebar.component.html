@@ -122,7 +122,7 @@
 
     </div>
 
-    <div class="profile-container" (click)="profile.toggle($event)" appendTo="body">
+    <div class="profile-container" (click)="profile.toggle($event)" appendTo="body" *ngIf="user">
          <!-- <a href="#" class="nav__link mt-4"  (click)="onLogout()" *ngIf="isAuthenticated"> -->
             <img [src]="avatarList[user?.avatar].avatarUrl" alt="avatar" width="40px">
             <span>

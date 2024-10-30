@@ -21,6 +21,6 @@
     </div>
 </div>
 
-<p-sidebar [(visible)]="sidebarVisible" [style]="{width: '250px', padding: '0'}">
+<p-sidebar [(visible)]="sidebarVisible" [style]="{width: '250px', padding: '0'}" *ngIf="sidebarVisible">
     <app-sidebar ></app-sidebar>
 </p-sidebar>

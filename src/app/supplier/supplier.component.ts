@@ -24,6 +24,8 @@ export class SupplierComponent implements OnInit, OnDestroy{
 
     isLoading: boolean = false;
 
+    submitLoading: boolean = false;
+
     dialogHeader?: string;
 
     private subscription: Subscription = new Subscription();
@@ -90,6 +92,14 @@ export class SupplierComponent implements OnInit, OnDestroy{
 
     // ==== SUBMIT FORM DATA ====
     onSubmit() {
+
+        if(!this.supplierForm.valid) {
+            alert('please fill all the blanks');
+            return
+        } 
+
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>;
         authObs = this.SupplierService.saveData(
             this.supplierForm.value.SupplierID, 
@@ -101,6 +111,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
         );
 
         authObs.subscribe(response =>{
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.MessageService.add({ 
@@ -134,6 +145,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
             }
             
         }, errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ 
                 severity: 'error', 
                 summary: 'Danger', 

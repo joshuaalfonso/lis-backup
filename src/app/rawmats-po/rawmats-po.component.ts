@@ -46,6 +46,8 @@ export class RawMatsPOComponent implements OnInit{
 
     userID: string = '';
 
+    submitLoading: boolean = false;
+
     private subscription: Subscription = new Subscription;
 
     constructor
@@ -222,6 +224,13 @@ export class RawMatsPOComponent implements OnInit{
 
     onSubmit() {
 
+        if(!this.rawMatsPOForm.valid) {
+            alert('please fill all the blanks')
+            return
+        }
+
+        this.submitLoading = true;
+
         let authObs: Observable<ResponseData>;
         authObs = this.RawMatsPOService.savedata
         (
@@ -241,6 +250,7 @@ export class RawMatsPOComponent implements OnInit{
         )
 
         authObs.subscribe(response =>{
+            this.submitLoading = false;
 
             if( response === 1) {
                 this.MessageService.add({ 
@@ -275,6 +285,7 @@ export class RawMatsPOComponent implements OnInit{
             
         }, 
         errorMessage => {
+            this.submitLoading = false;
             this.MessageService.add({ 
                 severity: 'error', summary: 'Danger', 
                 detail: errorMessage, 
