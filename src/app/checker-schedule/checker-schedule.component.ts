@@ -4,6 +4,10 @@ import { Subscription } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
 import { MessageService } from "primeng/api";
+import { PlantService } from "../plant/plant.service";
+import { CheckerType } from "../checker-type/checker-type.component";
+import { CheckerTypeService } from "../checker-type/checker-type.service";
+import { AuthService } from "../auth/auth.service";
 
 
 
@@ -17,6 +21,8 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
     checkerSchedule: any[] = [];
     checker: any[] = [];
     warehouseLocation: any[] = [];
+    plant: any[] = [];
+    checkerType: any[] = [];
 
     checkerScheduleForm!: FormGroup;
 
@@ -24,31 +30,59 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
     visible: boolean = false;
     modalHeader: string = '';
 
+    selectedCheckerType!: number;
+
+    submitLoading: boolean = false;
+
+    userID!: string;
+
     private subscriptions: Subscription = new Subscription;
 
     constructor(
         private CheckerScheduleService: CheckerScheduleService,
         private WarehouseLocationService: WarehouseLocationService,
-        private MessageService: MessageService
+        private MessageService: MessageService,
+        private PlantService: PlantService,
+        private CheckerTypeService: CheckerTypeService,
+        private AuthService: AuthService
     ) {}
 
     ngOnInit(): void {  
+
         this.checkerScheduleForm = new FormGroup({
             'ScheduleRotationID': new FormControl(null),
             'UserID': new FormControl(null, Validators.required),
-            'WarehouseLocationID': new FormControl(null, Validators.required),
+            'TypeID': new FormControl(null, Validators.required),
+            'LocationID': new FormControl(null),
+            'PlantID': new FormControl(null),
             'DateRotation': new FormControl(null, Validators.required),
             'AdminUserID': new FormControl()
         })
 
 
+
+        this.getUser();
         this.getData();
         this.getChecker();
         this.getWarehouseLocation();
+        this.getPlant();
+        this.getCheckerType();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    getUser() {
+        this.subscriptions.add(
+            this.AuthService.user.subscribe(
+                user => {
+                    if (user) {
+                        this.userID = user.user_id; 
+                    }
+                }
+            )
+        )
     }
 
     getData() {
@@ -56,6 +90,9 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
             this.CheckerScheduleService.displayData().subscribe(
                 response => {
                     this.checkerSchedule = response
+                },
+                err => {
+                    console.error('Error fetching checker schedule:', err);
                 }
             )
         )
@@ -66,6 +103,9 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
             this.CheckerScheduleService.checkerData().subscribe(
                 response => {
                     this.checker = response
+                },
+                err => {
+                    console.error('Error fetching checker:', err);
                 }
             )
         )
@@ -76,6 +116,35 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
             this.WarehouseLocationService.getWarehouseLocationData().subscribe(
                 response => {
                     this.warehouseLocation = response
+                },
+                err => {
+                    console.error('Error fetching warehouse location data:', err);
+                }
+            )
+        )
+    }
+
+    getPlant() {
+        this.subscriptions.add(
+            this.PlantService.getPlantData().subscribe(
+                response => {
+                    this.plant = response
+                }, 
+                err => {
+                    console.error('Error fetching plant data:', err);
+                }
+            )
+        )
+    }
+
+    getCheckerType() {
+        this.subscriptions.add(
+            this.CheckerTypeService.getCheckerTypeData().subscribe(
+                response => {
+                    this.checkerType = response;
+                },
+                err => {
+                    console.error('Error fetching checker type data:', err);
                 }
             )
         )
@@ -95,15 +164,20 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
     }
 
     onSubmit() {
+
+        this.submitLoading = true;
         
         this.CheckerScheduleService.saveData(
             this.checkerScheduleForm.value.ScheduleRotationID,
-            this.checkerScheduleForm.value.UserID.UserID,
-            this.checkerScheduleForm.value.WarehouseLocationID.WarehouseLocationID,
+            this.checkerScheduleForm.value.UserID,
+            this.checkerScheduleForm.value.TypeID,
+            this.checkerScheduleForm.value.PlantID,
+            this.checkerScheduleForm.value.LocationID,
             this.checkerScheduleForm.value.DateRotation.toLocaleDateString(),
-            this.checkerScheduleForm.value.AdminUserID
+            this.userID
         )
         .subscribe(response => {
+            this.submitLoading = false;
             
             if( response === 1) {
                 this.MessageService.add({ severity: 'success', summary: 'Success', detail:'Successfully recorded', life: 3000 });
@@ -117,9 +191,14 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
                 this.clearItems();
                 this.visible = false;
             }
+
+            else if ( response === 0) {
+                this.MessageService.add({ severity: 'error', summary: 'Warning', detail:'Checker already exist', life: 3000 });
+            }
                     
         },  errorMessage => {
-            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
+            this.submitLoading = false;
+            this.MessageService.add({ severity: 'error', summary: 'Warning', detail: errorMessage, life: 3000 });
         })
 
     }
@@ -140,15 +219,44 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
 
         let CheckerValue = this.findObjectByID(data.UserID.toUpperCase(), 'UserID', this.checker);
         let LocationValue = this.findObjectByID(data.WarehouseLocationID, 'WarehouseLocationID', this.warehouseLocation);
-        // console.log(data.UserID.toUpperCase())
+
+        this.onSelectCheckerType(data.TypeID)
+        // this.selectedCheckerType = data.TypeID;
 
         this.checkerScheduleForm.setValue({
             ScheduleRotationID: data.ScheduleRotationID,
-            UserID: CheckerValue,
-            WarehouseLocationID: LocationValue,
+            UserID: data.UserID,
+            TypeID: data.TypeID,
+            PlantID: data.PlantID,
+            LocationID: data.WarehouseLocationID,
             DateRotation: new Date(data.DateRotation.date),
             AdminUserID: data.AdminUserID
         })
 
     }
+
+    onSelectCheckerType(checkerTypeID: number) {
+
+        this.checkerScheduleForm.patchValue({
+            PlantID: null,
+            LocationID: null
+        })
+
+        this.selectedCheckerType = checkerTypeID;
+
+        this.checkerScheduleForm.get('LocationID')?.clearValidators();
+        this.checkerScheduleForm.get('PlantID')?.clearValidators();
+
+        if (checkerTypeID === 1) {
+            this.checkerScheduleForm.get('LocationID')?.setValidators(Validators.required);
+        } else if (checkerTypeID === 2) {
+            this.checkerScheduleForm.get('PlantID')?.setValidators(Validators.required);
+        }
+
+        // Update the form control states
+        this.checkerScheduleForm.get('LocationID')?.updateValueAndValidity();
+        this.checkerScheduleForm.get('PlantID')?.updateValueAndValidity();
+
+    }
+
 }

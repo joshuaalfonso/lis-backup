@@ -32,7 +32,10 @@
 </div> -->
 
 <!-- ===== TABLE ====== -->
+
+
 <div class="table" >
+
     <p-table 
       #dt1 
       [value]="checkerSchedule" 
@@ -67,7 +70,8 @@
             <tr class="thead">
                 <th></th>
                 <th>Name</th>
-                <th>Warehouse Location</th>
+                <th>Type</th>
+                <th>Designation</th>
                 <th>Date Rotation</th>
                 <th></th>
             </tr>
@@ -77,7 +81,8 @@
         <tr>
             <td data-title="#">{{ rowIndex + 1 }}</td>
             <td data-title="UserID">{{ row.Name }}</td>
-            <td data-title="Warehouse Location">{{ row.WarehouseLocation }}</td>
+            <td data-title="UserID">{{ row.TypeID === 1 ? 'Unloading' : 'Binloading' }}</td>
+            <td data-title="Warehouse Location">{{ row.PlantName ?? row.WarehouseLocation }}</td>
           <td data-title="DateRotation">{{ row.DateRotation.date | date: 'MM/dd/yyyy' }}</td>
 
           <td data-title="Action">
@@ -142,21 +147,56 @@
                 [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
                 [showClear]="true" 
                 placeholder="Select Checker" 
+                optionValue="UserID"
             ></p-dropdown>
         </div>
       </div>
 
       <div class="field">
+        <label class="font-semibold">Checker Type</label>
+        <div class="card flex justify-content-center">
+            <p-dropdown 
+                [options]="checkerType" 
+                optionLabel="CheckerType" 
+                [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                [showClear]="true" 
+                appendTo="body" 
+                formControlName="TypeID"
+                placeholder="Select checker type" 
+                optionValue="CheckerTypeID"
+                (onChange)="onSelectCheckerType($event.value)"
+            ></p-dropdown>
+        </div>
+      </div>
+
+      <div class="field" *ngIf="selectedCheckerType === 1">
         <label class="font-semibold">Warehouse Location</label>
         <div class="card flex justify-content-center">
             <p-dropdown 
                 [options]="warehouseLocation" 
                 optionLabel="WarehouseLocation" 
-                formControlName="WarehouseLocationID" 
+                formControlName="LocationID" 
                 [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
                 [showClear]="true" 
                 appendTo="body" 
-                placeholder="Select Checker" 
+                placeholder="Select location" 
+                optionValue="WarehouseLocationID"
+            ></p-dropdown>
+        </div>
+      </div>
+
+      <div class="field" *ngIf="selectedCheckerType === 2">
+        <label class="font-semibold">Plant</label>
+        <div class="card flex justify-content-center">
+            <p-dropdown 
+                [options]="plant" 
+                optionLabel="PlantName" 
+                formControlName="PlantID"
+                [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                [showClear]="true" 
+                appendTo="body" 
+                placeholder="Select plant" 
+                optionValue="PlantID"
             ></p-dropdown>
         </div>
       </div>
@@ -187,7 +227,18 @@
         <p-inputNumber formControlName="MinimumWeight" inputId="integeronly" autocomplete="off" placeholder="Enter maximum quantity"></p-inputNumber> 
       </div> -->
   
-      <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!checkerScheduleForm.valid"></button>
+      <!-- <button 
+        pButton 
+        pRipple 
+        label="Submit" 
+        class="bg-indigo-500 border-round border-none submit" 
+        [disabled]="!checkerScheduleForm.valid"
+      ></button> -->
+
+      <app-submit-button 
+        [submitLoading]="submitLoading"
+        [form]="checkerScheduleForm"
+      />
   
     </form>
   </p-dialog>

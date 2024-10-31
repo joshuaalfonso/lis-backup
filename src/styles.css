@@ -246,6 +246,7 @@ input {
     /* border: none; */
 }
 
+
 /* p-inputNumber ::ng-deep input {
     padding: 7px 10px;
 } */
@@ -258,7 +259,7 @@ input {
     /* background: red; */
 }
 
-.p-calendar button{
+.p-calendar button {
     border-top-right-radius: 5px; 
     border-bottom-right-radius: 5px; 
     /* background: red; */
@@ -351,9 +352,31 @@ input {
     color: var(--font-color-dark);
 }
 
-.p-paginator-bottom {
-    background: green !important;
+.table>:not(caption)>*>* {
+    background: transparent !important;
 }
+
+.p-paginator .p-link.p-highlight, .p-paginator button:hover {
+    background: var(--tab-color);
+}
+
+.p-paginator .p-dropdown {
+    background: transparent !important;
+    box-shadow: var(--card-box-shadow);
+    border: var(--card-border);
+}
+
+.p-paginator .p-dropdown-label {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.p-dialog-header-icons button:hover {
+    background: var(--tab-color);
+    color: var(--font-color);
+}
+
+
 
 /* .p-highlight {
     background: var(--tab-color)

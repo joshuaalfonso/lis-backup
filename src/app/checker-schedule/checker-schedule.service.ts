@@ -29,6 +29,8 @@ export class CheckerScheduleService {
     saveData(
         ScheduleRotationID: string,
         UserID: string,
+        TypeID: number,
+        PlantID: number,
         WarehouseLocationID: number,
         DateRotation: string,
         AdminUserID: string
@@ -39,6 +41,8 @@ export class CheckerScheduleService {
             {
                 ScheduleRotationID: ScheduleRotationID,
                 UserID: UserID,
+                TypeID: TypeID,
+                PlantID: PlantID,
                 WarehouseLocationID: WarehouseLocationID,
                 DateRotation: DateRotation,
                 AdminUserID: AdminUserID

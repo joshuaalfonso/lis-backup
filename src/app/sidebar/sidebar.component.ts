@@ -285,7 +285,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
             }, 
             {
                 title: 'Others',
-                view: true,
+                view: false,
                 subMenu: [
                     {
                         title: 'Account',
