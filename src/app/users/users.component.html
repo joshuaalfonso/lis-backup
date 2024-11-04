@@ -143,10 +143,12 @@
     
         <!-- <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!userForm.valid"></button> -->
 
-        <app-submit-button 
-            [submitLoading]="submitLoading" 
-            [form]="userForm" 
-        /> 
+        <div class="flex justify-content-end gap-2">
+            <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="userForm" 
+            /> 
+        </div>
 
     </form>
 </p-dialog>

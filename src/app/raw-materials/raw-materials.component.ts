@@ -171,6 +171,10 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
+    toggleDialog() {
+        this.visible = !this.visible;
+    }
+
     // ==== SHOW MODAL ====
     showDialog() {
 

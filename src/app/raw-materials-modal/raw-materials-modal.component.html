@@ -1,0 +1,92 @@
+<p-dialog 
+    header="{{ modalHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form 
+        [formGroup]="rawMatsForm" 
+        class="p-fluid" 
+    >  
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Raw Material
+            </label>
+
+            <input 
+                pInputText 
+                formControlName="RawMaterial" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter raw material"
+            >
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold" >
+                Category
+            </label>
+
+            <input 
+                pInputText 
+                formControlName="Category" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter category"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold">
+                Minimum Quantity
+            </label>
+
+            <p-inputNumber 
+                formControlName="MinimumQuantity" 
+                inputId="integeronly" 
+                autocomplete="off" 
+                placeholder="Enter minimun quantity"
+            ></p-inputNumber>
+
+        </div>
+
+        <div class="field">
+
+            <label class="font-semibold">
+                Minimum Weight
+            </label>
+
+            <p-inputNumber 
+                formControlName="MinimumWeight" 
+                inputId="integeronly" 
+                autocomplete="off" 
+                placeholder="Enter maximum quantity"
+            ></p-inputNumber>
+
+        </div>
+
+        <div class="flex justify-content-end gap-2">
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancel" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="onToggleDialog()"
+            ></p-button>
+
+            <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="rawMatsForm" 
+            /> 
+        </div>
+
+    </form>
+
+</p-dialog>

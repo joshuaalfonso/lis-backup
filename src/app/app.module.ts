@@ -163,6 +163,7 @@ import { SecurityComponent } from './security/security.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-dashboard.component';
 import { SubmitButtonComponent } from './submit-button/submit-button.component';
+import { RawMaterialsModalComponent } from './raw-materials-modal/raw-materials-modal.component';
 
 
 
@@ -229,7 +230,8 @@ import { SubmitButtonComponent } from './submit-button/submit-button.component';
     SecurityComponent,
     AccountDetailsComponent,
     DispatcherDashboardComponent,
-    SubmitButtonComponent
+    SubmitButtonComponent,
+    RawMaterialsModalComponent
     
   ],
   imports: [

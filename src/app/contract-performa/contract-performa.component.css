@@ -1,53 +1,8 @@
-.top-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-}
 
-.title {
-    padding: 5px;
-    display: grid;
-    align-content: center;
-}
-
-/* ==== SEARCH, ADD, EXPORT ==== */
-.controls {
-    margin-bottom: 15px;
-}
-
-.input__search {
-    padding: 6px 0;
-    margin-right: 20px;
-}
-
-.add__btn {
-    /* background: var(--first-color); */
-    border: none;
-    color: white;
-    padding: 7px 10px;
-    border-radius: 5px;
-    margin-right: 20px;
-}
-
-.export__btn {
-    border: none;
-    color: white;
-    padding: 7px 10px;
-    border-radius: 5px;
-}
-
-/* :host ::ng-deep .p-component {
-    margin-bottom: 10px;
-} */
 
 :host ::ng-deep .p-buttonset .p-button{
     padding: 5px 10px;
 }
-
-/* :host ::ng-deep .p-buttonset .p-button:last-of-type {
-    padding: 5px 10px;
-} */
-
 
 
 /* tab */
@@ -106,31 +61,7 @@
 
 
 /* ==== TABLE ==== */
-/* .table, .ship-trans-table {
-    border: 1px solid #E5E7EB;
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 15px;
-    margin-bottom: 40px;
-    max-height: 325px;
-    overflow-y: auto;
-    position: relative;
-} */
 
-/* .table {
-    border: 1px solid #E5E7EB;
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 15px;
-    overflow-y: auto;
-    position: relative;
-    background: white;
-    box-shadow:  0px 4px 30px rgba(221, 224, 255, .54);
-    transition: .3s all ease;
-}
-.table:hover {
-    box-shadow: none;
-} */
 
 :host ::ng-deep .p-datatable .p-datatable-header {
     border: none;
@@ -146,7 +77,7 @@
 
 
 /* Styling the scrollbar */
-:host ::ng-deep ::-webkit-scrollbar {
+/* :host ::ng-deep ::-webkit-scrollbar {
     width: 10px;
     height: 8px;
 }
@@ -162,7 +93,7 @@
 
 :host ::ng-deep ::-webkit-scrollbar-thumb:hover {
     background: #818181;
-}
+} */
 
 
 td, th {
@@ -208,32 +139,14 @@ td {
     border-right: 1px dotted lightgray;
 }
 
+.table-header-title {
+    color: var(--font-color);
+}
+
 
 
 /* ==== MODAL FORM ==== */
-/* input {
-    padding: 7px 10px;
-}
 
-.submit__btn {
-    background: var(--first-color);
-    color: white;
-    width: 100%;
-    border: none;
-    padding: 7px 0;
-    border-radius: 7px;
-}
-.submit {
-    padding: 7px 0;
-}
-
-:host ::ng-deep .p-dropdown-label {
-    padding: 7px 10px;
-}
-
-:host ::ng-deep p-dropdown ul {
-    padding: 0;
-} */
 .required {
     color: rgb(228, 84, 84);
 }
@@ -311,24 +224,6 @@ p-inputNumber ::ng-deep input {
 }
 
 
-
-
-/* @media (max-width: 1142px) {
-    .thead {
-        display: none;
-    }
-    td{
-        text-align: right;
-        display: block;
-    }
-    td::before {
-        content: attr(data-title) ": ";
-        float: left;
-    }
-    tr:nth-child(even) {
-        background: #f8f9fa;
-    }
-} */
 
 @media (max-width: 586px) {
     button span {

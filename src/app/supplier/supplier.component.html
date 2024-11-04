@@ -214,11 +214,12 @@
             ></p-inputNumber> 
         </div>
 
-
-        <app-submit-button 
-            [submitLoading]="submitLoading" 
-            [form]="supplierForm" 
-        /> 
+        <div class="flex justify-content-end gap-2">
+            <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="supplierForm" 
+            /> 
+        </div>
 
     </form>
 </p-dialog>

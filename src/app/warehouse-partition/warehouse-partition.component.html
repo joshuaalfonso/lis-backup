@@ -186,6 +186,7 @@
                 formControlName="WarehousePartitionName" 
                 autocomplete="off" 
                 class="input"
+                placeholder="Enter partition name"
             >
         </div>
 
@@ -217,14 +218,17 @@
                 formControlName="MaximumCapacity" 
                 inputId="integeronly" 
                 autocomplete="off" 
+                placeholder="Enter maximum capacity"
             ></p-inputNumber> 
         </div>
 
 
-        <app-submit-button 
-            [submitLoading]="submitLoading" 
-            [form]="warehousePartitionForm" 
-        /> 
+        <div class="flex justify-content-end gap-2">
+            <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="warehousePartitionForm" 
+            /> 
+        </div>
 
     </form>
 </p-dialog>

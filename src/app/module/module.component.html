@@ -6,13 +6,6 @@
 
 <app-content-header [title]="'Module'"></app-content-header>
 
-<!-- ======= SEARCH, ADD, EXPORT ======= -->
-<!-- <div class="controls">
-    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/>
-    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
-    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
-</div> -->
-
 <!-- ======= TABLE ======= -->
 <div class="table">
     <p-table  #dt1 [value]="module" [tableStyle]="{ 'width': '100%'}" [globalFilterFields]="['ModuleName']">
@@ -92,9 +85,11 @@
           <input pInputText formControlName="ModuleName" autocomplete="off" class="input">
         </div>
 
-        <app-submit-button 
-            [submitLoading]="submitLoading" 
-            [form]="moduleForm" 
-        /> 
+        <div class="flex justify-content-end gap-2">
+            <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="moduleForm" 
+            /> 
+        </div>
     </form>
 </p-dialog>

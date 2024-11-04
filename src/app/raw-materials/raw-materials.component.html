@@ -1,11 +1,12 @@
 
 
-<app-content-header [title]="'Products / Raw Material'"></app-content-header>
+<app-content-header 
+    [title]="'Products / Raw Material'"
+></app-content-header>
 
   
 <!-- ===== TABLE ====== -->
 <div class="table ">
-
 
     <p-table 
         #dt1 
@@ -116,7 +117,18 @@
 
 
 <!-- ======= MODAL FORM ======== -->
-<p-dialog 
+
+<app-raw-materials-modal 
+    [visible]="visible" 
+    [modalHeader]="modalHeader" 
+    [rawMatsForm]="rawMatsForm" 
+    [submitLoading]="submitLoading" 
+    (submit)="onSubmit()"
+    (toggleDialog)="toggleDialog()"
+/>
+
+
+<!-- <p-dialog 
     header="{{ modalHeader }}" 
     [(visible)]="visible" 
     [modal]="true" 
@@ -200,5 +212,5 @@
 
     </form>
 
-</p-dialog>
+</p-dialog> -->
 
