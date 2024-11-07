@@ -41,6 +41,7 @@
                     pRipple 
                     class="add__btn" 
                     (click)="showDialog()"
+                    *ngIf="insert"
                 >
                     <i class='bx bx-plus'></i> 
                     <span>Add Item</span>
@@ -56,7 +57,7 @@
                 <th>Trucking</th>
                 <!-- <th>Truck Type</th> -->
                 <th>Description</th>
-                <th></th>
+                <th *ngIf="edit"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -66,7 +67,7 @@
                 <td data-title="Trucking Name">{{ row.TruckingName }}</td>
                 <!-- <td data-title="Truck Type">{{ row.TruckType }}</td> -->
                 <td data-title="Description">{{ row.Description == null ? '-' : row.Description }}</td>
-                <td data-title="Actions">
+                <td data-title="Actions" *ngIf="edit">
                     <!-- <button pButton pRipple class="edit__btn" (click)="onSelect(row)" class="p-button-success p-2 border-round mr-2"><i class='bx bx-edit-alt'></i></button>
                     <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" (click)="confirm2($event, row.TruckID)"><i class='bx bx-trash' ></i></button> -->
                     <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>

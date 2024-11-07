@@ -26,7 +26,7 @@ export class CheckerService {
         CheckerID: number,
         CheckerName: string,
         // CheckerTypeID: number,
-        UserID: number
+        UserID: string
     ) 
     {
         return this.http.post

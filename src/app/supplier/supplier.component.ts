@@ -6,6 +6,7 @@ import { MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { ConfirmationService } from "primeng/api";
 import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 @Component({
     selector: 'app-supplier',
@@ -20,13 +21,18 @@ export class SupplierComponent implements OnInit, OnDestroy{
 
     visible: boolean= false;
 
-    currentUserID!: string;
-
     isLoading: boolean = false;
 
     submitLoading: boolean = false;
 
     dialogHeader?: string;
+
+    userID!: string;
+
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
 
     private subscription: Subscription = new Subscription();
 
@@ -34,17 +40,11 @@ export class SupplierComponent implements OnInit, OnDestroy{
         private SupplierService: SupplierService,
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
+        private UsersService: UsersService,
         private AuthService: AuthService
     ){}
 
     ngOnInit(): void {
-        this.AuthService.user.subscribe(
-            user => {
-                if (user) {
-                    this.currentUserID = user.user_id;
-                }
-            }
-        )
         
         this.supplierForm = new FormGroup({
             'SupplierID': new FormControl(0),
@@ -56,6 +56,8 @@ export class SupplierComponent implements OnInit, OnDestroy{
         })
 
         // ==== DISPLAY DATA ====
+        this.getUser();
+        this.getAccess();
         this.getSupplier();
     }
 
@@ -75,6 +77,46 @@ export class SupplierComponent implements OnInit, OnDestroy{
     // ==== UNSUBSCRIBE ====
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+    }
+
+    getUser() {
+        this.AuthService.user.subscribe(
+            user => {
+                if (user) {
+                    this.userID = user.user_id;
+                }
+            }
+        )
+    }
+
+    getAccess() {
+        this.subscription.add(
+            this.UsersService.getUserAccess(this.userID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '2.14.1':
+                                this.view = true;
+                                break;
+                            case '2.14.2':
+                                this.insert = true;
+                                break;
+                            case '2.14.3':
+                                this.edit = true;
+                                break;
+                            case '2.14.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )
+        )
     }
 
     // ==== SHOW MODAL ====
@@ -107,7 +149,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
             this.supplierForm.value.Address, 
             this.supplierForm.value.ContactPerson, 
             this.supplierForm.value.ContactNumber, 
-            this.supplierForm.value.UserID
+            this.userID
         );
 
         authObs.subscribe(response =>{
@@ -153,6 +195,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
                 life: 3000 
             });
         })
+        
     }
 
     // ==== EDIT ITEM ====

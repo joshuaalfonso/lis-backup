@@ -666,7 +666,7 @@
 
         </div>
 
-        <div>
+        <!-- <div>
             <button 
             pButton 
             pRipple 
@@ -674,7 +674,12 @@
             class="bg-indigo-500 border-round border-none submit" 
             [disabled]="!truckForm.valid"
             ></button>
-        </div>
+        </div> -->
+
+        <app-submit-button 
+            [submitLoading]="submitLoading" 
+            [form]="truckForm" 
+        /> 
 
     </form>
   

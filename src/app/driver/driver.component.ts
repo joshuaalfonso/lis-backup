@@ -1,8 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { DriverService } from "./driver.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
+import { UsersService } from "../users/users.service";
+import { AuthService } from "../auth/auth.service";
 
 
 @Component({
@@ -10,7 +12,7 @@ import { ConfirmationService, MessageService } from "primeng/api";
     templateUrl: 'driver.component.html',
     styleUrls: ['driver.component.css']
 })
-export class DriverComponent implements OnInit{
+export class DriverComponent implements OnInit, OnDestroy{
 
     driver: Driver[] = [];
 
@@ -24,10 +26,21 @@ export class DriverComponent implements OnInit{
 
     submitLoading: boolean = false;
 
+    subscription: Subscription = new Subscription;
+
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
+
+    userID!: string;
+
     constructor(
         private DriverService: DriverService,
         private MessageService: MessageService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
+        private UsersService: UsersService,
+        private AuthService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -38,7 +51,13 @@ export class DriverComponent implements OnInit{
             'UserID': new FormControl(0)
         })
 
+        this.getUser();
+        this.getUserAccess(this.userID);
         this.getData();
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     getData() {
@@ -48,6 +67,46 @@ export class DriverComponent implements OnInit{
                 this.driver = response;
                 this.isLoading = false;
             }
+        )
+    }
+
+    getUser() {
+        this.subscription.add(
+            this.AuthService.user.subscribe(user => {
+                if (user) {
+                    this.userID = user.user_id;
+                }
+            })
+        )
+    }
+
+    getUserAccess(UserID: string) {
+        this.subscription.add(
+            this.UsersService.getUserAccess(UserID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '2.11.1':
+                                this.view = true;
+                                break;
+                            case '2.11.2':
+                                this.insert = true;
+                                break;
+                            case '2.11.3':
+                                this.edit = true;
+                                break;
+                            case '2.11.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )       
         )
     }
 
@@ -77,7 +136,7 @@ export class DriverComponent implements OnInit{
             this.driverForm.value.DriverID,
             this.driverForm.value.DriverName,
             this.driverForm.value.ContactNumber,
-            this.driverForm.value.UserID,
+            this.userID
         )
 
         authObs.subscribe(response =>{

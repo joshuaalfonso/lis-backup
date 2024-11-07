@@ -337,32 +337,32 @@ export class TransferComponent implements OnInit, OnDestroy {
                     let userRights = response;
 
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 25.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '3.5.1':
                                 this.view = true;
                                 break;
-                            case 25.2:
+                            case '3.5.2':
                                 this.insert = true;
                                 break;
-                            case 25.3:
+                            case '3.5.3':
                                 this.edit = true;
                                 break;
-                            case 25.4:
+                            case '3.5.4':
                                 this.generateReport = true;
                                 break;
-                            case 25.5:
+                            case '3.5.5':
                                 this.dispatcherView = true;
                                 this.stateOptions = [...this.stateOptions, { label: 'Preparation', value: 0 }]
                                 break;
-                            case 25.6:
+                            case '3.5.6':
                                 this.sourceCheckerView = true;
                                 this.stateOptions = [...this.stateOptions, { label: 'Source', value: 1 }]
                                 break;
-                            case 25.7:
+                            case '3.5.7':
                                 this.destinationView = true;
                                 this.stateOptions = [...this.stateOptions, { label: 'Destination', value: 2 }]
                                 break;
-                            case 25.8:
+                            case '3.5.8':
                                 this.completedView = true;
                                 this.stateOptions = [...this.stateOptions, { label: 'Completed', value: 3 }]
                                 break;

@@ -101,17 +101,17 @@ export class RawMatsPOComponent implements OnInit{
                     let userRights = response;
 
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 21.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '3.1.1':
                                 this.view = true;
                                 break;
-                            case 21.2:
+                            case '3.1.2':
                                 this.insert = true;
                                 break;
-                            case 21.3:
+                            case '3.1.3':
                                 this.edit = true;
                                 break;
-                            case 21.4:
+                            case '3.1.4':
                                 this.generateReport = true;
                                 break;
                             default:

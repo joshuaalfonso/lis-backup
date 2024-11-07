@@ -94,7 +94,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
             },
             {
               title: 'Master',
-              view: true,
+              view: false,
               subMenu: [
                 // {
                 //     title: 'Products',
@@ -122,7 +122,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                     title: 'Raw Material',
                     icon: 'assets/icons/icon-tags.svg',
                     routerLink: '/raw-materials',
-                    view: true,
+                    view: false,
                 },
 
                 {
@@ -134,21 +134,20 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Location',
                             routerLink: '/warehouse-location',
-                            view: true,
+                            view: false,
                         },
                         {
                             title: 'Warehouse',
                             routerLink: '/warehouse',
-                            view: true,
+                            view: false,
                         },
                         {
                             title: 'Partition',
                             routerLink: '/warehouse-partition',
-                            view: true,
+                            view: false,
                         },
                     ],
                 },
-
                 
                 
                 {
@@ -160,7 +159,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Raw Material',
                             routerLink: '/inventory',
-                            view: true,
+                            view: false,
                         },
                         // {
                         //     title: 'Finish Product',
@@ -170,7 +169,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Warehouse',
                             routerLink: '/warehouse-inventory',
-                            view: true,
+                            view: false,
                         },
                     ],
                 },
@@ -184,12 +183,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Truck',
                             routerLink: '/truck',
-                            view: true,
+                            view: false,
                         },
                         {
                             title: 'Trucking',
                             routerLink: '/trucking',
-                            view: true,
+                            view: false,
                         },
                         // {
                         //     title: 'Truck Type',
@@ -199,7 +198,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Driver',
                             routerLink: '/driver',
-                            view: true,
+                            view: false,
                         },
                     ],
                 },
@@ -213,9 +212,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Checker',
                             routerLink: '/checker',
-                            view: true,
-                            insert: true,
-                            edit: true
+                            view: false,
                         },
                         // {
                         //     title: 'Checker Type',
@@ -227,9 +224,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Checker Schedule',
                             routerLink: '/checker-schedule',
-                            view: true,
-                            insert: true,
-                            edit: true
+                            view: false,
                         },
                     ]
                 },
@@ -238,54 +233,54 @@ export class SidebarComponent implements OnInit, OnDestroy{
                     title: 'Supplier',
                     icon: 'assets/icons/icon-flatbed.svg',
                     routerLink: '/supplier',
-                    view: true,
+                    view: false,
                 }
 
               ],
             },
             {
                 title: 'Transactions',
-                view: true,
+                view: false,
                 subMenu: [
                     {
                         title: 'Raw Mats PO',
                         icon: 'assets/icons/icon-user-bag.svg',
                         routerLink: '/contract-po',
                         isCollapse: false,
-                        view: true,
+                        view: false,
                     },
                     {
                         title: 'Importation',
                         icon: 'assets/icons/icon-ship.svg',
                         routerLink: '/contract-performa',
                         isCollapse: false,
-                        view: true,
+                        view: false,
                     },
                     {
                         title: 'Unloading',
                         icon: 'assets/icons/icon-truck-unload.svg',
                         routerLink: '/unloading-transaction',
                         isCollapse: false,
-                        view: true,
+                        view: false,
                     },
                     {
                         title: 'Binloading',
                         icon: 'assets/icons/icon-truck-binload.svg',
                         routerLink: '/binload',
                         isCollapse: false,
-                        view: true,
+                        view: false,
                     },
                     {
                         title: 'Transfer',
                         icon: 'assets/icons/icon-transfer.svg',
                         routerLink: '/transfer',
-                        view: true,
+                        view: false,
                     }
                 ]
             }, 
             {
                 title: 'Others',
-                view: true,
+                view: false,
                 subMenu: [
                     {
                         title: 'Account',
@@ -296,16 +291,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             {
                                 title: 'Users',
                                 routerLink: '/users',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                             {
                                 title: 'Module',
                                 routerLink: '/module',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                         ]
                     },
@@ -360,37 +351,27 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             {
                                 title: 'Shipping Line',
                                 routerLink: '/shipping-line',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                             {
                                 title: 'Port of Discharge',
                                 routerLink: '/port-of-discharge',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                             {
                                 title: 'Bank',
                                 routerLink: '/bank',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                             {
                                 title: 'Broker',
                                 routerLink: '/broker',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                             {
                                 title: 'Container Type',
                                 routerLink: '/container-type',
-                                view: true,
-                                insert: true,
-                                edit: true
+                                view: false,
                             },
                         ]
                     },
@@ -437,6 +418,94 @@ export class SidebarComponent implements OnInit, OnDestroy{
         this.SidebarService.getUserAccessRequest(UserID).subscribe(
             response => {
                 this.userAccessRights = response;
+
+                this.userAccessRights.forEach(accessRight => {
+                    switch(accessRight.AccessRight.trim()) {
+                        case '2' :
+                            this.menus[1].view = true;
+                            break
+                        case '2.1.1' :
+                            this.menus[1].subMenu[0].view = true;
+                            break
+                        case '2.2.1' :
+                            this.menus[1].subMenu[1].subMenu[0].view = true;
+                            break
+                        case '2.3.1' :
+                            this.menus[1].subMenu[1].subMenu[1].view = true;
+                            break
+                        case '2.4.1' :
+                            this.menus[1].subMenu[1].subMenu[2].view = true;
+                            break
+                        case '2.5.1' :
+                            this.menus[1].subMenu[2].subMenu[0].view = true;
+                            break
+                        case '2.6.1' :
+                            this.menus[1].subMenu[2].subMenu[1].view = true;
+                            break
+                        case '2.9.1' :
+                            this.menus[1].subMenu[3].subMenu[0].view = true;
+                            break
+                        case '2.10.1' :
+                            this.menus[1].subMenu[3].subMenu[1].view = true;
+                            break
+                        case '2.11.1' :
+                            this.menus[1].subMenu[3].subMenu[2].view = true;
+                            break
+                        case '2.12.1' :
+                            this.menus[1].subMenu[4].subMenu[0].view = true;
+                            break
+                        case '2.13.1' :
+                            this.menus[1].subMenu[4].subMenu[1].view = true;
+                            break
+                        case '2.14.1' :
+                            this.menus[1].subMenu[5].view = true;
+                            break
+                        case '3' :
+                            this.menus[2].view = true;
+                            break
+                        case '3.1.1' :
+                            this.menus[2].subMenu[0].view = true;
+                            break
+                        case '3.2.1' :
+                            this.menus[2].subMenu[1].view = true;
+                            break
+                        case '3.3.1' :
+                            this.menus[2].subMenu[2].view = true;
+                            break
+                        case '3.4.1' :
+                            this.menus[2].subMenu[3].view = true;
+                            break
+                        case '3.5.1' :
+                            this.menus[2].subMenu[4].view = true;
+                            break
+                        case '4.1.1' :
+                            this.menus[3].subMenu[0].subMenu[0].view = true;
+                            break
+                        case '4.2.1' :
+                            this.menus[3].subMenu[0].subMenu[1].view = true;
+                            break
+                        case '4.3.1' :
+                            this.menus[3].subMenu[1].subMenu[0].view = true;
+                            break
+                        case '4.4.1' :
+                            this.menus[3].subMenu[1].subMenu[1].view = true;
+                            break
+                        case '4.5.1' :
+                            this.menus[3].subMenu[1].subMenu[2].view = true;
+                            break
+                        case '4.6.1' :
+                            this.menus[3].subMenu[1].subMenu[3].view = true;
+                            break
+                        case '4.7.1' :
+                            this.menus[3].subMenu[1].subMenu[4].view = true;
+                            break
+                        case '4' :
+                            this.menus[3].view = true;
+                            break;
+                        default:
+                            break;
+                    }
+                })
 
                 // case 2.1:
                 //     this.FinishProductView = true;

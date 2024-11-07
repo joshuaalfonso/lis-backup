@@ -299,17 +299,17 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                     let userRights = response;
                  
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 22.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '3.2.1':
                                 this.view = true;
                                 break;
-                            case 22.2:
+                            case '3.2.2':
                                 this.insert = true;
                                 break;
-                            case 22.3:
+                            case '3.2.3':
                                 this.edit = true;
                                 break;
-                            case 22.4:
+                            case '3.2.4':
                                 this.generateReport = true;
                                 break;
                             default:

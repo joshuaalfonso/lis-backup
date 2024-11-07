@@ -10,369 +10,354 @@
      Welcome to LIS!
 </p>
 
-<div class="cards__container" *ngIf="!cardsLoading">
 
-     <ng-template ngFor let-row [ngForOf]="warehouseLocation" let-i="index">
-
-          <app-cards-location 
-               [row]="row" 
-               [isnightMode]="isnightMode"
-          ></app-cards-location>
-
-     </ng-template>
-
+<div *ngIf="isLoading" class="flex justify-content-center" >
+     <app-loader></app-loader>
 </div>
 
-<app-cards-location-loader  *ngIf="cardsLoading"/>
+<div *ngIf="LogisticsDashboard && !isLoading">
+     <div class="cards__container" *ngIf="!cardsLoading">
 
- 
-
-<!-- <div class="chart__container">
-    <div class="chart">
-        <p-chart type="line" [data]="data" [options]="options"></p-chart>
-    </div>
-    
-    <div class="chart2">
-        <p-chart type="pie" [data]="data2" [options]="options2"></p-chart>
-    </div>
-</div> -->
-
-<!-- <div class="grid-container">
-     <div class="table">
-          asd
+          <ng-template ngFor let-row [ngForOf]="warehouseLocation" let-i="index">
+     
+               <app-cards-location 
+                    [row]="row" 
+                    [isnightMode]="isnightMode"
+               ></app-cards-location>
+     
+          </ng-template>
+     
      </div>
-
-     <div class="table">
-          zxc
-     </div>
-</div> -->
-
-
-<div class="unload__container">
-
-     <!-- <div class=""> -->
-     <div class="surface-container flex flex-column">
-          <!-- <p-chart type="bar" [data]="data" [options]="options"></p-chart> -->
-
-          <h6 class="container__title ">Recent Transaction</h6>
-
-          <div class="radio-inputs">
-               <label class="radio">
-                    <input checked="" name="radio" type="radio" value="1" [(ngModel)]="selectedOption"/>
-                    <span class="name" [class.active]="selectedOption == 1">Unloading  </span>
-               </label>
-               <label class="radio">
-                    <input name="radio" type="radio" value="2" [(ngModel)]="selectedOption"/>
-                    <span class="name" [class.active]="selectedOption == 2">Binloading </span>
-               </label>
-          </div>
-
-          <div class="h-full overflow-y-auto" *ngIf="!unloadLoading && selectedOption == 1">
-               <p-table [value]="unloading" responsiveLayout="stack" [breakpoint]="'960px'">
-
-                    <ng-template pTemplate="body" let-row>
-                         <tr>
-                              <td >
-                                   <span class="p-column-title">Date Unload</span>
      
-                                   <p>
-                                        <span>{{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}</span>
-                                        <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
-                                   </p>
-                              </td>
-                              <td>
-                                   <span class="p-column-title">P.O #</span>
+     <app-cards-location-loader  *ngIf="cardsLoading"/>
      
-                                   <p>
-                                        <span>{{ row.PONo }}</span>
-                                        <span class="sub-text"> {{ row.Supplier }}</span>
-                                   </p>
-                              </td>
-                              <td>
-                                   <span class="p-column-title">Raw Material</span>
-                                   <span>{{ row.RawMaterial }}</span>
-                              </td>
-                              <td>
-                                   <span class="p-column-title">Total</span>
      
-                                   <p>
-                                        <span>{{ row.Weight | number}} KG</span>
-                                        <span class="sub-text"> {{ row.Quantity | number }} Bags</span>
-                                   </p>
+     <div class="unload__container">
+     
+          <!-- <div class=""> -->
+          <div class="surface-container flex flex-column">
+               <!-- <p-chart type="bar" [data]="data" [options]="options"></p-chart> -->
+     
+               <h6 class="container__title ">Recent Transaction</h6>
+     
+               <div class="radio-inputs">
+                    <label class="radio">
+                         <input checked="" name="radio" type="radio" value="1" [(ngModel)]="selectedOption"/>
+                         <span class="name" [class.active]="selectedOption == 1">Unloading  </span>
+                    </label>
+                    <label class="radio">
+                         <input name="radio" type="radio" value="2" [(ngModel)]="selectedOption"/>
+                         <span class="name" [class.active]="selectedOption == 2">Binloading </span>
+                    </label>
+               </div>
+     
+               <div class="h-full overflow-y-auto" *ngIf="!unloadLoading && selectedOption == 1">
+                    <p-table [value]="unloading" responsiveLayout="stack" [breakpoint]="'960px'">
+     
+                         <ng-template pTemplate="body" let-row>
+                              <tr>
+                                   <td >
+                                        <span class="p-column-title">Date Unload</span>
+          
+                                        <p>
+                                             <span>{{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}</span>
+                                             <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
+                                        </p>
+                                   </td>
+                                   <td>
+                                        <span class="p-column-title">P.O #</span>
+          
+                                        <p>
+                                             <span>{{ row.PONo }}</span>
+                                             <span class="sub-text"> {{ row.Supplier }}</span>
+                                        </p>
+                                   </td>
+                                   <td>
+                                        <span class="p-column-title">Raw Material</span>
+                                        <span>{{ row.RawMaterial }}</span>
+                                   </td>
+                                   <td>
+                                        <span class="p-column-title">Total</span>
+          
+                                        <p>
+                                             <span>{{ row.Weight | number}} KG</span>
+                                             <span class="sub-text"> {{ row.Quantity | number }} Bags</span>
+                                        </p>
+                                   </td>
+                                   <td>
+                                        <span class="p-column-title">Location</span>
+                                        <p>
+                                             <span>{{ row.WarehouseLocation }} </span>
+                                             <span class="sub-text"> {{ row.Warehouse_Name }}</span>
+                                        </p>
+                                   </td>
+                              </tr>
+                         </ng-template>
+          
+                    </p-table>
+               </div>
+                    
+               <div *ngIf="unloadLoading && selectedOption === 1" >
+                 
+                    <p-table [value]="products" >
+                         <ng-template pTemplate="body" let-product>
+                             <tr>
+                                 <td><p-skeleton /></td>
+                                 <td><p-skeleton /></td>
+                                 <td><p-skeleton /></td>
+                                 <td><p-skeleton /></td>
+                                 <td><p-skeleton /></td>
+                             </tr>
+                         </ng-template>
+                     </p-table>
+     
+               </div>
+     
+     
+               <p-table 
+                    [value]="recentBinload"
+                    dataKey="PlantName"  
+                    *ngIf="!unloadLoading && selectedOption == 2"             
+               >
+                    <ng-template pTemplate="header">
+                         <!-- <tr>
+                              <th class="text-left">Plant</th>
+                              <th class="text-left">Weight</th>
+                         </tr> -->
+                    </ng-template>
+     
+                    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+                         <tr> 
+                              <td class="text-left">
+                                   <div class="flex align-items-center gap-2">
+                                        <span class="material-symbols-outlined text-xl p-2 border-circle {{getClass(rowIndex)}}">
+                                             factory
+                                        </span>
+                                        {{ row.PlantName }}
+                                   </div>
+                              </td>
+                              <td class="text-left">
+                                   <span>{{ row.TodayBinloadWeight | number}} kg</span>
+                                   <span class="sub-text"> {{ row.TodayBinloadQty | number }} bag</span>
                               </td>
                               <td>
-                                   <span class="p-column-title">Location</span>
-                                   <p>
-                                        <span>{{ row.WarehouseLocation }} </span>
-                                        <span class="sub-text"> {{ row.Warehouse_Name }}</span>
-                                   </p>
+                                   <i 
+                                        class="pi {{expanded ? 'pi-angle-up' : 'pi-angle-down'}} p-2 border-circle cursor-pointer hover:bg-indigo-100" 
+                                        [pRowToggler]="row" 
+                                   ></i>
+                                   
                               </td>
                          </tr>
                     </ng-template>
      
+                    <ng-template pTemplate="rowexpansion" let-binload>
+                         <tr>
+                              <td colspan="10">
+                                   <div class="p-3">
+                                        <p-table [value]="binload.Binload" dataKey="id">
+                                             <ng-template pTemplate="header">
+                                             <tr>
+                                                  <th> Binloading Date </th>
+                                                  <th> Control # </th>
+                                                  <th> Intake </th>
+                                                  <th> Quantity </th>
+                                                  <th> Weight </th>
+                                                  <th> Checker </th>
+                                                  <th style="width: 4rem"></th>
+                                             </tr>
+                                             </ng-template>
+                                             <ng-template pTemplate="body" let-row>
+                                             <tr>
+                                                  <td>{{ row.BinloadingDate?.date | date: 'MM/dd/yyyy' }}</td>
+                                                  <td> {{ row.ControlNo }}</td>
+                                                  <td> {{ row.IntakeID }}</td>
+                                                  <td> {{ row.Quantity }}</td>
+                                                  <td> {{ row.Weight }}</td>
+                                                  <td> {{ row.CheckerName }}</td>
+                                             </tr>
+                                             </ng-template>
+                                             <ng-template pTemplate="emptymessage">
+                                             <tr>
+                                                  <td colspan="6">There are no binload for this plant yet.</td>
+                                             </tr>
+                                             </ng-template>
+                                        </p-table>
+                                   </div>
+                              </td>
+                         </tr>
+               
+                         <ng-template pTemplate=emptymessage>
+                              No binload for this request.
+                         </ng-template>
+               
+                    </ng-template>
+     
                </p-table>
-          </div>
-               
-          <div *ngIf="unloadLoading && selectedOption === 1" >
-            
-               <p-table [value]="products" >
-                    <ng-template pTemplate="body" let-product>
-                        <tr>
-                            <td><p-skeleton /></td>
-                            <td><p-skeleton /></td>
-                            <td><p-skeleton /></td>
-                            <td><p-skeleton /></td>
-                            <td><p-skeleton /></td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-
-          </div>
-
-
-          <p-table 
-               [value]="recentBinload"
-               dataKey="PlantName"  
-               *ngIf="!unloadLoading && selectedOption == 2"             
-          >
-               <ng-template pTemplate="header">
-                    <!-- <tr>
-                         <th class="text-left">Plant</th>
-                         <th class="text-left">Weight</th>
-                    </tr> -->
-               </ng-template>
-
-               <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
-                    <tr> 
-                         <td class="text-left">
-                              <div class="flex align-items-center gap-2">
-                                   <span class="material-symbols-outlined text-xl p-2 border-circle {{getClass(rowIndex)}}">
-                                        factory
-                                   </span>
-                                   {{ row.PlantName }}
-                              </div>
-                         </td>
-                         <td class="text-left">
-                              <span>{{ row.TodayBinloadWeight | number}} kg</span>
-                              <span class="sub-text"> {{ row.TodayBinloadQty | number }} bag</span>
-                         </td>
-                         <td>
-                              <i 
-                                   class="pi {{expanded ? 'pi-angle-up' : 'pi-angle-down'}} p-2 border-circle cursor-pointer hover:bg-indigo-100" 
-                                   [pRowToggler]="row" 
-                              ></i>
-                              
-                         </td>
-                    </tr>
-               </ng-template>
-
-               <ng-template pTemplate="rowexpansion" let-binload>
-                    <tr>
-                         <td colspan="10">
-                              <div class="p-3">
-                                   <p-table [value]="binload.Binload" dataKey="id">
-                                        <ng-template pTemplate="header">
-                                        <tr>
-                                             <th> Binloading Date </th>
-                                             <th> Control # </th>
-                                             <th> Intake </th>
-                                             <th> Quantity </th>
-                                             <th> Weight </th>
-                                             <th> Checker </th>
-                                             <th style="width: 4rem"></th>
-                                        </tr>
-                                        </ng-template>
-                                        <ng-template pTemplate="body" let-row>
-                                        <tr>
-                                             <td>{{ row.BinloadingDate?.date | date: 'MM/dd/yyyy' }}</td>
-                                             <td> {{ row.ControlNo }}</td>
-                                             <td> {{ row.IntakeID }}</td>
-                                             <td> {{ row.Quantity }}</td>
-                                             <td> {{ row.Weight }}</td>
-                                             <td> {{ row.CheckerName }}</td>
-                                        </tr>
-                                        </ng-template>
-                                        <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                             <td colspan="6">There are no binload for this plant yet.</td>
-                                        </tr>
-                                        </ng-template>
-                                   </p-table>
-                              </div>
-                         </td>
-                    </tr>
-          
-                    <ng-template pTemplate=emptymessage>
-                         No binload for this request.
-                    </ng-template>
-          
-               </ng-template>
-
-          </p-table>
-
-               
-
-     </div>
-     <!-- </div> -->
-
-
-     <div class="">
-          <!-- <div class="chart2">
-               <p-chart type="pie" [data]="data2" [options]="options2"></p-chart>
-           </div> -->
-          <div class="surface-container flex flex-column">
-
-               <h6 class="container__title">Recent Transfer</h6>
-
-               <p-carousel 
-                    [value]="recentTransfer" 
-                    [numVisible]="1" 
-                    [numScroll]="1" 
-                    *ngIf="!transferLoading && recentTransfer.length > 0"
-               >
-
-                    <ng-template let-row pTemplate="item">
-
-                         <app-cards-transfer [row]="row" [transferLoading]="transferLoading"></app-cards-transfer>
-
-                    </ng-template>
-          
-               </p-carousel>
-
-               <div *ngIf="recentTransfer.length === 0" class="no-data-container">
-                    <img src="assets/empty.png" width="60px"/>
-                    No data found 
-               </div>
-
-
-               <app-cards-transfer-loader *ngIf="transferLoading"/>
-
-          </div>
-          
-     </div>
-
-
-</div>
-
-<div class="grid mb-3">
      
-     <div class="col-12 xl:col-9">
-          <div class="surface-container flex flex-column">
-
-               <h6 class="container__title ">Received</h6>
-
-               <div class="flex-1 overflow-y-auto">
-                    <p-table [value]="landedShipping" [tableStyle]="{ 'min-width': '50rem' }" *ngIf="!unloadLoading" >
-                         <ng-template pTemplate="header">
-                              <tr class="hidden">
-                                   <th>ATA</th>
-                                   <!-- <th>MBL</th> -->
-                                   <th>BL</th>
-                                   <th>Raw Material</th>
-                                   <th>Served</th>
-                                   <th>Progress</th>
-                              </tr>
+                    
+     
+          </div>
+          <!-- </div> -->
+     
+     
+          <div class="">
+               <!-- <div class="chart2">
+                    <p-chart type="pie" [data]="data2" [options]="options2"></p-chart>
+                </div> -->
+               <div class="surface-container flex flex-column">
+     
+                    <h6 class="container__title">Recent Transfer</h6>
+     
+                    <p-carousel 
+                         [value]="recentTransfer" 
+                         [numVisible]="1" 
+                         [numScroll]="1" 
+                         *ngIf="!transferLoading && recentTransfer.length > 0"
+                    >
+     
+                         <ng-template let-row pTemplate="item">
+     
+                              <app-cards-transfer [row]="row" [transferLoading]="transferLoading"></app-cards-transfer>
+     
                          </ng-template>
+               
+                    </p-carousel>
      
-                         <ng-template pTemplate="body" let-row>
-                              <tr>
-                                   <td>
-                       
-                                        <span class="font-semibold"> 
-                                             {{row.ATA?.date | date: 'EEEE' }}
-                                        </span>
-                                        <span class="block text-xs font-medium text-500">
-                                             {{row.ATA?.date | date: 'MMM dd, yyyy' }}
-                                        </span>
-                                
-                                   </td>
-                                   <!-- <td>
-                                        {{ row.MBL }}
-                                   </td> -->
-                                   <td>
-                                        <span class="font-medium" *ngIf="row.BL != 0">
-                                             {{ row.BL }} 
-                                        </span>
-                                        <span class="font-medium" *ngIf="row.MBL != 0">
+                    <div *ngIf="recentTransfer.length === 0" class="no-data-container">
+                         <img src="assets/empty.png" width="60px"/>
+                         No data found 
+                    </div>
+     
+     
+                    <app-cards-transfer-loader *ngIf="transferLoading"/>
+     
+               </div>
+               
+          </div>
+     
+     
+     </div>
+     
+     <div class="grid mb-3">
+          
+          <div class="col-12 xl:col-9">
+               <div class="surface-container flex flex-column">
+     
+                    <h6 class="container__title ">Received</h6>
+     
+                    <div class="flex-1 overflow-y-auto">
+                         <p-table [value]="landedShipping" [tableStyle]="{ 'min-width': '50rem' }" *ngIf="!unloadLoading" >
+                              <ng-template pTemplate="header">
+                                   <tr class="hidden">
+                                        <th>ATA</th>
+                                        <!-- <th>MBL</th> -->
+                                        <th>BL</th>
+                                        <th>Raw Material</th>
+                                        <th>Served</th>
+                                        <th>Progress</th>
+                                   </tr>
+                              </ng-template>
+          
+                              <ng-template pTemplate="body" let-row>
+                                   <tr>
+                                        <td>
+                            
+                                             <span class="font-semibold"> 
+                                                  {{row.ATA?.date | date: 'EEEE' }}
+                                             </span>
+                                             <span class="block text-xs font-medium text-500">
+                                                  {{row.ATA?.date | date: 'MMM dd, yyyy' }}
+                                             </span>
+                                     
+                                        </td>
+                                        <!-- <td>
                                              {{ row.MBL }}
-                                        </span>
-                                        <span class="block text-xs text-500">
-                                             {{ row.Supplier }}
-                                        </span>
-                                   </td>
-                                   <td class="font-medium">
-                                        {{ row.RawMaterial }}
-                                        <span class="block text-xs font-medium text-500">  {{ row.Packaging === 1 ? 'Containerized' : 'Bulk' }} </span>
-                                   </td>
-                                   <td>
-                                        <span class="font-medium" *ngIf="row.NoOfContainer">
-                                             {{ row.Unloaded_Container }} / {{ row.NoOfContainer }} 
-                                             <span class="block text-xs font-medium text-500"> {{ row.Container }} </span>
-                                        </span>
-                                        <span class="font-medium" *ngIf="row.NoOfTruck">
-                                             {{ row.Unloaded_Truck }} / {{ row.NoOfTruck }}
-                                             <span class="block text-xs font-medium text-500"> Trucks </span>
-                                        </span>
-                                   </td>
-                                   <td class="w-7rem">
-                                        <p-progressBar 
-                                             [value]="getRoundedPercentage(row.Unloaded_Container, row.NoOfContainer, 1)" 
-                                             [style]="{ height: '6px'}" 
-                                             [showValue]="false"
-                                             *ngIf="row.NoOfContainer"
-                                        />
-                                        <p-progressBar 
-                                             [value]="getRoundedPercentage(row.Unloaded_Truck, row.NoOfTruck, 1)" 
-                                             [style]="{ height: '6px' }" 
-                                             [showValue]="false"
-                                             *ngIf="row.NoOfTruck"
-                                        />
-                                   </td>
-                               
-                              </tr>
+                                        </td> -->
+                                        <td>
+                                             <span class="font-medium" *ngIf="row.BL != 0">
+                                                  {{ row.BL }} 
+                                             </span>
+                                             <span class="font-medium" *ngIf="row.MBL != 0">
+                                                  {{ row.MBL }}
+                                             </span>
+                                             <span class="block text-xs text-500">
+                                                  {{ row.Supplier }}
+                                             </span>
+                                        </td>
+                                        <td class="font-medium">
+                                             {{ row.RawMaterial }}
+                                             <span class="block text-xs font-medium text-500">  {{ row.Packaging === 1 ? 'Containerized' : 'Bulk' }} </span>
+                                        </td>
+                                        <td>
+                                             <span class="font-medium" *ngIf="row.NoOfContainer">
+                                                  {{ row.Unloaded_Container }} / {{ row.NoOfContainer }} 
+                                                  <span class="block text-xs font-medium text-500"> {{ row.Container }} </span>
+                                             </span>
+                                             <span class="font-medium" *ngIf="row.NoOfTruck">
+                                                  {{ row.Unloaded_Truck }} / {{ row.NoOfTruck }}
+                                                  <span class="block text-xs font-medium text-500"> Trucks </span>
+                                             </span>
+                                        </td>
+                                        <td class="w-7rem">
+                                             <p-progressBar 
+                                                  [value]="getRoundedPercentage(row.Unloaded_Container, row.NoOfContainer, 1)" 
+                                                  [style]="{ height: '6px'}" 
+                                                  [showValue]="false"
+                                                  *ngIf="row.NoOfContainer"
+                                             />
+                                             <p-progressBar 
+                                                  [value]="getRoundedPercentage(row.Unloaded_Truck, row.NoOfTruck, 1)" 
+                                                  [style]="{ height: '6px' }" 
+                                                  [showValue]="false"
+                                                  *ngIf="row.NoOfTruck"
+                                             />
+                                        </td>
+                                    
+                                   </tr>
+                              </ng-template>
+          
+                         </p-table>
+                    </div>
+     
+               </div>
+          </div>
+     
+          <div class="col-12 xl:col-3">
+     
+               <div class="surface-container flex flex-column">
+     
+                    <h6 class="container__title">Raw Materials</h6>
+          
+                    <ul *ngIf="!rawmatsLoading" class="flex-1 overflow-y-auto">
+                         <ng-template ngFor let-location [ngForOf]="rawMaterial" let-i="index">
+                              <li class="border-left-3 border-primary-500">
+                                   <span class="text-sm font-medium">{{ location.RawMaterial}}</span>
+                                   <span class="text-sm font-semibold">{{ location.Weight | number }} KG</span>
+                              </li>
                          </ng-template>
+                    </ul>
+          
+                    <div *ngIf="rawmatsLoading">
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+                    </div>
      
-                    </p-table>
                </div>
-
-          </div>
-     </div>
-
-     <div class="col-12 xl:col-3">
-
-          <div class="surface-container flex flex-column">
-
-               <h6 class="container__title">Raw Materials</h6>
      
-               <ul *ngIf="!rawmatsLoading" class="flex-1 overflow-y-auto">
-                    <ng-template ngFor let-location [ngForOf]="rawMaterial" let-i="index">
-                         <li class="border-left-3 border-primary-500">
-                              <span class="text-sm font-medium">{{ location.RawMaterial}}</span>
-                              <span class="text-sm font-semibold">{{ location.Weight | number }} KG</span>
-                         </li>
-                    </ng-template>
-               </ul>
-     
-               <div *ngIf="rawmatsLoading">
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-               </div>
-
           </div>
-
+     
      </div>
-
 </div>
 
 
 
-<app-dispatcher-dashboard />
+<app-dispatcher-dashboard *ngIf="DispatchingDashboard"/>
 
 
 

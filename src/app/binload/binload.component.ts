@@ -203,17 +203,17 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                     let userRights = response;
  
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 24.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '3.4.1':
                                 this.view = true;
                                 break;
-                            case 24.2:
+                            case '3.4.2':
                                 this.insert = true;
                                 break;
-                            case 24.3:
+                            case '3.4.3':
                                 this.edit = true;
                                 break;
-                            case 24.4:
+                            case '3.4.4':
                                 this.generateReport = true;
                                 break;
                             default:

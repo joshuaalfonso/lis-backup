@@ -9,6 +9,7 @@ import { UnloadingTransactionService } from "../unloading-transaction/unloading-
 import { MessageService } from "primeng/api";
 import { BinloadService } from "../binload/binload.service";
 import { TransferService } from "../raw-material-transfer/transfer.service";
+import { UsersService } from "../users/users.service";
 
 
 
@@ -60,6 +61,11 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
     products: any[] = [];
 
+    isLoading: boolean = false;
+
+    LogisticsDashboard: boolean = false;
+    DispatchingDashboard: boolean = false;
+
     // @Output() sidebarToggled = new EventEmitter<boolean>();
 
     constructor(
@@ -71,12 +77,19 @@ export class DashboardComponent implements OnInit, OnDestroy{
         private UnloadingService: UnloadingTransactionService,
         private MessageService: MessageService,
         private BinloadService: BinloadService,
-        private RawMaterialTransferService: TransferService
+        private RawMaterialTransferService: TransferService,
+        private UserService: UsersService
     ) {}
 
         
     ngOnInit(): void {
 
+        this.userSubscription = this.AuthService.user.subscribe(user => {
+            this.userName = user ? user.username : null;
+            this.userID = user ? user.user_id : '';
+        });    
+
+        this.getUserAccess(this.userID);
         this.getRawMaterial();
         this.getWarehouseLocation();
         this.getLandedShipping();
@@ -84,12 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy{
         this.getRecentBinload();
         this.getRecentTransfer();
 
-        this.products = Array.from({ length: 7 }).map((_, i) => `Item #${i}`);
-
-        this.userSubscription = this.AuthService.user.subscribe(user => {
-            this.userName = user ? user.username : null;
-            this.userID = user ? user.user_id : '';
-        });        
+        this.products = Array.from({ length: 7 }).map((_, i) => `Item #${i}`);    
 
         this.subscriptions.add(
             this.AppComponent.isNightMode.subscribe(response => {
@@ -201,6 +209,32 @@ export class DashboardComponent implements OnInit, OnDestroy{
         }
 
         this.subscriptions.unsubscribe();
+    }
+
+    getUserAccess(UserID: string) {
+        this.isLoading = true;
+
+        this.subscriptions.add(
+            this.UserService.getUserAccess(UserID).subscribe(
+                response => {
+
+                    this.isLoading = false;
+                    let userRights = response;
+                    
+                    userRights.forEach((userRight: any) => {
+                        if (userRight.AccessRight.trim() == '1.1.1') {
+                            this.LogisticsDashboard = true;
+                        } else if (userRight.AccessRight.trim() == '1.1.2') {
+                            this.DispatchingDashboard = true;
+                        }
+                    })
+                    
+                    
+                }, error => {
+                    console.error('error getting user access :' + error)
+                }
+            )       
+        )
     }
 
     getRawMaterial() {

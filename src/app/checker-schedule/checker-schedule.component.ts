@@ -8,6 +8,7 @@ import { PlantService } from "../plant/plant.service";
 import { CheckerType } from "../checker-type/checker-type.component";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
 import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 
 
@@ -38,13 +39,19 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
 
     private subscriptions: Subscription = new Subscription;
 
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
+
     constructor(
         private CheckerScheduleService: CheckerScheduleService,
         private WarehouseLocationService: WarehouseLocationService,
         private MessageService: MessageService,
         private PlantService: PlantService,
         private CheckerTypeService: CheckerTypeService,
-        private AuthService: AuthService
+        private AuthService: AuthService,
+        private UsersService: UsersService
     ) {}
 
     ngOnInit(): void {  
@@ -60,13 +67,14 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
         })
 
 
-
         this.getUser();
+        this.getUserAccess(this.userID);
         this.getData();
         this.getChecker();
         this.getWarehouseLocation();
         this.getPlant();
         this.getCheckerType();
+
     }
 
     ngOnDestroy(): void {
@@ -82,6 +90,36 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
                     }
                 }
             )
+        )
+    }
+
+    getUserAccess(UserID: string) {
+        this.subscriptions.add(
+            this.UsersService.getUserAccess(UserID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '2.13.1':
+                                this.view = true;
+                                break;
+                            case '2.13.2':
+                                this.insert = true;
+                                break;
+                            case '2.13.3':
+                                this.edit = true;
+                                break;
+                            case '2.13.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )       
         )
     }
 

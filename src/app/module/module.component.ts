@@ -4,6 +4,8 @@ import { Subscription, Observable } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
+import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 
 @Component({
@@ -25,12 +27,21 @@ export class ModuleComponent implements OnInit, OnDestroy{
 
     submitLoading: boolean = false;
 
+    userID!: string;
+    
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
         private ModuleService: ModuleService,
         private MessageService: MessageService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
+        private AuthService: AuthService,
+        private UsersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -40,7 +51,49 @@ export class ModuleComponent implements OnInit, OnDestroy{
             'UserID': new FormControl(0)
         })
 
+        this.getUser();
+        this.getAccess();
         this.getData();
+    }
+
+    getUser() {
+        this.subscription.add(
+            this.AuthService.user.subscribe(user => {
+                if (user) {
+                    this.userID = user.user_id; 
+                }
+            })
+        )
+    }
+
+    getAccess() {
+        this.subscription.add(
+            this.UsersService.getUserAccess(this.userID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '4.2.1':
+                                this.view = true;
+                                break;
+                            case '4.2.2':
+                                this.insert = true;
+                                break;
+                            case '4.2.3':
+                                this.edit = true;
+                                break;
+                            case '4.2.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )
+        )
     }
 
     getData() {

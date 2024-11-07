@@ -58,6 +58,7 @@
                     pRipple 
                     class="add__btn" 
                     (click)="showDialog()"
+                    *ngIf="insert"
                 >
                     <i class='bx bx-plus'></i> 
                     <span>Add Item</span>
@@ -73,7 +74,7 @@
                 <th>Type</th>
                 <th>Designation</th>
                 <th>Date Rotation</th>
-                <th></th>
+                <th *ngIf="edit"></th>
             </tr>
         </ng-template>
 
@@ -85,7 +86,7 @@
             <td data-title="Warehouse Location">{{ row.PlantName ?? row.WarehouseLocation }}</td>
           <td data-title="DateRotation">{{ row.DateRotation.date | date: 'MM/dd/yyyy' }}</td>
 
-          <td data-title="Action">
+          <td data-title="Action" *ngIf="edit">
             <!-- <button 
               pButton 
               pRipple 

@@ -86,17 +86,17 @@ export class WarehouseComponent implements OnInit, OnDestroy{
                     let userRights = response;
 
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 5.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '2.3.1':
                                 this.view = true;
                                 break;
-                            case 5.2:
+                            case '2.3.2':
                                 this.insert = true;
                                 break;
-                            case 5.3:
+                            case '2.3.3':
                                 this.edit = true;
                                 break;
-                            case 5.4:
+                            case '2.3.4':
                                 this.generateReport = true;
                                 break;
                             default:

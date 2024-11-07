@@ -66,6 +66,7 @@
                     pRipple 
                     class="add__btn" 
                     (click)="showDialog()"
+                    *ngIf="insert"
                 >
                     <i class='bx bx-plus'></i> 
                     <span>Add Item</span>
@@ -80,7 +81,7 @@
                 <th>Broker</th>
                 <th>Contact Person</th>
                 <th>Contact Number</th>
-                <th></th>
+                <th *ngIf="edit"></th>
             </tr>
         </ng-template>
 
@@ -98,7 +99,7 @@
                 <td data-title="Contact Number">
                 {{ row.ContactNumber }}
                 </td>
-                <td data-title="Actions">
+                <td data-title="Actions" *ngIf="edit">
 
                     <!-- <button 
                         pButton 

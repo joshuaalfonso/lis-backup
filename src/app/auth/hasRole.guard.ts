@@ -47,7 +47,7 @@ export class HasRoleGuard implements CanActivate{
 
       return this.auth.getUserAccess(user_id).pipe(
         map(access => {
-          const isAuthorized = access.some((item: any) => item.AccessRight === requiredRole);
+          const isAuthorized = access.some((item: any) => item.AccessRight.trim() == requiredRole);
 
           if (!isAuthorized) {
             return this.router.createUrlTree(['/unauthorized']);

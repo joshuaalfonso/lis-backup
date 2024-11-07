@@ -1,10 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { FormControl, Validators } from "@angular/forms";
 import { BrokerService } from "./broker.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
+import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 
 @Component({
@@ -13,7 +15,7 @@ import { Table } from "primeng/table";
     styleUrls: ['broker.component.css']
 })
 
-export class BrokerComponent implements OnInit{
+export class BrokerComponent implements OnInit, OnDestroy{
 
     value: string | undefined;
 
@@ -27,10 +29,21 @@ export class BrokerComponent implements OnInit{
 
     isLoading: boolean = false;
 
+    subscription: Subscription = new Subscription;
+
+    userID!: string;
+
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
+
     constructor( 
         private BrokerService: BrokerService, 
         private MessageService: MessageService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
+        private AuthService: AuthService,
+        private UsersService: UsersService
     ){}
 
     ngOnInit(): void {
@@ -42,17 +55,66 @@ export class BrokerComponent implements OnInit{
             'UserID': new FormControl(0),
         });
 
+        this.getUser();
+        this.getAccess();
         this.getData();
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     // ==== GET BROKER DATA ====
     getData() {
         this.isLoading = true;
-        this.BrokerService.getBrokerData().subscribe(
-            response => {
-                this.broker = response;
-                this.isLoading = false;
-            }
+        
+        this.subscription.add(
+            this.BrokerService.getBrokerData().subscribe(
+                response => {
+                    this.broker = response;
+                    this.isLoading = false;
+                }
+            )
+        )
+    }
+
+    getUser() {
+        this.subscription.add(
+            this.AuthService.user.subscribe(user => {
+                if (user) {
+                    this.userID = user.user_id;
+                }
+            })
+        )
+    }
+
+    getAccess() {
+        this.subscription.add(
+            this.UsersService.getUserAccess(this.userID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '4.6.1':
+                                this.view = true;
+                                break;
+                            case '4.6.2':
+                                this.insert = true;
+                                break;
+                            case '4.6.3':
+                                this.edit = true;
+                                break;
+                            case '4.6.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )
         )
     }
 
@@ -70,7 +132,13 @@ export class BrokerComponent implements OnInit{
 
     onSubmit() {
         let authObs: Observable<ResponseData>;
-        authObs = this.BrokerService.saveData(this.brokerForm.value.BrokerID, this.brokerForm.value.Broker, this.brokerForm.value.ContactPerson, this.brokerForm.value.ContactNumber, this.brokerForm.value.UserID);
+        authObs = this.BrokerService.saveData(
+            this.brokerForm.value.BrokerID, 
+            this.brokerForm.value.Broker, 
+            this.brokerForm.value.ContactPerson, 
+            this.brokerForm.value.ContactNumber, 
+            this.userID
+        );
 
         authObs.subscribe(response =>{
 

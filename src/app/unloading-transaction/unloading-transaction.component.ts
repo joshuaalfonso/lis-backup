@@ -211,17 +211,17 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     let userRights = response;
                     // console.log(userRights)
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 23.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '3.3.1':
                                 this.view = true;
                                 break;
-                            case 23.2:
+                            case '3.3.2':
                                 this.insert = true;
                                 break;
-                            case 23.3:
+                            case '3.3.3':
                                 this.edit = true;
                                 break;
-                            case 23.4:
+                            case '3.3.4':
                                 this.generateReport = true;
                                 break;
                             case 23.5:

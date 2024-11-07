@@ -5,6 +5,7 @@ import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 
 
@@ -35,11 +36,17 @@ export class TruckComponent implements OnInit, OnDestroy{
 
     subscription: Subscription = new Subscription;
 
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
+
     constructor(
         private TruckService: TruckService,
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
-        private Auth: AuthService
+        private Auth: AuthService,
+        private UsersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -52,9 +59,9 @@ export class TruckComponent implements OnInit, OnDestroy{
             'UserID': new FormControl
         })
 
-        
-
+    
         this.getUser();
+        this.getUserAccess(this.userID);
         this.getData();
         this.getTruckType();
     }
@@ -72,6 +79,36 @@ export class TruckComponent implements OnInit, OnDestroy{
                     }
                 }
             )
+        )
+    }
+
+    getUserAccess(UserID: string) {
+        this.subscription.add(
+            this.UsersService.getUserAccess(UserID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '2.9.1':
+                                this.view = true;
+                                break;
+                            case '2.9.2':
+                                this.insert = true;
+                                break;
+                            case '2.9.3':
+                                this.edit = true;
+                                break;
+                            case '2.9.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )       
         )
     }
 

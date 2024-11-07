@@ -22,7 +22,7 @@ export class PortOfDischargeService {
     (
         PortOfDischargeID: number,
         PortOfDischarge: string,
-        UserID: number
+        UserID: string
     )
     {
         return this.http.post

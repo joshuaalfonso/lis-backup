@@ -86,17 +86,17 @@ export class WarehousePartition implements OnInit, OnDestroy{
                     let userRights = response;
 
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
-                            case 7.1:
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '2.4.1':
                                 this.view = true;
                                 break;
-                            case 7.2:
+                            case '2.4.2':
                                 this.insert = true;
                                 break;
-                            case 7.3:
+                            case '2.4.3':
                                 this.edit = true;
                                 break;
-                            case 7.4:
+                            case '2.4.4':
                                 this.generateReport = true;
                                 break;
                             default:

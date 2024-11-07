@@ -28,7 +28,7 @@
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between mb-2">
                 <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
-                <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add User</span></button>
+                <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add User</span></button>
             </div>
         </ng-template>
 
@@ -40,7 +40,7 @@
                 <th>Name</th>
                 <th>Contact #</th>
                 <th>Email</th>
-                <th></th>
+                <th *ngIf="edit"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -59,7 +59,7 @@
                 </td>
                 <td data-title="UContactNoLevel">{{ row.ContactNo == 0 ? '-' : row.ContactNo }}</td>
                 <td data-title="EmailAdd">{{ row.EmailAdd }}</td>
-                <td data-title="Actions">
+                <td data-title="Actions" *ngIf="edit">
                     <!-- <button pButton pRipple class="edit__btn"  class="p-button-primary p-2 border-round mr-2" (click)="confirm1($event, row)" pTooltip="Reset password"  tooltipPosition="top" ><i class='pi pi-refresh'></i></button>
                     <button pButton pRipple class="edit__btn"  class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)" pTooltip="Edit" tooltipPosition="top"><i class='bx bx-edit-alt'></i></button>
                     <button pButton pRipple class="delete__btn" class="p-button-info p-2 border-round" (click)="showAccessModal(row, accessModuleDialog)" pTooltip="Access rights" tooltipPosition="top"><i class='pi pi-unlock' ></i></button> -->

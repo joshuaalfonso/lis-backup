@@ -72,7 +72,7 @@ const routes: Routes = [
         component: RawMaterialsComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 1.1
+            'role': '1.1.1'
         }
     },
     {
@@ -88,7 +88,7 @@ const routes: Routes = [
         component: RawMaterialInventoryComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 3.1
+            'role': '2.5.1'
         }
     },
     {
@@ -104,7 +104,7 @@ const routes: Routes = [
         component: WarehouseComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 5.1
+            'role': '2.3.1'
         }
     },
     {
@@ -112,7 +112,7 @@ const routes: Routes = [
         component: WarehouseLocationComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 6.1
+            'role': '2.2.1'
         }
     },
     {
@@ -120,7 +120,7 @@ const routes: Routes = [
         component: WarehousePartition, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 7.1
+            'role': '2.4.1'
         }
     },
     {
@@ -128,7 +128,7 @@ const routes: Routes = [
         component: RawMatsPOComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 21.1
+            'role': '3.1.1'
         }
     },
     {
@@ -136,7 +136,7 @@ const routes: Routes = [
         component: ContractPerformaComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 22.1
+            'role': '3.2.1'
         }
     },
     {
@@ -144,7 +144,7 @@ const routes: Routes = [
         component: UnloadingTransactionComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 23.1
+            'role': '3.3.1'
         }
     },
     {
@@ -152,7 +152,7 @@ const routes: Routes = [
         component: BinloadingComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 24.1
+            'role': '3.4.1'
         }
     },
     {
@@ -160,7 +160,7 @@ const routes: Routes = [
         component: TransferComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': 25.1
+            'role': '3.5.1'
         }
     },
     {
@@ -198,22 +198,34 @@ const routes: Routes = [
     {
         path: 'supplier', 
         component: SupplierComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.14.1'
+        }
     },
     {
         path: 'broker', component: 
         BrokerComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.6.1'
+        }
     },
     {
         path: 'warehouse-inventory', 
         component: WarehouseInventoryComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            role: '2.5.1'
+        }
     },
     {
         path: 'checker', 
         component: CheckerComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.12.1'
+        }
     },
     {
         path: 'guard', 
@@ -223,17 +235,26 @@ const routes: Routes = [
     {
         path: 'shipping-line', 
         component: ShippingLineComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.3.1'
+        }
     },
     {
         path: 'module', 
         component: ModuleComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.2.1'
+        }
     },
     {
         path: 'truck', 
         component: TruckComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.9.1'
+        }
     },
     {
         path: 'truck-type', 
@@ -243,7 +264,10 @@ const routes: Routes = [
     {
         path: 'trucking', 
         component: TruckingComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.10.1'
+        }
     },
     {
         path: 'plant', 
@@ -273,12 +297,18 @@ const routes: Routes = [
     {
         path: 'container-type', 
         component: ContainerTypeComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.7.1'
+        }
     },
     {
         path: 'driver', 
         component: DriverComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.10.1'
+        }
     },
     {
         path: 'indentor', 
@@ -323,22 +353,34 @@ const routes: Routes = [
     {
         path: 'bank', 
         component: BankComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.5.1'
+        }
     },
     {
         path: 'port-of-discharge', 
         component: PortOfDischarge, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.4.1'
+        }
     },
     {
         path: 'users', 
         component: UsersComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '4.1.1'
+        }
     },
     {
         path: 'checker-schedule', 
         component: CheckerScheduleComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.13.1'
+        }
     },
     {
         path: 'unauthorized', 

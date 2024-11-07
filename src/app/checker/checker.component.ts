@@ -5,6 +5,8 @@ import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
+import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 
 @Component({
@@ -26,13 +28,22 @@ export class CheckerComponent implements OnInit,OnDestroy{
 
     dialogHeader?: string;
 
+    userID!: string;
+
     private subscription: Subscription = new Subscription();
+
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
 
     constructor(
         private CheckerService: CheckerService,
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
-        private CheckerTypeService: CheckerTypeService
+        private CheckerTypeService: CheckerTypeService,
+        private AuthService: AuthService,
+        private UsersService: UsersService
     ){}
 
     ngOnInit(): void {
@@ -44,6 +55,8 @@ export class CheckerComponent implements OnInit,OnDestroy{
             'UserID': new FormControl(0)
         })
 
+        this.getUser();
+        this.getUserAccess(this.userID);
         this.getData();
         this.getCheckerType();
     }
@@ -70,6 +83,46 @@ export class CheckerComponent implements OnInit,OnDestroy{
         )
     }
 
+    getUser() {
+        this.subscription.add(
+            this.AuthService.user.subscribe(user => {
+                if (user) {
+                    this.userID = user.user_id;
+                }
+            })
+        )
+    }
+
+    getUserAccess(UserID: string) {
+        this.subscription.add(
+             this.UsersService.getUserAccess(UserID).subscribe(
+                 response => {
+                     let userRights = response;
+ 
+                     for (let i = 0; i < userRights.length; i++) {
+                         switch (userRights[i].AccessRight.trim()) {
+                             case '2.12.1':
+                                 this.view = true;
+                                 break;
+                             case '2.12.2':
+                                 this.insert = true;
+                                 break;
+                             case '2.12.3':
+                                 this.edit = true;
+                                 break;
+                             case '2.12.4':
+                                 this.generateReport = true;
+                                 break;
+                             default:
+                                 break;
+                         }
+                     }
+                     
+                 }
+             )       
+        )
+     }
+
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
     }    
@@ -93,7 +146,7 @@ export class CheckerComponent implements OnInit,OnDestroy{
             this.checkerForm.value.CheckerID, 
             this.checkerForm.value.CheckerName, 
             // this.checkerForm.value.CheckerTypeID.CheckerTypeID, 
-            this.checkerForm.value.UserID
+            this.userID
         );
 
         authObs.subscribe(response =>{

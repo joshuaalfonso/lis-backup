@@ -3,6 +3,8 @@ import { Observable, Subscription } from "rxjs";
 import { BankService } from "./bank.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MessageService } from "primeng/api";
+import { AuthService } from "../auth/auth.service";
+import { UsersService } from "../users/users.service";
 
 
 
@@ -21,22 +23,21 @@ export class BankComponent implements OnInit, OnDestroy{
 
     dialogHeader: string = '';
 
+    userID!: string;
+
+    view: boolean = false;
+    insert: boolean = false;
+    edit: boolean = false;
+    generateReport: boolean = false;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
         private BankService: BankService,
-        private MessageService: MessageService
+        private MessageService: MessageService,
+        private AuthService: AuthService,
+        private UsersService: UsersService
     ) {}
-
-    getData() {
-        this.subscription.add(
-            this.BankService.getData().subscribe(
-                response => {
-                    this.bank = response;
-                }
-            )
-        )
-    }
 
     ngOnInit(): void {
         this.bankForm = new FormGroup({
@@ -46,8 +47,59 @@ export class BankComponent implements OnInit, OnDestroy{
             'UserID': new FormControl(0),
         })
 
+        this.getUser();
+        this.getAccess();
+        this.getData();
+    }
 
-        this.getData()
+    getUser() {
+        this.subscription.add(
+            this.AuthService.user.subscribe(user => {
+                if (user) {
+                    this.userID = user.user_id;
+                }
+            })
+        )
+    }
+
+    getAccess() {
+        this.subscription.add(
+            this.UsersService.getUserAccess(this.userID).subscribe(
+                response => {
+                    let userRights = response;
+
+                    for (let i = 0; i < userRights.length; i++) {
+                        switch (userRights[i].AccessRight.trim()) {
+                            case '4.5.1':
+                                this.view = true;
+                                break;
+                            case '4.5.2':
+                                this.insert = true;
+                                break;
+                            case '4.5.3':
+                                this.edit = true;
+                                break;
+                            case '4.5.4':
+                                this.generateReport = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                }
+            )
+        )
+    }
+
+    getData() {
+        this.subscription.add(
+            this.BankService.getData().subscribe(
+                response => {
+                    this.bank = response;
+                }
+            )
+        )
     }
 
     ngOnDestroy(): void {
@@ -71,7 +123,7 @@ export class BankComponent implements OnInit, OnDestroy{
             this.bankForm.value.BankID, 
             this.bankForm.value.Bank, 
             this.bankForm.value.BankName, 
-            this.bankForm.value.UserID, 
+            this.userID
         );
 
         authObs.subscribe(response =>{
