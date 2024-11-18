@@ -1,0 +1,29 @@
+<div class="surface-container flex flex-column">
+     
+    <h6 class="container__title">Raw Materials</h6>
+
+    <div class="flex-1 overflow-y-auto" *ngIf="!rawmatsLoading">
+
+        <ul class="mr-2">
+            <ng-template ngFor let-location [ngForOf]="rawMaterial" let-i="index">
+                <li class="border-left-3 border-primary-500">
+                    <span class="text-sm font-medium">{{ location.RawMaterial}}</span>
+                    <span class="text-sm font-semibold">{{ location.Weight | number }} KG</span>
+                </li>
+            </ng-template>
+        </ul>
+
+    </div>
+        
+    <div *ngIf="rawmatsLoading">
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+         <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
+    </div>
+
+</div>

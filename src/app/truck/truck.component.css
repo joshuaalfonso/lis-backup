@@ -77,6 +77,20 @@ input {
     padding: 7px 0;
 }
 
+
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border) !important;
+    box-shadow: var(--input-box-shadow);
+}
+
+:host ::ng-deep input {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+
 :host ::ng-deep .p-dropdown-label {
     padding: 7px 10px;
 }

@@ -1,14 +1,18 @@
 
 
-<div *ngIf="!transferLoading">
+<div>
     <div class="transfer__detail">
         <div>
             <h6 class="indigo mb-1">#{{ row.TransferCode }}</h6>
-            <span class="sub-text"> {{ row.DateTransfer?.date | date: 'M/d/yy' }} </span>
+            <span class="sub-text"> {{ row.DateTransfer == null ? '-' : compareDate(today, row.DateTransfer.date) | date: 'MM/dd/yyyy' }} </span>
         </div>
 
         <div class="greent-tag" *ngIf="row.Status === 3">
             Completed
+        </div>
+
+        <div class="yellow-tag" *ngIf="row.Status === 0">
+            On Route
         </div>
 
     </div>
@@ -27,7 +31,7 @@
                 {{ event.status }}
             </span>
             <span class="sub-text">
-                {{ event.date?.date | date: 'M/d/yy, h:mm a' }}
+                {{ event.date == null ? '----' : event.date?.date | date: 'M/d/yy, h:mm a' }}
             </span>
         </ng-template>
     </p-timeline>

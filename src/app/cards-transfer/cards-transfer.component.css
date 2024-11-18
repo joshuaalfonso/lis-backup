@@ -41,3 +41,12 @@
     border-radius: 4px;
 }
 
+.yellow-tag {
+    font-size: var(--font-xs);
+    font-weight: var(--font-600);
+    color: #a47d06;
+    background: #f6de95;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+

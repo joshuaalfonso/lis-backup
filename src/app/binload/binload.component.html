@@ -271,31 +271,37 @@
             <input pInputText formControlName="ControlNo" autocomplete="off" class="input">
         </div> -->
 
-        <div class="field">
-            <label class="font-semibold" > Request Date <span class="required">*</span></label>
-            <p-calendar 
-                formControlName="RequestDate" 
-                [showIcon]="true" 
-                placeholder="mm/dd/yyyy" 
-                [showTime]="true" 
-                hourFormat="12" 
-                appendTo="body" 
-                [style]="{'width': '100%'}"
-            ></p-calendar>
-        </div>
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Request Date <span class="required">*</span></label>
+                    <p-calendar 
+                        formControlName="RequestDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="12" 
+                        appendTo="body" 
+                        [style]="{'width': '100%'}"
+                    ></p-calendar>
+                </div>
+            </div>
 
-        <div class="field">
-            <label class="font-semibold" >Plant <span class="required">*</span></label>
-            <div class="card flex justify-content-center">
-                <p-dropdown 
-                    [options]="plant" 
-                    formControlName="PlantID" 
-                    optionLabel="PlantName" 
-                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
-                    [showClear]="true" 
-                    placeholder="Select Plant" 
-                    optionValue="PlantID"
-                ></p-dropdown>
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Plant <span class="required">*</span></label>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown 
+                            [options]="plant" 
+                            formControlName="PlantID" 
+                            optionLabel="PlantName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plant" 
+                            optionValue="PlantID"
+                        ></p-dropdown>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -584,10 +590,12 @@
             </button>
         </div> -->
 
-        <app-submit-button 
-            [submitLoading]="requestSubmitLoading" 
-            [form]="binloadRequestForm" 
-        /> 
+        <div class="flex justify-content-end align-items-center">
+            <app-submit-button 
+                [submitLoading]="requestSubmitLoading" 
+                [form]="binloadRequestForm" 
+            /> 
+        </div>
 
   
     </form>
@@ -609,102 +617,121 @@
 >
     <form [formGroup]="binloadForm" class="" (ngSubmit)="onSubmitBinload()">  
 
-        <div class="field">
-            <label class="font-semibold" > Request Date </label>
-            <p-calendar 
-                formControlName="RequestDate" 
-                [showIcon]="true" 
-                placeholder="mm/dd/yyyy" 
-                [showTime]="true" 
-                hourFormat="12" 
-                appendTo="body" 
-                [style]="{'width': '100%'}"
-                class="disabled"
-            ></p-calendar>
-        </div>
 
-        <div class="field">
-            <label class="font-semibold" >Plant</label>
-            <div class="card flex justify-content-center disabled">
-                <p-dropdown 
-                    [options]="plant" 
-                    formControlName="PlantID" 
-                    optionLabel="PlantName" 
-                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
-                    [showClear]="true" 
-                    placeholder="Select Plant" 
-                    optionValue="PlantID"
-                    class="disabled"
-                ></p-dropdown>
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Request Date </label>
+                    <p-calendar 
+                        formControlName="RequestDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="12" 
+                        appendTo="body" 
+                        [style]="{'width': '100%'}"
+                        class="disabled"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Plant</label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="plant" 
+                            formControlName="PlantID" 
+                            optionLabel="PlantName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plant" 
+                            optionValue="PlantID"
+                            class="disabled"
+                        ></p-dropdown>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="field">
-            <label class="font-semibold" >
-                Raw Material 
-            </label>
-            <div class="card flex justify-content-center disabled">
-                <p-dropdown 
-                    [options]="rawMaterial" 
-                    formControlName="RawMaterialID" 
-                    optionLabel="RawMaterial" 
-                    [style]="{'height': '40px', 'border': '1px solid white' , 'width': '100%'}" 
-                    [showClear]="true" 
-                    placeholder="Select Raw Material"
-                    optionValue="RawMaterialID"
-                    [filter]="true"
-                ></p-dropdown>
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Raw Material 
+                    </label>
+                    <div class="card flex justify-content-center disabled">
+                        <p-dropdown 
+                            [options]="rawMaterial" 
+                            formControlName="RawMaterialID" 
+                            optionLabel="RawMaterial" 
+                            [style]="{'height': '40px', 'border': '1px solid white' , 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Raw Material"
+                            optionValue="RawMaterialID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Location </label>
+                    <div class="card flex justify-content-center" [class.disabled]="true">
+                        <p-dropdown 
+                            [options]="warehouseLocation" 
+                            formControlName="WarehouseLocationID" 
+                            optionLabel="WarehouseLocation" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Location" 
+                            (onChange)="onSelectLocation($event.value)"
+                            optionValue="WarehouseLocationID"
+                        ></p-dropdown>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="field">
-            <label class="font-semibold" > Location </label>
-            <div class="card flex justify-content-center" [class.disabled]="true">
-                <p-dropdown 
-                    [options]="warehouseLocation" 
-                    formControlName="WarehouseLocationID" 
-                    optionLabel="WarehouseLocation" 
-                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
-                    [showClear]="true" 
-                    placeholder="Select Location" 
-                    (onChange)="onSelectLocation($event.value)"
-                    optionValue="WarehouseLocationID"
-                ></p-dropdown>
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Warehouse </label>
+                    <div class="card flex justify-content-center" [class.disabled]="true">
+                        <p-dropdown 
+                            [options]="warehouse" 
+                            formControlName="WarehouseID" 
+                            optionLabel="Warehouse_Name" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Warehouse" 
+                            (onChange)="onSelectLocation($event.value)"
+                            optionValue="WarehouseID"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Partition </label>
+                    <div class="card flex justify-content-center" [class.disabled]="true">
+                        <p-dropdown 
+                            [options]="warehousePartition" 
+                            formControlName="WarehousePartitionID" 
+                            optionLabel="WarehousePartitionName" 
+                            [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
+                            [showClear]="true" 
+                            placeholder="Select Partition" 
+                            (onChange)="onSelectLocation($event.value)"
+                            optionValue="WarehousePartitionID"
+                        ></p-dropdown>
+                    </div>
+                </div>
             </div>
         </div>
 
-
-        <div class="field">
-            <label class="font-semibold" > Warehouse </label>
-            <div class="card flex justify-content-center" [class.disabled]="true">
-                <p-dropdown 
-                    [options]="warehouse" 
-                    formControlName="WarehouseID" 
-                    optionLabel="Warehouse_Name" 
-                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
-                    [showClear]="true" 
-                    placeholder="Select Warehouse" 
-                    (onChange)="onSelectLocation($event.value)"
-                    optionValue="WarehouseID"
-                ></p-dropdown>
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="font-semibold" > Partition </label>
-            <div class="card flex justify-content-center" [class.disabled]="true">
-                <p-dropdown 
-                    [options]="warehousePartition" 
-                    formControlName="WarehousePartitionID" 
-                    optionLabel="WarehousePartitionName" 
-                    [style]="{'height': '40px', 'border': '1px solid white', 'width': '100%'}" 
-                    [showClear]="true" 
-                    placeholder="Select Partition" 
-                    (onChange)="onSelectLocation($event.value)"
-                    optionValue="WarehousePartitionID"
-                ></p-dropdown>
-            </div>
-        </div>
 
         <div class="grid">
 
@@ -1011,8 +1038,6 @@
             </div>
 
         </div>
-        <!-- [class.ng-dirty]="binloadForm.value.RequestWeight > binloadForm.value.RequestWeight" -->
-        <span *ngIf="binloadForm.value.RequestWeight > binloadForm.value.RequestWeight">zxc</span>
 
         <div class="field">
 

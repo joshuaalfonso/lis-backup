@@ -118,6 +118,13 @@ p-inputNumber ::ng-deep input {
     padding: 7px 10px;
 }
 
+:host ::ng-deep .p-inputtext {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+
 .p-inputtext.ng-dirty.ng-invalid {
     border-color: #ced4da;
 }

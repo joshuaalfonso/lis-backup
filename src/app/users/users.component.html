@@ -65,8 +65,8 @@
                     <button pButton pRipple class="delete__btn" class="p-button-info p-2 border-round" (click)="showAccessModal(row, accessModuleDialog)" pTooltip="Access rights" tooltipPosition="top"><i class='pi pi-unlock' ></i></button> -->
 
                     <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
-                    <p-overlayPanel #action>
-                      <div class="actions-overlay">
+                    <p-overlayPanel #action appendTo="body" >
+                      <div class="actions-overlay" >
                             <p (click)="confirm1($event, row)">
                                 <svg  width="15px" height="15px">
                                     <use href="assets/icons/icon-reset.svg#Layer_1"></use>

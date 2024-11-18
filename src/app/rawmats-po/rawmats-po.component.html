@@ -89,7 +89,7 @@
                 <!-- <th>Item</th> -->
                 <th>Total Quantity</th>
                 <th>Total Amount</th>
-                <th *ngIf="edit">Actions</th>
+                <th *ngIf="edit"></th>
             </tr>
         </ng-template>
 
@@ -388,7 +388,7 @@
                         <th> Ordered Qty </th>  
                         <th> Unit Price </th>  
                         <th> Amount </th>
-                        <th class="text-center"> Remove </th>   
+                        <!-- <th class="text-center"> Remove </th>    -->
                     </tr>
                 </ng-template>
     
@@ -461,11 +461,11 @@
                         </td>
                         
                     
-                        <td class="text-center" data-title="Remove">
+                        <!-- <td class="text-center" data-title="Remove">
                             <ng-container>
                                 <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removeOrder(rowIndex)"></i>
                             </ng-container> 
-                        </td>
+                        </td> -->
 
                     </tr>
                 </ng-template>

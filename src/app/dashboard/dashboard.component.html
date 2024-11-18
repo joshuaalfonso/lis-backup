@@ -1,21 +1,39 @@
 
 
-<!-- card header -->
-<app-content-header [title]="'Dashboard'"></app-content-header>
+<!-- app title -->
+<app-content-header 
+     [title]="'Dashboard'"
+/>
 
-
+<!-- greet message -->
 <p class="greet">
      Hi 
      <span>{{ userName }}</span>, 
      Welcome to LIS!
 </p>
 
-
+<!-- user access loading -->
 <div *ngIf="isLoading" class="flex justify-content-center" >
      <app-loader></app-loader>
 </div>
 
-<div *ngIf="LogisticsDashboard && !isLoading">
+<!-- warehousing dashboard --> 
+<section *ngIf="LogisticsDashboard && !isLoading">
+     <app-dashboard-warehousing 
+          [isnightMode]="isnightMode"
+     />
+</section>
+
+<!-- dispatcher dashboard -->
+<section *ngIf="DispatchingDashboard">
+     <app-dispatcher-dashboard />
+</section>
+
+
+
+<!-- <div *ngIf="LogisticsDashboard && !isLoading">
+
+
      <div class="cards__container" *ngIf="!cardsLoading">
 
           <ng-template ngFor let-row [ngForOf]="warehouseLocation" let-i="index">
@@ -34,9 +52,7 @@
      
      <div class="unload__container">
      
-          <!-- <div class=""> -->
           <div class="surface-container flex flex-column">
-               <!-- <p-chart type="bar" [data]="data" [options]="options"></p-chart> -->
      
                <h6 class="container__title ">Recent Transaction</h6>
      
@@ -120,10 +136,6 @@
                     *ngIf="!unloadLoading && selectedOption == 2"             
                >
                     <ng-template pTemplate="header">
-                         <!-- <tr>
-                              <th class="text-left">Plant</th>
-                              <th class="text-left">Weight</th>
-                         </tr> -->
                     </ng-template>
      
                     <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
@@ -197,13 +209,9 @@
                     
      
           </div>
-          <!-- </div> -->
      
      
           <div class="">
-               <!-- <div class="chart2">
-                    <p-chart type="pie" [data]="data2" [options]="options2"></p-chart>
-                </div> -->
                <div class="surface-container flex flex-column">
      
                     <h6 class="container__title">Recent Transfer</h6>
@@ -223,7 +231,7 @@
                
                     </p-carousel>
      
-                    <div *ngIf="recentTransfer.length === 0" class="no-data-container">
+                    <div *ngIf="recentTransfer.length === 0 && !transferLoading" class="no-data-container">
                          <img src="assets/empty.png" width="60px"/>
                          No data found 
                     </div>
@@ -250,7 +258,6 @@
                               <ng-template pTemplate="header">
                                    <tr class="hidden">
                                         <th>ATA</th>
-                                        <!-- <th>MBL</th> -->
                                         <th>BL</th>
                                         <th>Raw Material</th>
                                         <th>Served</th>
@@ -270,9 +277,6 @@
                                              </span>
                                      
                                         </td>
-                                        <!-- <td>
-                                             {{ row.MBL }}
-                                        </td> -->
                                         <td>
                                              <span class="font-medium" *ngIf="row.BL != 0">
                                                   {{ row.BL }} 
@@ -353,11 +357,11 @@
           </div>
      
      </div>
-</div>
+</div> -->
 
 
 
-<app-dispatcher-dashboard *ngIf="DispatchingDashboard"/>
+<!-- <app-dispatcher-dashboard *ngIf="DispatchingDashboard"/> -->
 
 
 

@@ -1,0 +1,25 @@
+th {
+    color: var(--font-color-dark);
+    font-weight: 600;
+    padding-top: 0;
+    background: none;
+}
+
+th, td {
+    font-size: var(--font-sm);
+}
+td {
+    background: var(--surface-color);
+    color: var(--font-color);
+    font-weight: 500;
+}
+
+tr {
+    /* color: 	#808080; */
+    /* border: var(--border-bottom); */
+    border: 1px var(--divider-border);
+    border-bottom-style: dotted;
+}
+p {
+    margin: 0;
+}

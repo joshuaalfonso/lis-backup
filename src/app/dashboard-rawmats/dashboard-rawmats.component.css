@@ -1,0 +1,42 @@
+.surface-container {
+    border: var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+    height: 500px;
+    background: var(--surface-color);
+    box-shadow: var(--card-box-shadow);
+    width: 100%;
+}
+
+ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+li {
+    padding: 10px;
+    margin-bottom: 5px;
+    background: var(--tab-color);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--font-color);
+}
+
+
+::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    background: var(--tab-color); /* Color of the scrollbar */
+    border-radius: 10px; /* Rounded edges */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: gray; /* Color on hover */
+}

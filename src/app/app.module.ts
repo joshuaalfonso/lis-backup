@@ -164,6 +164,14 @@ import { AccountDetailsComponent } from './account-details/account-details.compo
 import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-dashboard.component';
 import { SubmitButtonComponent } from './submit-button/submit-button.component';
 import { RawMaterialsModalComponent } from './raw-materials-modal/raw-materials-modal.component';
+import { DashboardWarehousingComponent } from './dashboard-warehousing/dashboard-warehousing.component';
+import { TabComponent } from './tab/tab.component';
+import { DashboardRecentUnloadComponent } from './dashboard-recent-unload/dashboard-recent-unload.component';
+import { DashboardRecentBinloadComponent } from './dashboard-recent-binload/dashboard-recent-binload.component';
+import { DashboardRecentTransferComponent } from './dashboard-recent-transfer/dashboard-recent-transfer.component';
+import { DashboardReceivedComponent } from './dashboard-received/dashboard-received.component';
+import { DashboardRawmatsComponent } from './dashboard-rawmats/dashboard-rawmats.component';
+import { DashbTableLoaderComponent } from './dashb-table-loader/dashb-table-loader.component';
 
 
 
@@ -231,7 +239,15 @@ import { RawMaterialsModalComponent } from './raw-materials-modal/raw-materials-
     AccountDetailsComponent,
     DispatcherDashboardComponent,
     SubmitButtonComponent,
-    RawMaterialsModalComponent
+    RawMaterialsModalComponent,
+    DashboardWarehousingComponent,
+    TabComponent,
+    DashboardRecentUnloadComponent,
+    DashboardRecentBinloadComponent,
+    DashboardRecentTransferComponent,
+    DashboardReceivedComponent,
+    DashboardRawmatsComponent,
+    DashbTableLoaderComponent
     
   ],
   imports: [

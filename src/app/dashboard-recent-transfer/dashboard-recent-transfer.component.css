@@ -1,0 +1,5 @@
+.container__title {
+    margin-bottom: 24px;
+    font-weight: var(--font-600);
+    color: var(--font-color-dark);
+}

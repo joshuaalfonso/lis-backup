@@ -4,7 +4,6 @@
     [title]="'Products / Raw Material'"
 ></app-content-header>
 
-  
 <!-- ===== TABLE ====== -->
 <div class="table ">
 
@@ -128,89 +127,4 @@
 />
 
 
-<!-- <p-dialog 
-    header="{{ modalHeader }}" 
-    [(visible)]="visible" 
-    [modal]="true" 
-    [breakpoints]="{ '1200px': '500px' }" 
-    [style]="{ width: '35vw' }" 
-    [draggable]="false" 
-    [resizable]="false"
->
-    <form 
-        [formGroup]="rawMatsForm" 
-        class="p-fluid" 
-        (ngSubmit)="onSubmit()" 
-    >  
-
-        <div class="field">
-
-            <label class="font-semibold" >
-                Raw Material
-            </label>
-
-            <input 
-                pInputText 
-                formControlName="RawMaterial" 
-                autocomplete="off" 
-                class="input" 
-                placeholder="Enter raw material"
-            >
-        </div>
-
-        <div class="field">
-
-            <label class="font-semibold" >
-                Category
-            </label>
-
-            <input 
-                pInputText 
-                formControlName="Category" 
-                autocomplete="off" 
-                class="input" 
-                placeholder="Enter category"
-            >
-
-        </div>
-
-        <div class="field">
-
-            <label class="font-semibold">
-                Minimum Quantity
-            </label>
-
-            <p-inputNumber 
-                formControlName="MinimumQuantity" 
-                inputId="integeronly" 
-                autocomplete="off" 
-                placeholder="Enter minimun quantity"
-            ></p-inputNumber>
-
-        </div>
-
-        <div class="field">
-
-            <label class="font-semibold">
-                Minimum Weight
-            </label>
-
-            <p-inputNumber 
-                formControlName="MinimumWeight" 
-                inputId="integeronly" 
-                autocomplete="off" 
-                placeholder="Enter maximum quantity"
-            ></p-inputNumber>
-
-        </div>
-
-
-        <app-submit-button 
-            [submitLoading]="submitLoading" 
-            [form]="rawMatsForm" 
-        /> 
-
-    </form>
-
-</p-dialog> -->
 

@@ -1,0 +1,52 @@
+
+
+
+<p-table [value]="recentUnload" responsiveLayout="stack" [breakpoint]="'960px'" *ngIf="!unloadLoading">
+
+    <ng-template pTemplate="body" let-row>
+         <tr>
+              <td >
+                   <span class="p-column-title">Date Unload</span>
+
+                   <p>
+                        <span>{{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}</span>
+                        <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
+                   </p>
+              </td>
+              <td>
+                   <span class="p-column-title">P.O #</span>
+
+                   <p>
+                        <span>{{ row.PONo }}</span>
+                        <span class="sub-text"> {{ row.Supplier }}</span>
+                   </p>
+              </td>
+              <td>
+                   <span class="p-column-title">Raw Material</span>
+                   <span>{{ row.RawMaterial }}</span>
+              </td>
+              <td>
+                   <span class="p-column-title">Total</span>
+
+                   <p>
+                        <span>{{ row.Weight | number}} KG</span>
+                        <span class="sub-text"> {{ row.Quantity | number }} Bags</span>
+                   </p>
+              </td>
+              <td>
+                   <span class="p-column-title">Location</span>
+                   <p>
+                        <span>{{ row.WarehouseLocation }} </span>
+                        <span class="sub-text"> {{ row.Warehouse_Name }}</span>
+                   </p>
+              </td>
+         </tr>
+    </ng-template>
+
+</p-table>
+
+
+<app-dashb-table-loader 
+     *ngIf="unloadLoading"
+/>
+

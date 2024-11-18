@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { RawMaterialsService } from "./raw-materials.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
@@ -133,9 +133,6 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
             )
         )
     }
-
-
-
 
     getUserAccess(UserID: string) {
        this.subscription.add(

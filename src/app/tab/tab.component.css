@@ -1,0 +1,42 @@
+.radio-inputs {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 0.2rem;
+    background: var(--tab-color);
+    box-sizing: border-box;
+    padding: 3px;
+    width: 200px;
+    font-size: var(--font-sm);
+    box-shadow: var(--card-box-shadow);
+    border: var(--card-border);
+    margin-bottom: 10px;
+  }
+  
+.radio-inputs .radio {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.radio-inputs .radio input {
+    display: none;
+}
+
+.radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.2rem;
+    border: none;
+    padding: 2px 8px;
+    color: var(--font-color);
+    transition: all 0.15s ease-in-out;
+    font-weight: 400;
+}
+
+.radio-inputs .radio .name.active {
+/* background-color: var(--tab-active); */
+    background: var(--first-color);
+    color: #eee;
+}

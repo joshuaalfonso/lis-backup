@@ -241,11 +241,27 @@ body {
 }
 
 /* Modal  */
-input {
+
+
+/* input {
     padding: 7px 10px;
     background: var(--surface-color);
-    /* border: none; */
+} */
+
+input {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+    padding: 7px 10px;
 }
+
+/* .p-inputtext {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+} */
 
 
 /* p-inputNumber ::ng-deep input {

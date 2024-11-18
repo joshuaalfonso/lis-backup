@@ -50,21 +50,27 @@
 }
 
 h1 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    color: var(--font-color-dark);
+    text-align: center;
+    text-transform: uppercase;
+    font-size: var(--font-3xl);
 }
 
 label {
     display: block;
-    color: #6C737F;
+    color: var(--font-color);
     font-size: 15px;
     margin-bottom: 5px;
+    font-weight: var(--font-500);
 }
 
 input {
     width: 100%;
     margin-bottom: 10px;
     padding: 10px 0;
-    border: 1px solid #E5E7EB;
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
     border-radius: 5px;
     padding-left: 10px;
     font-size: 16px;
@@ -72,11 +78,20 @@ input {
     /* background: red; */
 }
 
+/* :host ::ng-deep input {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+} */
+
 :host ::ng-deep p-password input{
     width: 100%;
     padding: 10px 0;
     border: 1px solid #E5E7EB;
     padding-left: 10px;
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
 }
 
 

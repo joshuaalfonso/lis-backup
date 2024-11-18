@@ -1,0 +1,10 @@
+<div class="radio-inputs">
+    <label class="radio">
+        <input checked="" name="radio" type="radio" value="1" (change)="tabChange($event)"/>
+        <span class="name" [class.active]="selectedOption == 1">Unloading  </span>
+    </label>
+    <label class="radio">
+        <input name="radio" type="radio" value="2" (change)="tabChange($event)"/>
+        <span class="name" [class.active]="selectedOption == 2">Binloading </span>
+    </label>
+</div>

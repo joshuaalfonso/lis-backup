@@ -5,7 +5,9 @@
 <p-confirmPopup></p-confirmPopup>
 
 <!-- ==== TITLE ==== -->
-<app-content-header [title]="'Profile / Port of Discharge'"></app-content-header>
+<app-content-header 
+    [title]="'Profile / Port of Discharge'"
+></app-content-header>
 <!-- <h1 class="title">Port of Discharge</h1> -->
 
 
@@ -19,13 +21,34 @@
 
 <!-- ===== TABLE ====== -->
 <div class="table">
-    <p-table #dt1  [value]="portOfDischarge" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['Broker', 'ContactPerson', 'ContactNumber']">
+
+    <p-table 
+        #dt1  
+        [value]="portOfDischarge" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['Broker', 'ContactPerson', 'ContactNumber']"
+    >
 
     <ng-template pTemplate="caption">
         <div class="flex align-items-center justify-content-between mb-2">
 
-            <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
-            <button pButton pRipple class="add__btn"  (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+            <input 
+                pInputText 
+                type="text" 
+                class="p-inputtext-lg pl-3 input__search" 
+                placeholder="Search" 
+            />
+
+            <button 
+                pButton 
+                pRipple 
+                class="add__btn"  
+                (click)="showDialog()" 
+                *ngIf="insert"
+            >
+                <i class='bx bx-plus'></i> 
+                <span>Add Item</span>
+            </button>
 
         </div>
     </ng-template>
@@ -63,6 +86,7 @@
                     </p>
                     </div>
                 </p-overlayPanel>
+                
             </td>
         </tr>
     </ng-template>
@@ -77,15 +101,39 @@
 
 
 <!-- ======= MODAL FORM ======== -->
-<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
-    <form [formGroup]="portOfDischargeForm" class="p-fluid" (ngSubmit)="onSubmit()" >  
+<p-dialog 
+    header="{{ dialogHeader }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form 
+        [formGroup]="portOfDischargeForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()" 
+    >  
   
         <div class="field">
           <label class="font-semibold" >Port of Discharge</label>
-          <input pInputText formControlName="PortOfDischarge" autocomplete="off" class="input" placeholder="Enter port of discharge">
+          <input 
+            pInputText 
+            formControlName="PortOfDischarge" 
+            autocomplete="off" 
+            class="input" 
+            placeholder="Enter port of discharge"
+        >
         </div>
   
-        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!portOfDischargeForm.valid"></button>
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!portOfDischargeForm.valid"
+        ></button>
   
     </form>
 </p-dialog>

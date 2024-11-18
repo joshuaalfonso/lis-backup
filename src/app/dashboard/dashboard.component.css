@@ -13,61 +13,7 @@
 }
 
 /* Location Cards */
-.cards__container {
-    width: 100%;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
-    gap: 20px;
-    margin-bottom: 20px;
-}
 
-.cards__container .cards {
-    height: 150px;
-    padding: 20px;
-    border: var(--card-border);
-    border-radius: 8px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: var(--surface-color);
-    box-shadow:  var(--card-box-shadow);
-    transition: var(--transition-3s)
-}
- .cards__container .cards .left-col{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 0;
-}
-.cards__container .cards .card__title {
-    font-weight: 500;
-    color: var( --font-color-dark);
-}
-
-.cards__container .cards .card__number {
-    display: block;
-    font-weight: 700;
-    font-size: var(--font-2xl);
-    color: var(--font-color);
-}
-
-.cards__container .cards .vsYesterdayGreen {
-    background: var(--font-green-light);
-    color: var(--font-green);
-    font-size: var(--font-sm);
-    font-weight: 500;
-    padding: 0 5px;
-    border-radius: 10px;
-}
-
-.cards__container .cards .vsYesterdayRed {
-    background: var(--font-red-light);
-    color: var(--font-red);
-    font-size: var(--font-sm);
-    font-weight: 500;
-    padding: 0 7px;
-    border-radius: 10px;
-}
 
 .warehousing-cards {
     padding: 20px;

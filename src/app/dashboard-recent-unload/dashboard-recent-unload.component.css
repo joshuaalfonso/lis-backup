@@ -1,0 +1,11 @@
+th, td {
+    font-size: var(--font-sm);
+}
+td {
+    background: var(--surface-color);
+    color: var(--font-color);
+    font-weight: 500;
+}
+p {
+    margin: 0;
+}

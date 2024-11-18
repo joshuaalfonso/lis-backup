@@ -230,7 +230,7 @@
                 <span class="required">*</span>
             </label>
 
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     [options]="po" 
                     formControlName="PO" 
@@ -240,7 +240,7 @@
                     placeholder="Select or Enter PO" 
                     (onChange)="onSelectPO($event.value)"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
 
         </div>
 
@@ -251,7 +251,7 @@
                 <span class="required">*</span>
             </label>
 
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     [options]="bl" 
                     formControlName="BL" 
@@ -262,7 +262,7 @@
                     (ngModelChange)="onSelectBL($event)" 
                     [filter]="true"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
 
         </div>
       
@@ -274,7 +274,7 @@
                 <span class="required">*</span>
             </label>
         
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     [options]="containerNumber" 
                     formControlName="ContainerNumber" 
@@ -283,7 +283,7 @@
                     [showClear]="true" 
                     placeholder="Select Container #"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
 
         </div>
 
@@ -352,7 +352,7 @@
                         <span class="required">*</span>
                     </label>
 
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                         [options]="supplier" 
                         formControlName="SupplierID" 
@@ -362,7 +362,7 @@
                         placeholder="Select Supplier" 
                         [filter]="true"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
 
                 </div>
             </div>
@@ -376,9 +376,9 @@
                         <span class="required">*</span>
                     </label>
 
-                    <div class="flex">
+                    <div class="flex gap-2">
 
-                        <div class="card flex justify-content-center flex-1 mr-2">
+                        <!-- <div class="card flex justify-content-center flex-1 mr-2"> -->
                             <p-dropdown 
                                 [options]="truck" 
                                 formControlName="TruckID" 
@@ -387,13 +387,13 @@
                                 [showClear]="true" 
                                 placeholder="Select Plate No" 
                                 [filter]="true"
+                                class="flex-1"
                             ></p-dropdown>
-                        </div>
+                        <!-- </div> -->
 
                         <p-button 
                             icon="pi pi-plus" 
                             (click)="showTruckDialog()" 
-                            *ngIf="selectedTransaction != 0"
                             pTooltip="New Truck" 
                             tooltipPosition="left"
                         />
@@ -415,7 +415,7 @@
                         Warehouse 
                         <span class="required">*</span>
                     </label>
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             [options]="warehouse" 
                             formControlName="WarehouseID" 
@@ -425,7 +425,7 @@
                             placeholder="Select Warehouse" 
                             (onChange)="onSelectWarehouse($event.value)"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div> 
             </div>
 
@@ -437,16 +437,16 @@
                         <span class="required">*</span>
                     </label>
 
-                    <div class="card flex justify-content-center">
-                        <p-dropdown 
+                    <!-- <div class="card flex justify-content-center"> -->
+                    <p-dropdown 
                         [options]="selectedWarehouse" 
                         formControlName="WarehousePartitionID" 
                         optionLabel="WarehousePartitionName" 
                         [style]="{'height': '40px', 'border': '1px solid white'}" 
                         [showClear]="true" 
                         placeholder="Select Warehouse"
-                        ></p-dropdown>
-                    </div>
+                    ></p-dropdown>
+                    <!-- </div> -->
 
                 </div>
             </div>
@@ -460,7 +460,7 @@
                 <span class="required">*</span>
             </label>
 
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     [options]="rawMaterial" 
                     formControlName="RawMaterialID" 
@@ -469,7 +469,7 @@
                     [showClear]="true" 
                     placeholder="Select Raw Material"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
 
         </div>
 
