@@ -72,7 +72,7 @@ const routes: Routes = [
         component: RawMaterialsComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
-            'role': '1.1.1'
+            'role': '2.1.1'
         }
     },
     {

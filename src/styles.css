@@ -293,6 +293,13 @@ input {
     pointer-events: none; /* prevents interactions */
 }
 
+/* .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+} */
+
 .p-dropdown-items {
     /* background: gray; */
     padding: 0;

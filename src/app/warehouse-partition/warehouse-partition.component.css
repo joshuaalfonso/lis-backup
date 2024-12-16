@@ -70,6 +70,35 @@ td {
 }
 
 
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+
+:host ::ng-deep .p-dropdown-items-wrapper{
+    background: var(--surface-color);
+    /* background: red; */
+}
+
+:host :ng-deep .p-dropdownitem {
+    background: red;
+}
+
+:host ::ng-deep .p-dropdown-item.p-highlight {
+    background: var(--divider-border);
+}
+
+:host ::ng-deep .p-dropdown-item:hover {
+    background: var(--divider-border);
+}
+
+:host ::ng-deep .p-dropdown-items-wrapper ul li {
+    color: var(--font-color);
+}
+
+
 :host ::ng-deep .p-dropdown-label {
     padding: 7px 10px;
 }

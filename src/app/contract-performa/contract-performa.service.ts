@@ -46,6 +46,34 @@ export class ContractPerformaService {
         return this.http.get<any>( this.baseUrl + '/project/a_UnloadedBLView.php?id=' + id);
     }  
 
+    getRecentEta() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard.php');
+    }
+
+    getBalanceAtPort() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard1.php');
+    }
+
+    BalanceContainer() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard2.php');
+    }
+
+    getLegalDashboard3() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard3.php' )
+    }
+
+    getLegalDashboard4() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard4.php' )
+    }
+
+    getLegalDashboard5() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard5.php' )
+    }
+
+    getSailingData() {
+        return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard6.php')
+    }
+
     saveData
     (
         ContractPerformaID: number,

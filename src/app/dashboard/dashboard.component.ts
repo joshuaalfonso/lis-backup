@@ -254,15 +254,6 @@ export class DashboardComponent implements OnInit, OnDestroy{
     }
 
     getRecentBinload() {
-        // this.subscriptions.add(
-        //     this.BinloadService.getRecentBinload().subscribe(
-        //         response => {
-        //             this.recentBinload = response;
-        //         }, err => {
-        //             console.error(err)
-        //         }
-        //     )
-        // )
 
         this.unloadLoading = true;
 
@@ -357,8 +348,6 @@ export class DashboardComponent implements OnInit, OnDestroy{
                             ]
                         };
                     });
-
-                    // console.log(this.recentTransfer)
 
                 }
             )

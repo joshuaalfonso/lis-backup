@@ -7,8 +7,6 @@ import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
 
 
-
-
 @Component({
     selector: 'app-port-of-discharge',
     templateUrl: 'port-of-discharge.component.html',

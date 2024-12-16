@@ -172,6 +172,7 @@ import { DashboardRecentTransferComponent } from './dashboard-recent-transfer/da
 import { DashboardReceivedComponent } from './dashboard-received/dashboard-received.component';
 import { DashboardRawmatsComponent } from './dashboard-rawmats/dashboard-rawmats.component';
 import { DashbTableLoaderComponent } from './dashb-table-loader/dashb-table-loader.component';
+import { ImportationDashboardComponent } from './importation-dashboard/importation-dashboard.component';
 
 
 
@@ -247,7 +248,8 @@ import { DashbTableLoaderComponent } from './dashb-table-loader/dashb-table-load
     DashboardRecentTransferComponent,
     DashboardReceivedComponent,
     DashboardRawmatsComponent,
-    DashbTableLoaderComponent
+    DashbTableLoaderComponent,
+    ImportationDashboardComponent
     
   ],
   imports: [

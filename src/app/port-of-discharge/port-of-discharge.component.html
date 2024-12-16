@@ -66,9 +66,6 @@
             <td data-title="#">{{ rowIndex + 1 }}</td>
             <td data-title="Broker">{{ row.PortOfDischarge }}</td>
             <td data-title="" *ngIf="edit">
-                <!-- <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
-                <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" ><i class='bx bx-trash' ></i></button> -->
-
                 <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
                 <p-overlayPanel #action>
                     <div class="actions-overlay">

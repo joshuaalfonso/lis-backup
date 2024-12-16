@@ -72,11 +72,8 @@
     border-radius: 8px;
     padding: 20px;
     height: 500px;
-    /* background: #ffffff; */
     background: var(--surface-color);
     box-shadow: var(--card-box-shadow);
-    /* transition: var(--transition-3s); */
-    /* overflow: auto; */
     width: 100%;
 }
 
@@ -156,12 +153,10 @@ th {
 }
 
 th, td {
-    /* text-align: center; */
     font-size: var(--font-sm);
 }
 td {
     background: var(--surface-color);
-    /* transition: var(--transition-3s); */
     color: var(--font-color);
     font-weight: 500;
 }

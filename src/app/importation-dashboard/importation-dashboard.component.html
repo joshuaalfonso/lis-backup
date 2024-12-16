@@ -1,0 +1,468 @@
+<!-- <div class="chart-container" style="height: 400px;">
+    <p-chart type="line" [data]="data" [options]="options" width="400px" height="auto"></p-chart>
+</div> -->
+
+
+<div class="cards__container">
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title"> Containers at Port</h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    {{ balanceAtPort }} 
+                </span>
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+
+            <div class="icon">
+                <img src="assets/crane.png" alt="route" width="35px">
+            </div>
+            <!-- <p-chart type="line" [data]="data" [options]="options" width="100%" height="100%"></p-chart> -->
+    
+        </div>
+    
+    </div>
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title"> Unreturned Cont </h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    {{ balanceContainer }}  
+                </span>
+
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+
+            <div class="icon">
+                <img src="assets/container3.png" alt="route" width="35px">
+            </div>
+            <!-- <p-chart type="line" [data]="data" [options]="options" width="100%" height="100%"></p-chart> -->
+
+        </div>
+    
+    </div>
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title"> Bulk </h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    {{ sailingBulk }}
+                </span>
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+            <div class="icon">
+                <img src="assets/dump.png" alt="route" width="35px">
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="cards">
+
+        <div class="left-col">
+            <h6 class="card__title">Containerized</h6>
+            
+            <div> 
+    
+                <span class="card__number">
+                    {{ sailingContainerized }}  
+                </span>
+    
+            </div>
+    
+        </div>
+    
+        <div class="right-col">
+            <div class="icon">
+                <img src="assets/long-truck.png" alt="route" width="35px">
+            </div>
+        </div>
+    
+    </div>
+
+</div>
+
+
+<div class="grid">
+
+    <div class="col-12 xl:col-6">
+        <div class="surface-container" style="height: 300px; overflow-y: auto;">
+            <p class="card__title font-semibold">
+                Landed bulk
+            </p>
+
+            <div>
+                <p-table [value]="bulk" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+
+                    <ng-template pTemplate="header">
+                        <tr class="thead">
+                            <th>BL</th>
+                            <th>Progess</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+                                <span class="p-column-title">BL :</span> 
+                                {{ row.BL }} 
+                            </td>
+
+                            <td>
+                                <span class="p-column-title">Progress :</span> 
+
+
+                                <div class="grid my-auto">
+                                    <span class="col-2 p-0">
+                                        {{ getRoundedPercentage(row.WithdrawnQty, row.TargetQuantity, 1) }}%
+                                    </span>
+                                    
+                                    <div class="col p-0 my-auto">
+                                        <p-progressBar 
+                                            [value]="getRoundedPercentage(row.WithdrawnQty, row.TargetQuantity, 1)" 
+                                            [style]="{ height: '6px', width: '80%' }" 
+                                            [showValue]="false"
+                                        />
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td>
+                                <span class="p-column-title">WithdrawnQty :</span> 
+                                <span>{{ row.WithdrawnQty | number }} / {{ row.TargetQuantity | number }}</span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 xl:col-3">
+        <div class="surface-container flex flex-column gap-3" style="height: 300px;">
+
+            <p class="card__title font-semibold m-0">
+                ETA Within 7 days
+            </p>
+
+            <div class="grid">
+                <div class="col">
+                    <div 
+                        class=" border-round py-2 flex align-items-center justify-content-center"
+                        style="background: linear-gradient(270deg, #6366f1 0%, #7f81f0 100%);"
+                    >
+                        <span class="text-3xl font-medium text-white font-semibold"> 
+                            {{ oneWeekEta.at(-1)?.X20 }} 
+                            <small class="text-lg"> x20 </small>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div 
+                        class=" border-round py-2 flex align-items-center justify-content-center"
+                        style="background: linear-gradient(270deg, #6366f1 0%, #7f81f0 100%);"
+                    >
+                        <span class="text-3xl font-medium text-white font-semibold"> 
+                            {{ oneWeekEta.at(-1)?.X40 }} 
+                            <small class="text-lg"> x40 </small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <span 
+                class="sub-text uppercase text-sm" 
+                style="color: #757575;"
+            > 
+                ETA within 7 days 
+            </span> -->
+
+            <div
+                class="overflow-container flex-1 flex flex-column gap-2"
+            >
+                <ul *ngFor="let row of oneWeekEta"
+                >
+                    <li 
+                        *ngIf="row.MBL != 'Total'"
+                        class="text-sm flex justify-content-between align-items-center py-2 pr-1"
+                        style="color: var(--font-color); font-weight: 500;"
+                    >
+                        <div class="flex gap-3">
+                            <div 
+                                class="flex align-items-center justify-content-center px-2 border-circle" 
+                                style="background: var(--tab-color);"
+                            >
+                                <span 
+                                    class="text-sm font-semibold"
+                                    style="color: var(--first-color);"
+                                >
+                                    {{  row.X20 != 0 ? 'x20' : 'x40' }}
+                                </span>
+                            </div>
+
+                            <div>
+                                {{ row.MBL }}
+                                <span class="sub-text"> {{ row.ETA?.date | date: 'MM/dd/yyyy' }} </span>
+                            </div>
+                        </div>
+
+                        <span>
+                            {{ row.X20 || row.X40}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            
+
+            <!-- <p class="card__title font-semibold">
+                Upcoming this week
+            </p>
+    
+            <div>
+                <p-table [value]="oneWeekEta" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+    
+    
+                    <ng-template pTemplate="header">
+                        <tr class="thead">
+                            <th>MBL</th>
+                            <th>ETA</th>
+                            <th>X20</th>
+                            <th>X40</th>
+                        </tr>
+                    </ng-template>
+    
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+    
+                                {{ row.MBL }}
+                            </td>
+                            <td>
+                                {{ row.ETA?.date | date: 'MM/dd/yyyy' }}
+                            </td>
+                            <td>
+                                {{ row.X20 }}
+                            </td>
+                            <td>
+                                {{ row.X40 }}
+                            </td>
+    
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div> -->
+        </div>
+    </div>
+
+
+    <div class="col-12 xl:col-3">
+
+        <div class="surface-container flex flex-column gap-3" style="height: 300px;">
+            
+            <p class="card__title font-semibold m-0">
+                Landed bulk
+            </p>
+
+            <div class="overflow-container flex-1 flex flex-column">
+                <ul 
+                    *ngFor="let row of bulk"
+                >
+                    <li style="color: var(--font-color);" class="flex flex-column gap-3 p-3"> 
+                        
+                        <h1 class="text-base m-0">{{ row.BL }}</h1>
+
+                        <div>
+                            <p-progressBar 
+                                [value]="getRoundedPercentage(row.WithdrawnQty, row.TargetQuantity, 1)" 
+                                [style]="{ height: '6px', marginBottom: '5px'}" 
+                                [showValue]="false"
+                            />
+                            
+                            <div class="flex justify-content-between">
+                                <span 
+                                class="sub-text"
+                            >
+                                {{ row.WithdrawnQty | number }} / {{ row.TargetQuantity | number }} MT
+                            </span>
+                            <span 
+                                class="sub-text"
+                            >
+                                 {{ (row.TargetQuantity -row.WithdrawnQty) | number }} BAL
+                            </span>
+                            </div>
+                        </div>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="col-12 xl:col-4">
+        <div class="surface-container">
+            <p class="card__title">
+                Sailing Bulk
+            </p>
+
+            <div>
+                <p-table [value]="salingBulkList" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+                                <span class="p-column-title">BL :</span> 
+                                {{ row.BL }} 
+                            </td>
+
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="col-12 xl:col-8">
+        <div class="surface-container" style="height: 300px; overflow-y: auto;">
+            <p class="card__title font-semibold">
+                Sailing Containerized
+            </p>
+
+            <div>
+                <p-table [value]="sailingContainerizedList" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+
+                    <ng-template pTemplate="header">
+                        <tr class="thead">
+                            <th>MBL</th>
+                            <th>ETA</th>
+                            <th>Raw Material</th>
+                            <th>Supplier</th>
+                            <th>No Of Container</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+                                <span class="p-column-title">MBL :</span> 
+                                {{ row.MBL }} 
+                            </td>
+                            <td>
+                                <span class="p-column-title">ETA :</span> 
+                                {{ row.ETA?.date | date: 'MM/dd/yyyy' }} 
+                            </td>
+                            <td>
+                                <span class="p-column-title">Raw Material :</span> 
+                                {{ row.RawMaterial }} 
+                            </td>
+                            <td>
+                                <span class="p-column-title">Supplier :</span> 
+                                {{ row.Supplier }} 
+                            </td>
+                            <td>
+                                <span class="p-column-title">NoOfContainer :</span> 
+                                {{ row.NoOfContainer }} 
+                            </td>
+
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 xl:col-4">
+        <div class="surface-container flex flex-column gap-3" style="height: 300px;">
+            <p class="card__title font-semibold m-0">
+                All sailing
+            </p>
+    
+            <div class="overflow-container">
+                <p-table [value]="allSailingList" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <!-- <td>
+                                <img [src]="row.Packaging === 2 ? 'assets/dump-truck2.png' : 'assets/container-truck2.png' " alt="" width="40px">
+                            </td> -->
+                            <td>
+                                <div class="flex justify-content-between">
+                                    <div class="flex gap-4">
+                                        <div class="flex alig-items-center">
+                                            <img [src]="row.Packaging === 2 ? 'assets/dump-truck2.png' : 'assets/container-truck2.png' " alt="" width="30px">
+                                        </div>
+                                        <div>
+                                            {{ row.BL != '0' ? row.BL : row.MBL }}
+                                            <span class="sub-text">
+                                                {{ row.Packaging === 2 ? 'Bulk' : 'Containerized'  }}    
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="flex items-center"> -->
+                                        <span 
+                                            style="display: flex; align-items: center;"
+                                        >
+                                            {{ row.RawMaterial }}
+                                        </span>
+                                    <!-- </div> -->
+                                </div>
+                            </td>
+    
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div> 
+    </div>
+
+
+    <!-- <div class="surface-container max-w-19rem">
+        <p class="card__title text-2xl font-bold">
+            {{ today | date : 'dd MMM' }}
+        </p>
+
+        <div>
+            <p-table [value]="ataToday" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td 
+                            style="border-left: 3px solid var(--first-color); ;"
+                        >
+
+                            {{ row.BL != '0' ? row.Bl : row.MBL }}
+                        </td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> -->
+
+
+</div>
