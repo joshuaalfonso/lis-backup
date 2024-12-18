@@ -1,0 +1,7 @@
+:host ::ng-deep .p-dialog-titlebar-close {
+    display: none;
+}
+
+:host ::ng-deep .p-dialog-header-icons {
+    display: none;
+}

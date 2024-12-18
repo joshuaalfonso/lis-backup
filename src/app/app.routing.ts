@@ -53,6 +53,7 @@ import { CheckerScheduleComponent } from "./checker-schedule/checker-schedule.co
 import { ProfileSettingsComponent } from "./profile-settings/profile-settings.component";
 import { AccountDetailsComponent } from "./account-details/account-details.component";
 import { SecurityComponent } from "./security/security.component";
+import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-inspection.component";
 
 
 
@@ -210,6 +211,11 @@ const routes: Routes = [
         data: {
             'role': '4.6.1'
         }
+    },
+    {
+        path: 'rawmats-inspection', 
+        component: RawmatsInspectionComponent, 
+        canActivate: [AuthGuard],
     },
     {
         path: 'warehouse-inventory', 

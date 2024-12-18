@@ -57,6 +57,7 @@
             <tr class="thead">
                 <th>#</th>
                 <th>Raw Material</th>
+                <th>Category</th>
                 <th>Quanitity</th>
                 <th>Weight</th>
                 <th>Status</th>
@@ -69,6 +70,9 @@
                 <td data-title="#"> {{ rowIndex + 1 }} </td>
                 <td data-title="Raw Material">
                     {{ row.RawMaterial }}
+                </td>
+                <td data-title="Raw Material">
+                    {{ row.Category }}
                 </td>
                 <td data-title="Quantity">{{ row.Quantity | number}}</td>
                 <td data-title="Weight">{{ row.Weight | number}}</td>

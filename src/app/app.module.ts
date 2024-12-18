@@ -173,6 +173,9 @@ import { DashboardReceivedComponent } from './dashboard-received/dashboard-recei
 import { DashboardRawmatsComponent } from './dashboard-rawmats/dashboard-rawmats.component';
 import { DashbTableLoaderComponent } from './dashb-table-loader/dashb-table-loader.component';
 import { ImportationDashboardComponent } from './importation-dashboard/importation-dashboard.component';
+import { RawmatsInspectionComponent } from './lab/rawmats-inspection/rawmats-inspection.component';
+import { RawmatsInspectionFormComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-form/rawmats-inspection-form.component';
+import { RawmatsInspectionTableComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-table/rawmats-inspection-table.component';
 
 
 
@@ -249,7 +252,10 @@ import { ImportationDashboardComponent } from './importation-dashboard/importati
     DashboardReceivedComponent,
     DashboardRawmatsComponent,
     DashbTableLoaderComponent,
-    ImportationDashboardComponent
+    ImportationDashboardComponent,
+    RawmatsInspectionComponent,
+    RawmatsInspectionFormComponent,
+    RawmatsInspectionTableComponent
     
   ],
   imports: [

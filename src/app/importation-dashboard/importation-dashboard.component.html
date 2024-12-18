@@ -112,17 +112,19 @@
     <div class="col-12 xl:col-6">
         <div class="surface-container" style="height: 300px; overflow-y: auto;">
             <p class="card__title font-semibold">
-                Landed bulk
+                Landed today
             </p>
 
             <div>
-                <p-table [value]="bulk" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
+                <p-table [value]="ataToday" [tableStyle]="{ 'width': '100%', 'table-layout': 'fixed' }"  [breakpoint]="'960px'">
 
                     <ng-template pTemplate="header">
                         <tr class="thead">
                             <th>BL</th>
-                            <th>Progess</th>
-                            <th>Quantity</th>
+                            <th>Raw Material</th>
+                            <th>Broker</th>
+                            <th>Supplier</th>
+                            <th>Trucks/Cont</th>
                         </tr>
                     </ng-template>
 
@@ -134,27 +136,20 @@
                             </td>
 
                             <td>
-                                <span class="p-column-title">Progress :</span> 
-
-
-                                <div class="grid my-auto">
-                                    <span class="col-2 p-0">
-                                        {{ getRoundedPercentage(row.WithdrawnQty, row.TargetQuantity, 1) }}%
-                                    </span>
-                                    
-                                    <div class="col p-0 my-auto">
-                                        <p-progressBar 
-                                            [value]="getRoundedPercentage(row.WithdrawnQty, row.TargetQuantity, 1)" 
-                                            [style]="{ height: '6px', width: '80%' }" 
-                                            [showValue]="false"
-                                        />
-                                    </div>
-                                </div>
-
+                                <span class="p-column-title">Raw Material :</span> 
+                                <span>{{ row.RawMaterial }}</span>
                             </td>
                             <td>
                                 <span class="p-column-title">WithdrawnQty :</span> 
-                                <span>{{ row.WithdrawnQty | number }} / {{ row.TargetQuantity | number }}</span>
+                                <span>{{ row.Broker }}</span>
+                            </td>
+                            <td>
+                                <span class="p-column-title">Supplier :</span> 
+                                <span>{{ row.Supplier }}</span>
+                            </td>
+                            <td>
+                                <span class="p-column-title">Supplier :</span> 
+                                <span>{{ row.NoOfContainer || row .NoOfTruck }}  {{ row.NoOfContainer != 0 ? 'Trucks' : 'Containers' }} </span>
                             </td>
                         </tr>
                     </ng-template>
@@ -167,7 +162,7 @@
         <div class="surface-container flex flex-column gap-3" style="height: 300px;">
 
             <p class="card__title font-semibold m-0">
-                ETA Within 7 days
+                ETA within 7 days
             </p>
 
             <div class="grid">

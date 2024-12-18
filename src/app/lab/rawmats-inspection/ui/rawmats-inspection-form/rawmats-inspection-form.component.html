@@ -1,0 +1,213 @@
+<p-dialog 
+    header="Raw Material Inspection" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <form 
+        [formGroup]="rawMatsInspectionForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()"
+    >  
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Inspection Date 
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <p-calendar 
+                        formControlName="InspectionDate" 
+                        [showIcon]="true" 
+                        appendTo="body" 
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        DR No.
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <input pInputText formControlName="DRNumber" autocomplete="off" class="input">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Sample Code
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <input pInputText formControlName="SampleCode" autocomplete="off" class="input">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Plate No
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <input pInputText formControlName="PlateNo" autocomplete="off" class="input">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Raw Material 
+                        <span class="text-red-400">*</span>
+                    </label>
+            
+                    <p-dropdown 
+                        [options]="rawMaterials" 
+                        optionLabel="RawMaterial" 
+                        formControlName="RawMaterialID"
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        [filter]="true"
+                        appendTo="body"
+                        placeholder="select raw material"
+                        optionValue="RawMaterialID"
+                        (onChange)="getStandard($event.value)"
+                    ></p-dropdown>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Container No.
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <input pInputText formControlName="ContainerNumber" autocomplete="off" class="input">
+                </div>
+            </div>
+
+        </div>
+
+      
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Supplier 
+                        <span class="text-red-400">*</span>
+                    </label>
+            
+                    <p-dropdown 
+                        [options]="supplier" 
+                        optionLabel="Supplier" 
+                        formControlName="SupplierID"
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        [filter]="true"
+                        placeholder="select supplier"
+                        optionValue="SupplierID"
+                        appendTo="body"
+                    ></p-dropdown>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Time of Sampling
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <!-- <input pInputText formControlName="ContainerNumber" autocomplete="off" class="input"> -->
+                    <p-calendar 
+                        inputId="calendar-24h" 
+                        formControlName="TimeOfSampling" 
+                        [showTime]="true" 
+                        hourFormat="24" 
+                        appendTo="body"
+                        [timeOnly]="true"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold">
+                Analysis Information
+            </label>
+
+            <p-table 
+                #dt2
+                [value]="analysisInformation" 
+                [tableStyle]="{ 'width': '100%' }" 
+                [globalFilterFields]="['RawMaterial', 'Category']"
+            >
+
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th>Parameters</th>
+                        <th>Standard/s</th>
+                        <th>Result</th>
+                    </tr>
+                </ng-template>
+            
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            {{ row.Parameters }}
+                        </td>
+                        <td>
+                            {{ row.Standard  }}
+                        </td>
+                        <td>
+                            <input 
+                                pInputText 
+                                [(ngModel)]="row.Result"
+                                [ngModelOptions]="{standalone: true}" 
+                                autocomplete="off" 
+                                class="input"
+                            >
+                        </td>
+                    </tr>
+                </ng-template>
+
+
+            </p-table>
+        </div>
+    
+
+        <div class="flex justify-content-end gap-2">
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancel" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="onToggleDialog()"
+            ></p-button>
+
+            <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="rawMatsInspectionForm" 
+            /> 
+        </div>
+
+        <!-- <div class="flex justify-content-end gap-2"> -->
+            
+
+    </form>
+</p-dialog>
