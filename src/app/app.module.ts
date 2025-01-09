@@ -163,7 +163,6 @@ import { SecurityComponent } from './security/security.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-dashboard.component';
 import { SubmitButtonComponent } from './submit-button/submit-button.component';
-import { RawMaterialsModalComponent } from './raw-materials-modal/raw-materials-modal.component';
 import { DashboardWarehousingComponent } from './dashboard-warehousing/dashboard-warehousing.component';
 import { TabComponent } from './tab/tab.component';
 import { DashboardRecentUnloadComponent } from './dashboard-recent-unload/dashboard-recent-unload.component';
@@ -176,6 +175,8 @@ import { ImportationDashboardComponent } from './importation-dashboard/importati
 import { RawmatsInspectionComponent } from './lab/rawmats-inspection/rawmats-inspection.component';
 import { RawmatsInspectionFormComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-form/rawmats-inspection-form.component';
 import { RawmatsInspectionTableComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-table/rawmats-inspection-table.component';
+import { RawMaterialsModalComponent } from './raw-materials/ui/raw-materials-modal/raw-materials-modal.component';
+import { RawMaterialsTableComponent } from './raw-materials/ui/raw-materials-table/raw-materials-table.component';
 
 
 
@@ -255,7 +256,8 @@ import { RawmatsInspectionTableComponent } from './lab/rawmats-inspection/ui/raw
     ImportationDashboardComponent,
     RawmatsInspectionComponent,
     RawmatsInspectionFormComponent,
-    RawmatsInspectionTableComponent
+    RawmatsInspectionTableComponent,
+    RawMaterialsTableComponent
     
   ],
   imports: [

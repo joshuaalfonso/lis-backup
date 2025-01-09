@@ -15,7 +15,7 @@ import { AuthService } from "../auth/auth.service";
     templateUrl: 'warehouse-partition.component.html',
     styleUrls: ['warehouse-partition.component.css']
 })
-export class WarehousePartition implements OnInit, OnDestroy{
+export class WarehousePartition implements OnInit, OnDestroy {
 
     warehousePartition: any[] = [];
 

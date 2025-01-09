@@ -277,8 +277,8 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         view: false,
                     },
                     {
-                        title: 'Raw Mats Inspection',
-                        icon: 'assets/icons/icon-inspect.svg',
+                        title: 'Inspection',
+                        icon: 'assets/icons/icon-microscope.svg',
                         routerLink: '/rawmats-inspection',
                         view: true,
                     }

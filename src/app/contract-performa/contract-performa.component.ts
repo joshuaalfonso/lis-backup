@@ -18,8 +18,6 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
 
 
-
-
 @Component({
     selector: 'app-contract-performa',
     templateUrl: 'contract-performa.component.html',

@@ -416,7 +416,7 @@ const routes: Routes = [
     {
         path: 'login', 
         component: AuthComponent
-    },
+    }, 
 ];
 
 @NgModule({

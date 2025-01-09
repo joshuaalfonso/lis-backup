@@ -256,7 +256,7 @@
     [resizable]="false" 
     #rawMatsPOModal
 >
-    <form [formGroup]="rawMatsPOForm" class="p-fluid" (ngSubmit)="onSubmit()">  
+    <form #poForm="ngForm" [formGroup]="rawMatsPOForm" class="p-fluid" (ngSubmit)="onSubmit()">  
 
         <div class="field">
             <label class="font-semibold" >
@@ -269,6 +269,7 @@
                 class="input" 
                 placeholder="Enter PO #"
             >
+            <!-- <small *ngIf="rawMatsPOForm.get('PONo')!.invalid && poForm.submitted" class="text-red-500">Name is required.</small> -->
         </div>
 
         <div class="grid">
@@ -351,8 +352,9 @@
                             [style]="{'height': '40px', 'border': '1px solid white'}" 
                             [showClear]="true" 
                             placeholder="Select Supplier" 
-                            (onChange)="onSelectSupplier($event)"
+                            (onChange)="onSelectSupplier($event.value)"
                             [filter]="true"
+                            optionValue="SupplierID"
                         >
                         </p-dropdown>
                     </div>
@@ -376,7 +378,7 @@
 
         </div>
 
-        <div class="field">
+        <!-- <div class="field">
             <label class="font-semibold" >
                 Purchase Order Details
             </label>
@@ -388,25 +390,14 @@
                         <th> Ordered Qty </th>  
                         <th> Unit Price </th>  
                         <th> Amount </th>
-                        <!-- <th class="text-center"> Remove </th>    -->
+                        <th class="text-center"> </th>   
                     </tr>
                 </ng-template>
     
                 <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
                     <tr>
-                
-                        <td data-title="MaterialCode">
-                                <input 
-                                pInputText 
-                                autocomplete="off" 
-                                class="input" 
-                                placeholder="Enter Material Code"
-                                [ngModelOptions]="{standalone: true}" 
-                                [(ngModel)]="data.MaterialCode" 
-                            >
-                        </td>
 
-                       <!-- <td>
+                       <td>
                             <input 
                                 pInputText 
                                 autocomplete="off" 
@@ -415,7 +406,7 @@
                                 [ngModelOptions]="{standalone: true}" 
                                 [(ngModel)]="data.MaterialCode" 
                             >
-                       </td> -->
+                       </td>
 
                        <td>
                             <p-dropdown 
@@ -461,18 +452,18 @@
                         </td>
                         
                     
-                        <!-- <td class="text-center" data-title="Remove">
+                        <td class="text-center" data-title="Remove">
                             <ng-container>
                                 <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removeOrder(rowIndex)"></i>
                             </ng-container> 
-                        </td> -->
+                        </td>
 
                     </tr>
                 </ng-template>
 
 
             </p-table>
-        </div>
+        </div> -->
 
         <!-- <div class="field text-right">
 
@@ -526,6 +517,131 @@
             </fieldset>
         </div>
 
+        <!-- <div formArrayName="OrderDetail">
+            <div *ngFor="let poItem of poItems; let i = index">
+              <div [formGroupName]="i">
+                <label>Item:</label>
+                <input formControlName="item" placeholder="Enter item name">
+                
+                <label>Quantity:</label>
+                <input formControlName="quantity" placeholder="Enter quantity" type="number">
+                
+                <label>Price:</label>
+                <input formControlName="price" placeholder="Enter price" type="number">
+        
+                <button (click)="removePoItem(i)">Remove</button>
+              </div>
+            </div>
+        </div> -->
+
+        <div class="field">
+            <label class="font-semibold" >Order Details</label>
+            <p-table #dt_orders2 [tableStyle]="{ 'width': '100%'}" [value]="poItems">
+
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th> Material Code </th>
+                        <th> Description </th>  
+                        <th> Ordered Qty </th>  
+                        <th> Unit Price </th>  
+                        <th> Amount </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-data let-i="rowIndex" formArrayName="OrderDetail">
+                    <tr [formGroupName]="i">
+    
+                        <td data-title="MaterialCode">
+                            <input 
+                                formControlName="MaterialCode"
+                                pInputText 
+                                autocomplete="off" 
+                                class="input" 
+                                placeholder="Enter Material Code"
+                            >
+                        </td>
+    
+                       <td>
+                            <p-dropdown 
+                            formControlName="RawMaterialID"
+                            [options]="rawMaterial" 
+                            optionLabel="RawMaterial" 
+                            [style]="{'height': '40px'}" 
+                            placeholder="Select Raw Material" 
+                            appendTo="body" 
+                            [showClear]="true"
+                            optionValue="RawMaterialID"
+                        >
+                        </p-dropdown>
+                       </td>
+    
+                        <td data-title="Quantity">
+                            <p-inputNumber 
+                                formControlName="Quantity"
+                                [minFractionDigits]="2" 
+                                (onInput)="onComputeAmount()"
+                            />                               
+                        </td>
+    
+                        <td data-title="UnitPrice">
+                            <p-inputNumber     
+                                formControlName="UnitPrice"
+                                [minFractionDigits]="2" 
+                                (onInput)="onComputeAmount()"
+                            />                               
+                        </td>
+    
+                        <td data-title="Amount">
+                            <fieldset [disabled]="true">
+                                <p-inputNumber 
+                                    formControlName="Amount"
+                                    [minFractionDigits]="2" 
+                                />                               
+                            </fieldset>
+                        </td>
+                        
+                    
+                       <td>
+                            <!-- <button (click)="removePoItem(i)">Remove</button> -->
+                            <p-button 
+                                icon="pi pi-trash font-bold text-red-500" 
+                                styleClass="p-button-rounded-full p-button-text hover:bg-red-100"
+                                (click)="removePoItem(i)"
+                            ></p-button>
+                       </td>
+    
+                    </tr>
+                </ng-template>
+    
+            </p-table>
+        </div>
+
+        <div class="field">
+
+            <div class="flex">
+
+            <p-button 
+                icon="pi pi-plus" 
+                label="Add row" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="addPoItem()"
+            ></p-button>
+
+
+            <!-- <p-button 
+                type="buton"
+                label="Add row" 
+                icon="pi pi-plus"
+                (click)="addPoItem()"
+            /> -->
+            </div>
+
+        </div>
+
+        <!-- <button (click)="addPoItem()" type="button">Add PO Item</button> -->
+        <!-- <pre>{{ this.rawMatsPOForm.value | json }}</pre> -->
+
         <!-- <button 
             pButton 
             pRipple 
@@ -552,7 +668,7 @@
         <div class="flex justify-content-end gap-2">
             <app-submit-button 
                 [submitLoading]="submitLoading" 
-                [form]="rawMatsPOForm" 
+                [form]="rawMatsPOForm"
             /> 
         </div>
 

@@ -1,13 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RawMaterialsService } from "./raw-materials.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
-import { Observable, Subscription } from "rxjs";
-import { Table } from "primeng/table";
+import { Subscription } from "rxjs";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
-import { Router } from "@angular/router";
-
 
 @Component({
     selector: 'app-raw-materials',
@@ -15,8 +12,6 @@ import { Router } from "@angular/router";
     styleUrls: ['./raw-materials.component.css']
 })
 export class RawMaterialsComponent implements OnInit, OnDestroy {
-
-    value: string | undefined;
 
     rawMaterials: RawMats[] = [];
 
@@ -35,8 +30,6 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
 
     userID: string = '';
 
-    items: any[] | undefined;
-
     activeItem:any;
 
     rowOptions: any[] = [];
@@ -51,10 +44,10 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
         private ConfirmationService: ConfirmationService,
         private auth: AuthService,
         private UsersService: UsersService,
-        private router: Router
     ){}
 
     ngOnInit(): void {
+
 
         this.rawMatsForm = new FormGroup({
             'RawMaterialID': new FormControl(0),
@@ -66,26 +59,8 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
             'Category': new FormControl(null, Validators.required),
             // 'Packaging': new FormControl(null, Validators.required),
             'UserID': new FormControl(0),
-        });
+          });
 
-        this.items = [
-            {
-                label: 'Options',
-                items: [
-                    {
-                        label: 'Refresh',
-                        icon: 'pi pi-refresh',
-                        command: () => {
-                            this.getData();
-                        }
-                    },
-                    {
-                        label: 'Export',
-                        icon: 'pi pi-upload'
-                    }
-                ]
-            }
-        ];
 
         this.rowOptions = [
             {
@@ -170,6 +145,8 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
 
     toggleDialog() {
         this.visible = !this.visible;
+        this.rawMatsForm.reset();
+        this.rawMatsForm.patchValue({'RawMaterialID': 0});
     }
 
     // ==== SHOW MODAL ====
@@ -189,88 +166,8 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
 
         this.visible = true;
         this.modalHeader = 'Add Raw Material';
-        this.clearForm();
+        // this.clearForm();
 
-    }
-
-    // ==== RESET FORM ====
-    clearForm() {
-        this.rawMatsForm.reset();
-        this.rawMatsForm.patchValue({'RawMaterialID': 0});
-    }
-
-    // ==== SUBMIT FORM DATA ====
-    onSubmit() {
-        if (!this.rawMatsForm.valid) {
-            console.log('Please fill all the blanks')
-        }
-
-        this.submitLoading = true;
-
-
-        let authObs: Observable<ResponseData>;
-        authObs = this.RawMaterialsService.saveData
-        (
-            this.rawMatsForm.value.RawMaterialID, 
-            this.rawMatsForm.value.RawMaterial, 
-            this.rawMatsForm.value.Category, 
-            this.rawMatsForm.value.Packaging, 
-            this.rawMatsForm.value.Quantity, 
-            this.rawMatsForm.value.Weight, 
-            this.rawMatsForm.value.MinimumQuantity, 
-            this.rawMatsForm.value.MinimumWeight, 
-            this.userID
-        );
-
-        authObs.subscribe(response =>{
-
-            this.submitLoading = false;
-
-            if( response === 1) {
-
-                this.visible = false;
-                this.MessageService.add({ 
-                    severity: 'success', 
-                    summary: 'Success', 
-                    detail:'Successfully recorded!', 
-                    life: 3000 
-                });
-                this.getData();
-                this.clearForm();
-            } 
-            else if ( response === 2) {
-
-                this.visible = false;
-                this.MessageService.add({ 
-                    severity: 'success', 
-                    summary: 'Success', 
-                    detail: 'Successfully updated!', 
-                    life: 3000 
-                });
-                this.getData();
-                this.clearForm();
-            }
-            else if ( response === 0) {
-
-                this.MessageService.add({ 
-                    severity: 'error', 
-                    summary: 'Danger', 
-                    detail: 'Item: ' + this.rawMatsForm.value.RawMaterial +  ' already exist', 
-                    life: 3000 
-                });
-
-            }
-            
-        }, errorMessage => {
-            this.MessageService.add({ 
-                severity: 'error', 
-                summary: 'Danger', 
-                detail: errorMessage, 
-                life: 3000 
-            });
-
-            this.submitLoading = false;
-        })
     }
 
     // ==== EDIT ITEM ====
@@ -337,16 +234,8 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
         });
     }
 
-    // ==== INPUT SEARCH DATA====
-     onGlobalFilter(table: Table, event: Event) {
-        const inputValue = (event.target as HTMLInputElement).value;
-        table.filterGlobal(inputValue, 'contains');
-    }
-
 
 }
 
 interface RawMats {
-}
-interface ResponseData {
 }
