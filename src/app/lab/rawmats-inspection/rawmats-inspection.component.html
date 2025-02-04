@@ -1,6 +1,6 @@
 
 <app-content-header 
-    [title]="'Transactions / Raw Mats Inspection'"
+    [title]="'Transactions / Inspection'"
 ></app-content-header>
 
 
@@ -10,6 +10,7 @@
     [rawMatsInspection]="rawMatsInspection"
     [isLoading]="isLoading"
     (showDialog)="showDialog()"
+    (onSelect)="onSelect($event)"
 />
 
 
@@ -17,4 +18,9 @@
 <app-rawmats-inspection-form 
     [visible]="visible" 
     (toggleDialog)="showDialog()"
+    [rawMatsInspectionForm]="rawMatsInspectionForm"
+    [analysisInformation]="analysisInformation"
+    (getInspectionList)="getInspectionList()"
 />
+
+

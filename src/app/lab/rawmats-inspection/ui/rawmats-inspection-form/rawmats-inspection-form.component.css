@@ -5,3 +5,8 @@
 :host ::ng-deep .p-dialog-header-icons {
     display: none;
 }
+
+
+/* td {
+    border-bottom: 1px solid var(--divider-border);
+} */

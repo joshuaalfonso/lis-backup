@@ -59,7 +59,7 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
             'Category': new FormControl(null, Validators.required),
             // 'Packaging': new FormControl(null, Validators.required),
             'UserID': new FormControl(0),
-          });
+        });
 
 
         this.rowOptions = [

@@ -40,12 +40,83 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
+                <th>Inspection Date</th>
+                <th>Sample Code</th>
+                <th>Raw Material</th>
+                <th>DR #</th>
+                <th>Status</th>
+                <!-- <th>Supplier</th>
+                <th>Plate No</th>
+                <th>Container #</th> -->
+                <th> Date Released </th>
+                <th> Remarks </th>
+                <th> </th>
             </tr>
         </ng-template>
       
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
             <tr  *ngIf="!isLoading">
-                
+                <td>
+                    {{ rowIndex + 1}}
+                </td>
+                <td>
+                    {{ row.InspectionDate?.date | date: 'MM/dd/yyyy' }}
+                </td>
+                <td>
+                    {{ row.SampleCode }}
+                </td>
+                <td>
+                    {{ row.RawMaterial }}
+                </td>
+                <td>
+                    {{ row.DRNumber }}
+                </td>
+                <td>
+                    <!-- {{ row.Status === 0 ? 'Approved' : 'Rejected'}} -->
+                    <p-tag severity="success" value="Approved" *ngIf="row.Status === 0"/>
+                    <p-tag severity="danger" value="Rejected" *ngIf="row.Status === 1"/>
+                </td>
+                <!-- <td>
+                    {{ row.Supplier }}
+                </td>
+                <td>
+                    {{ row.PlateNo }}
+                </td>
+                <td>
+                    {{ row.ContainerNumber }}
+                </td> -->
+                <td>
+                    {{ row.DateTimeReleased?.date | date: 'MM/dd/yyyy'  }}
+                </td>
+                <td>
+                    {{ row.Remarks || '-'  }}
+                </td>
+                <td>
+
+                    <span class="p-column-title"></span> 
+
+                    <i 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" 
+                        (click)="action.toggle($event)"
+                    ></i>
+
+                    <p-overlayPanel #action>
+                        <div class="actions-overlay">
+                            <p (click)="onEdit(row)">
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                                </svg>
+                                Edit
+                            </p>
+                            <!-- <p>
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                                </svg>
+                                Delete
+                            </p> -->
+                        </div>
+                    </p-overlayPanel>
+                </td>
             </tr>
         </ng-template>
 

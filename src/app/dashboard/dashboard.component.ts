@@ -65,6 +65,7 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
     LogisticsDashboard: boolean = false;
     DispatchingDashboard: boolean = false;
+    ImportationDashboard: boolean = false;
 
     // @Output() sidebarToggled = new EventEmitter<boolean>();
 
@@ -226,6 +227,8 @@ export class DashboardComponent implements OnInit, OnDestroy{
                             this.LogisticsDashboard = true;
                         } else if (userRight.AccessRight.trim() == '1.1.2') {
                             this.DispatchingDashboard = true;
+                        } else if (userRight.AccessRight.trim() == '1.1.3') {
+                            this.ImportationDashboard = true;
                         }
                     })
                     

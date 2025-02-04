@@ -11,31 +11,57 @@
         [formGroup]="rawMatsInspectionForm" 
         class="p-fluid" 
         (ngSubmit)="onSubmit()"
+        #form="ngForm"
     >  
 
         <div class="grid">
 
             <div class="col">
                 <div class="field">
+
                     <label class="font-semibold" >
                         Inspection Date 
                         <span class="text-red-400">*</span>
                     </label>
+
                     <p-calendar 
                         formControlName="InspectionDate" 
                         [showIcon]="true" 
                         appendTo="body" 
                     ></p-calendar>
+
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['InspectionDate'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
                 </div>
+
             </div>
 
             <div class="col">
                 <div class="field">
+
                     <label class="font-semibold" >
                         DR No.
                         <span class="text-red-400">*</span>
                     </label>
-                    <input pInputText formControlName="DRNumber" autocomplete="off" class="input">
+
+                    <input 
+                        pInputText 
+                        formControlName="DRNumber" 
+                        autocomplete="off" 
+                        class="input" 
+                    >
+
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['DRNumber'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
+
                 </div>
             </div>
 
@@ -50,6 +76,12 @@
                         <span class="text-red-400">*</span>
                     </label>
                     <input pInputText formControlName="SampleCode" autocomplete="off" class="input">
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['SampleCode'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
                 </div>
             </div>
 
@@ -60,6 +92,12 @@
                         <span class="text-red-400">*</span>
                     </label>
                     <input pInputText formControlName="PlateNo" autocomplete="off" class="input">
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['PlateNo'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
                 </div>
             </div>
 
@@ -83,20 +121,42 @@
                         [showClear]="true" 
                         [filter]="true"
                         appendTo="body"
-                        placeholder="select raw material"
+                        placeholder="select"
                         optionValue="RawMaterialID"
                         (onChange)="getStandard($event.value)"
                     ></p-dropdown>
+
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['RawMaterialID'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
                 </div>
             </div>
 
             <div class="col">
                 <div class="field">
+
                     <label class="font-semibold" >
                         Container No.
                         <span class="text-red-400">*</span>
                     </label>
-                    <input pInputText formControlName="ContainerNumber" autocomplete="off" class="input">
+
+                    <input 
+                        pInputText 
+                        formControlName="ContainerNumber" 
+                        autocomplete="off" 
+                        class="input"
+                    >
+
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['ContainerNumber'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
+
                 </div>
             </div>
 
@@ -119,10 +179,17 @@
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
                         [filter]="true"
-                        placeholder="select supplier"
+                        placeholder="select"
                         optionValue="SupplierID"
                         appendTo="body"
                     ></p-dropdown>
+
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['SupplierID'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
 
                 </div>
             </div>
@@ -142,12 +209,20 @@
                         appendTo="body"
                         [timeOnly]="true"
                     />
+
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['TimeOfSampling'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
                 </div>
             </div>
 
         </div>
 
-        <div class="field">
+        <div class="field" *ngIf="rawMatsInspectionForm.value.RawMaterialID">
+
             <label class="font-semibold">
                 Analysis Information
             </label>
@@ -162,35 +237,92 @@
                 <ng-template pTemplate="header">
                     <tr class="thead">
                         <th>Analysis Type</th>
-                        <th>Standard/s</th>
+                        <th>Standard</th>
                         <th>Result</th>
                     </tr> 
                 </ng-template>
             
                 <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-                    <tr>
+                    <tr [class]="row.Permission === 1 ? 'bg-red-100' : null">
                         <td>
-                            {{ row.Parameters }}
+                            {{ row.Parameter }}
                         </td>
                         <td>
-                            {{ row.Standard  }}
+                            <span *ngIf="row.boolean === 1"> {{ row.Value == 1 ? 'Negative': null }} </span>
+                            <span *ngIf="row.boolean === 0 && +row.Value != -1"> NMT {{ row.Value }}% </span>
+                            <span *ngIf="row.boolean === 0 && +row.Value === -1" class="text-sm"> AS INDICATED ON COA </span>
                         </td>
                         <td>
-                            <input 
-                                pInputText 
-                                [(ngModel)]="row.Result"
+                            <p-inputNumber 
+                                [(ngModel)]="row.Result" 
                                 [ngModelOptions]="{standalone: true}" 
-                                autocomplete="off" 
-                                class="input"
-                            >
+                                mode="decimal" 
+                                [minFractionDigits]="2" 
+                                [maxFractionDigits]="5" 
+                                *ngIf="row.boolean === 0"
+                                (ngModelChange)="validateResult(rowIndex)"
+                                [disabled]="+row.Value === -1"
+                            /> 
+
+                            <p-dropdown 
+                                [options]="positiveNegative" 
+                                [(ngModel)]="row.Result" 
+                                [ngModelOptions]="{standalone: true}" 
+                                optionLabel="label" 
+                                placeholder="select" 
+                                appendTo="body"
+                                optionValue="value"
+                                [showClear]="true"
+                                (onChange)="validateResult(rowIndex)"
+                                *ngIf="row.boolean === 1"
+                            />
                         </td>
                     </tr>
                 </ng-template>
 
-
             </p-table>
         </div>
-    
+
+
+        <div class="grid" *ngIf="rawMatsInspectionForm.value.RawMaterialID">
+
+           <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Date and Time Released
+                        <span class="text-red-400">*</span>
+                    </label>
+        
+                    <p-calendar 
+                        formControlName="DateTimeReleased" 
+                        [showIcon]="true" 
+                        appendTo="body" 
+                        [showTime]="true" 
+                    
+                    ></p-calendar>
+        
+                    <p 
+                        class="text-red-400 text-sm mt-1" 
+                        *ngIf="rawMatsInspectionForm.controls['DateTimeReleased'].invalid && form.submitted"
+                    >
+                        This field is required.
+                    </p>
+                </div>
+           </div>
+
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Remarks
+                    </label>
+                    <input pInputText formControlName="Remarks" autocomplete="off" class="input">
+                </div>
+            </div>
+
+        </div>
+        
 
         <div class="flex justify-content-end gap-2">
             <p-button 
@@ -198,15 +330,20 @@
                 label="Cancel" 
                 styleClass="p-button-rounded p-button-text"
                 (click)="onToggleDialog()"
+                type="reset"
             ></p-button>
 
-            <app-submit-button 
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check"
+            />
+
+            <!-- <app-submit-button 
                 [submitLoading]="submitLoading" 
                 [form]="rawMatsInspectionForm" 
-            /> 
+            />  -->
         </div>
-
-        <!-- <div class="flex justify-content-end gap-2"> -->
             
 
     </form>

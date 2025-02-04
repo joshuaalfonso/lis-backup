@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
 import { RawMatsInspectionService } from '../../rawmats-inspection.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-rawmats-inspection-form',
@@ -14,45 +15,41 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
 
   @Input() visible: boolean = false;
   @Output() toggleDialog = new EventEmitter<void>();
+  @Output() getInspectionList = new EventEmitter<void>();
 
   submitLoading: boolean = false;
 
   rawMaterials: any[] = [];
   supplier: any[] = [];
-  analysisInformation: any[] = [];
+  @Input() analysisInformation: any[] = [];
 
-  rawMatsInspectionForm!: FormGroup;
+  @Input() rawMatsInspectionForm!: FormGroup;
 
   subscriptions: Subscription = new Subscription;
+
+  positiveNegative: any[] = [];
 
 
   constructor(
     private SupplierService: SupplierService,
     private RawMaterialService: RawMaterialsService,
-    private RawMatsInspectionService: RawMatsInspectionService
+    private RawMatsInspectionService: RawMatsInspectionService,
+    private MessageService: MessageService
   ) {}
 
 
   ngOnInit(): void {
 
-    this.rawMatsInspectionForm = new FormGroup({
-      'InspectionReportID': new FormControl(0),
-      'DeliveryTypeID': new FormControl(null),
-      'EffectiveDate': new FormControl(null),
-      'VersionNo': new FormControl(null),
-      'InspectionDate': new FormControl(null, Validators.required),
-      'SampleCode': new FormControl(null, Validators.required),
-      'RawMaterialID': new FormControl(null, Validators.required),
-      'SupplierID': new FormControl(null, Validators.required),
-      'DRNumber': new FormControl(null, Validators.required),
-      'PlateNo': new FormControl(null, Validators.required),
-      'ContainerNumber': new FormControl(null, Validators.required),
-      'TimeOfSampling': new FormControl(null, Validators.required),
-      'FinalResultID': new FormControl(null),
-      'DateTimeReleased': new FormControl(null),
-      'Remarks': new FormControl(null),
-      'UserID': new FormControl(0, Validators.required),
-    })
+    this.positiveNegative = [
+      {
+        label: 'Negative',
+        value: 0
+      },
+      {
+        label: 'Positive',
+        value: 1
+      },
+    ]
 
 
     this.getRawMaterials();
@@ -64,8 +61,69 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.rawMatsInspectionForm.value);
-    console.log(this.analysisInformation);
+    // console.log(this.rawMatsInspectionForm.value);
+    // console.log(this.analysisInformation);
+
+    if (this.rawMatsInspectionForm.invalid) return;
+
+    let status = 0;
+
+    this.analysisInformation.forEach(
+      item => {
+        
+        if (item.Permission === 1) {
+          status = 1;
+        }
+        
+      }
+    )
+
+    const data = {
+      ...this.rawMatsInspectionForm.value,
+      InspectionDate: this.rawMatsInspectionForm.value.InspectionDate?.toLocaleDateString() || null,
+      TimeOfSampling: this.rawMatsInspectionForm.value.TimeOfSampling?.toLocaleString() || null,
+      DateTimeReleased: this.rawMatsInspectionForm.value.DateTimeReleased?.toLocaleString() || null,
+
+      EffectiveDate: null,
+      Parameters: this.analysisInformation,
+      Status: status
+    }
+    
+    // console.log(data);
+    // console.log(this.analysisInformation);
+    
+
+    this.RawMatsInspectionService.createInspection(data).subscribe(
+      response => {
+        console.log(response)
+
+        if (response === 1) {
+          this.getInspectionList.emit();
+          this.toggleDialog.emit();
+          this.MessageService.add({ 
+            severity: 'success', 
+            summary: 'Success', 
+            detail: 'Successfully Created!', 
+            life: 3000 
+          });
+        }
+
+        if (response === 2) {
+          this.getInspectionList.emit();
+          this.toggleDialog.emit();
+          this.MessageService.add({ 
+            severity: 'success', 
+            summary: 'Success', 
+            detail: 'Successfully Updated!', 
+            life: 3000 
+          });
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    )
+    
     
   }
 
@@ -107,7 +165,7 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
           console.log(response);
 
           this.analysisInformation = response.map((item: any) => {
-            return item = {...item, Result: null}
+            return item = {...item, Result: null, Permission: null, ParameterResultID: 0}
           })
 
         },
@@ -129,7 +187,48 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
     this.toggleDialog.emit();
   }
 
+  getSeverity (row: any) {
+
+    if (row.ParameterBoolean === 0) {
+      return row.Result > (+row.Rejection || +row.Standard)  ? 'bg-red-200' : null
+    }
+
+    if (row.ParameterBoolean === 1) {
+      return row.Result > 0 ? 'bg-red-200' : null
+    }
+
+    return null
+
+  }
+
+  validateResult(index: number) {
+    
+    
+    if (this.analysisInformation[index].boolean === 0) {
+
+      if (this.analysisInformation[index].Result > +this.analysisInformation[index].Value) {
+        this.analysisInformation[index].Permission = 1;
+      } else {
+        this.analysisInformation[index].Permission = 0;
+      }
+
+    } 
+
+    else if (this.analysisInformation[index].boolean === 1) {
+
+      if (this.analysisInformation[index].Result === 1 ) {
+
+        this.analysisInformation[index].Permission = 1;
+
+      } else {
+        this.analysisInformation[index].Permission = 0;
+      }
+
+    }
   
+    // console.log(this.analysisInformation);    
+
+  }
 
 }
 
