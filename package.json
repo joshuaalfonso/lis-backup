@@ -27,6 +27,7 @@
     "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
+    "html2canvas": "^1.4.1",
     "jquery": "^3.6.4",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.31",

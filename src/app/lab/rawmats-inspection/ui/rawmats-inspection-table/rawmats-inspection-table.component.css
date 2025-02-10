@@ -1,0 +1,103 @@
+
+
+
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-medium);
+}
+
+
+
+/* .invoice {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  
+  .company-details h1 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .company-details p {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .invoice-details h2 {
+    font-size: 32px;
+    color: #333;
+  }
+  
+  .invoice-details p {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .bill-to {
+    margin-bottom: 30px;
+  }
+  
+  .bill-to h3 {
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .bill-to p {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .items table, table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+
+  table {
+    table-layout: fixed;
+  }
+  
+  .items th, .items td, td, th {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .items th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .totals {
+    text-align: right;
+  }
+  
+  .total p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .grand-total {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  footer {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    margin-top: 20px;
+  } */

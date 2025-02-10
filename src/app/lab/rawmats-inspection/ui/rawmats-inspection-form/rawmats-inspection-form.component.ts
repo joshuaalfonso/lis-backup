@@ -24,6 +24,10 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
   @Input() analysisInformation: any[] = [];
 
   @Input() rawMatsInspectionForm!: FormGroup;
+  @Input() parameterList: any[] = [];
+
+  @Input() rawMatsParameters: any[] = [];
+  @Output() getStandard = new EventEmitter<void>();
 
   subscriptions: Subscription = new Subscription;
 
@@ -39,7 +43,7 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-
+    
     this.positiveNegative = [
       {
         label: 'Negative',
@@ -60,7 +64,7 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  onSubmit() {
+  onSubmit(form: any) {
     // console.log(this.rawMatsInspectionForm.value);
     // console.log(this.analysisInformation);
 
@@ -106,6 +110,7 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
             detail: 'Successfully Created!', 
             life: 3000 
           });
+          form.resetForm();
         }
 
         if (response === 2) {
@@ -117,6 +122,7 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
             detail: 'Successfully Updated!', 
             life: 3000 
           });
+          form.resetForm();
         }
       },
       err => {
@@ -153,37 +159,83 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
     )
   }
 
-  getStandard(rawMatsID: any) {
-    if (!rawMatsID) {
-      this.analysisInformation = []; 
-      return;
-    }
+  onGetStadard(rawMatsID: any) {
+    this.getStandard.emit(rawMatsID)
+  }
 
-    this.subscriptions.add(
-      this.RawMatsInspectionService.getRawMatsStandard(rawMatsID).subscribe(
-        response => {
-          console.log(response);
+  // getStandard(rawMatsID: any) {
+  //   if (!rawMatsID) {
+  //     this.analysisInformation = []; 
+  //     return;
+  //   }
 
-          this.analysisInformation = response.map((item: any) => {
-            return item = {...item, Result: null, Permission: null, ParameterResultID: 0}
-          })
+  //   this.subscriptions.add(
+  //     this.RawMatsInspectionService.getRawMatsStandard(rawMatsID).subscribe(
+  //       response => {
+  //         // console.log(response);
+  //         this.rawMatsParameters = response;
+  //         this.analysisInformation = response.map((item: any) => {
+  //           return item = {...item, Result: null, Permission: null, ParameterResultID: 0}
+  //         })
 
-        },
-        error => {
-          console.log(error)
-        }
-      )
-    )
+  //       },
+  //       error => {
+  //         console.log(error)
+  //       }
+  //     )
+  //   )
+
+  // }
+
+  addStandard() {
+
+    this.analysisInformation.push({
+      StandardID: 0,
+      ParameterID: 0,
+      boolean: 0,
+      Value: 0,
+      OperatorID: 0,
+      Operator: null
+    })
 
   }
 
+  removeStandart(i: number) {
+    this.analysisInformation.splice(i, 1);
+  }
+
+  onSelectParameter(id: any, i: number) {
+
+    if (id === null) {
+      this.analysisInformation[i] = {
+        ...this.analysisInformation[i],
+        StandardID: 0,
+        ParameterID: 0,
+        boolean: 0,
+        Value: 0,
+        OperatorID: 0,
+        Operator: null
+      }
+
+      return
+    }
+
+    const selectedParameterID = id;
+    const selectedParameterResultID = this.analysisInformation[i]?.ParameterResultID || 0;
+    
+    const parameterObject = this.rawMatsParameters.find(item => item.ParameterID === selectedParameterID);
+    this.analysisInformation[i] = {
+      ...parameterObject,
+      Permission: null,
+      Result: null,
+      ParameterResultID: selectedParameterResultID
+    };
+    
+    // console.log(this.analysisInformation);
+    
+  }
+
   onToggleDialog() {
-    this.rawMatsInspectionForm.reset();
-    this.rawMatsInspectionForm.patchValue({
-      InspectionReportID: 0,
-      UserID: 0
-    });
-    this.analysisInformation = [];
     this.toggleDialog.emit();
   }
 

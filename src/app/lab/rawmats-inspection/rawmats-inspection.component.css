@@ -4,3 +4,9 @@
     box-shadow: var(--input-box-shadow);
     color: var(--font-color);
 }
+
+:host ::ng-deep .p-button {
+    width: auto;
+    border-radius: 5px;
+    padding: 8px 10px;
+}

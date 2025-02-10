@@ -30,4 +30,8 @@ export class RawMatsInspectionService {
         return this.http.get<any>( this.baseUrl + '/project/lab/a_InspectionReceipt.php' );
     }
 
+    getParameterList() {
+        return this.http.get<any>( this.baseUrl + '/project/lab/a_ParameterValue.php' );
+    }
+
 }

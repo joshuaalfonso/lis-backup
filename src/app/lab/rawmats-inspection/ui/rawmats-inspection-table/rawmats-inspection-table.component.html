@@ -1,4 +1,4 @@
-<div class="table ">
+<div class="table">
 
     <p-table 
         #dt1 
@@ -14,13 +14,17 @@
 
             <div class="flex align-items-center justify-content-between mb-2">
 
-                <input 
-                    pInputText 
-                    type="text" 
-                    class="p-inputtext-lg pl-3 input__search" 
-                    placeholder="Search" 
+                <div>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        class="p-inputtext-lg pl-3 input__search" 
+                        placeholder="Search" 
+                    />
+                    <!-- <button type="button" (click)="generatePDF()">pdf</button> -->
+                </div>
 
-                />
+                <!-- <span >hello world!</span> -->
 
                 <button 
                     pButton 
@@ -87,6 +91,7 @@
                 </td> -->
                 <td>
                     {{ row.DateTimeReleased?.date | date: 'MM/dd/yyyy'  }}
+                    <span class="sub-text"> {{ row.DateTimeReleased?.date | date: 'hh:mm a'  }} </span>
                 </td>
                 <td>
                     {{ row.Remarks || '-'  }}
@@ -128,3 +133,76 @@
     </div>
 
 </div>
+
+
+
+  <!-- <div class="invoice" id="greet">
+    <header>
+      <div class="company-details">
+        <h1>Company Name</h1>
+        <p>1234 Business St, City, Country</p>
+        <p>Phone: (123) 456-7890</p>
+        <p>Email: contact@company.com</p>
+      </div>
+      <div class="invoice-details">
+        <h2>Invoice</h2>
+        <p>Invoice #: 123456</p>
+        <p>Date: February 5, 2025</p>
+      </div>
+
+    </header>
+
+    <section class="bill-to">
+      <h3>Bill To:</h3>
+      <p>John Doe</p>
+      <p>5678 Client St, City, Country</p>
+      <p>Phone: (987) 654-3210</p>
+      <p>Email: john.doe@email.com</p>
+    </section>
+
+    <section class="items">
+      <table>
+        <thead>
+          <tr>
+            <th>Item Description</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Item 1</td>
+            <td>2</td>
+            <td>$50.00</td>
+            <td>$100.00</td>
+          </tr>
+          <tr>
+            <td>Item 2</td>
+            <td>1</td>
+            <td>$30.00</td>
+            <td>$30.00</td>
+          </tr>
+          <tr>
+            <td>Item 3</td>
+            <td>3</td>
+            <td>$20.00</td>
+            <td>$60.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="totals">
+      <div class="total">
+        <p>Subtotal: $190.00</p>
+        <p>Tax (10%): $19.00</p>
+        <p class="grand-total">Grand Total: $209.00</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Thank you for your business!</p>
+    </footer>
+  </div> -->
+

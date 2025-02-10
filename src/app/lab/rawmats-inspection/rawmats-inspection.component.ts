@@ -22,6 +22,8 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
   submitLoading: boolean = false;
 
   rawMaterials: any[] = [];
+  parameterList: any[] = [];
+  rawMatsParameters: any[] = [];
 
   minDate: Date = new Date();
 
@@ -57,6 +59,7 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
     })
     
     this.getInspectionList();
+    this.getParameterList(); 
 
   }
 
@@ -77,13 +80,38 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
 
   }
 
+  getParameterList() {
+
+    this.subscriptions.add(
+      this.RawMatsInspectionService.getParameterList().subscribe(
+        response => {
+          this.parameterList = response;
+        }
+      )
+    )
+
+  }
+
 
   showDialog() {
+    this.rawMatsInspectionForm.reset();
+    this.rawMatsInspectionForm.patchValue({
+      InspectionReportID: 0,
+      UserID: 0
+    });
+    this.analysisInformation = [];
+    this.rawMatsParameters = [];
+
     this.visible = !this.visible;
+    
   }
 
   onSelect(row: any) {
     this.showDialog();
+
+    if (!row.RawMaterialID) return;
+
+    this.getRawMaterialParameter(row.RawMaterialID);
 
     this.rawMatsInspectionForm.setValue({
       InspectionReportID: row.InspectionReportID,
@@ -104,11 +132,46 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
       Remarks: row.Remarks,
       UserID: 0
     })
-
     
-    // console.log(row.Result);
+    console.log(row.Result);
     this.analysisInformation = [...row.Result]
     
+  }
+
+  getRawMaterialParameter(rawMatsID: any) {
+
+    this.subscriptions.add(
+      this.RawMatsInspectionService.getRawMatsStandard(rawMatsID).subscribe(
+        response => {
+          this.rawMatsParameters = response;
+        }
+      )
+    )
+
+  }
+
+  getStandard(rawMatsID: any) {
+    if (!rawMatsID) {
+      this.analysisInformation = []; 
+      return;
+    }
+
+    this.subscriptions.add(
+      this.RawMatsInspectionService.getRawMatsStandard(rawMatsID).subscribe(
+        response => {
+          // console.log(response);
+          this.rawMatsParameters = response;
+          this.analysisInformation = response.map((item: any) => {
+            return item = {...item, Result: null, Permission: null, ParameterResultID: 0}
+          })
+
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    )
+
   }
 
 

@@ -10,7 +10,7 @@
     <form 
         [formGroup]="rawMatsInspectionForm" 
         class="p-fluid" 
-        (ngSubmit)="onSubmit()"
+        (ngSubmit)="onSubmit(form)"
         #form="ngForm"
     >  
 
@@ -123,7 +123,7 @@
                         appendTo="body"
                         placeholder="select"
                         optionValue="RawMaterialID"
-                        (onChange)="getStandard($event.value)"
+                        (onChange)="onGetStadard($event.value)"
                     ></p-dropdown>
 
                     <p 
@@ -239,18 +239,32 @@
                         <th>Analysis Type</th>
                         <th>Standard</th>
                         <th>Result</th>
+                        <th></th>
                     </tr> 
                 </ng-template>
             
                 <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
                     <tr [class]="row.Permission === 1 ? 'bg-red-100' : null">
                         <td>
-                            {{ row.Parameter }}
+                            <!-- {{ row.Parameter }} -->
+
+                            <p-dropdown 
+                                [options]="rawMatsParameters" 
+                                [(ngModel)]="row.ParameterID" 
+                                [ngModelOptions]="{standalone: true}" 
+                                optionLabel="Parameter" 
+                                placeholder="select" 
+                                appendTo="body"
+                                optionValue="ParameterID"
+                                [showClear]="true"
+                                (ngModelChange)="onSelectParameter($event, rowIndex)"
+                            />
                         </td>
                         <td>
                             <span *ngIf="row.boolean === 1"> {{ row.Value == 1 ? 'Negative': null }} </span>
-                            <span *ngIf="row.boolean === 0 && +row.Value != -1"> NMT {{ row.Value }}% </span>
-                            <span *ngIf="row.boolean === 0 && +row.Value === -1" class="text-sm"> AS INDICATED ON COA </span>
+                            <span *ngIf="row.boolean === 0 && +row.Value != -1 && row.ParameterID != 0"> NMT {{ row.Value }}% </span>
+                            <span *ngIf="row.ParameterID === 0 ">-</span>
+                            <span *ngIf="row.boolean === 0 && +row.Value === -1" class="text-xs font-medium"> AS INDICATED ON COA </span>
                         </td>
                         <td>
                             <p-inputNumber 
@@ -261,7 +275,7 @@
                                 [maxFractionDigits]="5" 
                                 *ngIf="row.boolean === 0"
                                 (ngModelChange)="validateResult(rowIndex)"
-                                [disabled]="+row.Value === -1"
+                                [disabled]="+row.Value === -1 || row.ParameterID === 0"
                             /> 
 
                             <p-dropdown 
@@ -277,10 +291,36 @@
                                 *ngIf="row.boolean === 1"
                             />
                         </td>
+
+                        <td>
+                            <!-- <button type="button" (click)="removeStandart(rowIndex)">x</button> -->
+                            <!-- <p-button 
+                                icon="pi pi-trash font-bold" 
+                                styleClass="p-button-text hover:bg-red-100"
+                                (click)="removeStandart(rowIndex)"
+                            ></p-button> -->
+                            <i 
+                                class="pi pi-trash cursor-pointer hover:text-red-500 border-round-sm p-2"
+                                (click)="removeStandart(rowIndex)"
+                            ></i>
+                        </td>
                     </tr>
                 </ng-template>
 
             </p-table>
+
+
+            <div class="flex">
+                <!-- <button type="button" (click)="addStandard()">Add</button> -->
+                <!-- <p-button label="Contrast" severity="Contrast" /> -->
+                <p-button 
+                    icon="pi pi-plus" 
+                    label="Add row" 
+                    styleClass="p-button-rounded p-button-text "
+                    (click)="addStandard()"
+                ></p-button>
+            </div>
+
         </div>
 
 
