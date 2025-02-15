@@ -71,11 +71,12 @@ export class RawMatsPOComponent implements OnInit{
             'PRNumber': new FormControl(null, Validators.required),
             'SupplierID': new FormControl(null, Validators.required),
             'SupplierAddress': new FormControl(null, Validators.required),
-            'TotalQuantity': new FormControl(null),
-            'TotalAmount': new FormControl(null),
+            'RawMaterialID': new FormControl(null, Validators.required),
+            'Quantity': new FormControl(null),
+            'Weight': new FormControl(null),
             'deleted': new FormControl(null),
             'UserID': new FormControl(0),
-            'OrderDetail': new FormArray([])
+            // 'OrderDetail': new FormArray([])
         })
 
         this.subscription.add(
@@ -102,7 +103,7 @@ export class RawMatsPOComponent implements OnInit{
             MaterialCode: new FormControl(null, Validators.required),
             RawMaterialID: new FormControl(null, Validators.required),
             Quantity: new FormControl(null, Validators.required),
-            UnitPrice: new FormControl(null, Validators.required),
+            UnitPrice: new FormControl(null),
             deleted: new FormControl(0),
             Amount: new FormControl(0)
         });
@@ -222,11 +223,11 @@ export class RawMatsPOComponent implements OnInit{
         this.dialogHeader = 'Add RawMats P.O'
         this.visible = !this.visible;
         this.clearForms();
-        this.OrderDetail = [];
-        this.addOrder();
-        (this.rawMatsPOForm.get('OrderDetail') as FormArray).clear();
-        this.addPoItem();
-        dialog.maximize();
+        // this.OrderDetail = [];
+        // this.addOrder();
+        // (this.rawMatsPOForm.get('OrderDetail') as FormArray).clear();
+        // this.addPoItem();
+        // dialog.maximize();
     }
 
     clearForms() {
@@ -267,12 +268,12 @@ export class RawMatsPOComponent implements OnInit{
             this.rawMatsPOForm.value.PRNumber,
             this.rawMatsPOForm.value.SupplierID,
             this.rawMatsPOForm.value.SupplierAddress,
-            this.rawMatsPOForm.value.TotalQuantity,
-            this.rawMatsPOForm.value.TotalAmount,
+            this.rawMatsPOForm.value.RawMaterialID,
+            this.rawMatsPOForm.value.Quantity,
+            this.rawMatsPOForm.value.Weight,
             this.rawMatsPOForm.value.deleted,
             this.userID,
             this.rawMatsPOForm.value.OrderDetail,
-            // this.OrderDetail
         )
 
         authObs.subscribe(response =>{
@@ -282,7 +283,7 @@ export class RawMatsPOComponent implements OnInit{
                 this.MessageService.add({ 
                     severity: 'success', 
                     summary: 'Success', 
-                    detail: 'Item: ' + this.rawMatsPOForm.value.PONo +  ' successfully recorded', 
+                    detail: 'Successfully Recorded!', 
                     life: 3000 
                 });
                 this.clearForms();
@@ -293,7 +294,7 @@ export class RawMatsPOComponent implements OnInit{
                 this.MessageService.add({ 
                     severity: 'success', 
                     summary: 'Success', 
-                    detail: 'Item: ' + this.rawMatsPOForm.value.PONo +  ' successfully updated', 
+                    detail: 'Successfully Updated!', 
                     life: 3000 
                 });
                 this.clearForms();
@@ -347,10 +348,10 @@ export class RawMatsPOComponent implements OnInit{
 
         this.visible = !this.visible;
         this.clearForms();
-        dialog.maximize();
+        // dialog.maximize();
         this.dialogHeader = 'Edit RawMats P.O';
-        this.OrderDetail = [];
-        (this.rawMatsPOForm.get('OrderDetail') as FormArray).clear();
+        // this.OrderDetail = [];
+        // (this.rawMatsPOForm.get('OrderDetail') as FormArray).clear();
 
         // let SupplierValue = this.findObjectByID(data.SupplierID, 'SupplierID', this.supplier);
 
@@ -363,30 +364,47 @@ export class RawMatsPOComponent implements OnInit{
             PRNumber: data.PRNumber,
             SupplierID: data.SupplierID,
             SupplierAddress: data.SupplierAddress,
+            RawMaterialID: data.RawMaterialID,
+            Quantity: data.Quantity,
+            Weight: data.Weight,
             TotalQuantity: data.TotalQuantity,
             TotalAmount: data.TotalAmount,
             deleted: data.deleted,
             UserID: this.userID
         })
 
+        // 'PurchaseOrderID': new FormControl(0),
+        // 'PONo': new FormControl(null, Validators.required),
+        // 'PODate': new FormControl(null, Validators.required),
+        // 'DeliveryDate': new FormControl(null, Validators.required),
+        // 'Terms': new FormControl(null, Validators.required),
+        // 'PRNumber': new FormControl(null, Validators.required),
+        // 'SupplierID': new FormControl(null, Validators.required),
+        // 'SupplierAddress': new FormControl(null, Validators.required),
+        // 'RawMaterialID': new FormControl(null, Validators.required),
+        // 'Quantity': new FormControl(null),
+        // 'Weight': new FormControl(null),
+        // 'deleted': new FormControl(null),
+        // 'UserID': new FormControl(0),
+
         // console.log(data.OrderDetail)
 
-        this.OrderDetail = [...data.OrderDetail];
+        // this.OrderDetail = [...data.OrderDetail];
 
-        for (let i = 0; i < data.OrderDetail.length; i++) {
+        // for (let i = 0; i < data.OrderDetail.length; i++) {
 
-            const poItemGroup = new FormGroup({
-                PurchaseOrderDetailID: new FormControl(data.OrderDetail[i].PurchaseOrderDetailID),
-                MaterialCode: new FormControl(data.OrderDetail[i].MaterialCode, Validators.required),
-                RawMaterialID: new FormControl(data.OrderDetail[i].RawMaterialID, Validators.required),
-                Quantity: new FormControl(data.OrderDetail[i].Quantity, Validators.required),
-                UnitPrice: new FormControl(data.OrderDetail[i].UnitPrice, Validators.required),
-                deleted: new FormControl(data.OrderDetail[i].deleted),
-                Amount: new FormControl(data.OrderDetail[i].Amount)
-            });
+        //     const poItemGroup = new FormGroup({
+        //         PurchaseOrderDetailID: new FormControl(data.OrderDetail[i].PurchaseOrderDetailID),
+        //         MaterialCode: new FormControl(data.OrderDetail[i].MaterialCode, Validators.required),
+        //         RawMaterialID: new FormControl(data.OrderDetail[i].RawMaterialID, Validators.required),
+        //         Quantity: new FormControl(data.OrderDetail[i].Quantity, Validators.required),
+        //         UnitPrice: new FormControl(data.OrderDetail[i].UnitPrice, Validators.required),
+        //         deleted: new FormControl(data.OrderDetail[i].deleted),
+        //         Amount: new FormControl(data.OrderDetail[i].Amount)
+        //     });
 
-            (this.rawMatsPOForm.get('OrderDetail') as FormArray).push(poItemGroup);
-        }
+        //     (this.rawMatsPOForm.get('OrderDetail') as FormArray).push(poItemGroup);
+        // }
 
         // Method to add a new item (FormGroup) to the FormArray
         // addPoItem() {
@@ -404,7 +422,7 @@ export class RawMatsPOComponent implements OnInit{
         // }
 
 
-        this.onComputeAmount();
+        // this.onComputeAmount();
         // this.RawMatsPOService.getRawMatsPODetail(data.PurchaseOrderID).subscribe(
         //     response => {
         //         for (let i = 0; i < response.length; i++) {

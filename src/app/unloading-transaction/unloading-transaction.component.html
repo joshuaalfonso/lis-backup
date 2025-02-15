@@ -50,7 +50,9 @@
         [tableStyle]="{ 'width': '100%' }" 
         [globalFilterFields]="['PONo', 'MBL', 'RawMaterial', 'ContainerNumber', 'DrNumber', 'Supplier', 'CheckerName']" 
         [scrollable]="true" 
-        scrollHeight="600px" 
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
     >
 
         <ng-template pTemplate="caption">
@@ -88,7 +90,8 @@
                 <th> Weight </th>
                 <th> Warehouse </th>
                 <th> Checker </th>
-                <th *ngIf="edit"> Actions </th>
+                <th> Verified </th>
+                <th *ngIf="edit">  </th>
             </tr>
         </ng-template>
 
@@ -133,10 +136,17 @@
                     <span class="sub-text"> {{ row.WarehouseLocation}} </span>
                 </td>
                 <td data-title="CheckerID">
-                    {{ row.CheckerName }}
+                    {{ row.Name }}
+                </td>
+                <td data-title="Verified" *ngIf="row.Status == 3">
+                    <i class="pi pi-check-circle text-green-500"></i>
+                </td>
+
+                <td data-title="Verified" *ngIf="row.Status == 0">
+                    <i class="pi pi-times-circle text-red-500"></i>
                 </td>
                 <td data-title="Action" *ngIf="edit">
-                    <button 
+                    <!-- <button 
                         pButton pRipple 
                         class="edit__btn" 
                         class="p-button-success p-2 border-round mr-2" 
@@ -144,16 +154,17 @@
                         *ngIf="row.Status == 0"
                     >
                         <i class='bx bx-edit-alt'></i>
-                    </button>
+                    </button> -->
 
-                    <button pButton pRipple 
+                    <!-- <button pButton pRipple 
                         class="delete__btn" 
                         class="p-button-danger p-2 border-round mr-2"
                     >
                         <i class='bx bx-trash' ></i>
-                    </button>
+                    </button> -->
 
-                    <button pButton pRipple 
+                    <div class="flex gap-2">
+                        <button pButton pRipple 
                         class="delete__btn" 
                         class="p-button-primay p-2 border-round" 
                         (click)="onAprrove(row)"  
@@ -173,6 +184,7 @@
                         <i class='pi pi pi-image' ></i>
                     </button>           
 
+                    </div>
                 </td>
             </tr>
         </ng-template>

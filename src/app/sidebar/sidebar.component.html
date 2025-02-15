@@ -97,11 +97,13 @@
 
                 <li *ngFor="let item of menu.subMenu">
 
-                    <a (click)="item.isCollapse = !item.isCollapse" [routerLink]="item.routerLink" routerLinkActive="link-active" *ngIf="item.view">
+                    <a 
+                        (click)="item.isCollapse = !item.isCollapse" 
+                        [routerLink]="item.routerLink" 
+                        routerLinkActive="link-active" 
+                        *ngIf="item.view && !allSubMenuItemsHidden(item)"
+                    >
                         <img [src]="item.icon" alt="{{ item.title }}" *ngIf="item.icon">
-                        <!-- <svg width="20px" height="20px" >
-                            <use href="assets/icons/icon-grid.svg#Layer_1"></use>
-                        </svg> -->
                         <span class="text">{{ item.title }}</span>
                         <img *ngIf="item.subMenu && item.subMenu.length > 0" src="assets/icons/icon-arrow-down.svg" alt="arrow-down">
                     </a>

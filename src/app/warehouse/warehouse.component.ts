@@ -335,9 +335,11 @@ export class WarehouseComponent implements OnInit, OnDestroy{
             return this.warehouse;
         }
 
-        return this.warehouse.filter(warehouse => {
-            return warehouse.WarehouseLocationID == this.selectedFilter;
-        })
+        const filteredWarehouse = this.warehouse.filter((warehouse) => (
+            warehouse.WarehouseLocationID === this.selectedFilter
+        ));
+
+        return filteredWarehouse;
         
     }
 

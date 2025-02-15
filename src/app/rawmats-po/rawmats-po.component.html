@@ -49,6 +49,9 @@
         dataKey="PONo" 
         [tableStyle]="{ 'width': '100%'}" 
         [globalFilterFields]="['PONo', 'PODate.date', 'Terms', 'DeliveryDate.date', 'PRNumber', 'SupplierAddress']" 
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
     >
 
         <ng-template pTemplate="caption">
@@ -78,31 +81,34 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th style="width: 5rem"></th>
+                <!-- <th style="width: 5rem"></th> -->
                 <th>PO #</th>
                 <!-- <th>PO Date</th> -->
                 <th>Terms</th>
                 <th>Delivery Date</th>
                 <th>PR #</th>
+                <th>RawMaterial</th>
+                <th>Quantity</th>
+                <th>Weight</th>
                 <th>Supplier</th>
                 <!-- <th>Supplier Address</th> -->
                 <!-- <th>Item</th> -->
-                <th>Total Quantity</th>
-                <th>Total Amount</th>
+                <!-- <th>Total Quantity</th>
+                <th>Total Amount</th> -->
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
             <tr>
-                <td>
+                <!-- <td>
                     <p-button 
                         pRipple 
                         [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
                         [pRowToggler]="row" 
                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
                     />
-                </td>
+                </td> -->
                 <td  data-title="PONo"> 
                     <span class="">{{ row.PONo }}</span> 
                     <span class="block text-xs text-gray-500"> 
@@ -113,7 +119,7 @@
                     {{ row.PODate.date | date: 'MM/dd/yyyy' }} 
                 </td> -->
                 <td  data-title="Terms"> 
-                    {{ row.Terms }} 
+                    {{ row.Terms }} Days
                 </td>
                 <td  data-title="PODate"> 
                     {{ row.DeliveryDate.date | date: 'MMM dd, yyyy' }} 
@@ -121,12 +127,21 @@
                 <td  data-title="PRNumber"> 
                     {{ row.PRNumber }} 
                 </td>
+                <td  data-title="RawMaterial"> 
+                    {{ row.RawMaterial || '-'}} 
+                </td>
+                <td  data-title="Quantity"> 
+                    {{ row.Quantity || '-'}} 
+                </td>
+                <td  data-title="Weight"> 
+                    {{ row.Weight || '-'}} 
+                </td>
                 <td  data-title="Supplier">  
                     <!-- {{ row.Supplier}}  -->
                     <span class="">{{ row.Supplier }}</span> 
-                    <span class="block text-xs text-gray-500">
+                    <!-- <span class="block text-xs text-gray-500">
                         {{ row.SupplierAddress }} 
-                    </span>
+                    </span> -->
                 </td>
                 <!-- <td  data-title="Supplier"> 
                     {{ row.SupplierAddress }} 
@@ -135,12 +150,12 @@
                     <span class=" "> {{ getOrderItem(row.OrderDetail) }} </span>
                 </td> -->
 
-                <td  data-title="TotalWeight"> 
+                <!-- <td  data-title="TotalWeight"> 
                     {{ row.TotalQuantity | number }} 
                 </td>
                 <td  data-title="TotalWeight"> 
                     {{ row.TotalAmount |number }} 
-                </td>
+                </td> -->
                 <td  data-title="Actions" *ngIf="edit">
                     <!-- <button 
                         pButton 
@@ -190,7 +205,7 @@
             </tr>
         </ng-template>
 
-        <ng-template pTemplate="rowexpansion" let-PO>
+        <!-- <ng-template pTemplate="rowexpansion" let-PO>
             <tr>
                 <td colspan="12">
                     <div class="">
@@ -201,8 +216,6 @@
                                     <th>Material Code</th>
                                     <th>Description</th>
                                     <th>Ordered Quantity</th>
-                                    <th>Unit Price</th>
-                                    <th>Amount</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-detail let-index="index">
@@ -217,12 +230,6 @@
                                     <td> 
                                         {{ detail.Quantity | number }}
                                     </td>
-                                    <td> 
-                                        {{ detail.UnitPrice | number }}
-                                    </td>
-                                    <td> 
-                                        {{ detail.Amount | number }}
-                                    </td>
                                     
                                 </tr>
                             </ng-template>
@@ -235,7 +242,7 @@
                     </div>
                 </td>
             </tr>
-        </ng-template>
+        </ng-template> -->
 
     </p-table>
 
@@ -258,21 +265,22 @@
 >
     <form #poForm="ngForm" [formGroup]="rawMatsPOForm" class="p-fluid" (ngSubmit)="onSubmit()">  
 
-        <div class="field">
-            <label class="font-semibold" >
-                P.O #
-            </label>
-            <input 
-                pInputText 
-                formControlName="PONo" 
-                autocomplete="off" 
-                class="input" 
-                placeholder="Enter PO #"
-            >
-            <!-- <small *ngIf="rawMatsPOForm.get('PONo')!.invalid && poForm.submitted" class="text-red-500">Name is required.</small> -->
-        </div>
-
         <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        P.O #
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="PONo" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter PO #"
+                    >
+                </div>
+            </div>
 
             <div class="col">
                 <div class="field">
@@ -288,24 +296,29 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="grid">
+
             <div class="col">
                 <div class="field">
                     <label class="font-semibold" >
                         Terms
                     </label>
-                    <input 
+                    <!-- <input 
                         pInputText 
                         formControlName="Terms" 
                         autocomplete="off" 
                         class="input" 
                         placeholder="Enter Terms"
-                    >
+                    > -->
+                    <p-inputNumber 
+                        inputId="integeronly" 
+                        formControlName="Terms"
+                        placeholder="Enter Terms"
+                    /> 
                 </div>
             </div>
-
-        </div>
-
-        <div class="grid">
 
             <div class="col">
                 <div class="field">
@@ -316,9 +329,14 @@
                         formControlName="DeliveryDate" 
                         [showIcon]="true" 
                         placeholder="mm/dd/yyyy" 
+                        appendTo="body"
                     ></p-calendar>
                 </div>
             </div>
+
+        </div>
+
+        <div class="grid">
 
             <div class="col">
                 <div class="field">
@@ -335,6 +353,57 @@
                 </div>
             </div>
 
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Raw Material
+                    </label>
+                    <p-dropdown 
+                        [options]="rawMaterial" 
+                        formControlName="RawMaterialID"
+                        optionLabel="RawMaterial" 
+                        [style]="{'height': '40px'}" 
+                        placeholder="Select Raw Material" 
+                        appendTo="body" 
+                        [showClear]="true"
+                        optionValue="RawMaterialID"
+                    >
+                    </p-dropdown>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Quantity
+                    </label>
+                    <p-inputNumber 
+                        inputId="integeronly" 
+                        formControlName="Quantity"
+                        placeholder="Enter quantity"
+                    /> 
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Weight
+                    </label>
+                    <p-inputNumber 
+                        inputId="integeronly" 
+                        formControlName="Weight"
+                        placeholder="Enter weight"
+                    /> 
+                </div>
+            </div>
+
         </div>
 
         <div class="grid">
@@ -344,20 +413,20 @@
                     <label class="font-semibold" >
                         Supplier
                     </label>
-                    <div class="card flex justify-content-center">
-                        <p-dropdown 
-                            [options]="supplier" 
-                            formControlName="SupplierID" 
-                            optionLabel="Supplier" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
-                            [showClear]="true" 
-                            placeholder="Select Supplier" 
-                            (onChange)="onSelectSupplier($event.value)"
-                            [filter]="true"
-                            optionValue="SupplierID"
-                        >
-                        </p-dropdown>
-                    </div>
+                    <p-dropdown 
+                        [options]="supplier" 
+                        formControlName="SupplierID" 
+                        optionLabel="Supplier" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Supplier" 
+                        (onChange)="onSelectSupplier($event.value)"
+                        [filter]="true"
+                        optionValue="SupplierID"
+                        appendTo="body"
+                    >
+                    </p-dropdown>
+                     
                 </div>
             </div>
 
@@ -377,6 +446,13 @@
             </div>
 
         </div>
+
+        <div class="grid">
+
+
+        </div>
+
+
 
         <!-- <div class="field">
             <label class="font-semibold" >
@@ -491,7 +567,7 @@
             </button>
         </div> -->
 
-        <div class="field">
+        <!-- <div class="field">
             <label class="font-semibold" >Total Quantity</label>
             <fieldset [disabled]="true">
                 <p-inputNumber 
@@ -502,9 +578,9 @@
                     [minFractionDigits]="2" 
                 ></p-inputNumber> 
             </fieldset>
-        </div>
+        </div> -->
 
-        <div class="field">
+        <!-- <div class="field">
             <label class="font-semibold" >Total Amount</label>
             <fieldset [disabled]="true">
                 <p-inputNumber 
@@ -515,7 +591,7 @@
                     [minFractionDigits]="2" 
                 ></p-inputNumber> 
             </fieldset>
-        </div>
+        </div> -->
 
         <!-- <div formArrayName="OrderDetail">
             <div *ngFor="let poItem of poItems; let i = index">
@@ -534,7 +610,7 @@
             </div>
         </div> -->
 
-        <div class="field">
+        <!-- <div class="field">
             <label class="font-semibold" >Order Details</label>
             <p-table #dt_orders2 [tableStyle]="{ 'width': '100%'}" [value]="poItems">
 
@@ -543,8 +619,6 @@
                         <th> Material Code </th>
                         <th> Description </th>  
                         <th> Ordered Qty </th>  
-                        <th> Unit Price </th>  
-                        <th> Amount </th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -582,28 +656,9 @@
                                 [minFractionDigits]="2" 
                                 (onInput)="onComputeAmount()"
                             />                               
-                        </td>
-    
-                        <td data-title="UnitPrice">
-                            <p-inputNumber     
-                                formControlName="UnitPrice"
-                                [minFractionDigits]="2" 
-                                (onInput)="onComputeAmount()"
-                            />                               
-                        </td>
-    
-                        <td data-title="Amount">
-                            <fieldset [disabled]="true">
-                                <p-inputNumber 
-                                    formControlName="Amount"
-                                    [minFractionDigits]="2" 
-                                />                               
-                            </fieldset>
-                        </td>
-                        
+                        </td>            
                     
                        <td>
-                            <!-- <button (click)="removePoItem(i)">Remove</button> -->
                             <p-button 
                                 icon="pi pi-trash font-bold text-red-500" 
                                 styleClass="p-button-rounded-full p-button-text hover:bg-red-100"
@@ -615,29 +670,21 @@
                 </ng-template>
     
             </p-table>
-        </div>
+        </div> -->
 
-        <div class="field">
+        <!-- <div class="field">
 
             <div class="flex">
 
-            <p-button 
-                icon="pi pi-plus" 
-                label="Add row" 
-                styleClass="p-button-rounded p-button-text"
-                (click)="addPoItem()"
-            ></p-button>
-
-
-            <!-- <p-button 
-                type="buton"
-                label="Add row" 
-                icon="pi pi-plus"
-                (click)="addPoItem()"
-            /> -->
+                <p-button 
+                    icon="pi pi-plus" 
+                    label="Add row" 
+                    styleClass="p-button-rounded p-button-text"
+                    (click)="addPoItem()"
+                ></p-button>
             </div>
 
-        </div>
+        </div> -->
 
         <!-- <button (click)="addPoItem()" type="button">Add PO Item</button> -->
         <!-- <pre>{{ this.rawMatsPOForm.value | json }}</pre> -->

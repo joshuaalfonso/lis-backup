@@ -280,7 +280,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         title: 'Inspection',
                         icon: 'assets/icons/icon-microscope.svg',
                         routerLink: '/rawmats-inspection',
-                        view: true,
+                        view: false,
                     }
                 ]
             }, 
@@ -419,6 +419,10 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
     }
 
+    allSubMenuItemsHidden(item: any) {
+        return item.subMenu && item.subMenu.every((subItem: any) => !subItem.view);
+    }
+
 
     getUserAccess(UserID: string) {
         this.SidebarService.getUserAccessRequest(UserID).subscribe(
@@ -483,6 +487,9 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             break
                         case '3.5.1' :
                             this.menus[2].subMenu[4].view = true;
+                            break
+                        case '3.6.1' :
+                            this.menus[2].subMenu[5].view = true;
                             break
                         case '4.1.1' :
                             this.menus[3].subMenu[0].subMenu[0].view = true;

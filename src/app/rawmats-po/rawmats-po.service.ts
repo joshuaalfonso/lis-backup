@@ -32,8 +32,9 @@ export class RawMatsPOService {
         PRNumber: string,
         SupplierID: number,
         SupplierAddress: number,
-        TotalQuantity: number,
-        TotalAmount: number,
+        RawMaterialID: number,
+        Quantity: number,
+        Weight: number,
         deleted: number,
         UserID: string,
         OrderDetail: any[]
@@ -51,8 +52,9 @@ export class RawMatsPOService {
                 PRNumber: PRNumber,
                 SupplierID: SupplierID,
                 SupplierAddress: SupplierAddress,
-                TotalQuantity: TotalQuantity,
-                TotalAmount: TotalAmount,
+                RawMaterialID: RawMaterialID,
+                Quantity: Quantity,
+                Weight: Weight,
                 deleted: deleted,
                 UserID: UserID,
                 OrderDetail: OrderDetail

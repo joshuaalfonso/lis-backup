@@ -398,7 +398,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             UnloadingTransactionID: 0, 
             Status: 0
         })
-        this.selectedTransaction = 0;
+        this.selectedTransaction = 1;
         this.BeforeImage = '';
 
         this.files = [];
@@ -484,7 +484,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
         const data = { 
             UnloadingTransactionID: this.unloadingTransactionForm.value.UnloadingTransactionID,
-            isTransactionID:  this.selectedTransaction,
+            isTransactionID:  this.value,
             PO:  this.unloadingTransactionForm.value.PO === null ? null : this.unloadingTransactionForm.value.PO.PurchaseOrderID,
             BL :this.unloadingTransactionForm.value.BL === null ? null : this.unloadingTransactionForm.value.BL.ShippingTransactionID,
             BLNumber:this.unloadingTransactionForm.value.BL === null ? null : this.unloadingTransactionForm.value.BL.MBL,
@@ -510,7 +510,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         this.files.forEach(file => {
             formData.append('files[]', file);
         })
-
+        
 
         let authObs: Observable<ResponseData>;
         authObs = this.UnloadingTransactionService.saveData
@@ -752,7 +752,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
         let TransactionValue = this.findObjectByID(data.isTransactionID, 'TransactionID', this.transaction);
 
-        let CheckerValue = this.findObjectByID(data.CheckerID, 'CheckerID', this.checker);
+        // let CheckerValue = this.findObjectByID(data.CheckerID, 'CheckerID', this.checker);
 
         let TruckValue = this.findObjectByID(data.TruckID, 'TruckID', this.truck);
 
@@ -781,7 +781,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             DateTimeUnload: new Date(data.DateTimeUnload.date),
             DateUnload: new Date(data.DateUnload.date),
             DrNumber: data.DrNumber,
-            CheckerID: CheckerValue,
+            // CheckerID: CheckerValue,
             TruckID: TruckValue,
             RawMaterialID: RawMaterialValue,
             WarehouseLocationID: data.WarehouseLocationID,
@@ -810,7 +810,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
         let TransactionValue = this.findObjectByID(data.isTransactionID, 'TransactionID', this.transaction);
 
-        let CheckerValue = this.findObjectByID(data.CheckerID, 'CheckerID', this.checker);
+        // let CheckerValue = this.findObjectByID(data.CheckerID, 'CheckerID', this.checker);
 
         let TruckValue = this.findObjectByID(data.TruckID, 'TruckID', this.truck);
 
@@ -832,7 +832,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             DateTimeUnload: new Date(data.DateTimeUnload.date),
             DateUnload: new Date(data.DateUnload.date),
             DrNumber: data.DrNumber,
-            CheckerID: CheckerValue,
+            // CheckerID: CheckerValue,
             TruckID: TruckValue,
             RawMaterialID: RawMaterialValue,
             WarehouseLocationID: data.WarehouseLocationID,
