@@ -515,7 +515,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
     }
 
     showPullOutDialog() {
-        this.PullOutVisible = true;
+        this.PullOutVisible = !this.PullOutVisible;
         this.PullOutDetail = [];
         // this.addPullOutRow();
     }
@@ -1176,7 +1176,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                     life: 3000 
                 });
                 // this.shippingClearItems();
-                this.onFilterShippingTransaction()
+                this.onFilterShippingTransaction();
+                this.showPullOutDialog();
             } 
             else if ( response === 2) {
                 this.MessageService.add({ 
@@ -1186,7 +1187,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                     life: 3000 
                 });
                 // this.shippingClearItems();
-                this.onFilterShippingTransaction()
+                this.onFilterShippingTransaction();
+                this.showPullOutDialog();
             }
             else if ( response === 0) {
                 this.MessageService.add({ 

@@ -107,6 +107,9 @@
         [tableStyle]="{ 'width': '100%' }" 
         [globalFilterFields]="['RequestDate', 'RawMaterial', 'PlantName', 'WarehouseLocation', 'PlateNo', 'DriverName']" 
         dataKey="BinloadRequestID"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
     >
 
         <ng-template pTemplate="header">
@@ -149,7 +152,7 @@
                 </td> -->
                 <td data-title="Weight"> 
                     <!-- {{ row.Weight }}  -->
-                    <span class="">{{ row.Weight}} KG</span> 
+                    <span class="">{{ row.Weight | number}} KG</span> 
                     <span class="sub-text"> {{ row.Quantity}} Bag</span>
                 </td>
                 <td data-title="Warehouse Location"> 
@@ -215,7 +218,7 @@
                                     <td> {{ row.ControlNo }}</td>
                                     <td> {{ row.IntakeID }}</td>
                                     <td> {{ row.Quantity }}</td>
-                                    <td> {{ row.Weight }}</td>
+                                    <td> {{ row.Weight | number}}</td>
                                     <td> {{ row.CheckerName }}</td>
                                 </tr>
                             </ng-template>
@@ -1060,7 +1063,7 @@
 
         </div>
 
-        <div class="field">
+        <!-- <div class="field">
 
             <label class="font-semibold" >
                 Checker 
@@ -1079,7 +1082,7 @@
                 ></p-dropdown>
             </div>
 
-        </div>
+        </div> -->
 
         <!-- <div class="flex justify-content-end">
             <button 
@@ -1190,7 +1193,7 @@
             pRipple 
             icon="pi pi-times" 
             (click)="partitionModal=false" 
-            label="Dismiss" 
+            label="Okay" 
             class="p-button-text">
         </button>
     </ng-template>

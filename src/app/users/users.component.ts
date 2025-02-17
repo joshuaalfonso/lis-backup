@@ -6,6 +6,7 @@ import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Dialog } from "primeng/dialog";
 import { AuthService } from "../auth/auth.service";
+import { Table } from "primeng/table";
 
 
 
@@ -351,6 +352,12 @@ export class UsersComponent implements OnInit, OnDestroy{
             this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
         });
 
+    }
+
+    // ==== INPUT SEARCH DATA====
+    onGlobalFilter(table: Table, event: Event) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        table.filterGlobal(inputValue, 'contains');
     }
 
 }

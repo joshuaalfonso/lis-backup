@@ -19,7 +19,7 @@
         #dt1 
         [value]="users" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['WarehouseLocation', 'Warehouse_Name']"
+        [globalFilterFields]="['UName', 'ModuleName']"
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]" 
@@ -27,8 +27,17 @@
 
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between mb-2">
-                <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" />
-                <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add User</span></button>
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    (input)="onGlobalFilter(dt1, $event)"
+                    placeholder="Search" 
+                />
+                <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert">
+                    <i class='bx bx-plus'></i> 
+                    <span>Add User</span>
+                </button>
             </div>
         </ng-template>
 

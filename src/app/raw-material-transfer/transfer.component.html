@@ -1140,7 +1140,7 @@
                 formControlName="RequestWeight" 
                 inputId="integeronly" 
                 autocomplete="off" 
-                placeholder="No. of bags"
+                placeholder="No. of kg"
             ></p-inputNumber> 
         </div>
 
@@ -1490,7 +1490,7 @@
                             optionLabel="CheckerName" 
                             [style]="{'height': '40px', 'border': '1px solid white'}" 
                             [showClear]="true" 
-                            placeholder="Select Truck"
+                            placeholder="Select Checker"
                         ></p-dropdown>
                     </div>
                 </div>
@@ -1509,7 +1509,7 @@
                             optionLabel="GuardName" 
                             [style]="{'height': '40px', 'border': '1px solid white'}" 
                             [showClear]="true" 
-                            placeholder="Select Truck" 
+                            placeholder="Select Guard" 
                         ></p-dropdown>
                     </div>
                 </div>
@@ -1768,7 +1768,7 @@
                             [options]="toWarehouse" 
                             optionLabel="LocationName" 
                             [style]="{'height': '40px', 'border': '1px solid white'}" 
-                            placeholder="Select Location" 
+                            placeholder="Select Warehouse" 
                             [showClear]="true" 
                             (ngModelChange)="onSelectToWarehouse($event)"
                         >
@@ -1790,7 +1790,7 @@
                             [options]="toWarehousePartition" 
                             optionLabel="WarehousePartitionName" 
                             [style]="{'height': '40px', 'border': '1px solid white'}" 
-                            placeholder="Select Location" 
+                            placeholder="Select Partition" 
                             [showClear]="true"
                         >
                         </p-dropdown>
@@ -1814,7 +1814,7 @@
                         type="number" 
                         formControlName="Quantity" 
                         (change)="onComputeQuantityLossAndOver($event)" 
-                        placeholder="Type here" 
+                        placeholder="No of bag" 
                     />
                 </div>
             </div>

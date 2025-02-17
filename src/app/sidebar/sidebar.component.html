@@ -124,7 +124,7 @@
 
     </div>
 
-    <div class="profile-container" (click)="profile.toggle($event)" appendTo="body" *ngIf="user">
+    <div class="profile-container cursor-pointer" (click)="profile.toggle($event)" appendTo="body" *ngIf="user">
          <!-- <a href="#" class="nav__link mt-4"  (click)="onLogout()" *ngIf="isAuthenticated"> -->
             <img [src]="avatarList[user?.avatar].avatarUrl" alt="avatar" width="40px">
             <span>
@@ -145,10 +145,10 @@
             </svg>
             Log out
         </p>
-        <p (click)="toggleNightMode()">
+        <!-- <p (click)="toggleNightMode()">
             <img src="assets/icons/icon-moon.svg" alt="avatar" width="15px">
             Night Mode
-        </p>
+        </p> -->
         <p routerLink="/settings">
             <img src="assets/icons/icon-profile.svg" alt="avatar" width="15px">
             Profile
