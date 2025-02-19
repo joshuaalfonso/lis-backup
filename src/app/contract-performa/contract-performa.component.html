@@ -105,7 +105,7 @@
                 <!-- <th>Shipment Period</th> -->
                 <th>Country Of Origin</th>
                 <th >Status</th>
-                <th alignFrozen="right" pFrozenColumn *ngIf="edit">Actions</th>
+                <th alignFrozen="right" pFrozenColumn *ngIf="edit"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -117,7 +117,9 @@
                 <td data-title="Contract No" pFrozenColumn>
                     <!-- {{ row.ContractNo }} -->
                     <span class="">{{ row.ContractNo }}</span> 
-                    <span class="sub-text">  {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }} </span>
+                    <span class="sub-text">  
+                        {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }} 
+                    </span>
                 </td>
                 <td data-title="RawMaterialID" class="white-space-nowrap">
                     <!-- {{ row.RawMaterial }} -->
@@ -176,8 +178,60 @@
                         {{ row.Status }}
                     </p-tag></td>
                 <!-- <p-tag [severity]="row.Status === 'Pending' ? 'warning' : row.Status ==='Completed' ? 'success' : ''">{{ row.Status }}</p-tag> -->
-                <td data-title="Action" alignFrozen="right" pFrozenColumn *ngIf="edit">
-                    <button 
+                <td data-title="Action" class="text-center z-20" alignFrozen="right" pFrozenColumn *ngIf="edit">
+
+
+                    <!-- (click)="contractOverlay.toggle($event)" -->
+                    <i 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle"
+                        (click)="toggleContractOverlay($event, contractOverlay)" 
+                    ></i>
+
+                    <p-overlayPanel #contractOverlay>
+                        <div class="actions-overlay">
+    
+                            <!-- sailing edit button -->
+                            <p  
+                                (click)="onSelect($event, row)"
+                            >
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                                </svg>
+                                Edit
+                            </p>
+    
+                            <!-- landed edit button -->
+                            <p  
+                                (click)="onAddTransaction($event, row, ShippingDialog)"
+                            >
+                                <i class="pi pi-plus" width="15px" height="15px"></i>
+                                Add Shipping
+                            </p>
+
+                            <p  
+                                (click)="confirmCompleted('center', row)"
+                            >
+                                <i class="pi pi-check" width="15px" height="15px"></i>
+                                Completed
+                            </p>
+    
+                            <!-- delete button -->
+                            <p
+                                (click)="confirmDeleteContract('center', row)"
+                            >
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                                </svg>
+                                Delete
+                            </p>
+    
+    
+                        </div>
+                    </p-overlayPanel>
+
+                    
+
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="edit__btn" 
@@ -186,7 +240,7 @@
                     >
                         <i class='bx bx-edit-alt'></i>
                     </button>
-                    <!-- <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round mr-2"><i class='bx bx-trash' ></i></button> -->
+                 
                     <button pButton pRipple 
                         class="" 
                         class="p-button- p-2 border-round" 
@@ -195,7 +249,7 @@
                         (click)="onAddTransaction($event, row, ShippingDialog)"
                     >
                         <i class='pi pi-plus' ></i>
-                    </button>
+                    </button> -->
                 </td>
             </tr>
         </ng-template>
@@ -944,6 +998,7 @@
                             inputId="integeronly" 
                             autocomplete="off" 
                             placeholder="Enter Quantity"
+                            [minFractionDigits]="3" 
                         ></p-inputNumber> 
                     </fieldset>
                 </div>
@@ -1478,7 +1533,7 @@
                     Remarks
                 </th>
                 <th alignFrozen="right" pFrozenColumn *ngIf="edit">
-                    Action
+                    
                 </th>
             </tr>
         </ng-template>
@@ -1615,9 +1670,14 @@
                 <td data-title="Remarks" *ngIf="value2 === 1">
                     {{ row.Remarks === '' ? '-' : row.Remarks}}
                 </td>
-                <td data-title="Action" alignFrozen="right" pFrozenColumn *ngIf="edit">
+                <td data-title="Action" class="text-center" alignFrozen="right" pFrozenColumn *ngIf="edit">
 
-                    <button 
+                    <i 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" 
+                        (click)="action.toggle($event)"
+                    ></i>
+
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="edit__btn" 
@@ -1626,10 +1686,12 @@
                         *ngIf="value2 === 1"
                     >
                         <i class='bx bx-edit-alt'></i>
-                    </button>
+                    </button> -->
+
+                   
 
                     <!-- <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round"><i class='bx bx-trash' ></i></button> -->
-                    <button 
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="p-button- p-2 border-round" 
@@ -1639,9 +1701,9 @@
                         *ngIf="value2 == 1 && row.Status === 1"
                     >
                         <i class='pi pi-check' ></i>
-                    </button>
+                    </button> -->
 
-                    <button 
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="edit__btn" 
@@ -1650,9 +1712,9 @@
                         *ngIf="value2 === 2"
                     >
                         <i class='bx bx-edit-alt'></i>
-                    </button>
+                    </button> -->
 
-                    <button 
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="p-button- p-2 border-round" 
@@ -1662,11 +1724,11 @@
                         *ngIf="value2 == 2 && row.Status === 2"
                     >
                         <i class='pi pi-check' ></i>
-                    </button>
+                    </button> -->
                     <!-- <button pButton pRipple class="p-button- p-2 border-round" (click)="onSelectShipping(row, ShippingDialog)" pTooltip="Landed" tooltipPosition="top" *ngIf="value2 == 2">
                         <i class='pi pi-plus' ></i>
                     </button> -->
-                    <button 
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="edit__btn" 
@@ -1675,8 +1737,74 @@
                         *ngIf="value2 === 3"
                     >
                         <i class='bx bx-edit-alt'></i>
-                    </button>
+                    </button> -->
                 </td>
+
+                <p-overlayPanel #action>
+                    <div class="actions-overlay">
+
+                        <!-- sailing edit button -->
+                        <p  
+                            (click)="onSelectShipping( row, ShippingDialog)"
+                            *ngIf="value2 == 1 && row.Status === 1"
+                        >
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p>
+
+                        <!-- landed button -->
+                        <p
+                            (click)="showLandedForm(row)"  
+                            *ngIf="value2 == 1 && row.Status === 1"
+                        >
+                            <i class="pi pi-check" width="15px" height="15px"></i>
+                            Landed
+                        </p>
+
+                        <!-- landed edit button -->
+                        <p  
+                            (click)="onSelectShipping(row, ShippingDialog)" 
+                            *ngIf="value2 === 2"
+                        >
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p>
+
+                        <p  
+                            (click)="confirmLandedToSailing('center', row)" 
+                            *ngIf="value2 === 2"
+                        >
+                            <i class="pi pi-replay" width="15px" height="15px"></i>
+                            Revert to Sailing
+                        </p>
+
+                        <!-- pull out button -->
+                        <p
+                            (click)="onPullOut(row)" 
+                            *ngIf="value2 == 2 && row.Status === 2 "
+                        >
+                            <i class="pi pi-check" width="15px" height="15px"></i>
+                            Pull Out
+                        </p>
+
+                        <!-- delete button -->
+                        <!-- (click)="onDeleteShippingTransaction(row)" -->
+                        <p
+                            (click)="confirmDeleteShippingTransaction('center', row)" 
+                        >
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                            </svg>
+                            Delete
+                        </p>
+
+
+                    </div>
+                </p-overlayPanel>
             </tr>
         </ng-template>
         
@@ -1695,6 +1823,12 @@
    
   
 </div>
+
+<p-confirmDialog 
+    key="positionDialog" 
+    [position]="position" 
+    rejectButtonStyleClass="p-button-outlined" 
+/>
 
 
 <!-- Pull Out Table -->

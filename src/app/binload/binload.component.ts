@@ -56,6 +56,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
     insert: boolean = false;
     edit: boolean = false;
     generateReport: boolean = false;
+    checkerInsert: boolean = false;
 
     partitionDetails: any[] = [];
 
@@ -215,6 +216,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                                 break;
                             case '3.4.4':
                                 this.generateReport = true;
+                                break;
+                            case '3.4.5':
+                                this.checkerInsert = true;
                                 break;
                             default:
                                 break;

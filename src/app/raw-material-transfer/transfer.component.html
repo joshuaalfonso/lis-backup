@@ -139,6 +139,7 @@
                         class="edit__btn" 
                         class="p-button-success p-2 border-round mr-2" 
                         (click)="onEditTransferRequest(row)"
+                        *ngIf="row.TransferDetail.length == 0"
                     >
                         <i class='bx bx-edit-alt'></i>
                     </button>

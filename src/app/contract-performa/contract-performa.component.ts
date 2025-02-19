@@ -120,6 +120,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
 
     userID: string = '';
 
+    position: string = 'center';
+
     constructor(
         private ContractPerformaService: ContractPerformaService,
         private MessageService: MessageService,
@@ -718,6 +720,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
 
         // console.log(this.shippingTransactionForm.value)
         
+        
         let authObs: Observable<ResponseData>;
         authObs = this.ContractPerformaService.saveShippingTransaction
         (
@@ -812,6 +815,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
             });
         })
     }
+
+
 
     // fill shipping transaction form inputs
     onSelectShipping(data: any, dialog?: Dialog) {
@@ -976,7 +981,10 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
     // contract filter
     onSelectFilter() {
         if (this.value === 'Active') this.value2 = 1;
-        if (this.value === 'Completed') this.value2 = 2;
+        if (this.value === 'Completed') {
+            this.value2 = 2;
+            // this.shippingTransaction = [];
+        }
         this.selectedContractPerformaID = 0;
         this.shippingTransaction = [];
         this.isLoading = true;
@@ -1220,6 +1228,232 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
 
     }
 
+    // delete contract
+    onDeleteContract(contractID: any) {
+
+        this.ContractPerformaService.deleteContract(contractID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.MessageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Deleted!' 
+                    });
+                    this.onSelectFilter();
+                } 
+            }, error => {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+
+    }
+
+    // delete contract form
+    confirmDeleteContract(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.ContractPerformaID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const contractPerformaID = row.ContractPerformaID;
+        const contractNo = row.ContractNo;
+
+        this.ConfirmationService.confirm({
+            message: `Are you sure you want to delete contract '${contractNo}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onDeleteContract(contractPerformaID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+    }
+
+    // delete shipping transaction function
+    onDeleteShippingTransaction(shippingTransactionID: any) {
+    
+        this.ContractPerformaService.deleteShippingTransaction(shippingTransactionID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.MessageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Deleted!' 
+                    });
+                    this.onFilterShippingTransaction();
+                } 
+            }, error => {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+             
+        )
+
+    }
+
+    // delete shpping transaction form
+    confirmDeleteShippingTransaction(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.ShippingTransactionID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const shippingTransactionID = row.ShippingTransactionID;
+        const lot = row.Lot;
+
+        this.ConfirmationService.confirm({
+            message: `Are you sure you want to delete Lot '${lot}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onDeleteShippingTransaction(shippingTransactionID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+    }
+
+
+    // contract overlay
+    toggleContractOverlay(event: MouseEvent, overlay: any) {
+        event.stopPropagation();
+        overlay.toggle(event)
+    }
+
+
+    contractCompleted(contractPerformaID: any) {
+
+        this.ContractPerformaService.contractCompleted(contractPerformaID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.MessageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Updated!' 
+                    });
+                    this.onSelectFilter();
+                } 
+            }, error => {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+
+    }
+
+    // completed contract confimation form
+    confirmCompleted(position: string, row: any) {
+
+        this.position = position;        
+
+        if (!row.ContractPerformaID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const contractPerformaID = row.ContractPerformaID;
+        const contractNo = row.ContractNo;
+
+        this.ConfirmationService.confirm({
+            message: `Are you sure contract '${contractNo}' is now completed ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.contractCompleted(contractPerformaID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+        
+    }
+
+
+
+    LandedToSailing(shippingTransactionID: any) {
+
+        this.ContractPerformaService.landedToSaling(shippingTransactionID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.MessageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Updated!' 
+                    });
+                    this.onFilterShippingTransaction();
+                } 
+            }, error => {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+       
+    }
+
+    confirmLandedToSailing(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.ShippingTransactionID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const shippingTransactionID = row.ShippingTransactionID;
+        const mbl = row.MBL == 0 ? row.BL : row.MBL;
+        const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
+
+        this.ConfirmationService.confirm({
+            message: `Are you sure you want to revert ${blMBL} '${mbl}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.LandedToSailing(shippingTransactionID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+    }
     
     
 }

@@ -74,6 +74,42 @@ export class ContractPerformaService {
         return this.http.get<any>( this.baseUrl + '/project/a_LegalDashboard6.php')
     }
 
+    deleteContract(id: any) {
+        return this.http.post( 
+            this.baseUrl + '/project/d_ContractPerforma.php', 
+            {
+                ContractPerformaID: id
+            }
+        )
+    }
+
+    deleteShippingTransaction(id: any) {
+        return this.http.post( 
+            this.baseUrl + '/project/d_ShippingTransaction.php', 
+            {
+                ShippingTransactionID: id
+            }
+        )
+    }
+
+    contractCompleted(id: any) {
+        return this.http.post( 
+            this.baseUrl + '/project/b_ContractCompleted.php', 
+            {
+                ContractPerformaID: id
+            }
+        )
+    }
+
+    landedToSaling(id: any) {
+        return this.http.post(
+            this.baseUrl + '/project/b_ShippingLanded.php', 
+            {
+                ShippingTransactionID: id
+            }
+        )
+    }
+
     saveData
     (
         ContractPerformaID: number,
