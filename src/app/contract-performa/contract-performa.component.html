@@ -297,16 +297,16 @@
                         Raw Material
                         <span class="required">*</span>
                     </label>
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             [options]="rawMaterial" 
                             formControlName="RawMaterialID" 
                             optionLabel="RawMaterial" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select "
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
 
             </div>
@@ -337,16 +337,16 @@
                         Packaging
                         <span class="required">*</span>
                     </label>
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             [options]="packaging" 
                             formControlName="Packaging" 
                             optionLabel="Packaging" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -356,16 +356,16 @@
                         Packed In
                         <span class="required">*</span>
                     </label>
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             [options]="packedIn" 
                             formControlName="PackedInID" 
                             optionLabel="PackedIn" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select "
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -401,17 +401,17 @@
                         Supplier
                         <span class="required">*</span>
                     </label>
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             [options]="supplier" 
                             formControlName="SupplierID" 
                             optionLabel="Supplier" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select" 
                             (onChange)="onSelectSupplier($event)"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -458,16 +458,16 @@
                         <span class="required">*</span>
                     </label>
                     <!-- <input pInputText formControlName="PortOfDischarge" autocomplete="off" class="input" placeholder="Enter Port of Discharge"> -->
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             formControlName="PortOfDischargeID" 
                             [options]="portOfDischarge" 
                             optionLabel="PortOfDischarge" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select" 
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -508,13 +508,31 @@
             <input pInputText formControlName="Status" autocomplete="off" class="input">
         </div> -->
   
-        <button 
+        <!-- <button 
             pButton 
             pRipple 
             label="Submit" 
             class="bg-indigo-500 border-round border-none submit" 
             [disabled]="!contractPerformaform.valid"
-        ></button>
+        ></button> -->
+
+        <div class="flex justify-content-end gap-2">
+
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancel" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="visible = false"
+            ></p-button>
+
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check"
+                [loading]="submitContractLoading" 
+                [disabled]="!contractPerformaform.valid"
+            />
+        </div>
   
     </form>
 </p-dialog>
@@ -599,16 +617,17 @@
             <label class="font-semibold" >
                 Raw Material
             </label>
-            <div class="card flex justify-content-center" [class.disabled]="true">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     formControlName="RawMaterialID" 
                     [options]="rawMaterial" 
                     optionLabel="RawMaterial" 
-                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [style]="{'height': '40px'}" 
                     [showClear]="true" 
                     placeholder="Select Raw Material"
+                    [class.disabled]="true"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
         </div>
 
         <div class="grid">
@@ -618,16 +637,17 @@
                     <label class="font-semibold" >
                         Supplier
                     </label>
-                    <div class="card flex justify-content-center" [class.disabled]="true">
+                    <!-- <div class="card flex justify-content-center" [class.disabled]="true"> -->
                         <p-dropdown 
                             formControlName="SupplierID" 
                             [options]="supplier" 
                             optionLabel="Supplier" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select Supplier"
+                            [class.disabled]="true"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -654,16 +674,17 @@
             <label class="font-semibold" >
                 Packaging
             </label>
-            <div class="card flex justify-content-center" [class.disabled]="true">
+            <!-- <div class="card flex justify-content-center" [class.disabled]="true"> -->
                 <p-dropdown 
                     formControlName="Packaging" 
                     [options]="packaging" 
                     optionLabel="Packaging" 
-                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [style]="{'height': '40px'}" 
                     [showClear]="true" 
                     placeholder="Select Raw Material"
+                    [class.disabled]="true"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
         </div>
 
         <div class="field">
@@ -826,16 +847,17 @@
                     <label class="font-semibold" >
                         Shipping Line
                     </label>
-                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                    <!-- <div class="card flex justify-content-center" [class.disabled]="value2 === 2"> -->
                         <p-dropdown 
                             [options]="shippingLine" 
                             formControlName="ShippingLineID" 
                             optionLabel="ShippingLine" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select Shipping Line"
+                            [class.disabled]="value2 === 2"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                   </div>
             </div>
 
@@ -941,16 +963,17 @@
                     <label class="font-semibold">
                         Container Type
                     </label>
-                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             [options]="containerType" 
                             optionLabel="Container" 
                             formControlName="ContainerTypeID" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select Container Type"
+                            [class.disabled]="value2 === 2"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -1013,16 +1036,17 @@
                     <label class="font-semibold" >
                         Broker
                     </label>
-                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                    <!-- <div class="card flex justify-content-center" [class.disabled]="value2 === 2"> -->
                         <p-dropdown 
                             [options]="broker" 
                             optionLabel="Broker" 
                             formControlName="BrokerID" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select Broker"
+                            [class.disabled]="value2 === 2"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -1125,16 +1149,17 @@
                     <!-- <fieldset [disabled]="value2 === 2">
                         <input pInputText formControlName="BankID" autocomplete="off" class="input" placeholder="Bank">
                     </fieldset> -->
-                    <div class="card flex justify-content-center" [class.disabled]="value2 === 2">
+                    <!-- <div class="card flex justify-content-center" [class.disabled]="value2 === 2"> -->
                         <p-dropdown 
                             formControlName="BankID" 
                             [options]="bank" 
                             optionLabel="Bank" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select Bank"
+                            [class.disabled]="value2 === 2"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
 
@@ -1233,16 +1258,16 @@
                     <label class="font-semibold" >
                         Lodgement Bank
                     </label>
-                    <div class="card flex justify-content-center">
+                    <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
                             formControlName="LodgementBankID" 
                             [options]="bank" 
                             optionLabel="Bank" 
-                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [style]="{'height': '40px'}" 
                             [showClear]="true" 
                             placeholder="Select Bank"
                         ></p-dropdown>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -1294,6 +1319,7 @@
                 </div>
             </div>
 
+            <!-- <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2"> -->
             <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2">
                 <div class="field">
                     <label class="font-semibold" >
@@ -1309,6 +1335,7 @@
                 </div>
             </div>
 
+            <!-- <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2"> -->
             <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2">
                 <div class="field">
                     <label class="font-semibold" >
@@ -1338,13 +1365,32 @@
 
         </div> -->
         
-        <button 
+        <!-- <div class="field"> -->
+            <div class="flex justify-content-end gap-2">
+
+                <p-button 
+                    icon="pi pi-times" 
+                    label="Cancel" 
+                    styleClass="p-button-rounded p-button-text"
+                    (click)="ShipTranVisible = false"
+                ></p-button>
+
+                <p-button 
+                    type="submit"
+                    label="Submit" 
+                    icon="pi pi-check"
+                    [loading]="submitShippingTransactionLoading" 
+                />
+            </div>
+        <!-- </div> -->
+
+        <!-- <button 
             pButton 
             pRipple 
             label="Submit" 
             class="bg-indigo-500 border-round border-none submit" 
             [disabled]=""
-        ></button>
+        ></button> -->
         
   
     </form>
@@ -1539,7 +1585,11 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-            <tr [class.landed]="row.Status == 2 && value2 == 1" [class.pullout]="row.Status == 3 && (value2 === 1 || 2)" class="white-space-nowrap">
+            <tr 
+                [class.landed]="row.Status == 2 && value2 == 1" 
+                [class.pullout]="row.Status == 3 && (value2 === 1 || 2)" 
+                class="white-space-nowrap"
+            >
                 <td data-title="Lot" *ngIf="value2 === 1" pFrozenColumn>
                     {{ row.Lot == 0 ? '-' : row.Lot}}
                 </td>
@@ -1784,8 +1834,8 @@
 
                         <!-- pull out button -->
                         <p
-                            (click)="onPullOut(row)" 
-                            *ngIf="value2 == 2 && row.Status === 2 "
+                            (click)="confirmPullOutShippingTransaction('center', row)" 
+                            *ngIf="value2 == 2 && row.Status == 2 && row.Packaging == 1"
                         >
                             <i class="pi pi-check" width="15px" height="15px"></i>
                             Pull Out

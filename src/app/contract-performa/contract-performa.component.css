@@ -4,6 +4,27 @@
     padding: 5px 10px;
 }
 
+:host ::ng-deep form .p-button {
+    width: auto;
+    border-radius: 5px;
+    padding: 8px 10px;
+}
+
+:host ::ng-deep .p-dropdown {
+    /* background: var(--surface-color); */
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+:host ::ng-deep p-dropdown.disabled .p-dropdown{
+    background-color: gainsboro; 
+    /* cursor: not-allowed; */
+}
+
+:host ::ng-deep fieldset:disabled input {
+    background: gainsboro;
+    /* cursor: not-allowed; */
+}
 
 /* tab */
 .radio-inputs {
@@ -113,6 +134,7 @@ td {
     /* border-bottom-style: dotted; */
     font-weight: var(--font-500);
     /* white-space: nowrap; */
+    /* background: transparent !important; */
 }
 
 
@@ -151,10 +173,10 @@ td {
     color: rgb(228, 84, 84);
 }
 
-.disabled {
-    opacity: 0.4;
-    pointer-events: none; /* prevents interactions */
-}
+/* .disabled {
+    opacity: 0.4; 
+    pointer-events: none; 
+} */
 
 .landed {
     /* background: #F0F8FF; */

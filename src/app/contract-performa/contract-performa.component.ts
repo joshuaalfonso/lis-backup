@@ -112,6 +112,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
     landedForm!: FormGroup;
 
     visibleLandedForm: boolean = false;
+    submitContractLoading: boolean = false;
+    submitShippingTransactionLoading: boolean = false;
 
     view: boolean = false;
     insert: boolean = false;
@@ -541,6 +543,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
     
     //submit contract form 
     onSubmit() {
+        this.submitContractLoading = true;
+
         // console.log(this.contractPerformaform.value)
         let authObs: Observable<ResponseData>;
         authObs = this.ContractPerformaService.saveData
@@ -573,6 +577,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                 });
                 this.clearItems();
                 this.onSelectFilter();
+                this.submitContractLoading = false;
+                this.visible = false;
             } 
 
             else if ( response === 2) {
@@ -584,6 +590,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                 });
                 this.clearItems();
                 this.onSelectFilter();
+                this.submitContractLoading = false;
+                this.visible = false;
             }
 
             else if ( response === 0) {
@@ -593,10 +601,13 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                     detail: 'Contract ' + this.contractPerformaform.value.ContractNo +  ' already exist', 
                     life: 3000 
                 });
+                this.submitContractLoading = false;
+                this.visible = false;
             }
         
         }, 
         errorMessage => {
+            this.submitContractLoading = false;
             this.MessageService.add({ 
                 severity: 'error', 
                 summary: 'Danger', 
@@ -720,7 +731,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
 
         // console.log(this.shippingTransactionForm.value)
         
-        
+        this.submitShippingTransactionLoading = true;
+
         let authObs: Observable<ResponseData>;
         authObs = this.ContractPerformaService.saveShippingTransaction
         (
@@ -785,6 +797,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                 this.shippingClearItems();
                 this.onFilterShippingTransaction()
                 this.ShipTranVisible = false;
+                this.submitShippingTransactionLoading = false;
             } 
             else if ( response === 2) {
                 this.MessageService.add({ 
@@ -796,6 +809,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                 this.shippingClearItems();
                 this.onFilterShippingTransaction()
                 this.ShipTranVisible = false;
+                this.submitShippingTransactionLoading = false;
             }
             else if ( response === 0) {
                 this.MessageService.add({ 
@@ -804,6 +818,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                     detail: 'Item: ' + this.shippingTransactionForm.value.ShippingTransactionID +  ' already exist', 
                     life: 3000 
                 });
+                this.submitShippingTransactionLoading = false;
             }
             
         }, 
@@ -813,10 +828,9 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                 detail: errorMessage, 
                 life: 3000 
             });
+            this.submitShippingTransactionLoading = false;
         })
     }
-
-
 
     // fill shipping transaction form inputs
     onSelectShipping(data: any, dialog?: Dialog) {
@@ -1309,6 +1323,35 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
     }
 
     // delete shpping transaction form
+    confirmPullOutShippingTransaction(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.ShippingTransactionID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const mbl = row.MBL == 0 ? row.BL : row.MBL;
+        const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
+
+        this.ConfirmationService.confirm({
+            message: `Are you sure you want to Pull Out ${blMBL} '${mbl}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onPullOut(row);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+    }
+
+    // delete shpping transaction form
     confirmDeleteShippingTransaction(position: string, row: any) {
         this.position = position;        
 
@@ -1318,10 +1361,14 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
         }
 
         const shippingTransactionID = row.ShippingTransactionID;
-        const lot = row.Lot;
+        const mbl = row.MBL == 0 ? row.BL : row.MBL;
+        const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
+
+        // const shippingTransactionID = row.ShippingTransactionID;
+        // const lot = row.Lot;
 
         this.ConfirmationService.confirm({
-            message: `Are you sure you want to delete Lot '${lot}' ?`,
+            message: `Are you sure you want to delete ${blMBL} '${mbl}' ?`,
             header: 'Confirmation',
             icon: 'pi pi-info-circle',
             acceptIcon:"none",

@@ -103,6 +103,7 @@ th {
     /* color: #757575; */
     font-weight: 600;
     text-transform: uppercase;
+    background: var(--surface-color);
 }
 
 td {
