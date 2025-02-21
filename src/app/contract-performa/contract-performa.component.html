@@ -1796,7 +1796,7 @@
                         <!-- sailing edit button -->
                         <p  
                             (click)="onSelectShipping( row, ShippingDialog)"
-                            *ngIf="value2 == 1 && row.Status === 1"
+                            *ngIf="value2 == 1 && (row.Status === 1 || row.Status === 2 || row.Status === 3)"
                         >
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>

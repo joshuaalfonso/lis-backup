@@ -232,9 +232,47 @@ export class SidebarComponent implements OnInit, OnDestroy{
                 {
                     title: 'Supplier',
                     icon: 'assets/icons/icon-flatbed.svg',
-                    routerLink: '/supplier',
-                    view: false,
-                }
+                    // routerLink: '/supplier',
+                    isCollapse: false,
+                    view: true,
+                    subMenu: [
+                        {
+                            title: 'Import',
+                            routerLink: '/supplier',
+                            view: false,
+                        },
+                        {
+                            title: 'Local',
+                            routerLink: '/local-supplier',
+                            view: true,
+                        }
+                    ]
+                },
+                // {
+                //     title: 'Supplier',
+                //     icon: 'assets/icons/icon-flatbed.svg',
+                //     isCollapse: false,
+                //     view: true,
+                //     subMenu: [
+                //         {
+                //             title: 'Supplier',
+                //             routerLink: '/supplier',
+                //             view: false,
+                //         },
+                //         // {
+                //         //     title: 'Checker Type',
+                //         //     routerLink: '/checker-type',
+                //         //     view: true,
+                //         //     insert: true,
+                //         //     edit: true
+                //         // },
+                //         {
+                //             title: 'Checker Schedule',
+                //             routerLink: '/checker-schedule',
+                //             view: false,
+                //         },
+                //     ]
+                // },
 
               ],
             },
@@ -468,7 +506,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             this.menus[1].subMenu[4].subMenu[1].view = true;
                             break
                         case '2.14.1' :
-                            this.menus[1].subMenu[5].view = true;
+                            this.menus[1].subMenu[5].subMenu[0].view = true;
                             break
                         case '3' :
                             this.menus[2].view = true;

@@ -124,6 +124,10 @@ p-inputNumber ::ng-deep input {
     color: var(--font-color);
 }
 
+progress::-webkit-progress-value  {
+    background: red;
+}
+
 
 @media (max-width: 1142px) {
     .thead {

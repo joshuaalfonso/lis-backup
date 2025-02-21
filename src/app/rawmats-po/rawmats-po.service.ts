@@ -22,19 +22,30 @@ export class RawMatsPOService {
         return this.http.get<any>( this.baseUrl + '/project/a_RawMatsPORequest.php?id=' + id);
     }
 
+    poCompleted(id: any) {
+        return this.http.post(
+            this.baseUrl + '/project/b_RawMatsStatus.php', 
+            {
+                PurchaseOrderID: id
+            }
+         )
+    }
+
     savedata
     (
         PurchaseOrderID: number,
         PONo: string,
         PODate: string,
         DeliveryDate: string,
-        Terms: string,
+        // Terms: string,
         PRNumber: string,
         SupplierID: number,
-        SupplierAddress: number,
+        // SupplierAddress: number,
         RawMaterialID: number,
-        Quantity: number,
+        // Quantity: number,
         Weight: number,
+        UnitPricePerKilo: number,
+        Remarks: string,
         deleted: number,
         UserID: string,
         OrderDetail: any[]
@@ -48,13 +59,15 @@ export class RawMatsPOService {
                 PONo: PONo,
                 PODate: PODate,
                 DeliveryDate: DeliveryDate,
-                Terms: Terms,
+                // Terms: Terms,
                 PRNumber: PRNumber,
                 SupplierID: SupplierID,
-                SupplierAddress: SupplierAddress,
+                // SupplierAddress: SupplierAddress,
                 RawMaterialID: RawMaterialID,
-                Quantity: Quantity,
+                // Quantity: Quantity,
                 Weight: Weight,
+                UnitPricePerKilo: UnitPricePerKilo,
+                Remarks: Remarks,
                 deleted: deleted,
                 UserID: UserID,
                 OrderDetail: OrderDetail

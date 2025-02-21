@@ -4,7 +4,7 @@ import { RawMatsPOService } from "./rawmats-po.service";
 import { Observable, Subscription } from "rxjs";
 import { SupplierService } from "../supplier/supplier.service";
 import { TruckService } from "../truck/truck.service";
-import { MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 import { Dialog } from "primeng/dialog";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { Table } from "primeng/table";
@@ -48,6 +48,8 @@ export class RawMatsPOComponent implements OnInit{
 
     submitLoading: boolean = false;
 
+    position: string = 'center';
+
     private subscription: Subscription = new Subscription;
 
     constructor
@@ -58,7 +60,8 @@ export class RawMatsPOComponent implements OnInit{
         private MessageService: MessageService,
         private RawMaterialService: RawMaterialsService,
         private UsersService: UsersService,
-        private auth: AuthService
+        private auth: AuthService,
+        private ConfirmationService: ConfirmationService
     ) {}
 
     ngOnInit(): void {
@@ -67,13 +70,16 @@ export class RawMatsPOComponent implements OnInit{
             'PONo': new FormControl(null, Validators.required),
             'PODate': new FormControl(null, Validators.required),
             'DeliveryDate': new FormControl(null, Validators.required),
-            'Terms': new FormControl(null, Validators.required),
+            // 'Terms': new FormControl(null, Validators.required),
             'PRNumber': new FormControl(null, Validators.required),
             'SupplierID': new FormControl(null, Validators.required),
-            'SupplierAddress': new FormControl(null, Validators.required),
+            // 'SupplierAddress': new FormControl(null, Validators.required),
             'RawMaterialID': new FormControl(null, Validators.required),
-            'Quantity': new FormControl(null),
-            'Weight': new FormControl(null),
+            // 'Quantity': new FormControl(null, Validators.required),
+            'Weight': new FormControl(null, Validators.required),
+            'UnitPricePerKilo': new FormControl(null, Validators.required),
+            'Remarks': new FormControl(null),
+
             'deleted': new FormControl(null),
             'UserID': new FormControl(0),
             // 'OrderDetail': new FormArray([])
@@ -264,13 +270,15 @@ export class RawMatsPOComponent implements OnInit{
             this.rawMatsPOForm.value.PONo,
             this.rawMatsPOForm.value.PODate.toLocaleDateString(),
             this.rawMatsPOForm.value.DeliveryDate.toLocaleDateString(),
-            this.rawMatsPOForm.value.Terms,
+            // this.rawMatsPOForm.value.Terms,
             this.rawMatsPOForm.value.PRNumber,
             this.rawMatsPOForm.value.SupplierID,
-            this.rawMatsPOForm.value.SupplierAddress,
+            // this.rawMatsPOForm.value.SupplierAddress,
             this.rawMatsPOForm.value.RawMaterialID,
-            this.rawMatsPOForm.value.Quantity,
+            // this.rawMatsPOForm.value.Quantity,
             this.rawMatsPOForm.value.Weight,
+            this.rawMatsPOForm.value.UnitPricePerKilo,
+            this.rawMatsPOForm.value.Remarks,
             this.rawMatsPOForm.value.deleted,
             this.userID,
             this.rawMatsPOForm.value.OrderDetail,
@@ -360,13 +368,15 @@ export class RawMatsPOComponent implements OnInit{
             PONo: data.PONo,
             PODate: new Date(data.PODate.date),
             DeliveryDate: new Date(data.DeliveryDate.date),
-            Terms: data.Terms,
+            // Terms: data.Terms,
             PRNumber: data.PRNumber,
             SupplierID: data.SupplierID,
-            SupplierAddress: data.SupplierAddress,
+            // SupplierAddress: data.SupplierAddress,
             RawMaterialID: data.RawMaterialID,
-            Quantity: data.Quantity,
+            // Quantity: data.Quantity,
             Weight: data.Weight,
+            UnitPricePerKilo: data.UnitPricePerKilo,
+            Remarks: data.Remarks,
             TotalQuantity: data.TotalQuantity,
             TotalAmount: data.TotalAmount,
             deleted: data.deleted,
@@ -444,6 +454,14 @@ export class RawMatsPOComponent implements OnInit{
         // )
     }
 
+    getRoundedPercentage(served: number, requestWeight: number, precision: number): number {
+        if (requestWeight === 0) return 0; // Avoid division by zero
+        const percentage = (served / requestWeight) * 100;
+        // return Number(percentage.toFixed(2)); 
+    
+        return Math.round(percentage);
+      }
+
 
     onComputeAmount() {
         // console.log('test');
@@ -496,6 +514,64 @@ export class RawMatsPOComponent implements OnInit{
         .filter((item: any) => item.RawMaterial)  // Filter out items without RawMaterial
         .map((item: any) => item.RawMaterial!)   // Map to RawMaterial, using non-null assertion
         .join(', ');        
+    }
+
+    poCompleted(id: any) {
+
+        this.RawMatsPOService.poCompleted(id).subscribe(
+            response => {
+
+                if ( response === 2) {
+                    this.MessageService.add({ 
+                        severity: 'success', 
+                        summary: 'Success', 
+                        detail: 'Successfully Updated!', 
+                        life: 3000 
+                    });
+                    this.getData();
+                }
+
+            }, error => {
+                this.MessageService.add({ 
+                    severity: 'error', summary: 'Danger', 
+                    detail: error || 'Unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+
+    }
+
+
+    confirmDeleteShippingTransaction(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.PurchaseOrderID) {
+            alert('Unkown error occured');
+            return
+        }
+
+        const purchaseOrderID = row.PurchaseOrderID;
+        const po = row.PONo;
+
+        // const shippingTransactionID = row.ShippingTransactionID;
+        // const lot = row.Lot;
+
+        this.ConfirmationService.confirm({
+            message: `Are you sure '${po}' is now completed ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.poCompleted(purchaseOrderID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
     }
 
 }

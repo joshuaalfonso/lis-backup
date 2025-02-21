@@ -177,6 +177,7 @@ import { RawmatsInspectionFormComponent } from './lab/rawmats-inspection/ui/rawm
 import { RawmatsInspectionTableComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-table/rawmats-inspection-table.component';
 import { RawMaterialsModalComponent } from './raw-materials/ui/raw-materials-modal/raw-materials-modal.component';
 import { RawMaterialsTableComponent } from './raw-materials/ui/raw-materials-table/raw-materials-table.component';
+import { LocalSupplier } from './supplier-local/local-supplier.component';
 
 
 
@@ -257,7 +258,8 @@ import { RawMaterialsTableComponent } from './raw-materials/ui/raw-materials-tab
     RawmatsInspectionComponent,
     RawmatsInspectionFormComponent,
     RawmatsInspectionTableComponent,
-    RawMaterialsTableComponent
+    RawMaterialsTableComponent,
+    LocalSupplier
     
   ],
   imports: [

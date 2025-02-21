@@ -53,8 +53,8 @@
                 <th>#</th>
                 <th>Raw Material</th>
                 <th>Category</th>
-                <th>Quanitity</th>
-                <th>Weight</th>
+                <th *ngIf="stockView">Quanitity</th>
+                <th *ngIf="stockView">Weight</th>
                 <th>Status</th>
                 <th *ngIf="edit"></th>
             </tr>
@@ -74,11 +74,11 @@
                     <span class="p-column-title">Category</span> 
                     {{ row.Category }}
                 </td>
-                <td>
+                <td *ngIf="stockView">
                     <span class="p-column-title">Quantity</span> 
                     {{ row.Quantity | number}}
                 </td>
-                <td>
+                <td *ngIf="stockView">
                     <span class="p-column-title">Weight</span> 
                     {{ row.Weight | number}}
                 </td>

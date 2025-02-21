@@ -54,6 +54,7 @@ import { ProfileSettingsComponent } from "./profile-settings/profile-settings.co
 import { AccountDetailsComponent } from "./account-details/account-details.component";
 import { SecurityComponent } from "./security/security.component";
 import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-inspection.component";
+import { LocalSupplier } from "./supplier-local/local-supplier.component";
 
 
 
@@ -203,6 +204,11 @@ const routes: Routes = [
         data: {
             'role': '2.14.1'
         }
+    },
+    {
+        path: 'local-supplier', 
+        component: LocalSupplier, 
+        canActivate: [AuthGuard]
     },
     {
         path: 'broker', component: 

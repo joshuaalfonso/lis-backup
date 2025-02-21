@@ -12,6 +12,7 @@ export class RawMaterialsTableComponent implements OnInit, OnDestroy {
   @Input() rawMaterials: any[] = [];
   @Input() insert: boolean = false;
   @Input() edit: boolean = false;
+  @Input() stockView: boolean = false;
   @Input() isLoading: boolean = false;
   @Output() showDialog = new EventEmitter<void>();
   @Output() onSelect = new EventEmitter<void>();

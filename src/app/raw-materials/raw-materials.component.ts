@@ -27,6 +27,7 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
     insert: boolean = false;
     edit: boolean = false;
     generateReport: boolean = false;
+    stockView: boolean = false;
 
     userID: string = '';
 
@@ -128,6 +129,9 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
                                 break;
                             case '2.1.4':
                                 this.generateReport = true;
+                                break;
+                            case '2.1.5':
+                                this.stockView = true;
                                 break;
                             default:
                                 break;

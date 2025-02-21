@@ -1,5 +1,9 @@
 <!-- ======= TOAST NOTIFICATION ======== -->
 <p-toast></p-toast>
+<p-confirmDialog 
+    key="positionDialog" 
+    [position]="position" 
+    rejectButtonStyleClass="p-button-outlined" />
 
 <!-- ======== CONFIRM POP-UP======== -->
 <p-confirmPopup></p-confirmPopup>
@@ -81,34 +85,37 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <!-- <th style="width: 5rem"></th> -->
+                <th style="width: 5rem"></th>
                 <th>PO #</th>
                 <!-- <th>PO Date</th> -->
-                <th>Terms</th>
+                <!-- <th>Terms</th> -->
                 <th>Delivery Date</th>
                 <th>PR #</th>
-                <th>RawMaterial</th>
-                <th>Quantity</th>
-                <th>Weight</th>
-                <th>Supplier</th>
+                <th>Raw Material</th>
+                <th>Unit Price Per Kilo</th>
+                <!-- <th>Quantity</th> -->
+                <!-- <th>Weight</th> -->
+                <th>Progress</th>
+                <!-- <th>Supplier</th> -->
                 <!-- <th>Supplier Address</th> -->
                 <!-- <th>Item</th> -->
                 <!-- <th>Total Quantity</th>
                 <th>Total Amount</th> -->
+                <th>Status</th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
             <tr>
-                <!-- <td>
+                <td>
                     <p-button 
                         pRipple 
                         [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
                         [pRowToggler]="row" 
                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
                     />
-                </td> -->
+                </td>
                 <td  data-title="PONo"> 
                     <span class="">{{ row.PONo }}</span> 
                     <span class="block text-xs text-gray-500"> 
@@ -118,9 +125,9 @@
                 <!-- <td  data-title="PODate"> 
                     {{ row.PODate.date | date: 'MM/dd/yyyy' }} 
                 </td> -->
-                <td  data-title="Terms"> 
+                <!-- <td  data-title="Terms"> 
                     {{ row.Terms }} Days
-                </td>
+                </td> -->
                 <td  data-title="PODate"> 
                     {{ row.DeliveryDate.date | date: 'MMM dd, yyyy' }} 
                 </td>
@@ -128,21 +135,50 @@
                     {{ row.PRNumber }} 
                 </td>
                 <td  data-title="RawMaterial"> 
-                    {{ row.RawMaterial || '-'}} 
+                    {{ row.RawMaterial  || '-'}} 
+                    <div class="sub-text">
+                        {{ row.Supplier }}
+                    </div>
                 </td>
-                <td  data-title="Quantity"> 
-                    {{ row.Quantity || '-'}} 
+                <td>
+                    {{ row.UnitPricePerKilo || '-'}}
                 </td>
-                <td  data-title="Weight"> 
-                    {{ row.Weight || '-'}} 
+                <!-- <td  data-title="Quantity"> 
+                    {{ (row.Quantity | number) || '-'}} {{ row.Quantity > 0 ? 'bags' : 'bag' }}
+                </td> -->
+                <!-- <td  data-title="Weight"> 
+                    {{ (row.Weight | number) || '-'}} kg
+                </td> -->
+                <td  data-title="Progress" style="width: 200px;"> 
+                    <!-- {{ row.Progress }}  -->
+                    <progress id="file" value="{{ row.Delivered }}" max="{{ row.Weight }}"> 32% </progress>
+                    <div class="sub-text">
+                        {{ (row.Delivered | number) || '-'}} / {{ (row.Weight | number) || '-' }} kg
+                    </div>
+                    <!-- <div>
+                        <p-progressBar 
+                            [value]="getRoundedPercentage(row.Delivered, row.Weight, 1)" 
+                            [style]="{ height: '6px', marginBottom: '5px'}" 
+                            [showValue]="false"
+                        />
+                        
+                        <div class="flex justify-content-between">
+                            <span 
+                            class="sub-text"
+                        >
+                            {{ row.Delivered | number }} / {{ row.Weight | number }} MT
+                        </span>
+                        <span 
+                            class="sub-text"
+                        >
+                             {{ (row.Delivered -row.Weight) | number }} BAL
+                        </span>
+                        </div>
+                    </div> -->
                 </td>
-                <td  data-title="Supplier">  
-                    <!-- {{ row.Supplier}}  -->
+                <!-- <td  data-title="Supplier">  
                     <span class="">{{ row.Supplier }}</span> 
-                    <!-- <span class="block text-xs text-gray-500">
-                        {{ row.SupplierAddress }} 
-                    </span> -->
-                </td>
+                </td> -->
                 <!-- <td  data-title="Supplier"> 
                     {{ row.SupplierAddress }} 
                 </td> -->
@@ -156,6 +192,14 @@
                 <td  data-title="TotalWeight"> 
                     {{ row.TotalAmount |number }} 
                 </td> -->
+                <td *ngIf="row.Status == 0">
+                    <p-tag severity="warning" value="Pending"/>
+                </td>
+
+                <td *ngIf="row.Status == 1">
+                    <p-tag severity="success" value="Completed"/>
+                </td>
+
                 <td  data-title="Actions" *ngIf="edit">
                     <!-- <button 
                         pButton 
@@ -187,11 +231,9 @@
                                 </svg>
                                 Edit
                             </p>
-                            <p >
-                                <svg  width="15px" height="15px">
-                                <use href="assets/icons/icon-file-delete.svg#delete"></use>
-                            </svg>
-                            Delete
+                            <p (click)="confirmDeleteShippingTransaction('center', row)">
+                                <i class="pi pi-check"></i>
+                                Completed
                         </p>
                         </div>
                     </p-overlayPanel>
@@ -205,44 +247,48 @@
             </tr>
         </ng-template>
 
-        <!-- <ng-template pTemplate="rowexpansion" let-PO>
+        <ng-template pTemplate="rowexpansion" let-PO>
             <tr>
                 <td colspan="12">
                     <div class="">
-                        <p-table [value]="PO.OrderDetail" dataKey="PO">
+                        <p-table [value]="PO.UnloadingDetail" dataKey="PO">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th style="width: 5rem"></th>
-                                    <th>Material Code</th>
-                                    <th>Description</th>
-                                    <th>Ordered Quantity</th>
+                                    <th>Date Unload</th>
+                                    <th>DR #</th>
+                                    <th>Plate #</th>
+                                    <th>Weight</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-detail let-index="index">
                                 <tr>
                                     <td></td>
-                                    <td> 
-                                        {{ detail.MaterialCode }}
+                                    <td>
+                                        {{ detail.DateUnload.date | date: 'MM/dd/yyyy' }}
                                     </td>
                                     <td> 
-                                        {{ detail.RawMaterial }}
+                                        {{ detail.DrNumber }}
                                     </td>
                                     <td> 
-                                        {{ detail.Quantity | number }}
+                                        {{ detail.PlateNo }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.Weight | number }} kg
                                     </td>
                                     
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="6">There are no containers for this MBL yet.</td>
+                                    <td colspan="6">There are no unloaded truck for this PO yet.</td>
                                 </tr>
                             </ng-template>
                         </p-table>
                     </div>
                 </td>
             </tr>
-        </ng-template> -->
+        </ng-template>
 
     </p-table>
 
@@ -300,25 +346,18 @@
 
         <div class="grid">
 
-            <div class="col">
+            <!-- <div class="col">
                 <div class="field">
                     <label class="font-semibold" >
                         Terms
                     </label>
-                    <!-- <input 
-                        pInputText 
-                        formControlName="Terms" 
-                        autocomplete="off" 
-                        class="input" 
-                        placeholder="Enter Terms"
-                    > -->
                     <p-inputNumber 
                         inputId="integeronly" 
                         formControlName="Terms"
                         placeholder="Enter Terms"
                     /> 
                 </div>
-            </div>
+            </div> -->
 
             <div class="col">
                 <div class="field">
@@ -334,10 +373,6 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="grid">
-
             <div class="col">
                 <div class="field">
                     <label class="font-semibold" >
@@ -352,6 +387,10 @@
                     >
                 </div>
             </div>
+
+        </div>
+
+        <div class="grid">
 
             <div class="col">
 
@@ -374,11 +413,27 @@
 
             </div>
 
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold">
+                        Unit Price Per Kilo
+                    </label>
+                    <p-inputNumber 
+                        inputId="integeronly" 
+                        formControlName="UnitPricePerKilo"
+                        placeholder="Enter Price"
+                    /> 
+                </div>
+
+            </div>
+
         </div>
+
 
         <div class="grid">
 
-            <div class="col">
+            <!-- <div class="col">
                 <div class="field">
                     <label class="font-semibold" >
                         Quantity
@@ -389,7 +444,7 @@
                         placeholder="Enter quantity"
                     /> 
                 </div>
-            </div>
+            </div> -->
 
             <div class="col">
                 <div class="field">
@@ -433,6 +488,21 @@
             <div class="col">
                 <div class="field">
                     <label class="font-semibold" >
+                        Remarks
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="Remarks" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Remarks"
+                    >
+                </div>
+            </div>
+
+            <!-- <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
                         Supplier Address
                     </label>
                     <input 
@@ -443,12 +513,7 @@
                         placeholder="Enter Supplier Address"
                     >
                 </div>
-            </div>
-
-        </div>
-
-        <div class="grid">
-
+            </div> -->
 
         </div>
 

@@ -18,6 +18,10 @@ export class SupplierService {
         return this.http.get<any>( this.baseUrl + '/project/a_supplier.php');
     }
 
+    getLocalSupplier(){
+        return this.http.get<any>( this.baseUrl + '/project/a_supplierLocalTab.php');
+    }
+
     onDeleteData(id:string) {
         return this.http.get<any>( this.baseUrl + '/project/c_Supplier.php?id=' + id);
     }
