@@ -26,12 +26,19 @@ export class SupplierService {
         return this.http.get<any>( this.baseUrl + '/project/c_Supplier.php?id=' + id);
     }
 
-    saveData(
+    saveData (
         SupplierID: string,
         Supplier: string,
         Address: string,
         ContactPerson: string,
         ContactNumber: string,
+        Source: number,
+        Product: string,
+        Currency: string,
+        Origin: string,
+        Indentor: string,
+        IndentorAddress: string,
+        Terms: string,
         UserID: string
     ) {
         return this.http.post
@@ -43,6 +50,13 @@ export class SupplierService {
                 Address: Address,
                 ContactPerson: ContactPerson,
                 ContactNumber: ContactNumber,
+                Source: Source,
+                Product: Product,
+                Currency: Currency,
+                Origin: Origin,
+                Indentor: Indentor,
+                IndentorAddress: IndentorAddress,
+                Terms: Terms,
                 UserID: UserID
             }
         )
@@ -53,6 +67,7 @@ export class SupplierService {
             })
         );
     }
+
 
     private handleError(errorRes: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';

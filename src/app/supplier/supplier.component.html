@@ -75,6 +75,7 @@
             <tr class="thead">
                 <th>#</th>
                 <th>Supplier</th>
+                <th>Origin</th>
                 <th>Address</th>
                 <th>Contact Person</th>
                 <th *ngIf="edit"></th>
@@ -85,14 +86,20 @@
             <tr>
                 <td data-title="#">{{ rowIndex + 1 }}</td>
                 <td data-title="Supplier">{{ row.Supplier }}</td>
+                <td data-title="Origin">
+                    <div class="flex gap-2">
+                        <span [class]="'fi fi-' + getFlag(row.Origin)?.toLowerCase()"></span> 
+                        {{ row.Origin }}
+                    </div>
+                </td>
                 <td data-title="Address">
                     <span class="text-overflow" pTooltip={{row.Address}} tooltipPosition="top">
                         {{ row.Address }}
                     </span>
                 </td>
                 <td data-title="Contact Person">
-                    {{ row.ContactPerson }}
-                    <span class="sub-text"> {{ row.ContactNumber }} </span>
+                    {{ row.ContactPerson || '-'}}
+                    <span class="sub-text"> {{ row.ContactNumber || '-'}} </span>
                 </td>
                 <td data-title="Actions" *ngIf="edit">
                     <!-- <button 
@@ -174,6 +181,40 @@
                 class="input" 
                 placeholder="Enter supplier"
             >
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Country
+            </label>
+            <p-dropdown 
+                [options]="countries" 
+                formControlName="Origin"
+                optionLabel="name" 
+                [style]="{'height': '40px'}" 
+                placeholder="Select Country" 
+                appendTo="body" 
+                [filter]="true"
+                filterBy="country"
+                [showClear]="true"
+       
+                (onChange)="onSelectCountry($event.value)"
+            >
+                <ng-template pTemplate="selectedItem" let-selectedOption>
+                    <div class="flex align-items-center gap-2">
+                        <span [class]="'fi fi-' + selectedOption.countryCode.toLowerCase()"></span>
+                        <div>{{ selectedOption.country }}</div>
+                    </div>
+                </ng-template>
+
+                <ng-template let-country pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                        <span [class]="'fi fi-' + country.countryCode.toLowerCase()"></span>
+                        <div>{{ country.country }}</div>
+                    </div>
+                </ng-template>
+
+            </p-dropdown>
         </div>
 
         <div class="field">

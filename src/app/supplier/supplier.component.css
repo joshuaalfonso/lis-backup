@@ -103,6 +103,13 @@ p-inputNumber ::ng-deep input {
     padding: 0;
 }
 
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+
 
 @media (max-width: 1142px) {
     .thead {

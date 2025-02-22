@@ -1,3 +1,20 @@
-p {
-    color:  red;
+
+
+
+
+
+/* ==== TABLE ==== */
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-500);
+}
+
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
 }

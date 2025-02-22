@@ -244,7 +244,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Local',
                             routerLink: '/local-supplier',
-                            view: true,
+                            view: false,
                         }
                     ]
                 },
@@ -507,6 +507,9 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             break
                         case '2.14.1' :
                             this.menus[1].subMenu[5].subMenu[0].view = true;
+                            break
+                        case '2.15.1' :
+                            this.menus[1].subMenu[5].subMenu[1].view = true;
                             break
                         case '3' :
                             this.menus[2].view = true;

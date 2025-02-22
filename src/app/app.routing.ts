@@ -208,7 +208,10 @@ const routes: Routes = [
     {
         path: 'local-supplier', 
         component: LocalSupplier, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '2.15.1'
+        }
     },
     {
         path: 'broker', component: 

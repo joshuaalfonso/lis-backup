@@ -7,6 +7,8 @@ import { Table } from "primeng/table";
 import { ConfirmationService } from "primeng/api";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { CountryService } from "../supplier-local/country.service";
+import currencySymbolMap from 'currency-symbol-map';
 
 @Component({
     selector: 'app-supplier',
@@ -34,6 +36,8 @@ export class SupplierComponent implements OnInit, OnDestroy{
     edit: boolean = false;
     generateReport: boolean = false;
 
+    countries: any[] = [];
+
     private subscription: Subscription = new Subscription();
 
     constructor( 
@@ -41,6 +45,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private UsersService: UsersService,
+        private CountryService: CountryService,
         private AuthService: AuthService
     ){}
 
@@ -52,13 +57,30 @@ export class SupplierComponent implements OnInit, OnDestroy{
             'Address': new FormControl(null, Validators.required),
             'ContactPerson': new FormControl(null, Validators.required),
             'ContactNumber': new FormControl(null, Validators.required),
-            'UserID' : new FormControl(0)
+            'Source': new FormControl(null),
+            'Product': new FormControl(null),
+            'Currency': new FormControl(null),
+            'Origin': new FormControl(null),
+            'Indentor': new FormControl(null),
+            'IndentorAddress': new FormControl(null),
+            'Terms': new FormControl(null),
+            'UserID': new FormControl(null),
         })
+
+        // 'SupplierID': new FormControl(0),
+        // 'Supplier': new FormControl(null, Validators.required),
+        // 'Address': new FormControl(null, Validators.required),
+        // 'ContactPerson': new FormControl(null, Validators.required),
+        // 'ContactNumber': new FormControl(null, Validators.required),
+        // 'Source': new FormControl(null),
+        // 'Product': new FormControl(null),
+        // 'UserID' : new FormControl(0)
 
         // ==== DISPLAY DATA ====
         this.getUser();
         this.getAccess();
         this.getSupplier();
+        this.getCountry();
     }
 
     // ==== GET SUPPLIER DATA ====
@@ -132,6 +154,53 @@ export class SupplierComponent implements OnInit, OnDestroy{
         this.supplierForm.patchValue({SupplierID: 0})
     }
 
+    getCountry() {
+
+        this.countries = this.CountryService.countryList();
+        // console.log(this.countries);
+    }
+
+    onSelectCountry(event: any) {
+
+        if (event == null) {
+            console.log('No currency code');
+            this.supplierForm.patchValue({Currency: null})
+            return
+        }
+
+        const currency = currencySymbolMap(event.code);
+
+        this.supplierForm.patchValue({Currency: currency})
+           
+    }
+
+    findObjectByID(countrName: string) {
+        
+        for(let i = 0; i < this.countries.length; i++) {
+
+           if (this.countries[i].country == countrName) {
+               return this.countries[i];
+           }
+
+       }
+
+       return countrName;
+    }
+
+    getFlag(coutryName: string) {
+
+        for(let i = 0; i < this.countries.length; i++) {
+
+            if (this.countries[i].country == coutryName) {
+                return this.countries[i].countryCode
+            }
+
+        }
+
+        return null;
+
+    }
+
     // ==== SUBMIT FORM DATA ====
     onSubmit() {
 
@@ -140,7 +209,9 @@ export class SupplierComponent implements OnInit, OnDestroy{
             return
         } 
 
-        this.submitLoading = true;
+        // console.log(this.supplierForm.value);    
+
+        this.submitLoading = true;    
 
         let authObs: Observable<ResponseData>;
         authObs = this.SupplierService.saveData(
@@ -149,6 +220,13 @@ export class SupplierComponent implements OnInit, OnDestroy{
             this.supplierForm.value.Address, 
             this.supplierForm.value.ContactPerson, 
             this.supplierForm.value.ContactNumber, 
+            this.supplierForm.value.Source, 
+            this.supplierForm.value.Product, 
+            this.supplierForm.value.Currency, 
+            this.supplierForm.value.Origin?.country || null, 
+            this.supplierForm.value.Indentor, 
+            this.supplierForm.value.IndentorAddress, 
+            this.supplierForm.value.Terms, 
             this.userID
         );
 
@@ -200,8 +278,11 @@ export class SupplierComponent implements OnInit, OnDestroy{
 
     // ==== EDIT ITEM ====
     onSelect(data: any) {
+
         this.visible = true;
         this.dialogHeader = 'Edit Supplier';
+
+        const origin = this.findObjectByID(data.Origin);
 
         this.supplierForm.setValue({
             SupplierID: data.SupplierID,
@@ -209,6 +290,13 @@ export class SupplierComponent implements OnInit, OnDestroy{
             Address: data.Address,
             ContactPerson: data.ContactPerson,
             ContactNumber: data.ContactNumber,
+            Source: data.Source,
+            Product: data.Product,
+            Currency: data.Currency,
+            Origin: origin,
+            Indentor: data.Indentor,
+            IndentorAddress: data.IndentorAddress,
+            Terms: data.Terms,
             UserID: data.UserID
         })
     }
