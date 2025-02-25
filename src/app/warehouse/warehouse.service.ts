@@ -20,7 +20,7 @@ export class WarehouseService {
     }
 
     getWarehouseLocation() {
-        return this.http.get<any>( this.baseUrl + '/project/d_WarehouseLocation.php');
+        return this.http.get<any>( this.baseUrl + '/project/a_WarehouseLocation.php');
     }
 
     onDeleteData(id:string) {

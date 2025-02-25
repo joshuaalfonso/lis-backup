@@ -51,10 +51,22 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Raw Material</th>
-                <th>Category</th>
-                <th *ngIf="stockView">Quanitity</th>
-                <th *ngIf="stockView">Weight</th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="Category">   
+                    Category
+                    <p-sortIcon field="Category" />
+                </th>
+                <th pSortableColumn="Quantity" *ngIf="stockView">   
+                    Quantity
+                    <p-sortIcon field="Quantity" />
+                </th>
+                <th pSortableColumn="Weight" *ngIf="stockView">   
+                    Weight
+                    <p-sortIcon field="Weight" />
+                </th>
                 <th>Status</th>
                 <th *ngIf="edit"></th>
             </tr>

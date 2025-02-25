@@ -23,7 +23,7 @@ export class WarehousePartitionService {
     // }
 
     onDeleteData(id:string) {
-        return this.http.get<any>( this.baseUrl + '/project/c_WarehousePartition.php?id=' + id);
+        return this.http.post<any>( this.baseUrl + '/project/d_WarehousePartition.php' , {WarehousePartitionID: id});
     }
 
     saveData

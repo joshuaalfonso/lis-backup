@@ -61,7 +61,7 @@ export class RawMatsPOComponent implements OnInit{
         private RawMaterialService: RawMaterialsService,
         private UsersService: UsersService,
         private auth: AuthService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
     ) {}
 
     ngOnInit(): void {
@@ -77,7 +77,7 @@ export class RawMatsPOComponent implements OnInit{
             'RawMaterialID': new FormControl(null, Validators.required),
             // 'Quantity': new FormControl(null, Validators.required),
             'Weight': new FormControl(null, Validators.required),
-            'UnitPricePerKilo': new FormControl(null, Validators.required),
+            'UnitPricePerKilo': new FormControl(null),
             'Remarks': new FormControl(null),
 
             'deleted': new FormControl(null),
@@ -169,7 +169,7 @@ export class RawMatsPOComponent implements OnInit{
 
     getSupplier() {
         this.subscription.add(
-            this.SuppplierService.getSupplierData().subscribe(
+            this.SuppplierService.getLocalSupplier().subscribe(
                 response => {
                     this.supplier = response;
                 }
@@ -246,14 +246,13 @@ export class RawMatsPOComponent implements OnInit{
         table.filterGlobal(inputValue, 'contains');
     }
 
-    onSelectSupplier(data: any) {
-        if (!data) {
-            this.rawMatsPOForm.patchValue({SupplierAddress: null});
-            return;
-        }
-        this.rawMatsPOForm.patchValue({SupplierAddress: this.supplier[data].Address})
-        // console.log(data.value);
-    }
+    // onSelectSupplier(data: any) {
+    //     if (!data) {
+    //         this.rawMatsPOForm.patchValue({SupplierAddress: null});
+    //         return;
+    //     }
+    //     this.rawMatsPOForm.patchValue({SupplierAddress: this.supplier[data].Address})
+    // }
 
     onSubmit() {
 

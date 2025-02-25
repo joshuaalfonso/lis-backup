@@ -311,7 +311,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     this.supplier = response;
                 }
             )
-       )
+        )
     }
 
     getBL() {
@@ -475,10 +475,10 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         )
     }
 
-    onSubmit() {
+    onSubmit(fileUpload?: any) {
 
 
-        this.submitLoading = true;
+        // this.submitLoading = true;
 
         const formData = new FormData();
 
@@ -510,52 +510,53 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         this.files.forEach(file => {
             formData.append('files[]', file);
         })
-        
 
-        let authObs: Observable<ResponseData>;
-        authObs = this.UnloadingTransactionService.saveData
-        (           
-            formData
-        )
+        fileUpload.clear();
 
-        authObs.subscribe(response =>{
-            this.submitLoading = false;
+        // let authObs: Observable<ResponseData>;
+        // authObs = this.UnloadingTransactionService.saveData
+        // (           
+        //     formData
+        // )
 
-            if( response == 1) {
-                this.MessageService.add({ 
-                    severity: 'success', 
-                    summary: 'Success', 
-                    detail: ' successfully recorded', 
-                    life: 3000 
-                });
-                this.onFilterUnloading();
-                this.clearItems();
-                this.visible = false;
-            } 
-            else if ( response == 2) {
-                this.MessageService.add({ 
-                    severity: 'success', 
-                    summary: 'Success', 
-                    detail: ' successfully updated', 
-                    life: 3000 
-                });
-                this.onFilterUnloading();
-                this.clearItems();
-                this.visible = false;
-            }
-            else if ( response == 0) {
-                this.MessageService.add({ 
-                    severity: 'error', 
-                    summary: 'Danger', 
-                    detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', 
-                    life: 3000 
-                });
-            }
+        // authObs.subscribe(response =>{
+        //     this.submitLoading = false;
+
+        //     if( response == 1) {
+        //         this.MessageService.add({ 
+        //             severity: 'success', 
+        //             summary: 'Success', 
+        //             detail: ' successfully recorded', 
+        //             life: 3000 
+        //         });
+        //         this.onFilterUnloading();
+        //         this.clearItems();
+        //         this.visible = false;
+        //     } 
+        //     else if ( response == 2) {
+        //         this.MessageService.add({ 
+        //             severity: 'success', 
+        //             summary: 'Success', 
+        //             detail: ' successfully updated', 
+        //             life: 3000 
+        //         });
+        //         this.onFilterUnloading();
+        //         this.clearItems();
+        //         this.visible = false;
+        //     }
+        //     else if ( response == 0) {
+        //         this.MessageService.add({ 
+        //             severity: 'error', 
+        //             summary: 'Danger', 
+        //             detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', 
+        //             life: 3000 
+        //         });
+        //     }
             
-        }, errorMessage => {
-            this.submitLoading = false;
-            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
-        })
+        // }, errorMessage => {
+        //     this.submitLoading = false;
+        //     this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
+        // })
     }
 
 
@@ -679,7 +680,22 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     }
 
     onSelectPO(data: any) {
-        // console.log(data);
+        
+        if(!data) {
+            this.unloadingTransactionForm.patchValue({
+                RawMaterialID: null,
+                SupplierID: null
+            });
+            return
+        }
+
+        const rawMaterialValue = this.findObjectByID(+data.RawMaterialID, 'RawMaterialID', this.rawMaterial);
+        const supplierValue = this.findObjectByID(+data.SupplierID, 'SupplierID', this.supplier);
+        this.unloadingTransactionForm.patchValue({
+            RawMaterialID: rawMaterialValue,
+            SupplierID: supplierValue
+        });
+        
     }
 
 

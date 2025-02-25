@@ -52,7 +52,7 @@
         [value]="rawMatsPO" 
         dataKey="PONo" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['PONo', 'PODate.date', 'Terms', 'DeliveryDate.date', 'PRNumber', 'SupplierAddress']" 
+        [globalFilterFields]="['PONo', 'PODate.date', 'Terms', 'DeliveryDate.date', 'PRNumber', 'SupplierAddress', 'RawMaterial']" 
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
@@ -86,15 +86,31 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th style="width: 5rem"></th>
-                <th>PO #</th>
+                <th pSortableColumn="PONo">   
+                    PO #
+                    <p-sortIcon field="PONo" />
+                </th>
                 <!-- <th>PO Date</th> -->
                 <!-- <th>Terms</th> -->
-                <th>Delivery Date</th>
-                <th>PR #</th>
-                <th>Raw Material</th>
-                <th>Unit Price Per Kilo</th>
+                <!-- <th>Delivery Date</th> -->
+                <th pSortableColumn="DeliveryDate">   
+                    Delivery Date
+                    <p-sortIcon field="DeliveryDate" />
+                </th>
+                <th pSortableColumn="PRNumber">   
+                    PR #
+                    <p-sortIcon field="PRNumber" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <!-- <th>Unit Price Per Kilo</th> -->
                 <!-- <th>Quantity</th> -->
-                <!-- <th>Weight</th> -->
+                <th pSortableColumn="Weight">   
+                    Weight
+                    <p-sortIcon field="Weight" />
+                </th>
                 <th>Progress</th>
                 <!-- <th>Supplier</th> -->
                 <!-- <th>Supplier Address</th> -->
@@ -140,20 +156,20 @@
                         {{ row.Supplier }}
                     </div>
                 </td>
-                <td>
+                <!-- <td>
                     {{ row.UnitPricePerKilo || '-'}}
-                </td>
+                </td> -->
                 <!-- <td  data-title="Quantity"> 
                     {{ (row.Quantity | number) || '-'}} {{ row.Quantity > 0 ? 'bags' : 'bag' }}
                 </td> -->
-                <!-- <td  data-title="Weight"> 
+                <td  data-title="Weight"> 
                     {{ (row.Weight | number) || '-'}} kg
-                </td> -->
+                </td>
                 <td  data-title="Progress" style="width: 200px;"> 
                     <!-- {{ row.Progress }}  -->
                     <progress id="file" value="{{ row.Delivered }}" max="{{ row.Weight }}"> 32% </progress>
                     <div class="sub-text">
-                        {{ (row.Delivered | number) || '-'}} / {{ (row.Weight | number) || '-' }} kg
+                        {{ (row.Delivered | number) || '0'}} / {{ (row.Weight | number) || '-' }} kg
                     </div>
                     <!-- <div>
                         <p-progressBar 
@@ -405,6 +421,8 @@
                         [style]="{'height': '40px'}" 
                         placeholder="Select Raw Material" 
                         appendTo="body" 
+                        [filter]="true"
+                        filterBy="RawMaterial" 
                         [showClear]="true"
                         optionValue="RawMaterialID"
                     >
@@ -413,7 +431,7 @@
 
             </div>
 
-            <div class="col">
+            <!-- <div class="col">
 
                 <div class="field">
                     <label class="font-semibold">
@@ -426,6 +444,19 @@
                     /> 
                 </div>
 
+            </div> -->
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Weight
+                    </label>
+                    <p-inputNumber 
+                        inputId="integeronly" 
+                        formControlName="Weight"
+                        placeholder="Enter weight"
+                    /> 
+                </div>
             </div>
 
         </div>
@@ -446,7 +477,7 @@
                 </div>
             </div> -->
 
-            <div class="col">
+            <!-- <div class="col">
                 <div class="field">
                     <label class="font-semibold" >
                         Weight
@@ -457,7 +488,7 @@
                         placeholder="Enter weight"
                     /> 
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
@@ -465,22 +496,22 @@
 
             <div class="col">
                 <div class="field">
-                    <label class="font-semibold" >
+                    <label class="font-semibold">
                         Supplier
                     </label>
                     <p-dropdown 
-                        [options]="supplier" 
+                        [options]="supplier"    
                         formControlName="SupplierID" 
                         optionLabel="Supplier" 
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
                         placeholder="Select Supplier" 
-                        (onChange)="onSelectSupplier($event.value)"
                         [filter]="true"
                         optionValue="SupplierID"
                         appendTo="body"
-                    >
+                        >
                     </p-dropdown>
+                    <!-- (onChange)="onSelectSupplier($event.value)" -->
                      
                 </div>
             </div>

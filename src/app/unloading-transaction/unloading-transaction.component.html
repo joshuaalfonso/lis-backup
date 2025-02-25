@@ -80,14 +80,29 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th> Date Unload </th>
-                <th *ngIf="value == 1"> P.O # </th>
+                <th pSortableColumn="DateUnload">   
+                    Date Unload
+                    <p-sortIcon field="DateUnload" />
+                </th>
+                <th pSortableColumn="PONo" *ngIf="value == 1">   
+                    P.O #
+                    <p-sortIcon field="PONo" />
+                </th>
+                <!-- <th *ngIf="value == 1"> P.O # </th> -->
                 <th *ngIf="value == 2"> MBL </th>
                 <th  *ngIf="value == 2"> Packaging  </th>
                 <th> Dr # </th>
-                <th> Raw Material </th>
+                <!-- <th> Raw Material </th> -->
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
 
-                <th> Weight </th>
+                <th pSortableColumn="Weight">   
+                    Weight
+                    <p-sortIcon field="Weight" />
+                </th>
+                <!-- <th> Weight </th> -->
                 <th> Warehouse </th>
                 <th> Checker </th>
                 <th> Verified </th>
@@ -479,6 +494,8 @@
                     optionLabel="RawMaterial" 
                     [style]="{'height': '40px', 'border': '1px solid white'}" 
                     [showClear]="true" 
+                    [filter]="true"
+                    filterBy="RawMaterial" 
                     placeholder="Select Raw Material"
                 ></p-dropdown>
             <!-- </div> -->
@@ -553,7 +570,7 @@
             </label>
 
             <p-fileUpload 
-                
+                #fileUpload
                 chooseLabel="Choose" 
                 [customUpload]="true"
                 chooseIcon="pi pi-upload"
@@ -563,7 +580,7 @@
                 (onSelect)="onUpload($event)" 
             >
                 <ng-template pTemplate="content">
-                    <ul *ngIf="uploadedFiles.length">
+                    <ul *ngIf="uploadedFiles.length > 0">
                         <li *ngFor="let file of uploadedFiles">
                             {{ file.name }} - {{ file.size }} bytes
                         </li>
@@ -590,7 +607,7 @@
                 icon="pi pi-check"
                 class="bg-indigo-500 border-round border-none submit" 
                 [disabled]="!unloadingTransactionForm.valid || files.length != 3"
-            ></button>
+                ></button>
         </div>
 
     </form>

@@ -204,7 +204,7 @@ export class WarehouseComponent implements OnInit, OnDestroy{
             this.UserID
         )
 
-        authObs.subscribe(response =>{
+        authObs.subscribe(response => {
 
             this.submitLoading = false;
 
@@ -213,7 +213,7 @@ export class WarehouseComponent implements OnInit, OnDestroy{
                 this.visible = false;
                 this.MessageService.add({ 
                     severity: 'success', 
-                    summary: 'Danger', 
+                    summary: 'Success', 
                     detail: 'Successfully recorded', 
                     life: 3000 
                 });
@@ -227,7 +227,7 @@ export class WarehouseComponent implements OnInit, OnDestroy{
                 this.visible = false;
                 this.MessageService.add({ 
                     severity: 'success', 
-                    summary: 'Danger', 
+                    summary: 'Success', 
                     detail: 'Successfully updated', 
                     life: 3000 
                 });
