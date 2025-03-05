@@ -84,7 +84,7 @@
         </ng-template>
 
         <ng-template pTemplate="header">
-            <tr class="thead">
+            <tr class="thead" >
                 <th style="width: 5rem"></th>
                 <th pSortableColumn="PONo">   
                     PO #
@@ -106,12 +106,14 @@
                     <p-sortIcon field="RawMaterial" />
                 </th>
                 <!-- <th>Unit Price Per Kilo</th> -->
-                <!-- <th>Quantity</th> -->
-                <th pSortableColumn="Weight">   
+                <!-- <th pSortableColumn="Weight">   
                     Weight
                     <p-sortIcon field="Weight" />
-                </th>
+                </th> -->
                 <th>Progress</th>
+                <th>   
+                    Balance
+                </th>
                 <!-- <th>Supplier</th> -->
                 <!-- <th>Supplier Address</th> -->
                 <!-- <th>Item</th> -->
@@ -159,38 +161,18 @@
                 <!-- <td>
                     {{ row.UnitPricePerKilo || '-'}}
                 </td> -->
-                <!-- <td  data-title="Quantity"> 
-                    {{ (row.Quantity | number) || '-'}} {{ row.Quantity > 0 ? 'bags' : 'bag' }}
-                </td> -->
-                <td  data-title="Weight"> 
+                <!-- <td  data-title="Weight"> 
                     {{ (row.Weight | number) || '-'}} kg
-                </td>
+                </td> -->
                 <td  data-title="Progress" style="width: 200px;"> 
                     <!-- {{ row.Progress }}  -->
-                    <progress id="file" value="{{ row.Delivered }}" max="{{ row.Weight }}"> 32% </progress>
-                    <div class="sub-text">
+                    <progress id="progress" value="{{ row.Delivered }}" max="{{ row.Weight }}"> 32% </progress>
+                    <div class="sub-text" >
                         {{ (row.Delivered | number) || '0'}} / {{ (row.Weight | number) || '-' }} kg
                     </div>
-                    <!-- <div>
-                        <p-progressBar 
-                            [value]="getRoundedPercentage(row.Delivered, row.Weight, 1)" 
-                            [style]="{ height: '6px', marginBottom: '5px'}" 
-                            [showValue]="false"
-                        />
-                        
-                        <div class="flex justify-content-between">
-                            <span 
-                            class="sub-text"
-                        >
-                            {{ row.Delivered | number }} / {{ row.Weight | number }} MT
-                        </span>
-                        <span 
-                            class="sub-text"
-                        >
-                             {{ (row.Delivered -row.Weight) | number }} BAL
-                        </span>
-                        </div>
-                    </div> -->
+                </td>
+                <td  data-title="Balance"  [class.text-red-400]="row.Delivered > row.Weight"> 
+                    {{ (row.Balance | number) || (row.Weight | number) }} kg
                 </td>
                 <!-- <td  data-title="Supplier">  
                     <span class="">{{ row.Supplier }}</span> 

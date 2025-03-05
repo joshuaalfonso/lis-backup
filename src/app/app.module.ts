@@ -178,6 +178,7 @@ import { RawmatsInspectionTableComponent } from './lab/rawmats-inspection/ui/raw
 import { RawMaterialsModalComponent } from './raw-materials/ui/raw-materials-modal/raw-materials-modal.component';
 import { RawMaterialsTableComponent } from './raw-materials/ui/raw-materials-table/raw-materials-table.component';
 import { LocalSupplier } from './supplier-local/local-supplier.component';
+import { AddWeightFormComponent } from './unloading-transaction/ui/add-weight-form/add-weight-form.component';
 
 
 
@@ -259,7 +260,8 @@ import { LocalSupplier } from './supplier-local/local-supplier.component';
     RawmatsInspectionFormComponent,
     RawmatsInspectionTableComponent,
     RawMaterialsTableComponent,
-    LocalSupplier
+    LocalSupplier,
+    AddWeightFormComponent
     
   ],
   imports: [

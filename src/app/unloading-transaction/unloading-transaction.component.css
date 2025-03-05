@@ -31,6 +31,29 @@
     border-radius: 5px;
 }
 
+/* .disabled {
+    background-color: gainsboro; 
+} */
+
+:host ::ng-deep p-calendar.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+:host ::ng-deep .p-inputtext.disabled{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+:host ::ng-deep p-inputnumber.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+
+:host ::ng-deep p-dropdown.disabled .p-dropdown{
+    background-color: gainsboro; 
+}
+
 :host ::ng-deep .p-buttonset .p-button{
     padding: 5px 10px;
     margin-bottom: 15px;
@@ -144,10 +167,10 @@ td {
 
 /* ==== MODAL FORM ==== */
 
-.disabled {
+/* .disabled {
     opacity: 0.4;
-    pointer-events: none; /* prevents interactions */
-}
+    pointer-events: none; 
+} */
 
 .required {
     color: rgb(228, 84, 84);

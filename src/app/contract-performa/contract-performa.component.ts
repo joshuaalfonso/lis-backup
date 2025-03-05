@@ -863,6 +863,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
 
         let supplierValue = this.findObjectByID(data.SupplierID, 'SupplierID', this.supplier);
 
+        console.log(supplierValue)
         let rawMatValue = this.findObjectByID(data.RawMaterialID, 'RawMaterialID', this.rawMaterial);
 
         let brokerValue = this.findObjectByID(data.BrokerID, 'BrokerID', this.broker);
@@ -930,6 +931,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
     }
 
     showLandedForm(data: any) {
+        console.log(data)
         this.visibleLandedForm = true;
         this.clearLandedForm();
         this.onUpdateShippingTransaction(data);

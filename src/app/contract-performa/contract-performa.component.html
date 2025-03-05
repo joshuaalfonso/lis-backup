@@ -2071,13 +2071,15 @@
             ></p-calendar>
         </div>
   
-        <button 
+        <div class="flex justify-content-end ">
+            <button 
             pButton 
             pRipple 
             label="Submit" 
             class="bg-indigo-500 border-round border-none submit" 
             [disabled]="!landedForm.valid"
         ></button>
+        </div>
   
     </form>
 </p-dialog>

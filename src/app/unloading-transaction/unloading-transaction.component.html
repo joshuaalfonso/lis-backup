@@ -40,11 +40,15 @@
         <input name="radio" type="radio" value="2" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
         <span class="name" [class.active]="value == 2"> Import </span>
     </label>
+    <label class="radio" *ngIf="verifiedView">
+        <input name="radio" type="radio" value="3" [(ngModel)]="value"  (ngModelChange)="getverified()"/>
+        <span class="name" [class.active]="value == 3"> Verified </span>
+    </label>
 </div>
 
 
 <!-- ===== TABLE ====== -->
-<div class="table">
+<div class="table" *ngIf="value === 1 || 2 ">
     <p-table #dt1 
         [value]="unloadingTransaction" 
         [tableStyle]="{ 'width': '100%' }" 
@@ -105,7 +109,7 @@
                 <!-- <th> Weight </th> -->
                 <th> Warehouse </th>
                 <th> Checker </th>
-                <th> Verified </th>
+                <!-- <th> Verified </th> -->
                 <th *ngIf="edit">  </th>
             </tr>
         </ng-template>
@@ -153,14 +157,14 @@
                 <td data-title="CheckerID">
                     {{ row.Name }}
                 </td>
-                <td data-title="Verified" *ngIf="row.Status == 3">
+                <td data-title="Verified" *ngIf="row.Status == 2">
                     <i class="pi pi-check-circle text-green-500"></i>
                 </td>
 
-                <td data-title="Verified" *ngIf="row.Status == 0">
+                <!-- <td data-title="Verified" *ngIf="row.Status == 0">
                     <i class="pi pi-times-circle text-red-500"></i>
-                </td>
-                <td data-title="Action" *ngIf="edit">
+                </td> -->
+                <td data-title="Action" *ngIf="edit || insert">
                     <!-- <button 
                         pButton pRipple 
                         class="edit__btn" 
@@ -180,21 +184,32 @@
 
                     <div class="flex gap-2">
                         <button pButton pRipple 
-                        class="delete__btn" 
-                        class="p-button-primay p-2 border-round" 
-                        (click)="onAprrove(row)"  
-                        *ngIf="row.Status == 0"
-                        pTooltip="Verify"
+                            class="delete__btn" 
+                            class="p-button-primay p-2 border-round" 
+                            (click)="onVerifyUnloading(row)"  
+                            pTooltip="Verify"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 1"
+                        >
+                            <i class='pi pi-check' ></i>
+                        </button>
+
+                    <button pButton pRipple 
+                        class="p-button-info p-2 border-round" 
+                        (click)="onAddWeight(row, addWeightModal)"  
+                        pTooltip="Add Weight"
                         tooltipPosition="top"
+                        *ngIf="row.Status == 0 && insert"
                     >
-                        <i class='pi pi-check' ></i>
-                    </button>
+                        <i class='pi pi pi-plus' ></i>
+                    </button>     
 
                     <button pButton pRipple 
                         class="p-button-info p-2 border-round" 
                         (click)="getImage(row)"  
                         pTooltip="Images"
                         tooltipPosition="top"
+                        *ngIf="row.Status === 1"
                     >
                         <i class='pi pi pi-image' ></i>
                     </button>           
@@ -211,6 +226,9 @@
     </div>
 
 </div>
+
+
+<app-add-weight-form />
 
 
 <!-- ======= MODAL FORM ======== -->
@@ -264,6 +282,7 @@
                     optionLabel="PONo" 
                     [style]="{'height': '40px', 'border': '1px solid white'}" 
                     [showClear]="true" 
+                    [filter]="true"
                     placeholder="Select or Enter PO" 
                     (onChange)="onSelectPO($event.value)"
                 ></p-dropdown>
@@ -309,6 +328,7 @@
                     [style]="{'height': '40px', 'border': '1px solid white'}" 
                     [showClear]="true" 
                     placeholder="Select Container #"
+                    [filter]="true"
                 ></p-dropdown>
             <!-- </div> -->
 
@@ -338,7 +358,6 @@
                 <div class="field">
                     <label class="font-semibold" >
                         Date & Time Unload 
-                        <span class="required">*</span>
                     </label>
                     <p-calendar 
                         formControlName="DateTimeUnload" 
@@ -347,6 +366,7 @@
                         hourFormat="24" 
                         [style]="{'width': '100%'}"
                         [maxDate]="maxDate"
+                        [class.disabled]="true"
                     >
                     </p-calendar>
                 </div>
@@ -381,13 +401,26 @@
 
                     <!-- <div class="card flex justify-content-center"> -->
                         <p-dropdown 
-                        [options]="supplier" 
-                        formControlName="SupplierID" 
-                        optionLabel="Supplier" 
-                        [style]="{'height': '40px', 'border': '1px solid white'}" 
-                        [showClear]="true" 
-                        placeholder="Select Supplier" 
-                        [filter]="true"
+                            [options]="localSupplier" 
+                            formControlName="SupplierID" 
+                            optionLabel="Supplier" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Supplier" 
+                            [filter]="true"
+                            *ngIf="value == 1"
+                        ></p-dropdown>
+
+
+                        <p-dropdown 
+                            [options]="supplier" 
+                            formControlName="SupplierID" 
+                            optionLabel="Supplier" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Supplier" 
+                            [filter]="true"
+                            *ngIf="value == 2"
                         ></p-dropdown>
                     <!-- </div> -->
 
@@ -449,6 +482,7 @@
                             optionLabel="LocationName" 
                             [style]="{'height': '40px', 'border': '1px solid white'}" 
                             [showClear]="true" 
+                            [filter]="true"
                             placeholder="Select Warehouse" 
                             (onChange)="onSelectWarehouse($event.value)"
                         ></p-dropdown>
@@ -492,11 +526,392 @@
                     [options]="rawMaterial" 
                     formControlName="RawMaterialID" 
                     optionLabel="RawMaterial" 
+                    [style]="{'height': '40px'}" 
+                    [showClear]="true" 
+                    [filter]="true"
+                    filterBy="RawMaterial" 
+                    placeholder="Select Raw Material"
+                ></p-dropdown>
+            <!-- </div> -->
+
+        </div>
+
+        <div class="grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Quantity 
+                    </label>
+
+                    <p-inputNumber 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of bags"
+                        [class.disabled]="true"
+                    ></p-inputNumber> 
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Weight 
+                    </label>
+
+                    <p-inputNumber 
+                        formControlName="Weight" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of kg"
+                        [class.disabled]="true"
+                    ></p-inputNumber> 
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="field" *ngIf="value != 0">
+
+            <label class="font-semibold" >
+                Image 
+                <span class="required">*</span>
+            </label>
+
+            <p-fileUpload 
+                #fileUpload
+                chooseLabel="Choose" 
+                [customUpload]="true"
+                chooseIcon="pi pi-upload"
+                accept="image/*" 
+                [multiple]="true"
+                [maxFileSize]="1000000"
+                (onSelect)="onUpload($event)" 
+            >
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length > 0">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size }} bytes
+                        </li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+
+        </div> -->
+
+        <!-- <div class="field" *ngIf="BeforeImage">
+            <p-image 
+                src="{{BeforeImage}}" 
+                alt="Image" 
+                width="250" 
+                [preview]="true" 
+            />
+        </div> -->
+
+        <div class="flex justify-content-end">
+            <!-- <button 
+                pButton 
+                pRipple 
+                label="Submit" 
+                icon="pi pi-check"
+                class="bg-indigo-500 border-round border-none submit" 
+                [loading]="true"
+                [disabled]="!unloadingTransactionForm.valid"
+                ></button> -->
+
+                <app-submit-button 
+                [submitLoading]="submitLoading" 
+                [form]="unloadingTransactionForm"
+            /> 
+        </div>
+
+    </form>
+</p-dialog>
+
+
+<!-- ======= ADD WeightMODAL FORM ======== -->
+<p-dialog 
+    header="Add Weight" 
+    [(visible)]="addWeightVisible" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    #addWeightModal
+>
+    <form 
+        [formGroup]="addWeightForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmitAddWeight()" 
+    >  
+
+        <div class="field" *ngIf="value == 1">
+
+            <label class="font-semibold" >
+                PO 
+            </label>
+
+            <!-- <div class="card flex justify-content-center"> -->
+                <p-dropdown 
+                    [options]="po" 
+                    formControlName="PO" 
+                    optionLabel="PONo" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select or Enter PO" 
+                    (onChange)="onSelectPO($event.value)"
+                    [class.disabled]="true"
+                ></p-dropdown>
+            <!-- </div> -->
+
+        </div>
+
+        <div class="field" *ngIf="value == 2">
+
+            <label class="font-semibold" >
+                BL 
+            </label>
+
+            <!-- <div class="card flex justify-content-center"> -->
+                <p-dropdown 
+                    [options]="bl" 
+                    formControlName="BL" 
+                    optionLabel="BlPackaging" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select BL" 
+                    (ngModelChange)="onSelectBL($event)" 
+                    [filter]="true"
+                    [class.disabled]="true"
+                ></p-dropdown>
+            <!-- </div> -->
+
+        </div>
+      
+
+        <div class="field" *ngIf="value == 2 && selectedPackaging === 1">
+
+            <label class="font-semibold" >
+                Container # 
+            </label>
+        
+            <!-- <div class="card flex justify-content-center"> -->
+                <p-dropdown 
+                    [options]="containerNumber" 
+                    formControlName="ContainerNumber" 
+                    optionLabel="ContainerNumber" 
+                    [style]="{'height': '40px', 'border': '1px solid white'}" 
+                    [showClear]="true" 
+                    placeholder="Select Container #"
+                    [class.disabled]="true"
+                    [filter]="true"
+                ></p-dropdown>
+            <!-- </div> -->
+
+        </div>
+
+
+        <div class="grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Unload 
+                    </label>
+                    <p-calendar 
+                        formControlName="DateUnload" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        appendTo="body" 
+                        [maxDate]="maxDate"
+                        [class.disabled]="true"
+                    ></p-calendar>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date & Time Unload 
+                        <span class="required">*</span>
+                    </label>
+                    <p-calendar 
+                        formControlName="DateTimeUnload" 
+                        [showIcon]="true" placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="24" 
+                        [style]="{'width': '100%'}"
+                        [maxDate]="maxDate"
+                    >
+                    </p-calendar>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value != 0">
+            <label class="font-semibold" >
+                Dr Number 
+            </label>
+
+            <input 
+                pInputText 
+                formControlName="DrNumber" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter Dr Number"
+                [class.disabled]="true"
+            >
+        </div>
+
+        <div class="grid nested-grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Supplier 
+                    </label>
+
+                    <p-dropdown 
+                        [options]="localSupplier" 
+                        formControlName="SupplierID" 
+                        optionLabel="Supplier" 
+                        [style]="{'height': '40px', 'border': '1px solid white'}" 
+                        [showClear]="true" 
+                        placeholder="Select Supplier" 
+                        [filter]="true"
+                        *ngIf="value == 1"
+                        [class.disabled]="true"
+                    ></p-dropdown>
+
+
+                    <p-dropdown 
+                        [options]="supplier" 
+                        formControlName="SupplierID" 
+                        optionLabel="Supplier" 
+                        [style]="{'height': '40px', 'border': '1px solid white'}" 
+                        [showClear]="true" 
+                        placeholder="Select Supplier" 
+                        [filter]="true"
+                        [class.disabled]="true"
+                        *ngIf="value == 2"
+                    ></p-dropdown>
+
+                </div>
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+
+                    <label class="font-semibold" >
+                        Plate No. 
+                    </label>
+
+                    <div class="flex gap-2">
+
+                        <!-- <div class="card flex justify-content-center flex-1 mr-2"> -->
+                            <p-dropdown 
+                                [options]="truck" 
+                                formControlName="TruckID" 
+                                optionLabel="PlateNo" 
+                                [style]="{'height': '40px', 'border': '1px solid white'}" 
+                                [showClear]="true" 
+                                placeholder="Select Plate No" 
+                                [filter]="true"
+                                class="flex-1"
+                                [class.disabled]="true"
+                            ></p-dropdown>
+                        <!-- </div> -->
+
+                        <p-button 
+                            icon="pi pi-plus" 
+                            (click)="showTruckDialog()" 
+                            pTooltip="New Truck" 
+                            tooltipPosition="left"
+                        />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+      
+
+        <div class="grid" *ngIf="value != 0">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Warehouse 
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="warehouse" 
+                            formControlName="WarehouseID" 
+                            optionLabel="LocationName" 
+                            [style]="{'height': '40px', 'border': '1px solid white'}" 
+                            [showClear]="true" 
+                            placeholder="Select Warehouse" 
+                            (onChange)="onSelectWarehouse($event.value)"
+                            [class.disabled]="true"
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div> 
+            </div>
+
+            <div class="col">
+                <div class="field">
+
+                    <label class="font-semibold" > 
+                        Warehouse Partition 
+                    </label>
+
+                    <!-- <div class="card flex justify-content-center"> -->
+                    <p-dropdown 
+                        [options]="warehousePartition" 
+                        formControlName="WarehousePartitionID" 
+                        optionLabel="WarehousePartitionName" 
+                        [style]="{'height': '40px', 'border': '1px solid white'}" 
+                        [showClear]="true" 
+                        placeholder="Select Warehouse"
+                        [class.disabled]="true"
+                    ></p-dropdown>
+                    <!-- </div> -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field" *ngIf="value != 0">
+
+            <label class="font-semibold" > 
+                Raw Material 
+            </label>
+
+            <!-- <div class="card flex justify-content-center"> -->
+                <p-dropdown 
+                    [options]="rawMaterial" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
                     [style]="{'height': '40px', 'border': '1px solid white'}" 
                     [showClear]="true" 
                     [filter]="true"
                     filterBy="RawMaterial" 
                     placeholder="Select Raw Material"
+                    [class.disabled]="true"
                 ></p-dropdown>
             <!-- </div> -->
 
@@ -542,26 +957,6 @@
 
         </div>
 
-        <!-- <div class="field" *ngIf="value != 0">
-
-            <label class="font-semibold" >
-                Checker 
-                <span class="required">*</span>
-            </label>
-
-            <div class="card flex justify-content-center">
-                <p-dropdown 
-                    [options]="checker" 
-                    formControlName="CheckerID" 
-                    optionLabel="CheckerName" 
-                    [style]="{'height': '40px', 'border': '1px solid white'}" 
-                    [showClear]="true" 
-                    placeholder="Select Checker"
-                ></p-dropdown>
-            </div>
-
-        </div> -->
-
         <div class="field" *ngIf="value != 0">
 
             <label class="font-semibold" >
@@ -576,7 +971,7 @@
                 chooseIcon="pi pi-upload"
                 accept="image/*" 
                 [multiple]="true"
-                [maxFileSize]="1000000"
+                [maxFileSize]="4500000"
                 (onSelect)="onUpload($event)" 
             >
                 <ng-template pTemplate="content">
@@ -590,24 +985,28 @@
 
         </div>
 
-        <div class="field" *ngIf="BeforeImage">
-            <p-image 
-                src="{{BeforeImage}}" 
-                alt="Image" 
-                width="250" 
-                [preview]="true" 
-            />
-        </div>
-
         <div class="flex justify-content-end">
-            <button 
+            <!-- <button 
                 pButton 
                 pRipple 
                 label="Submit" 
                 icon="pi pi-check"
                 class="bg-indigo-500 border-round border-none submit" 
-                [disabled]="!unloadingTransactionForm.valid || files.length != 3"
-                ></button>
+                [disabled]="!addWeightForm.valid || files.length != 3"
+                ></button> -->
+
+                <p-button 
+                    type="submit"
+                    label="Submit" 
+                    icon="pi pi-check"
+                    [loading]="submitAddWeightIsLoading" 
+                    [disabled]="!addWeightForm.valid || files.length != 3"
+                />
+
+                <!-- <app-submit-button 
+                [submitLoading]="submitAddWeightIsLoading" 
+                [form]="!addWeightForm.valid || files.length != 3"
+                />  -->
         </div>
 
     </form>
@@ -631,7 +1030,7 @@
                 Trucking 
                 <span class="required">*</span>
             </label>
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                 [options]="trucking" 
                 formControlName="TruckingID" 
@@ -640,7 +1039,7 @@
                 [showClear]="true" 
                 placeholder="Select Trucking"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
         
         </div>
 
@@ -651,7 +1050,7 @@
                 <span class="required">*</span>
             </label>
 
-            <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     [options]="truckType" 
                     formControlName="TruckTypeID" 
@@ -660,7 +1059,7 @@
                     [showClear]="true" 
                     placeholder="Select Truck Type"
                 ></p-dropdown>
-            </div>
+            <!-- </div> -->
 
         </div>
 

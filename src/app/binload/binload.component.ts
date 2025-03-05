@@ -59,6 +59,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
     checkerInsert: boolean = false;
 
     partitionDetails: any[] = [];
+    unitOfMeasure: any[] = [];
 
     UserID!: string;
 
@@ -119,7 +120,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             'WarehousePartitionStockID': new FormControl(null),
             'PO': new FormControl(null),
             'BL': new FormControl(null),
-            'RequestWeight': new FormControl(null),
+            // 'RequestWeight': new FormControl(null),
+            'BinloadUomID': new FormControl(null),
             'RequestQuantity': new FormControl(null),
             'DriverID': new FormControl(null),
             'TruckID': new FormControl(null),
@@ -134,19 +136,6 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             'Status': new FormControl(0),
             'UserID': new FormControl(null),
         })
-        
-        // BinloadRequestID: string,
-        // WarehouseLocationID: number,
-        // WarehouseID: number,
-        // WarehousePartitionID: number,
-        // PlantID: number,
-        // TruckID: number,
-        // RequestDate: string,
-        // RawMaterialID: number,
-        // Quantity: number,
-        // Weight: number,
-        // Status: number,
-        // UserID: string
 
 
         this.binloadRequestForm = new FormGroup({
@@ -163,7 +152,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             'RequestDate': new FormControl(null, Validators.required),
             'RawMaterialID': new FormControl(null, Validators.required),
             'Quantity': new FormControl(null, Validators.required),
-            'Weight': new FormControl(null, Validators.required),
+            'BinloadUomID': new FormControl(null, Validators.required),
             'Status': new FormControl(0),
             'UserID': new FormControl(null),
         })
@@ -182,6 +171,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.getRawMaterial();
         this.getDriver();
         this.getTruck();
+        this.getUnitOfMeasure();
     }
 
     userRights() {
@@ -227,6 +217,14 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                     
                 }
             )       
+        )
+    }
+
+    getUnitOfMeasure() {
+        this.subscription.add(
+            this.BinloadService.getBinloadUom().subscribe(response => {
+                this.unitOfMeasure = response
+            })
         )
     }
 
@@ -745,7 +743,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
         this.requestSubmitLoading = true;
 
-        let binloadRequestFormValue: BinloadRequest = {
+        const binloadRequestFormValue: BinloadRequest = {
             BinloadRequestID: this.binloadRequestForm.value.BinloadRequestID,
             WarehouseLocationID: this.binloadRequestForm.value.WarehouseLocationID,
             WarehouseID: this.binloadRequestForm.value.WarehouseID,
@@ -759,7 +757,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             RequestDate: this.binloadRequestForm.value.RequestDate.toLocaleDateString(),
             RawMaterialID: this.binloadRequestForm.value.RawMaterialID,
             Quantity: this.binloadRequestForm.value.Quantity,
-            Weight: this.binloadRequestForm.value.Weight,
+            BinloadUomID: this.binloadRequestForm.value.BinloadUomID,
             Status: this.binloadRequestForm.value.Status,
             UserID: this.UserID,
             // BinloadDetail: this.binloadDetail
@@ -906,7 +904,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             PO: data.PO,
             BL: data.BL,
             RequestQuantity: data.Quantity,
-            RequestWeight: data.Weight,
+            BinloadUomID: data.BinloadUomID,
             DriverID: data.DriverID,
             TruckID: data.TruckID,
         })
@@ -971,7 +969,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         // Status: number,
         // UserID: string
         
-        let binloadOBJ = {
+        const binloadOBJ = {
             BinloadingID: this.binloadForm.value.BinloadingID,
             BinloadRequestID: this.binloadForm.value.BinloadRequestID,
             ControlNo: this.binloadForm.value.ControlNo,

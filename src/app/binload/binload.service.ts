@@ -16,6 +16,9 @@ export class BinloadService {
     getBinloadData(UserID: string) {
         return this.http.get<any>( this.baseUrl + '/project/a_Binloading.php?id=' + UserID);
     }
+    getBinloadUom() {
+        return this.http.get<any>( this.baseUrl + '/project/a_BinloadingUom.php');
+    }
 
     saveBinload(binloadOBJ: any) {
         return this.http.post( this.baseUrl + '/project/b_Binloading.php', binloadOBJ);
@@ -78,7 +81,7 @@ export interface BinloadRequest {
     RequestDate: string,
     RawMaterialID: number,
     Quantity: number,
-    Weight: number,
+    BinloadUomID: number,
     Status: number,
     UserID: string
     // BinloadDetail: any[]

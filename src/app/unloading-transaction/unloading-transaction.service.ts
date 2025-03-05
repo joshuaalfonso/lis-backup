@@ -17,8 +17,8 @@ export class UnloadingTransactionService {
         return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransaction.php');
     }
 
-    filterUnloadingTransaction(id: number) {
-        return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransaction.php?id=' + id);
+    filterUnloadingTransaction(data: any) {        
+        return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransaction.php?id=' + data.id + '&CheckerID=' + data.checkerID);
     }
 
     fileUpload(files: any) {
@@ -35,6 +35,23 @@ export class UnloadingTransactionService {
 
     getPO() {
         return this.http.get<any>( this.baseUrl + '/project/a_RawMatsPOUnloading.php');
+    }
+
+    getverified() {
+        return this.http.get<any>( this.baseUrl + '/project/a_UnloadingVerified.php')
+    }
+
+    verifyUnloading(unloadingID: number) {
+        return this.http.post( 
+            this.baseUrl +  '/project/b_UnloadingVerify.php', 
+            {
+                UnloadingTransactionID: unloadingID
+            }
+        );
+    }
+
+    getUnloadedToday() {
+        return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransactionToday.php')
     }
 
     saveData

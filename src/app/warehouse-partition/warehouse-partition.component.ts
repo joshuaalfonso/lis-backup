@@ -190,7 +190,7 @@ export class WarehousePartition implements OnInit, OnDestroy {
                 this.visible = false;
                 this.MessageService.add({ 
                     severity: 'success', 
-                    summary: 'Danger', 
+                    summary: 'Success', 
                     detail: 'Successfully recorded', 
                     life: 3000 
                 });
@@ -202,7 +202,7 @@ export class WarehousePartition implements OnInit, OnDestroy {
                 this.visible = false;
                 this.MessageService.add({ 
                     severity: 'success', 
-                    summary: 'Danger', 
+                    summary: 'Success', 
                     detail: 'Successfully updated', 
                     life: 3000 
                 });

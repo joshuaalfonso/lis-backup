@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy{
         this.getRawMaterial();
         this.getWarehouseLocation();
         this.getLandedShipping();
-        this.getUnloadingTransaction();
+        // this.getUnloadingTransaction();
         this.getRecentBinload();
         this.getRecentTransfer();
 
@@ -302,18 +302,23 @@ export class DashboardComponent implements OnInit, OnDestroy{
     getUnloadingTransaction() {
         this.unloadLoading = true;
 
+        // this.subscriptions.add(
+        //     this.UnloadingService.filterUnloadingTransaction(1).subscribe(
+        //         response => {
+        //             this.unloading = response.splice(-5);
+        //             this.unloadLoading = false;
+
+        //         }
+        //     )
+        // )
+
         this.subscriptions.add(
-            this.UnloadingService.filterUnloadingTransaction(1).subscribe(
+            this.UnloadingService.getUnloadedToday().subscribe(
                 response => {
-                    this.unloading = response.splice(-5);
-                    // response.forEach((item: any) => {
-                    //     if (new Date(item.DateUnload.date).toDateString() == new Date().toDateString()) {
-                    //         this.unloading.push(item);
-                    //     }
-                    // })
-
-                    this.unloadLoading = false;
-
+                    console.log(response);
+                    
+                }, error => {
+                    console.error(error)
                 }
             )
         )

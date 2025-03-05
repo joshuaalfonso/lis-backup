@@ -23,30 +23,20 @@ import { FileSelectEvent, FileUploadEvent, UploadEvent } from "primeng/fileuploa
 export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     unloadingTransaction: any[] = [];
-
     checker: any[] = [];
-
     truck: any[] = [];
-
     rawMaterial: any[] = [];
-
     warehouse: any[] = [];
-
     selectedWarehouse: any[] = [];
-
     warehousePartition: any[] = [];
-
     supplier: any[] = [];
-
+    localSupplier: any[] = [];
     trucking: any[] = [];
-
     truckType: any[] = [];
-
     bl: any[] = [];
     po: any[] = [];
 
     containerNumber: any[] = [];
-
     transaction: any[] = [];
 
     unloadingFilter: any[] = [
@@ -63,6 +53,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     truckForm!: FormGroup;
 
     visible: boolean = false;
+    addWeightVisible: boolean = false;
     visibleTruckModal: boolean = false;
 
     dialogHeader?: string;
@@ -80,6 +71,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     edit: boolean = false;
     generateReport: boolean = false;
     approval: boolean = false;
+    verifiedView: boolean = false;
 
     uploadedFiles: any[] = [];
 
@@ -90,6 +82,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     loading: boolean = false;
 
     userID: string = '';
+
+    addWeightForm!: FormGroup;
 
     responsiveOptions: any[] = [
         {
@@ -110,11 +104,14 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         }
     ];
 
+    addWeightVisisble: boolean = false;
+
     BeforeImage?:string;
 
     selectedOption: number = 1;
 
     submitLoading: boolean = false;
+    submitAddWeightIsLoading: boolean = false;
 
     private subscription: Subscription = new Subscription();
 
@@ -154,17 +151,36 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             'DateTimeUnload': new FormControl(null),
             'DateUnload': new FormControl(null, Validators.required),
             'DrNumber': new FormControl(null, Validators.required),
-            // 'CheckerID': new FormControl(null, Validators.required),
             'TruckID': new FormControl(null, Validators.required),
             'RawMaterialID': new FormControl(null, Validators.required),
             'WarehouseLocationID': new FormControl(null), 
             'WarehouseID': new FormControl(null, Validators.required),
             'WarehousePartitionID': new FormControl(null, Validators.required),
-            'Quantity': new FormControl(null, Validators.required),
-            'Weight': new FormControl(null, Validators.required),
+            'Quantity': new FormControl(null),
+            'Weight': new FormControl(null),
             'SupplierID': new FormControl(null, Validators.required),
             'Status': new FormControl(0),
-            // 'file': new FormControl(null),
+            'UserID': new FormControl(0),
+        })
+
+        this.addWeightForm = new FormGroup({
+            'UnloadingTransactionID': new FormControl(0),
+            'isTransactionID': new FormControl(0),
+            'PO': new FormControl(null),
+            'BL': new FormControl(null),
+            'ContainerNumber': new FormControl(null),
+            'DateTimeUnload': new FormControl(null, Validators.required),
+            'DateUnload': new FormControl(null),
+            'DrNumber': new FormControl(null),
+            'TruckID': new FormControl(null),
+            'RawMaterialID': new FormControl(null),
+            'WarehouseLocationID': new FormControl(null), 
+            'WarehouseID': new FormControl(null),
+            'WarehousePartitionID': new FormControl(null),
+            'Quantity': new FormControl(null, Validators.required),
+            'Weight': new FormControl(null, Validators.required),
+            'SupplierID': new FormControl(null),
+            'Status': new FormControl(0),
             'UserID': new FormControl(0),
         })
 
@@ -196,11 +212,12 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         this.getTruck();
         this.getChecker();
         this.getSupplier();
+        this.getLocalSupplier();
         this.getBL();
         this.getPO();
         this.getTrucking();
         this.getTruckType();
-
+        // this.getverified();
     }
 
 
@@ -224,6 +241,9 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                             case '3.3.4':
                                 this.generateReport = true;
                                 break;
+                            case '3.3.5':
+                                this.verifiedView = true;
+                                break;
                             case 23.5:
                                 this.approval = true;
                                 break;
@@ -238,12 +258,47 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     }
 
     onFilterUnloading() {
+        
+
+        // if (this.value == 1 || 2) {
+        //     console.log('1 and 2');
+            
+            this.isLoading = true;
+            this.subscription.add(
+                this.UnloadingTransactionService.filterUnloadingTransaction({id: this.value, checkerID: this.userID}).subscribe(
+                    response => {
+                        this.isLoading = false;
+                        this.unloadingTransaction = response;
+                    }, error => {
+                        console.log(error);
+                        alert('There was an error  fetching data')
+                        this.isLoading = false;
+                    }
+                )
+            )
+        // }
+
+        // if (this.value == 3) {
+        //     console.log(this.value)
+        //     this.getverified();
+        // }
+
+        // console.log(this.value)
+
+    }
+
+    getverified() {
         this.isLoading = true;
         this.subscription.add(
-            this.UnloadingTransactionService.filterUnloadingTransaction(this.value).subscribe(
+            this.UnloadingTransactionService.getverified().subscribe(
                 response => {
                     this.isLoading = false;
                     this.unloadingTransaction = response;
+                    
+                }, error => {
+                    console.log(error);
+                    alert('There was an error  fetching data')
+                    this.isLoading = false;
                 }
             )
         )
@@ -314,6 +369,16 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         )
     }
 
+    getLocalSupplier() {
+        this.subscription.add(
+            this.SupplierService.getLocalSupplier().subscribe(
+                response => {
+                    this.localSupplier = response;
+                }
+            )
+        )
+    }
+
     getBL() {
         this.subscription.add(
             this.UnloadingTransactionService.getBL().subscribe(
@@ -322,7 +387,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     for (let i = 0; i < this.bl.length; i++) {
                         this.bl[i] = {
                             ...this.bl[i], 
-                            BlPackaging: `${this.bl[i].MBL} - ${this.bl[i].Packaging == 1 ? 'Containerized' : 'Bulk'}`
+                            BlPackaging: `${this.bl[i].MBL} ${this.bl[i].HBL ? ' - ' + this.bl[i].HBL : '' } - ${this.bl[i].Packaging == 1 ? 'Containerized' : 'Bulk'}`
                         }
                     }
                 }
@@ -374,12 +439,9 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             });
         }
 
-
-        console.log(this.value);
-
         // onSelectTransaction()
         // console.log(this.value)
-        this.onSelectTransaction(this.value)
+        this.onSelectTransaction(this.value);
 
         dialog.maximize();
         this.clearItems();
@@ -477,8 +539,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     onSubmit(fileUpload?: any) {
 
-
-        // this.submitLoading = true;
+        this.submitLoading = true;
 
         const formData = new FormData();
 
@@ -489,7 +550,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             BL :this.unloadingTransactionForm.value.BL === null ? null : this.unloadingTransactionForm.value.BL.ShippingTransactionID,
             BLNumber:this.unloadingTransactionForm.value.BL === null ? null : this.unloadingTransactionForm.value.BL.MBL,
             ContainerNumber: this.unloadingTransactionForm.value.ContainerNumber === null ? null : this.unloadingTransactionForm.value.ContainerNumber.PullOutID,
-            DateTimeUnload: this.unloadingTransactionForm.value.DateTimeUnload.toLocaleString(),
+            DateTimeUnload: this.unloadingTransactionForm.value.DateTimeUnload?.toLocaleString() || null,
             DateUnload: this.unloadingTransactionForm.value.DateUnload.toLocaleDateString(),
             DrNumber: this.unloadingTransactionForm.value.DrNumber,
             // CheckerID:this.unloadingTransactionForm.value.CheckerID.CheckerID,
@@ -498,8 +559,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             WarehouseLocationID:this.unloadingTransactionForm.value.WarehouseLocationID,
             WarehouseID:this.unloadingTransactionForm.value.WarehouseID.WarehouseID,
             WarehousePartitionID: this.unloadingTransactionForm.value.WarehousePartitionID.WarehousePartitionID,
-            Quantity: this.unloadingTransactionForm.value.Quantity,
-            Weight:this.unloadingTransactionForm.value.Weight,
+            Quantity: this.unloadingTransactionForm.value.Quantity || 0,
+            Weight:this.unloadingTransactionForm.value.Weight || 0,
             SupplierID: this.unloadingTransactionForm.value.SupplierID.SupplierID,
             Status:this.unloadingTransactionForm.value.Status,
             UserID: this.userID
@@ -511,56 +572,55 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             formData.append('files[]', file);
         })
 
-        fileUpload.clear();
+        let authObs: Observable<ResponseData>;
+        authObs = this.UnloadingTransactionService.saveData
+        (           
+            formData
+        )
 
-        // let authObs: Observable<ResponseData>;
-        // authObs = this.UnloadingTransactionService.saveData
-        // (           
-        //     formData
-        // )
+        authObs.subscribe(response =>{
+            this.submitLoading = false;
 
-        // authObs.subscribe(response =>{
-        //     this.submitLoading = false;
-
-        //     if( response == 1) {
-        //         this.MessageService.add({ 
-        //             severity: 'success', 
-        //             summary: 'Success', 
-        //             detail: ' successfully recorded', 
-        //             life: 3000 
-        //         });
-        //         this.onFilterUnloading();
-        //         this.clearItems();
-        //         this.visible = false;
-        //     } 
-        //     else if ( response == 2) {
-        //         this.MessageService.add({ 
-        //             severity: 'success', 
-        //             summary: 'Success', 
-        //             detail: ' successfully updated', 
-        //             life: 3000 
-        //         });
-        //         this.onFilterUnloading();
-        //         this.clearItems();
-        //         this.visible = false;
-        //     }
-        //     else if ( response == 0) {
-        //         this.MessageService.add({ 
-        //             severity: 'error', 
-        //             summary: 'Danger', 
-        //             detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', 
-        //             life: 3000 
-        //         });
-        //     }
+            if( response == 1) {
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully recorded', 
+                    life: 3000 
+                });
+                this.onFilterUnloading();
+                this.clearItems();
+                this.visible = false;
+            } 
+            else if ( response == 2) {
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully updated', 
+                    life: 3000 
+                });
+                this.onFilterUnloading();
+                this.clearItems();
+                this.visible = false;
+            }
+            else if ( response == 0) {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'Item: ' + this.unloadingTransactionForm.value.UnloadingTransactionID +  ' already exist', 
+                    life: 3000 
+                });
+            }
             
-        // }, errorMessage => {
-        //     this.submitLoading = false;
-        //     this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
-        // })
+        }, errorMessage => {
+            this.submitLoading = false;
+            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
+        })
     }
 
 
     onSubmitTruckDialog() {
+
         let authObs2: Observable<ResponseData>;
         authObs2 = this.TruckService.saveData(
             this.truckForm.value.TruckID,
@@ -658,6 +718,10 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         this.unloadingTransactionForm.get('BL')?.clearValidators();
         this.unloadingTransactionForm.get('ContainerNumber')?.clearValidators();
         this.unloadingTransactionForm.get('PO')?.clearValidators();
+        // this.unloadingTransactionForm.get('DateTimeUnload')?.disable();
+        // this.unloadingTransactionForm.get('Quantity')?.disable();
+        // this.unloadingTransactionForm.get('Weight')?.disable();
+
 
         if (this.value == 1) {
 
@@ -679,6 +743,148 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         
     }
 
+    onAddWeight(data: any, dialog: Dialog) {
+
+        this.addWeightVisible = true;
+        dialog.maximize();
+
+        this.selectedTransaction = data.isTransactionID;
+
+        let POValue = this.findObjectByID(+data.PO, 'PurchaseOrderID', this.po);
+
+        let BlValue = this.findObjectByID(+data.BL, 'ShippingTransactionID', this.bl);
+
+        this.onSelectBL(BlValue);
+
+        let ContainerValue = this.findObjectByID(+data.ContainerID, 'PullOutID', this.containerNumber);
+
+        let TransactionValue = this.findObjectByID(data.isTransactionID, 'TransactionID', this.transaction);
+
+        // let CheckerValue = this.findObjectByID(data.CheckerID, 'CheckerID', this.checker);
+
+        let TruckValue = this.findObjectByID(data.TruckID, 'TruckID', this.truck);
+
+        let RawMaterialValue = this.findObjectByID(data.RawMaterialID, 'RawMaterialID', this.rawMaterial);
+
+        let WarehouseValue = this.findObjectByID(data.WarehouseID, 'WarehouseID', this.warehouse);
+
+        // this.onSelectWarehouse(WarehouseValue);
+
+        let WarehousePartitionValue = this.findObjectByID(data.WarehousePartitionID, 'WarehousePartitionID', this.warehousePartition);
+
+        let importSupplierValue = this.findObjectByID(data.SupplierID, 'SupplierID', this.supplier);
+
+        let localSupplierValue = this.findObjectByID(data.SupplierID, 'SupplierID', this.localSupplier);
+
+        const SupplierValue = this.value == 1 ? localSupplierValue : importSupplierValue;
+        
+        this.addWeightForm.setValue({
+            UnloadingTransactionID: data.UnloadingTransactionID,
+            isTransactionID: TransactionValue,
+            PO: POValue,
+            BL: BlValue,
+            ContainerNumber: ContainerValue,
+            DateTimeUnload: null,
+            DateUnload: new Date(data.DateUnload.date),
+            DrNumber: data.DrNumber,
+            TruckID: TruckValue,
+            RawMaterialID: RawMaterialValue,
+            WarehouseLocationID: data.WarehouseLocationID,
+            WarehouseID: WarehouseValue,
+            WarehousePartitionID: WarehousePartitionValue,
+            Quantity: null,
+            Weight: null,
+            SupplierID: SupplierValue,
+            Status: data.Status,
+            UserID: data.UserID,            
+        });
+        
+    }
+
+    onSubmitAddWeight() {
+
+        // console.log(this.addWeightForm.value)
+        this.submitAddWeightIsLoading = true;
+
+        const formData = new FormData();
+
+        const data = { 
+            UnloadingTransactionID: this.addWeightForm.value.UnloadingTransactionID,
+            isTransactionID:  this.value,
+            PO:  this.addWeightForm.value.PO === null ? null : this.addWeightForm.value.PO.PurchaseOrderID,
+            BL :this.addWeightForm.value.BL === null ? null : this.addWeightForm.value.BL.ShippingTransactionID,
+            BLNumber:this.addWeightForm.value.BL === null ? null : this.addWeightForm.value.BL.MBL,
+            ContainerNumber: this.addWeightForm.value.ContainerNumber === null ? null : this.addWeightForm.value.ContainerNumber.PullOutID,
+            DateTimeUnload: this.addWeightForm.value.DateTimeUnload?.toLocaleString(),
+            DateUnload: this.addWeightForm.value.DateUnload.toLocaleDateString(),
+            DrNumber: this.addWeightForm.value.DrNumber,
+            // CheckerID:this.unloadingTransactionForm.value.CheckerID.CheckerID,
+            TruckID: this.addWeightForm.value.TruckID.TruckID,
+            RawMaterialID: this.addWeightForm.value.RawMaterialID.RawMaterialID,
+            WarehouseLocationID:this.addWeightForm.value.WarehouseLocationID,
+            WarehouseID:this.addWeightForm.value.WarehouseID.WarehouseID,
+            WarehousePartitionID: this.addWeightForm.value.WarehousePartitionID.WarehousePartitionID,
+            Quantity: this.addWeightForm.value.Quantity,
+            Weight:this.addWeightForm.value.Weight,
+            SupplierID: this.addWeightForm.value.SupplierID.SupplierID,
+            Status: 3,
+            UserID: this.userID
+        }
+ 
+        formData.append('data', JSON.stringify({data:data}));
+
+        this.files.forEach(file => {
+            formData.append('files[]', file);
+        })
+        
+        
+        let authObs: Observable<ResponseData>;
+        authObs = this.UnloadingTransactionService.saveData
+        (           
+            formData
+        )
+
+        authObs.subscribe(response =>{
+            this.submitAddWeightIsLoading = false;
+
+            if( response == 1) {
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully recorded', 
+                    life: 3000 
+                });
+                this.onFilterUnloading();
+                this.addWeightForm.reset();
+                this.addWeightVisible = false;
+            } 
+            else if ( response == 2) {
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully updated', 
+                    life: 3000 
+                });
+                this.onFilterUnloading();
+                this.addWeightForm.reset();
+                this.addWeightVisible = false;
+            }
+            else if ( response == 0) {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'Item: already exist', 
+                    life: 3000 
+                });
+            }
+            
+        }, errorMessage => {
+            this.submitAddWeightIsLoading = false;
+            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
+        })
+
+    }
+
     onSelectPO(data: any) {
         
         if(!data) {
@@ -690,10 +896,11 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         }
 
         const rawMaterialValue = this.findObjectByID(+data.RawMaterialID, 'RawMaterialID', this.rawMaterial);
-        const supplierValue = this.findObjectByID(+data.SupplierID, 'SupplierID', this.supplier);
+        // const supplierValue = this.findObjectByID(+data.SupplierID, 'SupplierID', this.supplier);
+        const localSupplierValue = this.findObjectByID(+data.SupplierID, 'SupplierID', this.localSupplier)
         this.unloadingTransactionForm.patchValue({
             RawMaterialID: rawMaterialValue,
-            SupplierID: supplierValue
+            SupplierID: localSupplierValue
         });
         
     }
@@ -786,15 +993,16 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             this.BeforeImage = 'http://10.10.2.110/project/'+ data.BeforeImage;
             // this.BeforeImage = data.BeforeImage;
         }
-
-
+        // console.log(new Date(data.DateUnload.date))
+        // console.log(new Date());
+        
         this.unloadingTransactionForm.setValue({
             UnloadingTransactionID: data.UnloadingTransactionID,
             isTransactionID: TransactionValue,
             PO: POValue,
             BL: BlValue,
             ContainerNumber: ContainerValue,
-            DateTimeUnload: new Date(data.DateTimeUnload.date),
+            DateTimeUnload: data.DateTimeUnload ?  new Date(data.DateTimeUnload.date) : null,
             DateUnload: new Date(data.DateUnload.date),
             DrNumber: data.DrNumber,
             // CheckerID: CheckerValue,
@@ -879,6 +1087,34 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                 // this.selectedWarehouse = [...this.selectedWarehouse, this.warehousePartition[i]]
             }
         }
+    }
+
+    onVerifyUnloading(data: any) {
+
+        if (!data.UnloadingTransactionID) {
+            alert('unknown error occured');
+            return
+        }
+
+        const unloadingID = data.UnloadingTransactionID;
+
+        this.UnloadingTransactionService.verifyUnloading(unloadingID).subscribe(
+            response => {
+            if ( response == 2) {
+                this.MessageService.add({ 
+                    severity: 'success', 
+                    summary: 'Success', 
+                    detail: ' successfully verified', 
+                    life: 3000 
+                });
+                this.onFilterUnloading();
+            }
+            
+        },  errorMessage => {
+            this.submitAddWeightIsLoading = false;
+            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage || 'Unkown error occured', life: 3000 });
+        })
+
     }
 
     onGlobalFilter(table: Table, event: Event) {

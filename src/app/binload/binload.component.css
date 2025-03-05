@@ -94,10 +94,10 @@ tr:hover {
 
 /* ==== MODAL FORM ==== */
 
-.disabled {
+/* .disabled {
     opacity: 0.6;
-    pointer-events: none; /* prevents interactions */
-}
+    pointer-events: none; 
+} */
 
 .required {
     color: rgb(228, 84, 84);
@@ -130,6 +130,13 @@ tr:hover {
     padding: 0;
 }
 
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+
 input {
     padding: 7px 10px;
 }
@@ -140,6 +147,25 @@ p-inputNumber ::ng-deep input {
 
 .p-inputtext.ng-dirty.ng-invalid {
     border-color: #ced4da;
+}
+
+:host ::ng-deep p-calendar.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+:host ::ng-deep .p-inputtext.disabled{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+:host ::ng-deep p-inputnumber.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+
+:host ::ng-deep p-dropdown.disabled .p-dropdown{
+    background-color: gainsboro; 
 }
 
 
