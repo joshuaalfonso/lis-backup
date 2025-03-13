@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { CheckerService } from "../checker/checker.service";
 import { Observable, Subscription } from "rxjs";
 import { TruckService } from "../truck/truck.service";
-import { MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { WarehouseService } from "../warehouse/warehouse.service";
 import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
@@ -113,6 +113,10 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     submitLoading: boolean = false;
     submitAddWeightIsLoading: boolean = false;
 
+    position: string = '';
+
+    selectedRow = {};
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -127,6 +131,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         private TruckingService: TruckService,
         private UsersService: UsersService,
         private auth: AuthService,
+        private CofirmationService: ConfirmationService
     ) {}
 
     ngOnInit(): void {
@@ -515,7 +520,14 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     getImage(data: any) {
         this.images = [];
         this.loading = true;
-        let selectedID = data.UnloadingTransactionID;
+
+        if (!data.UnloadingTransactionID) {
+            alert('There is no Unloading transaction ID');
+            return
+        }
+
+        const selectedID = data.UnloadingTransactionID;
+        
 
         this.UnloadingTransactionService.getImage(selectedID).subscribe(
             response => {
@@ -535,6 +547,10 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                 this.loading = false
             }
         )
+    }
+
+    selectRow(row: any) {
+        this.selectRow = {...row};
     }
 
     onSubmit(fileUpload?: any) {
@@ -827,7 +843,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             Quantity: this.addWeightForm.value.Quantity,
             Weight:this.addWeightForm.value.Weight,
             SupplierID: this.addWeightForm.value.SupplierID.SupplierID,
-            Status: 3,
+            Status: 1,
             UserID: this.userID
         }
  
@@ -949,12 +965,17 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
 
     displayImage(imageName: string) {
-        return 'http://10.10.2.110/project/'+ imageName;
+        const parsedUrl = new URL(window.location.href);
+        const baseUrl = parsedUrl.origin;
+
+        // return 'http://10.10.2.110/project/'+ imageName;
+        return baseUrl + '/project/' + imageName;
     }
 
     onSelect(data: any, dialog: Dialog) {
         if(!this.edit) {
             this.MessageService.add({ severity: 'error', summary: 'Warning', detail: 'You are not authorized!', life: 3000 });
+            return
         }
 
         // console.log(data);
@@ -1089,14 +1110,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         }
     }
 
-    onVerifyUnloading(data: any) {
-
-        if (!data.UnloadingTransactionID) {
-            alert('unknown error occured');
-            return
-        }
-
-        const unloadingID = data.UnloadingTransactionID;
+    onVerifyUnloading(unloadingID: any) {
 
         this.UnloadingTransactionService.verifyUnloading(unloadingID).subscribe(
             response => {
@@ -1115,6 +1129,37 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage || 'Unkown error occured', life: 3000 });
         })
 
+    }
+
+
+    // delete contract form
+    confirmVerify(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.UnloadingTransactionID) {
+            alert('unknown error occured');
+            return
+        }
+
+        const unloadingID = row.UnloadingTransactionID;
+
+        const name = row.isTransactionID === 1 ? row.PONo : row.MBL;
+
+        this.CofirmationService.confirm({
+            message: `Are you sure you want to verify '${name}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onVerifyUnloading(unloadingID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
     }
 
     onGlobalFilter(table: Table, event: Event) {

@@ -1435,10 +1435,10 @@
         [scrollable]="true" 
         scrollHeight="330px"  
         [tableStyle]="{ 'width': '100%', 'position': 'relative' }" 
-        [globalFilterFields]="['MBL', 'BL', 'BAI_SPS_IC']" 
+        [globalFilterFields]="['MBL', 'BL', 'BAI_SPS_IC', 'Lot', 'ContractNo', 'ShippingLine', 'Vessel', 'HBL', 'Forwarder', 'RawMaterial', 'Supplier', 'PortOfDischarge', 'Broker', 'ETA', 'ETD', 'ATA', 'StorageLastFreeDate', 'Bank', 'Remarks']" 
         #shipingTransTable 
         *ngIf="!isLoading2" 
-        >      
+    >      
 
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
@@ -1495,9 +1495,6 @@
                 </th>
                 <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
                     Forwarder
-                </th>
-                <th *ngIf="value2 === 1">
-                    Status
                 </th>
                 <th *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
                     Cont
@@ -1580,6 +1577,9 @@
                 <th *ngIf="value2 === 1">
                     Remarks
                 </th>
+                <th alignFrozen="right" pFrozenColumn *ngIf="value2 === 1">
+                    Status
+                </th>
                 <th alignFrozen="right" pFrozenColumn *ngIf="edit">
                     
                 </th>
@@ -1594,6 +1594,9 @@
             >
                 <td data-title="Lot" *ngIf="value2 === 1" pFrozenColumn>
                     {{ row.Lot == 0 ? '-' : row.Lot}}
+                    <div class="sub-text">
+                        {{ row.ContractNo }}
+                    </div>
                 </td>
                 <td data-title="Quantity" *ngIf="value2 === 1" >
                     {{ row.Quantity == 0 ? '-' : row.Quantity | number }}
@@ -1636,11 +1639,11 @@
                     {{ row.Forwarder == '' ? '-' : row.Forwarder }}
                 </td>
 
-                <td data-title="Status" *ngIf="value2 === 1">
+                <!-- <td data-title="Status" alignFrozen="right" pFrozenColumn *ngIf="value2 === 1">
                     <p-tag [severity]="getSeverity(row.Status)">
                         {{ getStatus(row.Status) }}
                     </p-tag>
-                </td>
+                </td> -->
                 <td data-title="NoOfContainer" *ngIf="selectedRowPackaging === 1 || selectedRowPackaging == 0">
                     {{ row.NoOfContainer == 0 ? '-' : row.NoOfContainer}}
                 </td>
@@ -1721,6 +1724,11 @@
                 </td>
                 <td data-title="Remarks" *ngIf="value2 === 1">
                     {{ row.Remarks === '' ? '-' : row.Remarks}}
+                </td>
+                <td data-title="Status" alignFrozen="right" pFrozenColumn *ngIf="value2 === 1">
+                    <p-tag [severity]="getSeverity(row.Status)">
+                        {{ getStatus(row.Status) }}
+                    </p-tag>
                 </td>
                 <td data-title="Action" class="text-center" alignFrozen="right" pFrozenColumn *ngIf="edit">
 

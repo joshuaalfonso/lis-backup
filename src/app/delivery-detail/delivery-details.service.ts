@@ -9,10 +9,11 @@ export class DeliveryDetailService {
 
     constructor( private http: HttpClient){}
 
-    // parsedUrl = new URL(window.location.href);
-    // baseUrl = this.parsedUrl.origin;
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
+
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
 
     getDeliveryDetailData() {
         return this.http.get<any>( this.baseUrl + '/project/a_DeliveryDetail.php');

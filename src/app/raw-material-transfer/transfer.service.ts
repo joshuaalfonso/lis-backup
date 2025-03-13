@@ -9,10 +9,11 @@ export class TransferService {
 
     constructor( private http: HttpClient){}
 
-    // parsedUrl = new URL(window.location.href);
-    // baseUrl = this.parsedUrl.origin;
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
+
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
 
     insertTransferRequest(transferRequest: TransferRequestModel) {
         return this.http.post( this.baseUrl + '/project/b_DispatcherRequest.php', transferRequest);

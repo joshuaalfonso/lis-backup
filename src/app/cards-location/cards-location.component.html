@@ -9,12 +9,12 @@
                 {{ row.TotalWeight | number }} KG 
             </span>
 
-            <span 
+            <!-- <span 
                 class="vsYesterdayGreen" 
                 style="width: auto;" 
                 *ngIf="vsYesterday(row) > 0"
             >
-                +{{ vsYesterday(row) }}% 
+                +{{ vsYesterday(row) | number }}% 
                 <i class="pi pi-arrow-up text-xs"></i> 
             </span>
 
@@ -23,9 +23,9 @@
                 style="width: auto;" 
                 *ngIf="vsYesterday(row) < 0"
             >
-                {{ vsYesterday(row) }}% 
+                {{ vsYesterday(row) | number}}% 
                 <i class="pi pi-arrow-down text-xs"></i> 
-            </span>
+            </span> -->
 
         </div>
 

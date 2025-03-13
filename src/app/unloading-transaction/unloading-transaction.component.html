@@ -1,5 +1,4 @@
-<!-- ======= TOAST NOTIFICATION ======== -->
-<p-toast></p-toast>
+
 
 <!-- ======== CONFIRM POP-UP======== -->
 <p-confirmPopup></p-confirmPopup>
@@ -8,28 +7,6 @@
 <!-- <h1 class="title">Unloading Transaction</h1> -->
 <app-content-header [title]="'Unloading Transaction'"></app-content-header>
 
-<!-- ==== SEARCH, ADD , EXPORT ==== -->
-<!-- <div class="controls">
-
-  <button 
-    pButton pRipple 
-    class="add__btn" 
-    (click)="showDialog(unloadingModal)" 
-    *ngIf="insert"
-  >
-    <i class='bx bx-plus'></i> 
-    <span>Add Item</span>
-  </button>
-
-  <button pButton pRipple 
-    class="p-button-info export__btn" 
-    *ngIf="generateReport"
-  >
-    <i class='bx bx-file mr-1'>
-    </i> <span>Export File</span>
-  </button>
-
-</div> -->
 
 <div class="radio-inputs">
     <label class="radio">
@@ -49,12 +26,13 @@
 
 <!-- ===== TABLE ====== -->
 <div class="table" *ngIf="value === 1 || 2 ">
+    
     <p-table #dt1 
         [value]="unloadingTransaction" 
         [tableStyle]="{ 'width': '100%' }" 
         [globalFilterFields]="['PONo', 'MBL', 'RawMaterial', 'ContainerNumber', 'DrNumber', 'Supplier', 'CheckerName']" 
         [scrollable]="true" 
-        [paginator]="true"
+        [paginator]="!isLoading"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
     >
@@ -84,9 +62,9 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th pSortableColumn="DateUnload">   
+                <th pSortableColumn="DateUnload.date">   
                     Date Unload
-                    <p-sortIcon field="DateUnload" />
+                    <p-sortIcon field="DateUnload.date" />
                 </th>
                 <th pSortableColumn="PONo" *ngIf="value == 1">   
                     P.O #
@@ -157,13 +135,10 @@
                 <td data-title="CheckerID">
                     {{ row.Name }}
                 </td>
-                <td data-title="Verified" *ngIf="row.Status == 2">
+                <!-- <td data-title="Verified" *ngIf="row.Status == 2">
                     <i class="pi pi-check-circle text-green-500"></i>
-                </td>
-
-                <!-- <td data-title="Verified" *ngIf="row.Status == 0">
-                    <i class="pi pi-times-circle text-red-500"></i>
                 </td> -->
+
                 <td data-title="Action" *ngIf="edit || insert">
                     <!-- <button 
                         pButton pRipple 
@@ -180,46 +155,121 @@
                         class="p-button-danger p-2 border-round mr-2"
                     >
                         <i class='bx bx-trash' ></i>
-                    </button> -->
+                    </button> --> 
 
                     <div class="flex gap-2">
-                        <button pButton pRipple 
+                        <!-- <button pButton pRipple 
                             class="delete__btn" 
                             class="p-button-primay p-2 border-round" 
-                            (click)="onVerifyUnloading(row)"  
+                            (click)="confirmVerify('center', row)"  
                             pTooltip="Verify"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 1 && verifiedView"
+                        >
+                            <i class='pi pi-check' ></i>
+                        </button> -->
+
+
+                        <!-- Add weight  -->
+                        <button pButton pRipple 
+                            class="p-button-warning p-2 border-round" 
+                            (click)="onAddWeight(row, addWeightModal)"  
+                            pTooltip="Add Weight"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 0 && insert"
+                        >
+                            <i class='pi pi pi-plus' ></i>
+                        </button>      
+
+                        <!-- edit weight -->
+                        <!-- <button pButton pRipple 
+                            class="p-button-success p-2 border-round" 
+                            (click)="onSelect(row, unloadingModal)"  
+                            pTooltip="Edit Weight"
                             tooltipPosition="top"
                             *ngIf="row.Status == 1"
                         >
-                            <i class='pi pi-check' ></i>
-                        </button>
+                            <i class='pi pi pi-pencil' ></i>
+                        </button>   -->
 
-                    <button pButton pRipple 
-                        class="p-button-info p-2 border-round" 
-                        (click)="onAddWeight(row, addWeightModal)"  
-                        pTooltip="Add Weight"
-                        tooltipPosition="top"
-                        *ngIf="row.Status == 0 && insert"
-                    >
-                        <i class='pi pi pi-plus' ></i>
-                    </button>     
+                        <!-- get image -->
+                        <button pButton pRipple 
+                            class="p-button-info p-2 border-round" 
+                            (click)="getImage(row)"  
+                            pTooltip="Images"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 1 || row.Status == 2"
+                        >
+                            <i class='pi pi pi-image' ></i>
+                        </button>   
 
-                    <button pButton pRipple 
-                        class="p-button-info p-2 border-round" 
-                        (click)="getImage(row)"  
-                        pTooltip="Images"
-                        tooltipPosition="top"
-                        *ngIf="row.Status === 1"
-                    >
-                        <i class='pi pi pi-image' ></i>
-                    </button>           
+                        <!-- <app-edit-weight 
+                            *ngIf="row.Status == 1"
+                            [value]="value"
+                            [po]="po"
+                            [bl]="bl"
+                        /> -->
+                        
+                        <button pButton pRipple 
+                            class="p-button-primary p-2 border-round"  
+                            pTooltip="Verify"
+                            tooltipPosition="top"
+                            (click)="confirmVerify('center', row)"  
+                            *ngIf="row.Status == 1 && verifiedView"
+                        >
+                            <i class='pi pi pi-check' ></i>
+                        </button>   
+
+                        <!-- <i 
+                            class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle"
+                            (click)="unloadingOverlay.toggle($event)"
+                        ></i> -->
 
                     </div>
+
+
+                    <p-overlayPanel #unloadingOverlay>
+                        <div class="actions-overlay">
+
+                            <p  
+                                (click)="onAddWeight(row, addWeightModal)"  
+                                *ngIf="row.Status == 0 && insert"
+                            >
+                                <i class="pi pi-plus" width="15px" height="15px"></i>
+                                Add Weight
+                            </p>
+
+                            <p  
+                                (click)="confirmVerify('center', row)"  
+                                *ngIf="row.Status == 1 && verifiedView"
+                            >
+                                <i class="pi pi-check" width="15px" height="15px"></i>
+                                Verify
+                            </p>
+
+                            <p  
+                                (click)="getImage(row)"  
+                                *ngIf="row.Status == 1 || row.Status == 2"
+                            >
+                                <i class="pi pi-images"></i>
+                                View Images
+                            </p>
+    
+    
+                        </div>
+                    </p-overlayPanel>
                 </td>
+
             </tr>
         </ng-template>
 
     </p-table>
+
+    <p-confirmDialog 
+        key="positionDialog" 
+        [position]="position" 
+        rejectButtonStyleClass="p-button-outlined" 
+    />
   
     <div class="text-center my-3" *ngIf="isLoading">
         <app-loader></app-loader>
@@ -227,8 +277,6 @@
 
 </div>
 
-
-<app-add-weight-form />
 
 
 <!-- ======= MODAL FORM ======== -->
@@ -248,25 +296,6 @@
         class="p-fluid" 
         (ngSubmit)="onSubmit()" 
     >  
-
-        <!-- <div class="field">
-
-            <label class="font-semibold" >Transaction</label>
-
-            <div class="card flex justify-content-center">
-                <p-dropdown 
-                    [options]="transaction" 
-                    optionLabel="Label" 
-                    formControlName="isTransactionID" 
-                    [style]="{'height': '40px', 'border': '1px solid white'}" 
-                    [showClear]="true" 
-                    placeholder="Select Transaction" 
-                    (onChange)="onSelectTransaction($event)" 
-                    appendTo="body"
-                ></p-dropdown>
-            </div>
-
-        </div> -->
 
         <div class="field" *ngIf="value == 1">
 

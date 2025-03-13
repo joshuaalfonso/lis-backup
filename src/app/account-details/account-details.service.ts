@@ -11,8 +11,11 @@ import { HttpClient } from "@angular/common/http";
 })
 export class AccountDetailsService {
 
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
+
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
 
     constructor(
         private http: HttpClient

@@ -102,7 +102,11 @@
         <ng-template pTemplate="header">
             <tr class="thead white-space-nowrap">
                 <th style="width: 5rem"></th>
-                <th>Request Date</th>
+                <!-- <th>Request Date</th> -->
+                <th pSortableColumn="RequestDate.date">   
+                    Request Date
+                    <p-sortIcon field="RequestDate.date" />
+                </th>
                 <th>Plant</th>
                 <th>Raw Material</th>
                 <!-- <th>Request Quantity</th> -->

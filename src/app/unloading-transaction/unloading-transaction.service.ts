@@ -10,8 +10,11 @@ export class UnloadingTransactionService {
 
     constructor( private http: HttpClient){}
 
+    // parsedUrl = new URL(window.location.href);
+    // baseUrl = this.parsedUrl.origin;
+
     baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    // apiUrl = '10.10.2.110';z
 
     getUnloadingTransactionData() {
         return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransaction.php');

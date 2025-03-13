@@ -9,8 +9,11 @@ export class AddDeliveryService {
 
     constructor( private http: HttpClient){}
 
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
+
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
 
     getWarehousePartitionStock(id: any) {
         return this.http.get<any>( this.baseUrl + '/project/a_WarehousePartitionStock.php?id=' + id);

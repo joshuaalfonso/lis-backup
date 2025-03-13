@@ -7,8 +7,11 @@ import { throwError, catchError, tap } from "rxjs";
 @Injectable({ providedIn: 'root' })
 export class DriverService {
 
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
+
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
 
     constructor(
         private http: HttpClient

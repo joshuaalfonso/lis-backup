@@ -9,8 +9,11 @@ export class UsersService {
 
     constructor(private http: HttpClient){}
 
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
+
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
 
     getData() {
         return this.http.get<any>( this.baseUrl + '/project/a_UserAccount.php');

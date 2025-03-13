@@ -7,8 +7,11 @@ import { tap, throwError, catchError } from "rxjs";
 @Injectable({providedIn: 'root'})
 export class DispatcherService {
 
-    baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
+    parsedUrl = new URL(window.location.href);
+    baseUrl = this.parsedUrl.origin;
+
+    // baseUrl: string = environment.backend.baseURL;
+    // apiUrl = '10.10.2.110';
 
     constructor(
         private http: HttpClient
