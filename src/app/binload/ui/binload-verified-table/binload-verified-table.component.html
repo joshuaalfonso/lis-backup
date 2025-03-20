@@ -1,0 +1,152 @@
+<!-- ===== TABLE ====== -->
+<div class="table" *ngIf="!binloadVerifiedError">
+
+    <p-table 
+        #dt2 
+        [value]="binloadVerified" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RequestDate', 'RawMaterial', 'PlantName', 'WarehouseLocation', 'PlateNo', 'DriverName']" 
+        dataKey="BinloadRequestID"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+    >
+
+        <ng-template pTemplate="caption">
+
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                    (input)="onGlobalFilter(dt2, $event)" 
+                />
+
+            </div>
+
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead white-space-nowrap">
+                <th style="width: 5rem"></th>
+                <th pSortableColumn="RequestDate.date">   
+                    Request Date
+                    <p-sortIcon field="RequestDate.date" />
+                </th>
+                <th>Plant</th>
+                <th>Raw Material</th>
+                <th>Request</th>
+                <th>Location</th>
+                <th>Plate #</th>
+                <th>Dispatcher</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr *ngIf="!binloadVerifiedIsLoading">
+                <td>
+                    <p-button 
+                        type="button" 
+                        pRipple 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}"
+                    />
+                </td>
+                <td data-title="Request Date"> 
+                    {{ row.RequestDate.date | date: 'MM/dd/yyyy' }} 
+                </td>
+                <td data-title="Plant Name"> 
+                    {{ row.PlantName }} 
+                </td>
+                <td data-title="Raw Material"> 
+                    {{ row.RawMaterial }} 
+                </td>
+                <td data-title="Weight"> 
+                    <span > {{ row.Quantity + ' ' + row.BinloadUom}}  </span>
+                </td>
+                <td data-title="Warehouse Location"> 
+                    <span class="">{{ row.WarehouseLocation }} </span> 
+                    <span class="sub-text"> {{ row.Warehouse_Name}} - {{ row.WarehousePartitionName }}</span>
+                </td>
+                <td data-title="Plate No"> 
+                    <span class="">{{ row.PlateNo}} </span> 
+                    <span class="sub-text"> {{ row.DriverName}} </span>
+                </td>
+
+                <td data-title="Dispatcher">
+                    {{ row.Name }}
+
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-binloadRequest>
+            <tr>
+                <td colspan="10">
+                    <div class="p-3">
+                        <p-table [value]="binloadRequest.Binloading" dataKey="id">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th> Binloading Date </th>
+                                    <th> Control # </th>
+                                    <th> Intake </th>
+                                    <th> Quantity </th>
+                                    <th> Weight </th>
+                                    <th> Binload Checker </th>
+                                    <th style="width: 4rem"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row>
+                                <tr>
+                                    <td>
+                                        {{ (row.BinloadingDateTime.date | date: 'MM/dd/yyyy') || '-' }}
+                                        <div class="sub-text">
+                                            {{ (row.BinloadingDateTime.date | date: 'hh:mm a') || '-' }}
+                                        </div>
+                                    </td>
+                                    <td> {{ row.ControlNo }}</td>
+                                    <td> {{ row.IntakeID }}</td>
+                                    <td> {{ row.Quantity }}</td>
+                                    <td> {{ row.Weight | number}}</td>
+                                    <td> {{ row.Name }}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no order for this product yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+
+            <ng-template pTemplate=emptymessage>
+                No binload for this request.
+            </ng-template>
+
+        </ng-template>
+
+
+        <ng-template pTemplate=emptymessage *ngIf="!binloadVerifiedIsLoading">
+            There are no verified data.
+        </ng-template>
+    
+
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="binloadVerifiedIsLoading">
+      <app-loader></app-loader>
+    </div>
+
+</div>
+
+<p-messages 
+    [(value)]="binloadVerifiedError" 
+    [enableService]="false" 
+    [closable]="false"
+/>
+

@@ -14,7 +14,6 @@ export class EditWeightComponent implements OnInit {
   submitLoading: boolean = false;
 
   selectedPackaging: number = 0;
-
   
   @Input() selectedRow: any = {};
   @Input() value: number = 0;
@@ -33,9 +32,6 @@ export class EditWeightComponent implements OnInit {
   maxDate: Date = new Date();
 
   ngOnInit(): void {
-
-    console.log('zxc')
-  
     
     this.editWeightForm = new FormGroup({
       'UnloadingTransactionID': new FormControl(0),

@@ -83,6 +83,9 @@
         dataKey="DispatcherRequestID" 
         [tableStyle]="{ 'width': '100%'}" 
         [globalFilterFields]="['PlantName']" 
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
         *ngIf="value == 0  && viewValue == 'table' && !isLoading"
     >
         <ng-template pTemplate="header">
@@ -217,11 +220,13 @@
 
 
     <!-- Dispatcher Card View -->
+
+
     <div 
         class="card-container" 
         *ngIf="value == 0 && viewValue == 'card' && !isLoading"
     >
-        <ng-template ngFor let-row [ngForOf]="transferRequest" let-i="index">
+        <ng-template ngFor let-row [ngForOf]="paginatedCards" let-i="index">
             <div pRipple class="card">
                 <div class="card-title">
                     <span>{{row.RequestWeight}} KG</span>
@@ -288,8 +293,18 @@
             </div>
         </ng-template>    
 
-    
+
+
     </div>
+
+    <p-paginator 
+        (onPageChange)="onPageChange($event)" 
+        [first]="first" 
+        [rows]="rows" 
+        [totalRecords]="transferRequest.length" 
+        [rowsPerPageOptions]="[5, 10, 20]" 
+        *ngIf="value == 0 && viewValue == 'card' && !isLoading"
+    />
 
     <!-- Source Destination Table View -->
     <p-table 
@@ -719,313 +734,315 @@
 <p-sidebar 
     [(visible)]="sidebarVisible2" 
     position="right" 
-    styleClass="w-30rem p-4 overflow-x-hidden" 
+    styleClass="w-30rem" 
     *ngIf="transferDetails"
 >
-    <form [formGroup]="transferForm" class="p-fluid pointer-events-none">
+    <div class="overflow-x-hidden p-4">
+        <form [formGroup]="transferForm" class="p-fluid pointer-events-none">
         
-        <div class="field">
-            <label class="font-semibold">
-                Code Transfer
-            </label>
-            <input 
-                type="text" 
-                pInputText 
-                [value]="transferDetails.TransferCode"
-            />
-        </div>
-        
-        <div class="field">
-            <label class="font-semibold" >
-                Date Transfer
-            </label>
-            <input 
-                type="text" 
-                pInputText 
-                [value]="transferDetails.DateTransfer?.date | date: 'MM/dd/yyyy'"
-            >  
-        </div>
-
-        <div class="field">
-            <label class="font-semibold" >
-                Transfer Type
-            </label>
-            <input 
-                type="text" 
-                pInputText 
-                [value]="transferDetails.TransferTypeID == 1 ? 'Partial' : 'Full'"
-            >
-        </div>
-
-        <div class="field">
-            <label class="font-semibold" >
-                Raw Material
-            </label>
-            <input 
-                type="text" 
-                pInputText 
-                [value]="transferDetails.RawMaterial"
-            >
-        </div>
-
-        <div class="grid">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold">
-                        Quantity
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.Quantity"
-                    />
-                </div>
+            <div class="field">
+                <label class="font-semibold">
+                    Code Transfer
+                </label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="transferDetails.TransferCode"
+                />
             </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold">
-                        Weight
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.Weight"
-                    />
-                </div>
+            
+            <div class="field">
+                <label class="font-semibold" >
+                    Date Transfer
+                </label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="transferDetails.DateTransfer?.date | date: 'MM/dd/yyyy'"
+                >  
             </div>
-
-        </div>
-
-
-        <div class="grid" *ngIf="transferDetails.TransferTypeID == 2">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold">
-                        Loss Quantity
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.LossQuantity"
-                    />
-                </div>
+    
+            <div class="field">
+                <label class="font-semibold" >
+                    Transfer Type
+                </label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="transferDetails.TransferTypeID == 1 ? 'Partial' : 'Full'"
+                >
             </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold">
-                        Loss Weight
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.LossWeight"
-                    />
-                </div>
+    
+            <div class="field">
+                <label class="font-semibold" >
+                    Raw Material
+                </label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="transferDetails.RawMaterial"
+                >
             </div>
-
-        </div>
-
-
-        <div class="grid" *ngIf="transferDetails.TransferTypeID == 2">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold">
-                        Over Quantity
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.OverQuantity"
-                    />
+    
+            <div class="grid">
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold">
+                            Quantity
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.Quantity"
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold">
-                        Over Weight
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.OverWeight"
-                    />
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold">
+                            Weight
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.Weight"
+                        />
+                    </div>
                 </div>
+    
             </div>
-
-        </div>
-
-
-        <div class="field">
-            <label class="font-semibold">Source</label>
-            <input 
-                type="text" 
-                pInputText 
-                [value]="
-                    transferDetails.FromWarehouseLocation + 
-                    ' - ' + 
-                    transferDetails.FromWarehouse + 
-                    ' - ' + 
-                    transferDetails.FromWarehousePartitionName
-                "
-            />
-        </div>
-
-        <div class="field">
-            <label class="font-semibold">Destination</label>
-            <input 
-                type="text" 
-                pInputText 
-                [value]="
-                    transferDetails.ToWarehouseLocation + 
-                    ' - ' + 
-                    transferDetails.ToWarehouse + 
-                    ' - ' + 
-                    transferDetails.ToWarehousePartitionName
-                "
-            />
-        </div>
-
-
-        <div class="grid">
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Plate #
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.PlateNo"
-                    />
+    
+    
+            <div class="grid" *ngIf="transferDetails.TransferTypeID == 2">
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold">
+                            Loss Quantity
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.LossQuantity"
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Driver
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.DriverName"
-                    />
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold">
+                            Loss Weight
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.LossWeight"
+                        />
+                    </div>
                 </div>
+    
             </div>
-
-        </div>
-
-
-        <div class="field">
-            <label class="font-semibold" >
-                Dispatcher
-            </label>
-            <!-- <input pInputText formControlName="CheckerID" autocomplete="off" class="input"> -->
-            <input 
-                type="text" 
-                pInputText 
-                [value]="transferDetails.DispatcherName"
-            />
-        </div>
-
-        <div class="grid">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Checker
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.CheckerName"
-                    />
+    
+    
+            <div class="grid" *ngIf="transferDetails.TransferTypeID == 2">
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold">
+                            Over Quantity
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.OverQuantity"
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Guard
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.GuardName"
-                    />
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold">
+                            Over Weight
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.OverWeight"
+                        />
+                    </div>
                 </div>
+    
             </div>
-
-        </div>
-
-
-        <div class="grid">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Time Out
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.FeedmixDeparture?.date | date: 'MM/dd/yyyy HH:mm' "
-                    />
+    
+    
+            <div class="field">
+                <label class="font-semibold">Source</label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="
+                        transferDetails.FromWarehouseLocation + 
+                        ' - ' + 
+                        transferDetails.FromWarehouse + 
+                        ' - ' + 
+                        transferDetails.FromWarehousePartitionName
+                    "
+                />
+            </div>
+    
+            <div class="field">
+                <label class="font-semibold">Destination</label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="
+                        transferDetails.ToWarehouseLocation + 
+                        ' - ' + 
+                        transferDetails.ToWarehouse + 
+                        ' - ' + 
+                        transferDetails.ToWarehousePartitionName
+                    "
+                />
+            </div>
+    
+    
+            <div class="grid">
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Plate #
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.PlateNo"
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Time In
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.FeedmixArrival?.date | date: 'MM/dd/yyyy HH:mm' "
-                    />
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Driver
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.DriverName"
+                        />
+                    </div>
                 </div>
+    
             </div>
-
-       </div>
-
-        <div class="grid">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Source Arrival
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.SourceArrival?.date | date: 'MM/dd/yyyy HH:mm' "
-                    />
+    
+    
+            <div class="field">
+                <label class="font-semibold" >
+                    Dispatcher
+                </label>
+                <!-- <input pInputText formControlName="CheckerID" autocomplete="off" class="input"> -->
+                <input 
+                    type="text" 
+                    pInputText 
+                    [value]="transferDetails.DispatcherName"
+                />
+            </div>
+    
+            <div class="grid">
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Checker
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.CheckerName"
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Source Departure
-                    </label>
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [value]="transferDetails.SourceDeparture?.date | date: 'MM/dd/yyyy HH:mm' "
-                    />
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Guard
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.GuardName"
+                        />
+                    </div>
                 </div>
+    
             </div>
-
-       </div>
-
-    </form>
+    
+    
+            <div class="grid">
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Time Out
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.FeedmixDeparture?.date | date: 'MM/dd/yyyy HH:mm' "
+                        />
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Time In
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.FeedmixArrival?.date | date: 'MM/dd/yyyy HH:mm' "
+                        />
+                    </div>
+                </div>
+    
+           </div>
+    
+            <div class="grid">
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Source Arrival
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.SourceArrival?.date | date: 'MM/dd/yyyy HH:mm' "
+                        />
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Source Departure
+                        </label>
+                        <input 
+                            type="text" 
+                            pInputText 
+                            [value]="transferDetails.SourceDeparture?.date | date: 'MM/dd/yyyy HH:mm' "
+                        />
+                    </div>
+                </div>
+    
+           </div>
+    
+        </form>
+    </div>
 </p-sidebar>
 
 

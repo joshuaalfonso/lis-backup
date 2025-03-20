@@ -10,7 +10,6 @@ export class ProductionOutputService {
     constructor( private http: HttpClient){}
 
     baseUrl: string = environment.backend.baseURL;
-    apiUrl = '10.10.2.110';
 
     getProductionOutputData(){
         return this.http.get<any>( this.baseUrl + '/project/J_ProductionOutput.php');

@@ -41,7 +41,7 @@ export class UnloadingTransactionService {
     }
 
     getverified() {
-        return this.http.get<any>( this.baseUrl + '/project/a_UnloadingVerified.php')
+        return this.http.get<any>( this.baseUrl + '/project/a_UnloadingVerified.php');
     }
 
     verifyUnloading(unloadingID: number) {
@@ -50,6 +50,13 @@ export class UnloadingTransactionService {
             {
                 UnloadingTransactionID: unloadingID
             }
+        );
+    }
+
+    deleteUnloading(row: any) {
+        return this.http.post ( 
+            this.baseUrl + '/project/b_UnloadingTransactionDelete.php', 
+            row
         );
     }
 

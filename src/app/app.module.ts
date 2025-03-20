@@ -179,6 +179,9 @@ import { RawMaterialsModalComponent } from './raw-materials/ui/raw-materials-mod
 import { RawMaterialsTableComponent } from './raw-materials/ui/raw-materials-table/raw-materials-table.component';
 import { LocalSupplier } from './supplier-local/local-supplier.component';
 import { EditWeightComponent } from './unloading-transaction/features/edit-weight/edit-weight.component';
+import { BinloadVerifiedTableComponent } from './binload/ui/binload-verified-table/binload-verified-table.component';
+import { BlOverviewComponent } from './dashboard-warehousing/ui/bl-overview/bl-overview.component';
+import { BinloadTableComponent } from './binload/ui/binload-table/binload-table.component';
 
 
 
@@ -262,6 +265,9 @@ import { EditWeightComponent } from './unloading-transaction/features/edit-weigh
     RawMaterialsTableComponent,
     LocalSupplier,
     EditWeightComponent,
+    BinloadVerifiedTableComponent,
+    BlOverviewComponent,
+    BinloadTableComponent,
     
   ],
   imports: [

@@ -77,7 +77,7 @@ export class DashboardWarehousingComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.UnloadingService.getUnloadedToday().subscribe(
           response => {
-            console.log(response);
+            // console.log(response);
             
             this.recentUnload = response;
             this.unloadLoading = false;

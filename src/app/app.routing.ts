@@ -55,6 +55,7 @@ import { AccountDetailsComponent } from "./account-details/account-details.compo
 import { SecurityComponent } from "./security/security.component";
 import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-inspection.component";
 import { LocalSupplier } from "./supplier-local/local-supplier.component";
+import { BlOverviewComponent } from "./dashboard-warehousing/ui/bl-overview/bl-overview.component";
 
 
 
@@ -62,12 +63,17 @@ const routes: Routes = [
     {
         path: '', 
         redirectTo: '/dashboard', 
-        pathMatch: 'full'
+        pathMatch: 'full',
     },
     {
         path: 'dashboard', 
         component: DashboardComponent, 
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'dashboard/bl/:id', 
+        component: BlOverviewComponent, 
+        canActivate: [AuthGuard],
     },
     {
         path: 'raw-materials', 

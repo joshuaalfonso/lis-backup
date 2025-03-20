@@ -220,6 +220,15 @@
                             <i class='pi pi pi-check' ></i>
                         </button>   
 
+                        <button pButton pRipple 
+                            class="p-button-danger p-2 border-round"  
+                            pTooltip="Delete"
+                            tooltipPosition="top"
+                            (click)="onDeleteUnloading(row)"  
+                        >
+                            <i class='pi pi pi-trash' ></i>
+                        </button>   
+
                         <!-- <i 
                             class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle"
                             (click)="unloadingOverlay.toggle($event)"
@@ -654,9 +663,9 @@
                 ></button> -->
 
                 <app-submit-button 
-                [submitLoading]="submitLoading" 
-                [form]="unloadingTransactionForm"
-            /> 
+                    [submitLoading]="submitLoading" 
+                    [form]="unloadingTransactionForm"
+                /> 
         </div>
 
     </form>

@@ -1,0 +1,14 @@
+td, th {
+    padding: 10px 5px;
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+td {
+    /* color: 	#808080; */
+    color: var(--font-color);
+    font-weight: var(--font-500);
+    border: 1px lightgray;
+    border-bottom-style: dotted;
+    /* font-size: var(--font-sm); */
+}

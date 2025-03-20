@@ -14,6 +14,7 @@ import { Table } from "primeng/table";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { FileSelectEvent, FileUploadEvent, UploadEvent } from "primeng/fileupload";
+import { environment } from "../environments/environment";
 
 @Component({
     selector: 'app-unloading-transaction',
@@ -965,14 +966,17 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
 
     displayImage(imageName: string) {
-        const parsedUrl = new URL(window.location.href);
-        const baseUrl = parsedUrl.origin;
+        // const parsedUrl = new URL(window.location.href);
+        // const baseUrl = parsedUrl.origin;
+
+        const baseUrl = environment.backend.baseURL;
 
         // return 'http://10.10.2.110/project/'+ imageName;
         return baseUrl + '/project/' + imageName;
     }
 
     onSelect(data: any, dialog: Dialog) {
+        
         if(!this.edit) {
             this.MessageService.add({ severity: 'error', summary: 'Warning', detail: 'You are not authorized!', life: 3000 });
             return
@@ -1160,6 +1164,47 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             },
             key: 'positionDialog'
         });
+    }
+
+    onDeleteUnloading(row: any) {
+
+        if (!row.UnloadingTransactionID) {
+            alert('no transaction id');
+            return
+        }
+
+        const data = {
+            ...row,
+            DateTimeUnload: new Date( row.DateTimeUnload.date).toLocaleString(),
+            DateUnload: new Date(row.DateUnload.date).toLocaleDateString(),
+            DeleteQuantity: row.Quantity,
+            DeleteWeight: row.Weight
+        }
+        
+        this.UnloadingTransactionService.deleteUnloading(
+            data
+        ).subscribe(
+            response => {
+                if ( response == 3) {
+                    this.MessageService.add({ 
+                        severity: 'success', 
+                        summary: 'Success', 
+                        detail: ' Successfully Deleted', 
+                        life: 3000 
+                    });
+                    this.onFilterUnloading();
+                }
+            },
+            errorMessage => {
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: errorMessage || 'Unkown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+        
     }
 
     onGlobalFilter(table: Table, event: Event) {

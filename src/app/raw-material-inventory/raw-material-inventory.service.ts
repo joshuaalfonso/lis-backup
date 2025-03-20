@@ -9,11 +9,10 @@ export class RawMaterialInventoryService {
 
     constructor( private http: HttpClient){}
 
-    parsedUrl = new URL(window.location.href);
-    baseUrl = this.parsedUrl.origin;
+    // parsedUrl = new URL(window.location.href);
+    // baseUrl = this.parsedUrl.origin;
 
-    // baseUrl: string = environment.backend.baseURL;
-    // apiUrl = '10.10.2.110';
+    baseUrl: string = environment.backend.baseURL;
 
     getInventoryData() {
         return this.http.get<any>( this.baseUrl + '/project/a_RawMaterialInventory.php');

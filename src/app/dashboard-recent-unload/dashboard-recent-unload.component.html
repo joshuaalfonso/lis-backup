@@ -1,7 +1,14 @@
 
 
 
-<p-table [value]="recentUnload" responsiveLayout="stack" [breakpoint]="'960px'" *ngIf="!unloadLoading">
+<p-table 
+     [value]="recentUnload" 
+     responsiveLayout="stack" 
+     [breakpoint]="'960px'" 
+     responsiveLayout="stack" 
+     [breakpoint]="'960px'" 
+     *ngIf="!unloadLoading"  
+>
 
     <ng-template pTemplate="body" let-row>
          <tr>

@@ -207,9 +207,9 @@ export class SupplierComponent implements OnInit, OnDestroy{
         if(!this.supplierForm.valid) {
             alert('please fill all the blanks');
             return
-        } 
+        }  
 
-        // console.log(this.supplierForm.value);    
+        const importationSourceValue = 2;
 
         this.submitLoading = true;    
 
@@ -220,7 +220,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
             this.supplierForm.value.Address, 
             this.supplierForm.value.ContactPerson, 
             this.supplierForm.value.ContactNumber, 
-            this.supplierForm.value.Source, 
+            importationSourceValue, 
             this.supplierForm.value.Product, 
             this.supplierForm.value.Currency, 
             this.supplierForm.value.Origin?.country || null, 

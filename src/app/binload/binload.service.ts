@@ -8,11 +8,11 @@ export class BinloadService {
 
     constructor( private http: HttpClient){}
 
-    // baseUrl: string = environment.backend.baseURL;
-    // apiUrl = '10.10.2.110';
+    // parsedUrl = new URL(window.location.href);
+    // baseUrl = this.parsedUrl.origin;
 
-    parsedUrl = new URL(window.location.href);
-    baseUrl = this.parsedUrl.origin;
+    baseUrl: string = environment.backend.baseURL;
+
 
     binloadNotVerified = new BehaviorSubject<number>(0);
 
@@ -25,6 +25,10 @@ export class BinloadService {
 
     saveBinload(binloadOBJ: any) {
         return this.http.post( this.baseUrl + '/project/b_Binloading.php', binloadOBJ);
+    }
+
+    verifyBinload(binloadingRequestID: any) {
+        return this.http.post( this.baseUrl + '/project/b_BinloadingVerify.php', {BinloadRequestID: binloadingRequestID});
     }
 
     getWarehousePartitionStock(id: any) {
@@ -41,6 +45,10 @@ export class BinloadService {
 
     getBinloadRequest(id: any) {
         return this.http.get<any>( this.baseUrl + '/project/a_BinloadingRequest.php?id=' + id );
+    }
+
+    getBinloadVerified() {
+        return this.http.get<any>( this.baseUrl + '/project/a_BinloadingVerify.php');
     }
 
     getRecentBinload() {

@@ -17,14 +17,11 @@ export class AuthService {
 
     constructor(private http: HttpClient, private router: Router){}
 
-    parsedUrl = new URL(window.location.href);
-    baseUrl = this.parsedUrl.origin;
+    // parsedUrl = new URL(window.location.href);
+    // baseUrl = this.parsedUrl.origin;
 
-    // baseUrl: string = environment.backend.baseURL;
+    baseUrl: string = environment.backend.baseURL;
 
-    // apiUrl = '10.10.2.110'; 
-    // http://10.10.2.110/project/login.php
-    
     login(
         user_id: number,
         username: string,

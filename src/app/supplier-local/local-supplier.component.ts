@@ -27,6 +27,8 @@ export class LocalSupplier implements OnInit, OnDestroy {
 
     country: any[] = [];
 
+    selectedLocal:any[]=[];
+
     localSupplierForm!: FormGroup;
 
     view: boolean = false;
@@ -53,7 +55,8 @@ export class LocalSupplier implements OnInit, OnDestroy {
         this.newForm();
         // console.log(currencySymbolMap('USD'));
         this.getUser();
-        this.getAccess();
+        this.getAccess();       
+
     }
 
     ngOnDestroy(): void {
@@ -70,7 +73,7 @@ export class LocalSupplier implements OnInit, OnDestroy {
             'Product': new FormControl(null),
             'Address': new FormControl(null, Validators.required),
             'Currency': new FormControl(null, Validators.required),
-            'Origin': new FormControl(null, Validators.required),
+            'Origin': new FormControl(null , Validators.required),
             'Indentor': new FormControl(null),
             'IndentorAddress': new FormControl(null),
             'Terms': new FormControl(null, Validators.required),
@@ -143,6 +146,16 @@ export class LocalSupplier implements OnInit, OnDestroy {
         this.formReset();
         this.visible = true;
         this.dialogHeader = 'Create Supplier';
+        this.selectedLocal = [];
+
+        for (let i=0; i<= this.country.length-1; i++) {
+            if (this.country[i].code=='PHP') {
+                this.selectedLocal = this.country[i];  
+                this.localSupplierForm.patchValue(
+                    {Origin: this.selectedLocal}
+                );
+            }
+        }
 
     }
 

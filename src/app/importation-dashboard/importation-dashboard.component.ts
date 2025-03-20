@@ -134,7 +134,7 @@ export class ImportationDashboardComponent implements OnInit{
       this.ContractPerformaService.getLegalDashboard3().subscribe(
         response => {
           this.ataToday = response;
-          console.log(response);
+          // console.log(response);
           
         }
       )

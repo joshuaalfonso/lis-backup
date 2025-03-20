@@ -149,6 +149,12 @@ export class TransferComponent implements OnInit, OnDestroy {
     partitionStockQuantity: number = 0;
     partitionStockWeight: number = 0;
 
+    first = 0;
+    rows = 5; // Initial number of rows per page
+    totalRecords = this.transferRequest.length; // Total number of cards
+
+    paginatedCards: any = [];
+ 
     userID: string = '';
 
     private subscription: Subscription = new Subscription();
@@ -328,6 +334,7 @@ export class TransferComponent implements OnInit, OnDestroy {
         this.getWeigher();
         this.getDispatcher();
         this.getGuard();
+        
     }
 
     getUserAccess(UserID: string) {
@@ -388,6 +395,7 @@ export class TransferComponent implements OnInit, OnDestroy {
                 response => {
                     this.isLoading = false;
                     this.transferRequest = response;
+                    this.paginatedCards = this.transferRequest.slice(this.first, this.first + this.rows);
                 }, 
                 err => {
                     console.log(err);
@@ -552,6 +560,13 @@ export class TransferComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+    }
+
+    // Method to handle page change
+    onPageChange(event: any) {
+        this.first = event.first;
+        this.rows = event.rows;
+        this.paginatedCards = this.transferRequest.slice(this.first, this.first + this.rows);
     }
 
     showTransferRequestDialog() {

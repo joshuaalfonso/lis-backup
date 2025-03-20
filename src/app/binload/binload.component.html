@@ -1,5 +1,4 @@
-<!-- ======= TOAST NOTIFICATION ======== -->
-<p-toast></p-toast>
+
 
 <!-- ======== CONFIRM POP-UP======== -->
 <p-confirmPopup></p-confirmPopup>
@@ -8,29 +7,18 @@
 <!-- <h1 class="title">Binloading</h1> -->
 <app-content-header [title]="'Binloading'"></app-content-header>
 
-<!-- ==== SEARCH, ADD , EXPORT ==== -->
-<!-- <div class="controls">
 
-    <input 
-        pInputText 
-        type="text" 
-        class="p-inputtext-lg pl-3 input__search" 
-        placeholder="Search" 
-        (input)="onGlobalFilter(dt2, $event)" 
-    />
 
-    <button 
-        pButton 
-        pRipple 
-        class="add__btn" 
-        (click)="showRequestDialog(requestDialog)" 
-        *ngIf="insert"
-    >
-        <i class='bx bx-plus'></i> 
-        <span>Add Request</span>
-    </button>
-
-</div> -->
+<div class="radio-inputs" [class.hidden]="!binloadVerify">
+    <label class="radio">
+        <input checked="" name="radio" type="radio" value="1" [(ngModel)]="tabValue" (ngModelChange)="filterBinload()"/>
+        <span class="name" [class.active]="tabValue == 1"> Binload </span>
+    </label>
+    <label class="radio">
+        <input name="radio" type="radio" value="2" [(ngModel)]="tabValue" (ngModelChange)="filterBinload()" />
+        <span class="name" [class.active]="tabValue == 2"> Verified </span>
+    </label>
+</div>
 
 
 <!-- ===== TABLE ====== -->
@@ -46,24 +34,6 @@
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
     >
-
-        <!-- <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between mb-2">
-
-                <div>
-
-                    <p-dropdown 
-                        [options]="plant" 
-                        optionLabel="PlantName" 
-                        placeholder="Select plant" 
-                        [style]="{'width': '190px', 'margin-right': '10px'}"
-                        [showClear]="true"
-                        optionValue="PlantID"
-                    />
-                </div>
-
-            </div>
-        </ng-template> -->
 
         <ng-template pTemplate="caption">
 
@@ -82,7 +52,7 @@
                     pRipple 
                     class="add__btn" 
                     (click)="showRequestDialog(requestDialog)" 
-                    *ngIf="insert"
+                    *ngIf="insert && tabValue == 1"
                 >
                     <i class='bx bx-plus'></i> 
                     <span>Add Request</span>
@@ -90,31 +60,21 @@
 
             </div>
 
-            <!-- <p-menu 
-                #menu 
-                [model]="items" 
-                [popup]="true" 
-                appendTo="body"
-            /> -->
-
         </ng-template>
 
         <ng-template pTemplate="header">
             <tr class="thead white-space-nowrap">
                 <th style="width: 5rem"></th>
-                <!-- <th>Request Date</th> -->
                 <th pSortableColumn="RequestDate.date">   
                     Request Date
                     <p-sortIcon field="RequestDate.date" />
                 </th>
                 <th>Plant</th>
                 <th>Raw Material</th>
-                <!-- <th>Request Quantity</th> -->
                 <th>Request</th>
                 <th>Location</th>
                 <th>Plate #</th>
                 <th>Dispatcher</th>
-                <!-- <th>Driver</th> -->
                 <th *ngIf="edit">Actions</th>
             </tr>
         </ng-template>
@@ -139,21 +99,14 @@
                 <td data-title="Raw Material"> 
                     {{ row.RawMaterial }} 
                 </td>
-                <!-- <td data-title="Quantity"> 
-                    {{ row.Quantity }} 
-                </td> -->
                 <td data-title="Weight"> 
-                    <!-- {{ row.Weight }}  -->
-                    <!-- <span class="">{{ row.Weight | number}} KG</span>  -->
                     <span > {{ row.Quantity + ' ' + row.BinloadUom}}  </span>
                 </td>
                 <td data-title="Warehouse Location"> 
-                    <!-- {{ row.WarehouseLocation }}  -->
                     <span class="">{{ row.WarehouseLocation }} </span> 
                     <span class="sub-text"> {{ row.Warehouse_Name}} - {{ row.WarehousePartitionName }}</span>
                 </td>
                 <td data-title="Plate No"> 
-                    <!-- {{ row.PlateNo }}  -->
                     <span class="">{{ row.PlateNo}} </span> 
                     <span class="sub-text"> {{ row.DriverName}} </span>
                 </td>
@@ -162,9 +115,6 @@
                     {{ row.Name }}
 
                 </td>
-                <!-- <td data-title="Driver Name"> 
-                    {{ row.DriverName }} 
-                </td> -->
                 <td data-title="Action" *ngIf="edit || checkerInsert" class="">
                     <button 
                         pButton 
@@ -172,7 +122,7 @@
                         class="edit__btn" 
                         class="p-button-success p-2 border-round mr-2" 
                         (click)="onEditBinloadRequest(row, requestDialog)"
-                        *ngIf="row.Binloading.length == 0 && edit"
+                        *ngIf="row.Binloading.length == 0 && edit && tabValue == 1"
                     >
                         <i class='bx bx-edit-alt'></i>
                     </button>
@@ -181,15 +131,24 @@
                         pButton 
                         pRipple 
                         class="edit__btn" 
-                        class="p-button-primary p-2 border-round mr-2" 
+                        class="p-button-warning p-2 border-round mr-2" 
                         (click)="onAddBinload(row, dialog)"
-                        *ngIf="row.Binloading.length == 0 && checkerInsert"
+                        *ngIf="row.Binloading.length == 0 && checkerInsert && tabValue == 1"
                     >
                         <i class='bx bx-plus'></i>
                     </button>
 
-                  <!-- <button pButton pRipple class="delete__btn" class="p-button-primary p-2 border-round" (click)="onVerified(row)" *ngIf="row.Status == 0"><i class='bx bx-check' ></i></button> -->
-                </td>
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-primary p-2 border-round mr-2" 
+                        (click)="confirmBinloadVerified('center', row)"
+                        *ngIf="row.Binloading.length > 0 && tabValue == 1 && binloadVerify"
+                    >
+                        <i class='bx bx-check'></i>
+                    </button>
+
             </tr>
         </ng-template>
 
@@ -239,11 +198,6 @@
             </ng-template>
 
         </ng-template>
-
-
-        <!-- <ng-template pTemplate=emptymessage>
-            There are no binload request yet.
-        </ng-template> -->
     
 
     </p-table>
@@ -253,6 +207,13 @@
     </div>
 
 </div>
+
+<p-confirmDialog 
+    key="positionDialog" 
+    [position]="position" 
+    rejectButtonStyleClass="p-button-outlined" />
+
+<!-- <app-binload-verified-table *ngIf="tabValue == 2"/> -->
 
 
 

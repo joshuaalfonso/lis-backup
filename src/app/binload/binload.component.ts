@@ -7,7 +7,7 @@ import { CheckerService } from "../checker/checker.service";
 import { WarehouseService } from "../warehouse/warehouse.service";
 import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
-import { MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 import { DriverService } from "../driver/driver.service";
 import { TruckService } from "../truck/truck.service";
 import { Table } from "primeng/table";
@@ -57,6 +57,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
     edit: boolean = false;
     generateReport: boolean = false;
     checkerInsert: boolean = false;
+    binloadVerify: boolean = false;
 
     partitionDetails: any[] = [];
     unitOfMeasure: any[] = [];
@@ -65,6 +66,11 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
     requestSubmitLoading: boolean = false;
     binloadSubmitLoading: boolean = false;
+    verifyLoading: boolean = false;
+
+    tabValue: number = 1;
+
+    position: string = 'center';
 
     constructor(
         private BinloadService: BinloadService,
@@ -78,7 +84,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         private TruckService: TruckService,
         private UsersService: UsersService,
         private auth: AuthService,
-        private WarehouseLocation: WarehouseLocationService
+        private WarehouseLocation: WarehouseLocationService,
+        private ConfirmationService: ConfirmationService
     )
     {}
 
@@ -162,7 +169,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.userRights();
 
         // this.getData();
-        this.getBinloadRequest();
+        // this.getBinloadRequest();
+        this.filterBinload();
         this.getPlant();
         this.getChecker();
         this.getWarehouseLocation();
@@ -172,6 +180,10 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.getDriver();
         this.getTruck();
         this.getUnitOfMeasure();
+
+
+        
+
     }
 
     userRights() {
@@ -210,6 +222,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                             case '3.4.5':
                                 this.checkerInsert = true;
                                 break;
+                            case '3.4.6':
+                                this.binloadVerify = true;
+                                break;
                             default:
                                 break;
                         }
@@ -228,35 +243,67 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         )
     }
 
+    filterBinload() {
+
+        if (this.tabValue == 1) {
+            this.getBinloadRequest();
+        } else if (this.tabValue == 2) {
+            this.getVerifiedBinload();
+        }
+
+    }
+
     getData() {
         this.isLoading = true;
+
         this.subscription.add(
              this.BinloadService.getBinloadData(this.UserID).subscribe(
                  response => {
                      this.isLoading = false;
 
                      this.binload = response;
-
-                     let unverified: any[] = [];
-
-                     if (response) {
-                        unverified = response.filter(
-                            (item: any) => item.Status != 3
-                        );
-                     }
-                     
-
-                    this.BinloadService.binloadNotVerified.next(unverified.length);
                  }
              )
         )
+
     }
 
+
+    getVerifiedBinload() {
+        this.isLoading = true;
+    
+        this.subscription.add(
+          this.BinloadService.getBinloadVerified().subscribe(
+            response => {
+              this.binloadRequest = response;
+              this.isLoading = false;
+            }, 
+            // error => {
+            //   console.log('Error :' + error);
+            //   this.binloadVerifiedError = [{ severity: 'error', detail: error.message || 'There was an error fetching data' }];
+            //   this.binloadVerifiedIsLoading= false
+            // }
+            error => {
+                console.error('Error: ' + error);
+                this.isLoading = false;
+            }
+          )
+        )
+    }
+
+    
+
     getBinloadRequest() {
+        this.isLoading = true;
         this.subscription.add(
             this.BinloadService.getBinloadRequest(this.UserID).subscribe(
                 response => {
                     this.binloadRequest = response;
+                    this.isLoading = false;
+                },
+                error => {
+                    console.error('Error: ' + error);
+                    this.isLoading = false;
                 }
             )
         )
@@ -743,6 +790,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
         this.requestSubmitLoading = true;
 
+        const binloadRequestStatus = 1;
+
         const binloadRequestFormValue: BinloadRequest = {
             BinloadRequestID: this.binloadRequestForm.value.BinloadRequestID,
             WarehouseLocationID: this.binloadRequestForm.value.WarehouseLocationID,
@@ -758,7 +807,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             RawMaterialID: this.binloadRequestForm.value.RawMaterialID,
             Quantity: this.binloadRequestForm.value.Quantity,
             BinloadUomID: this.binloadRequestForm.value.BinloadUomID,
-            Status: this.binloadRequestForm.value.Status,
+            Status: binloadRequestStatus,
             UserID: this.UserID,
             // BinloadDetail: this.binloadDetail
         }
@@ -873,6 +922,46 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         // this.binloadDetail = data.BinloadDetail;
 
         // console.log(this.binloadDetail)
+
+    }
+
+    onVerify(binloadRequestID: any) {
+
+        this.verifyLoading = true;
+
+        this.BinloadService.verifyBinload(binloadRequestID).subscribe(
+            response => {
+
+                this.verifyLoading = false;
+
+                if ( response === 2) {
+
+                    this.MessageService.add({ 
+                        severity: 'success', 
+                        summary: 'Success', 
+                        detail: 'Successfully Verified', 
+                        life: 3000 
+                    });
+
+                    // this.getBinloadRequest();
+                    this.binloadRequest = this.binloadRequest.filter(binload => binload.BinloadRequestID != binloadRequestID);
+                }
+                
+            }, 
+            errorMessage => {
+
+                this.requestSubmitLoading = false;
+
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: errorMessage.message || 'There was an error', 
+                    life: 3000 
+                });
+
+            }
+
+        )
 
     }
 
@@ -1003,7 +1092,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                     this.MessageService.add({ 
                         severity: 'success', 
                         summary: 'Success', 
-                        detail: 'Item: ' + this.binloadForm.value.BinloadingID +  ' successfully recorded', 
+                        detail: 'Successfully recorded', 
                         life: 3000 
                     });
 
@@ -1030,7 +1119,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                     this.MessageService.add({ 
                         severity: 'error', 
                         summary: 'Danger', 
-                        detail: 'Item: ' + this.binloadForm.value.BinloadingID +  ' already exist', life: 3000 
+                        detail:  'Has binload data', 
+                        life: 3000 
                     });
 
                 }
@@ -1050,12 +1140,48 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         )
     }
 
-
-
     // ==== INPUT SEARCH DATA====
     onGlobalFilter(table: Table, event: Event) {
         const inputValue = (event.target as HTMLInputElement).value;
         table.filterGlobal(inputValue, 'contains');
+    }
+
+    // delete shpping transaction form
+    confirmBinloadVerified(position: string, row: any) {
+        this.position = position;        
+        
+
+        if (!row.Binloading[0].ControlNo) {
+            alert('Unknown error occured');
+            console.log('no control #');
+            return
+        }
+
+        if(!row.BinloadRequestID) {
+            alert('Unknown error occured');
+            console.log('no binload request id')
+            return
+        }
+
+        const controlNo = row.Binloading[0].ControlNo;
+        const binloadRequestID = row.BinloadRequestID;
+        
+
+        this.ConfirmationService.confirm({
+            message: `Verify control Number '${controlNo}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onVerify(binloadRequestID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
     }
 
 }
