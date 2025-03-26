@@ -1,4 +1,19 @@
-<div class="table ">
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="rawMaterialError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="rawMaterialError" 
+/>
+
+<div 
+    class="table" 
+    *ngIf="!isLoading && rawMaterialError.length == 0"
+>
 
     <p-table 
         #dt1 
@@ -29,7 +44,7 @@
                     pButton 
                     pRipple 
                     class="add__btn" 
-                    (click)="onShowDialog()" 
+                    (click)=" this.openDialog.emit()" 
                     *ngIf="insert"
                 >
                     <i class='bx bx-plus'></i> 
@@ -39,13 +54,7 @@
 
             </div>
 
-            <p-menu 
-                #menu 
-                [model]="items" 
-                [popup]="true" 
-                appendTo="body"
-            />
-
+          
         </ng-template>
 
         <ng-template pTemplate="header">
@@ -113,14 +122,15 @@
                 </td>
 
                 <p-overlayPanel #action>
+
                     <div class="actions-overlay">
-                        <p (click)="onSelectRow(row)">
+                        <p (click)=" this.openDialog.emit(row)">
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
                             </svg>
                             Edit
                         </p>
-                        <!-- <p (click)="onSelectRow(row)">
+                        <!-- <p (click)="">
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-delete.svg#delete"></use>
                             </svg>
@@ -134,9 +144,5 @@
 
 
     </p-table>
-
-    <div class="text-center my-3" *ngIf="isLoading">
-      <app-loader></app-loader>
-    </div>
 
 </div>

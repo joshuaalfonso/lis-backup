@@ -7,7 +7,7 @@
     border-right: 3px solid transparent;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
-    background: var(--surface-color);
+    /* background: var(--surface-color); */
   }
   
   @keyframes rotation {

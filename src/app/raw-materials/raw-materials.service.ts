@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, tap, throwError } from "rxjs";
 import { environment } from "../environments/environment";
+import { RawMaterial } from "./raw-materials.model";
 
 
 @Injectable({ providedIn: 'root' })
@@ -23,30 +24,31 @@ export class RawMaterialsService {
     }
 
     saveData(
-        RawMaterialID: string,
-        RawMaterial: string,
-        Category: string,
-        Packaging: string,
-        Quantity: string,
-        Weight: string,
-        MinimumQuantity: string,
-        MinimumWeight: string,
-        UserID: string
+        rawMaterial: RawMaterial
+        // RawMaterialID: number, 
+        // RawMaterial: string,
+        // Category: string,
+        // Quantity: string,
+        // Weight: string,
+        // MinimumQuantity: string, 
+        // MinimumWeight: string,
+        // UserID: string
     ) {
         return this.http.post
         ( 
             this.baseUrl + '/project/b_RawMaterial.php',
-            {
-                RawMaterialID: RawMaterialID,
-                RawMaterial: RawMaterial,
-                Category: Category,
-                Packaging: Packaging,
-                Quantity: Quantity,
-                Weight: Weight,
-                MinimumQuantity: MinimumQuantity,
-                MinimumWeight: MinimumWeight,
-                UserID: UserID
-            }
+            rawMaterial
+            // {
+            //     RawMaterialID: RawMaterialID,
+            //     RawMaterial: RawMaterial,
+            //     Category: Category,
+            //     // Packaging: Packaging,
+            //     Quantity: Quantity,
+            //     Weight: Weight,
+            //     MinimumQuantity: MinimumQuantity,
+            //     MinimumWeight: MinimumWeight,
+            //     UserID: UserID
+            // }
         )
         .pipe(
             catchError(this.handleError),

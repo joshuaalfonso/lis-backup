@@ -24,8 +24,13 @@
 </div>
 
 
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+
 <!-- ===== TABLE ====== -->
-<div class="table" *ngIf="value === 1 || 2 ">
+<div class="table" *ngIf="(value === 1 || 2) && !isLoading">
     
     <p-table #dt1 
         [value]="unloadingTransaction" 
@@ -51,7 +56,7 @@
                     pButton pRipple 
                     class="add__btn" 
                     (click)="showDialog(unloadingModal)" 
-                    *ngIf="insert"
+                    *ngIf="(value == 1 || 2) && insert"
                 >
                     <i class='bx bx-plus'></i> 
                     <span>Add Item</span>
@@ -93,7 +98,7 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-            <tr *ngIf="!isLoading">
+            <tr>
                 <td data-title="DateUnload">
                     <span class="text"> {{ row.DateUnload.date | date: 'MMM dd, yyyy'}}</span> 
                     <span class="sub-text"> {{ row.DateUnload.date | date: 'EEEE' }} </span>
@@ -220,11 +225,26 @@
                             <i class='pi pi pi-check' ></i>
                         </button>   
 
+                        <!-- delete unloaded -->
                         <button pButton pRipple 
                             class="p-button-danger p-2 border-round"  
                             pTooltip="Delete"
                             tooltipPosition="top"
-                            (click)="onDeleteUnloading(row)"  
+                            [disabled]="isDeleting"
+                            (click)="confirmDelete('center', row)"  
+                            *ngIf="row.Status == 1 && delete"
+                        >
+                            <i class='pi pi pi-trash' ></i>
+                        </button>   
+
+                        <!-- delete not unloaded -->
+                        <button pButton pRipple 
+                            class="p-button-danger p-2 border-round"  
+                            pTooltip="Delete"
+                            tooltipPosition="top"
+                            [disabled]="isDeleting"
+                            (click)="confirmDeleteStatus('center', row)"  
+                            *ngIf="row.Status == 0 && delete"
                         >
                             <i class='pi pi pi-trash' ></i>
                         </button>   
@@ -279,10 +299,6 @@
         [position]="position" 
         rejectButtonStyleClass="p-button-outlined" 
     />
-  
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
 
 </div>
 

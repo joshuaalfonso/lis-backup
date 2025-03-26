@@ -22,10 +22,10 @@ import { AuthService } from "../auth/auth.service";
 export class RawMatsPOComponent implements OnInit{
 
     rawMatsPO: any[] = [];
+    isLoading: boolean = false;
 
     rawMatsPOForm!: FormGroup;
 
-    isLoading: boolean = false;
 
     visible: boolean = false;
 
@@ -50,6 +50,10 @@ export class RawMatsPOComponent implements OnInit{
 
     position: string = 'center';
 
+    tabValue: number = 1;
+
+    selectedPO!: any;
+
     private subscription: Subscription = new Subscription;
 
     constructor
@@ -70,19 +74,14 @@ export class RawMatsPOComponent implements OnInit{
             'PONo': new FormControl(null, Validators.required),
             'PODate': new FormControl(null, Validators.required),
             'DeliveryDate': new FormControl(null, Validators.required),
-            // 'Terms': new FormControl(null, Validators.required),
             'PRNumber': new FormControl(null, Validators.required),
             'SupplierID': new FormControl(null, Validators.required),
-            // 'SupplierAddress': new FormControl(null, Validators.required),
             'RawMaterialID': new FormControl(null, Validators.required),
-            // 'Quantity': new FormControl(null, Validators.required),
             'Weight': new FormControl(null, Validators.required),
             'UnitPricePerKilo': new FormControl(null),
             'Remarks': new FormControl(null),
-
             'deleted': new FormControl(null),
             'UserID': new FormControl(0),
-            // 'OrderDetail': new FormArray([])
         })
 
         this.subscription.add(
@@ -98,31 +97,8 @@ export class RawMatsPOComponent implements OnInit{
 
         this.getData();
         this.getSupplier();
-        this.getTruck();
+        // this.getTruck();
         this.getRawMaterial();
-    }
-
-    // Method to add a new item (FormGroup) to the FormArray
-    addPoItem() {
-        const poItemGroup = new FormGroup({
-            PurchaseOrderDetailID: new FormControl(0),
-            MaterialCode: new FormControl(null, Validators.required),
-            RawMaterialID: new FormControl(null, Validators.required),
-            Quantity: new FormControl(null, Validators.required),
-            UnitPrice: new FormControl(null),
-            deleted: new FormControl(0),
-            Amount: new FormControl(0)
-        });
-
-        (this.rawMatsPOForm.get('OrderDetail') as FormArray).push(poItemGroup);
-    }
-
-    removePoItem(index: number) {
-        (this.rawMatsPOForm.get('OrderDetail') as FormArray).removeAt(index);
-    }
-
-    get poItems() {
-        return (this.rawMatsPOForm.get('OrderDetail') as FormArray).controls;
     }
 
     getUserAccess(UserID: string) {
@@ -157,14 +133,39 @@ export class RawMatsPOComponent implements OnInit{
 
     getData() {
         this.isLoading = true;
-        this.subscription.add(
-            this.RawMatsPOService.getData().subscribe(
-                response => {
-                    this.rawMatsPO = response;
-                    this.isLoading = false;
-                }
-            )
-        )
+
+        let observable;
+
+        if (this.tabValue == 1) {
+            observable = this.RawMatsPOService.getData();
+        } else if (this.tabValue == 2) {
+            observable = this.RawMatsPOService.getRawMatsPOCompleted();
+        }
+    
+        if (observable) {
+            this.subscription.add(
+                observable.subscribe(
+                    response => {
+                        this.rawMatsPO = response;
+                        this.isLoading = false;
+                    },
+                    error => {
+                        this.isLoading = false;
+                        // Optionally, handle the error (e.g., show an alert)
+                        console.error('Error fetching data:', error);
+                    }
+                )
+            );
+        } else {
+            // Handle the case where tabValue doesn't match either condition
+            console.warn('Invalid tabValue');
+            this.isLoading = false;
+        }
+
+        // console.log('asd');
+        
+    
+
     }
 
     getSupplier() {
@@ -197,48 +198,16 @@ export class RawMatsPOComponent implements OnInit{
         )
     }
 
-    addOrder() {
-        let data = {
-            PurchaseOrderDetailID: 0,
-            MaterialCode: '',
-            RawMaterialID: '',
-            Quantity: 0,
-            UnitPrice: 0,
-            deleted: 0,
-            Amount: 0
-        }
-
-        this.OrderDetail.push(data);
+    openModal(rawMatsPO: any = null) {
+        this.visible = true;
+        this.selectedPO = rawMatsPO;
+        // console.log(this.selectedPO);        
     }
 
-    removeOrder(index: number) {
-        this.OrderDetail.splice(index, 1);
-        this.onComputeAmount();
-    }
-
-    showDialog(dialog: Dialog) {
-        if (!this.insert) {
-            this.MessageService.add({ 
-                severity: 'error', summary: 'Warning', 
-                detail: 'You are not authorized!', 
-                life: 3000 
-            });
-            return;
-        }
-
-        this.dialogHeader = 'Add RawMats P.O'
-        this.visible = !this.visible;
-        this.clearForms();
-        // this.OrderDetail = [];
-        // this.addOrder();
-        // (this.rawMatsPOForm.get('OrderDetail') as FormArray).clear();
-        // this.addPoItem();
-        // dialog.maximize();
-    }
-
-    clearForms() {
-        this.rawMatsPOForm.reset();
-        this.rawMatsPOForm.patchValue({ PurchaseOrderID: 0 })
+    closeModal(rawMatsPO: any = null) {
+        this.visible = false;
+        this.selectedPO = rawMatsPO;
+        // console.log(this.selectedPO);        
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -246,212 +215,6 @@ export class RawMatsPOComponent implements OnInit{
         table.filterGlobal(inputValue, 'contains');
     }
 
-    // onSelectSupplier(data: any) {
-    //     if (!data) {
-    //         this.rawMatsPOForm.patchValue({SupplierAddress: null});
-    //         return;
-    //     }
-    //     this.rawMatsPOForm.patchValue({SupplierAddress: this.supplier[data].Address})
-    // }
-
-    onSubmit() {
-
-        if(!this.rawMatsPOForm.valid) {
-            return
-        }
-
-        this.submitLoading = true;
-
-        let authObs: Observable<ResponseData>;
-        authObs = this.RawMatsPOService.savedata
-        (
-            this.rawMatsPOForm.value.PurchaseOrderID,
-            this.rawMatsPOForm.value.PONo,
-            this.rawMatsPOForm.value.PODate.toLocaleDateString(),
-            this.rawMatsPOForm.value.DeliveryDate.toLocaleDateString(),
-            // this.rawMatsPOForm.value.Terms,
-            this.rawMatsPOForm.value.PRNumber,
-            this.rawMatsPOForm.value.SupplierID,
-            // this.rawMatsPOForm.value.SupplierAddress,
-            this.rawMatsPOForm.value.RawMaterialID,
-            // this.rawMatsPOForm.value.Quantity,
-            this.rawMatsPOForm.value.Weight,
-            this.rawMatsPOForm.value.UnitPricePerKilo,
-            this.rawMatsPOForm.value.Remarks,
-            this.rawMatsPOForm.value.deleted,
-            this.userID,
-            this.rawMatsPOForm.value.OrderDetail,
-        )
-
-        authObs.subscribe(response =>{
-            this.submitLoading = false;
-
-            if( response === 1) {
-                this.MessageService.add({ 
-                    severity: 'success', 
-                    summary: 'Success', 
-                    detail: 'Successfully Recorded!', 
-                    life: 3000 
-                });
-                this.clearForms();
-                this.getData();
-                this.visible = false;
-            } 
-            else if ( response === 2) {
-                this.MessageService.add({ 
-                    severity: 'success', 
-                    summary: 'Success', 
-                    detail: 'Successfully Updated!', 
-                    life: 3000 
-                });
-                this.clearForms();
-                this.getData();
-                this.visible = false;
-            }
-            else if ( response === 0) {
-                this.MessageService.add({ 
-                    severity: 'error', 
-                    summary: 'Danger', 
-                    detail: 'Item: ' + this.rawMatsPOForm.value.PONo +  ' already exist', 
-                    life: 3000 
-                });
-            }
-            
-        }, 
-        errorMessage => {
-            this.submitLoading = false;
-            this.MessageService.add({ 
-                severity: 'error', summary: 'Danger', 
-                detail: errorMessage, 
-                life: 3000 
-            });
-        })
-
-        // console.log(this.rawMatsPOForm.value)
-        // console.log(this.OrderDetail);
-
-    }
-
-       // find object for dropdown
-    findObjectByID( selectedID: number, idName: string, array: any[]) {
-        for (let i = 0; i <= array.length -1; i++) {
-            if (selectedID === array[i][idName]) {
-                return array[i];
-            }
-        }
-        return null; 
-    }
-
-    onSelect(data: any, dialog: any) {
-        // console.log(data);
-        if(!this.edit) {
-            this.MessageService.add({ 
-                severity: 'error', summary: 'Warning', 
-                detail: 'You are not authorized!', 
-                life: 3000 
-            });
-            return;
-        }
-
-        this.visible = !this.visible;
-        this.clearForms();
-        // dialog.maximize();
-        this.dialogHeader = 'Edit RawMats P.O';
-        // this.OrderDetail = [];
-        // (this.rawMatsPOForm.get('OrderDetail') as FormArray).clear();
-
-        // let SupplierValue = this.findObjectByID(data.SupplierID, 'SupplierID', this.supplier);
-
-        this.rawMatsPOForm.patchValue({
-            PurchaseOrderID: data.PurchaseOrderID,
-            PONo: data.PONo,
-            PODate: new Date(data.PODate.date),
-            DeliveryDate: new Date(data.DeliveryDate.date),
-            // Terms: data.Terms,
-            PRNumber: data.PRNumber,
-            SupplierID: data.SupplierID,
-            // SupplierAddress: data.SupplierAddress,
-            RawMaterialID: data.RawMaterialID,
-            // Quantity: data.Quantity,
-            Weight: data.Weight,
-            UnitPricePerKilo: data.UnitPricePerKilo,
-            Remarks: data.Remarks,
-            TotalQuantity: data.TotalQuantity,
-            TotalAmount: data.TotalAmount,
-            deleted: data.deleted,
-            UserID: this.userID
-        })
-
-        // 'PurchaseOrderID': new FormControl(0),
-        // 'PONo': new FormControl(null, Validators.required),
-        // 'PODate': new FormControl(null, Validators.required),
-        // 'DeliveryDate': new FormControl(null, Validators.required),
-        // 'Terms': new FormControl(null, Validators.required),
-        // 'PRNumber': new FormControl(null, Validators.required),
-        // 'SupplierID': new FormControl(null, Validators.required),
-        // 'SupplierAddress': new FormControl(null, Validators.required),
-        // 'RawMaterialID': new FormControl(null, Validators.required),
-        // 'Quantity': new FormControl(null),
-        // 'Weight': new FormControl(null),
-        // 'deleted': new FormControl(null),
-        // 'UserID': new FormControl(0),
-
-        // console.log(data.OrderDetail)
-
-        // this.OrderDetail = [...data.OrderDetail];
-
-        // for (let i = 0; i < data.OrderDetail.length; i++) {
-
-        //     const poItemGroup = new FormGroup({
-        //         PurchaseOrderDetailID: new FormControl(data.OrderDetail[i].PurchaseOrderDetailID),
-        //         MaterialCode: new FormControl(data.OrderDetail[i].MaterialCode, Validators.required),
-        //         RawMaterialID: new FormControl(data.OrderDetail[i].RawMaterialID, Validators.required),
-        //         Quantity: new FormControl(data.OrderDetail[i].Quantity, Validators.required),
-        //         UnitPrice: new FormControl(data.OrderDetail[i].UnitPrice, Validators.required),
-        //         deleted: new FormControl(data.OrderDetail[i].deleted),
-        //         Amount: new FormControl(data.OrderDetail[i].Amount)
-        //     });
-
-        //     (this.rawMatsPOForm.get('OrderDetail') as FormArray).push(poItemGroup);
-        // }
-
-        // Method to add a new item (FormGroup) to the FormArray
-        // addPoItem() {
-        //     const poItemGroup = new FormGroup({
-        //         PurchaseOrderDetailID: new FormControl(0),
-        //         MaterialCode: new FormControl(null, Validators.required),
-        //         RawMaterialID: new FormControl(null, Validators.required),
-        //         Quantity: new FormControl(null, Validators.required),
-        //         UnitPrice: new FormControl(null, Validators.required),
-        //         deleted: new FormControl(0),
-        //         Amount: new FormControl(0)
-        //     });
-
-        //     (this.rawMatsPOForm.get('OrderDetail') as FormArray).push(poItemGroup);
-        // }
-
-
-        // this.onComputeAmount();
-        // this.RawMatsPOService.getRawMatsPODetail(data.PurchaseOrderID).subscribe(
-        //     response => {
-        //         for (let i = 0; i < response.length; i++) {
-        //             let data = {};
-        //             let DescriptionValue = this.findObjectByID(response[i].RawMaterialID, 'RawMaterialID', this.rawMaterial);
-        //             data = {
-        //                 PurchaseOrderDetailID: response[i].PurchaseOrderDetailID,
-        //                 MaterialCode: response[i].MaterialCode,
-        //                 RawMaterialID: DescriptionValue,
-        //                 Quantity: response[i].Quantity,
-        //                 UnitPrice: response[i].UnitPrice,
-        //                 deleted: response[i].deleted,
-        //                 Amount: response[i].Amount
-        //             }
-        //             this.OrderDetail.push(data);
-        //         }
-        //         this.onComputeAmount();
-        //     }
-        // )
-    }
 
     getRoundedPercentage(served: number, requestWeight: number, precision: number): number {
         if (requestWeight === 0) return 0; // Avoid division by zero
@@ -459,61 +222,8 @@ export class RawMatsPOComponent implements OnInit{
         // return Number(percentage.toFixed(2)); 
     
         return Math.round(percentage);
-      }
-
-
-    onComputeAmount() {
-        // console.log('test');
-        
-
-        let TotalAmount = 0;
-        let TotalQuantity = 0;
-
-        for (let i = 0; i < this.poItems.length; i++) {
-            
-            const orderDetail = this.poItems.at(i);
-        
-            const quantity = orderDetail?.get('Quantity')!.value;
-            const price = orderDetail?.get('UnitPrice')!.value;
-            
-            
-            if (quantity && price) {
-                const amount = quantity * price;
-                TotalAmount += amount;
-                TotalQuantity += quantity;
-                orderDetail?.get('Amount')!.setValue(amount, { emitEvent: false }); // Disable emitting an event
-            } else {
-                orderDetail?.get('Amount')!.setValue(null, { emitEvent: false });
-            }
-            
-        }
-
-        this.rawMatsPOForm.patchValue({TotalQuantity: TotalQuantity});
-        this.rawMatsPOForm.patchValue({TotalAmount: TotalAmount});
     }
 
-
-    // onComputeAmount() {
-    //     let TotalAmount = 0;
-    //     let Quantity = 0;
-    //     for (let i = 0; i < this.OrderDetail.length ; i++) {
-    //         if (this.OrderDetail[i].Quantity && this.OrderDetail[i].UnitPrice) {
-    //             this.OrderDetail[i].Amount = this.OrderDetail[i].Quantity * this.OrderDetail[i].UnitPrice;
-    //             TotalAmount += this.OrderDetail[i].Quantity * this.OrderDetail[i].UnitPrice;
-    //             Quantity += this.OrderDetail[i].Quantity;
-    //         }
-    //     }
-
-    //     this.rawMatsPOForm.patchValue({TotalQuantity: Quantity});
-    //     this.rawMatsPOForm.patchValue({TotalAmount: TotalAmount});
-    // }
-
-    getOrderItem(orderDetail: any) {
-        return orderDetail
-        .filter((item: any) => item.RawMaterial)  // Filter out items without RawMaterial
-        .map((item: any) => item.RawMaterial!)   // Map to RawMaterial, using non-null assertion
-        .join(', ');        
-    }
 
     poCompleted(id: any) {
 
@@ -542,36 +252,33 @@ export class RawMatsPOComponent implements OnInit{
     }
 
 
-    confirmDeleteShippingTransaction(position: string, row: any) {
-        this.position = position;        
+    // confirmCompletedPO(position: string, row: any) {
+    //     this.position = position;        
 
-        if (!row.PurchaseOrderID) {
-            alert('Unkown error occured');
-            return
-        }
+    //     if (!row.PurchaseOrderID) {
+    //         alert('Unkown error occured');
+    //         return
+    //     }
 
-        const purchaseOrderID = row.PurchaseOrderID;
-        const po = row.PONo;
+    //     const purchaseOrderID = row.PurchaseOrderID;
+    //     const po = row.PONo;
 
-        // const shippingTransactionID = row.ShippingTransactionID;
-        // const lot = row.Lot;
-
-        this.ConfirmationService.confirm({
-            message: `Are you sure '${po}' is now completed ?`,
-            header: 'Confirmation',
-            icon: 'pi pi-info-circle',
-            acceptIcon:"none",
-            rejectIcon:"none",
-            rejectButtonStyleClass:"p-button-text",
-            accept: () => {
-                this.poCompleted(purchaseOrderID);
-            },
-            reject: () => {
-                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
-            },
-            key: 'positionDialog'
-        });
-    }
+    //     this.ConfirmationService.confirm({
+    //         message: `Are you sure '${po}' is now completed ?`,
+    //         header: 'Confirmation',
+    //         icon: 'pi pi-info-circle',
+    //         acceptIcon:"none",
+    //         rejectIcon:"none",
+    //         rejectButtonStyleClass:"p-button-text",
+    //         accept: () => {
+    //             this.poCompleted(purchaseOrderID);
+    //         },
+    //         reject: () => {
+    //             // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+    //         },
+    //         key: 'positionDialog'
+    //     });
+    // }
 
 }
 

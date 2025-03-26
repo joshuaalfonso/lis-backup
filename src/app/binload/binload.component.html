@@ -8,7 +8,6 @@
 <app-content-header [title]="'Binloading'"></app-content-header>
 
 
-
 <div class="radio-inputs" [class.hidden]="!binloadVerify">
     <label class="radio">
         <input checked="" name="radio" type="radio" value="1" [(ngModel)]="tabValue" (ngModelChange)="filterBinload()"/>
@@ -22,7 +21,11 @@
 
 
 <!-- ===== TABLE ====== -->
-<div class="table">
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<div class="table" *ngIf="!isLoading">
 
     <p-table 
         #dt2 
@@ -30,7 +33,7 @@
         [tableStyle]="{ 'width': '100%' }" 
         [globalFilterFields]="['RequestDate', 'RawMaterial', 'PlantName', 'WarehouseLocation', 'PlateNo', 'DriverName']" 
         dataKey="BinloadRequestID"
-        [paginator]="true"
+        [paginator]="!isLoading"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
     >
@@ -80,7 +83,7 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
-            <tr *ngIf="!isLoading">
+            <tr>
                 <td>
                     <p-button 
                         type="button" 
@@ -116,7 +119,7 @@
 
                 </td>
                 <td data-title="Action" *ngIf="edit || checkerInsert" class="">
-                    <button 
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="edit__btn" 
@@ -125,7 +128,7 @@
                         *ngIf="row.Binloading.length == 0 && edit && tabValue == 1"
                     >
                         <i class='bx bx-edit-alt'></i>
-                    </button>
+                    </button> -->
 
                     <button 
                         pButton 
@@ -147,6 +150,18 @@
                         *ngIf="row.Binloading.length > 0 && tabValue == 1 && binloadVerify"
                     >
                         <i class='bx bx-check'></i>
+                    </button>
+                    <button 
+
+                        pButton 
+                        pRipple 
+                        class="edit__btn" 
+                        class="p-button-danger p-2 border-round mr-2" 
+                        (click)="confirmBinloadDelete('center', row)"
+                        [disabled]="isDeleting"
+                        *ngIf="row.Binloading.length > 0 && tabValue == 1"
+                    >
+                        <i class='bx bx-trash'></i>
                     </button>
 
             </tr>
@@ -201,10 +216,6 @@
     
 
     </p-table>
-  
-    <div class="text-center my-3" *ngIf="isLoading">
-      <app-loader></app-loader>
-    </div>
 
 </div>
 

@@ -60,6 +60,15 @@ export class UnloadingTransactionService {
         );
     }
 
+    deleteUnloadingStatus(unloadingID: any) {
+        return this.http.post ( 
+            this.baseUrl + '/project/b_UnloadingStatusDelete.php', 
+            {
+                UnloadingTransactionID: unloadingID
+            }
+        );
+    }
+
     getUnloadedToday() {
         return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransactionToday.php')
     }

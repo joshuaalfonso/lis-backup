@@ -51,6 +51,10 @@ export class BinloadService {
         return this.http.get<any>( this.baseUrl + '/project/a_BinloadingVerify.php');
     }
 
+    deleteBinload(data: any) {
+        return this.http.post<any>( this.baseUrl + '/project/b_BinloadingDelete.php', data);
+    }
+
     getRecentBinload() {
         return this.http.get<any>( this.baseUrl + '/project/a_PlantBinload.php' )
     }

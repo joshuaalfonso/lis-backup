@@ -1,61 +1,8 @@
-<!-- ======= TOAST NOTIFICATION ======== -->
-<p-toast></p-toast>
-<p-confirmDialog 
-    key="positionDialog" 
-    [position]="position" 
-    rejectButtonStyleClass="p-button-outlined" />
-
-<!-- ======== CONFIRM POP-UP======== -->
-<p-confirmPopup></p-confirmPopup>
-
-<!-- <h1 class="title">Raw Material P.O</h1> -->
-<app-content-header [title]="'Raw Material P.O'"></app-content-header>
-
-<!-- ======= SEARCH, ADD, EXPORT ======= -->
-
-<div class="radio-inputs">
-    <label class="radio">
-        <input checked="" name="radio" type="radio" value="1" [(ngModel)]="tabValue" (ngModelChange)="getData()"/>
-        <span class="name" [class.active]="tabValue == 1"> Active </span>
-    </label>
-    <label class="radio">
-        <input name="radio" type="radio" value="2" [(ngModel)]="tabValue" (ngModelChange)="getData()" />
-        <span class="name" [class.active]="tabValue == 2"> Completed </span>
-    </label>
-</div>
-
-
-<app-rawmats-po-table 
-    [rawMatsPO]="rawMatsPO" 
-    [isLoading]="isLoading"
-    [insert]="insert" 
-    [edit]="edit"
-    (openModal)="openModal($event)"
-    (poCompleted)="poCompleted($event)"
-    *ngIf="tabValue == 1"
-/>
-
-<app-rawmats-po-completed 
-    [rawMatsPO]="rawMatsPO" 
-    [isLoading]="isLoading"
-    *ngIf="tabValue == 2"
-/>
 
 
 
-<!-- ========= MODAL FORM ========== -->
-<app-rawmats-po-modal 
-    [visible]="visible"
-    [rawMaterial]="rawMaterial"
-    [supplier]="supplier"
-    [selectedPO]="selectedPO"
-    [userID]="userID"
-    (closeModal)="closeModal()"
-    (getData)="getData()"
-/>
-
-<!-- <p-dialog 
-    header="{{ dialogHeader }}" 
+<p-dialog 
+    header="modal" 
     [(visible)]="visible" 
     [modal]="true" 
     [breakpoints]="{ '1200px': '500px' }" 
@@ -213,6 +160,13 @@
 
         <div class="flex justify-content-end gap-2">
 
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancel" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="closeModal.emit()"
+            ></p-button>
+
             <app-submit-button 
                 [submitLoading]="submitLoading" 
                 [form]="rawMatsPOForm"
@@ -220,4 +174,4 @@
         </div>
 
     </form>
-</p-dialog> -->
+</p-dialog>

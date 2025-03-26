@@ -70,8 +70,9 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     view: boolean = false;
     insert: boolean = false;
     edit: boolean = false;
+    delete: boolean = false;
     generateReport: boolean = false;
-    approval: boolean = false;
+    // approval: boolean = false;
     verifiedView: boolean = false;
 
     uploadedFiles: any[] = [];
@@ -113,6 +114,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     submitLoading: boolean = false;
     submitAddWeightIsLoading: boolean = false;
+    isDeleting: boolean = false;
 
     position: string = '';
 
@@ -136,6 +138,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     ) {}
 
     ngOnInit(): void {
+        
         this.maxDate = new Date();
         this.transaction = [
             {
@@ -250,9 +253,12 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                             case '3.3.5':
                                 this.verifiedView = true;
                                 break;
-                            case 23.5:
-                                this.approval = true;
+                            case '3.3.6':
+                                this.delete = true;
                                 break;
+                            // case 23.5:
+                            //     this.approval = true;
+                            //     break;
                             default:
                                 break;
                         }
@@ -1136,7 +1142,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
     }
 
 
-    // delete contract form
+    // verify unloading
     confirmVerify(position: string, row: any) {
         this.position = position;        
 
@@ -1166,36 +1172,31 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         });
     }
 
-    onDeleteUnloading(row: any) {
 
-        if (!row.UnloadingTransactionID) {
-            alert('no transaction id');
-            return
-        }
+    onDeleteUnloadingStatus(selectedUnloadingID: any) {
 
-        const data = {
-            ...row,
-            DateTimeUnload: new Date( row.DateTimeUnload.date).toLocaleString(),
-            DateUnload: new Date(row.DateUnload.date).toLocaleDateString(),
-            DeleteQuantity: row.Quantity,
-            DeleteWeight: row.Weight
-        }
+        this.isDeleting = true;
         
-        this.UnloadingTransactionService.deleteUnloading(
-            data
+        this.UnloadingTransactionService.deleteUnloadingStatus (
+            selectedUnloadingID
         ).subscribe(
             response => {
                 if ( response == 3) {
                     this.MessageService.add({ 
-                        severity: 'success', 
-                        summary: 'Success', 
-                        detail: ' Successfully Deleted', 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: ' Record Deleted', 
                         life: 3000 
                     });
-                    this.onFilterUnloading();
+                    this.isDeleting = false;
+                    // this.onFilterUnloading();
+                    this.unloadingTransaction = this.unloadingTransaction.filter(transaction => (
+                        transaction.UnloadingTransactionID != selectedUnloadingID
+                    ));
                 }
             },
             errorMessage => {
+                this.isDeleting = false;
                 this.MessageService.add({ 
                     severity: 'error', 
                     summary: 'Danger', 
@@ -1205,6 +1206,105 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             }
         )
         
+    }
+
+
+
+    onDeleteUnloading(data: any) {
+
+        this.isDeleting = true;
+
+        const selectedUnloadingID = data.UnloadingTransactionID;
+        
+        this.UnloadingTransactionService.deleteUnloading (
+            data
+        ).subscribe(
+            response => {
+                if ( response == 3) {
+                    this.MessageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: ' Record Deleted', 
+                        life: 3000 
+                    });
+                    this.isDeleting = false;
+                    // this.onFilterUnloading();
+                    this.unloadingTransaction = this.unloadingTransaction.filter(transaction => (
+                        transaction.UnloadingTransactionID != selectedUnloadingID
+                    ));
+                }
+            },
+            errorMessage => {
+                this.isDeleting = false;
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: errorMessage || 'Unkown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+        
+    }
+
+    confirmDelete(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.UnloadingTransactionID) {
+            alert('unknown error occured');
+            return
+        }
+
+        const data = {
+            ...row,
+            DateTimeUnload: new Date( row.DateTimeUnload?.date).toLocaleString() || null,
+            DateUnload: new Date(row.DateUnload.date).toLocaleDateString(),
+            DeleteQuantity: row.Quantity,
+            DeleteWeight: row.Weight
+        }
+
+        this.CofirmationService.confirm({
+            message: `Are you sure you want to DR '${data.DrNumber}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onDeleteUnloading(data);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+    }
+
+    confirmDeleteStatus(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.UnloadingTransactionID) {
+            alert('unknown error occured');
+            return
+        }
+
+        const unloadingID = row.UnloadingTransactionID;
+
+        this.CofirmationService.confirm({
+            message: `Are you sure you want to DR '${row.DrNumber}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onDeleteUnloadingStatus(unloadingID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
     }
 
     onGlobalFilter(table: Table, event: Event) {

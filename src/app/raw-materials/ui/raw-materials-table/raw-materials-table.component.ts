@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Message } from 'primeng/api';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -14,12 +15,11 @@ export class RawMaterialsTableComponent implements OnInit, OnDestroy {
   @Input() edit: boolean = false;
   @Input() stockView: boolean = false;
   @Input() isLoading: boolean = false;
-  @Output() showDialog = new EventEmitter<void>();
-  @Output() onSelect = new EventEmitter<void>();
+  @Input() rawMaterialError: Message[] = [];
+  @Output() openDialog = new EventEmitter<void>();
   @Output() getData = new EventEmitter<void>();
 
   value: string | undefined;
-  items: any[] | undefined;
 
 
   constructor(
@@ -27,36 +27,11 @@ export class RawMaterialsTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.items = [
-      {
-          label: 'Options',
-          items: [
-              {
-                  label: 'Refresh',
-                  icon: 'pi pi-refresh',
-                  command: () => {
-                      this.getData.emit();
-                  }
-              },
-              {
-                  label: 'Export',
-                  icon: 'pi pi-upload'
-              }
-          ]
-      }
-    ];
+    
   }
 
   ngOnDestroy(): void {
     
-  }
-
-  onShowDialog() {
-    this.showDialog.emit();
-  }
-
-  onSelectRow(data: any) {
-    this.onSelect.emit(data);
   }
 
   // ==== INPUT SEARCH DATA====

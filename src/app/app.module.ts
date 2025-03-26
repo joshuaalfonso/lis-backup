@@ -182,6 +182,9 @@ import { EditWeightComponent } from './unloading-transaction/features/edit-weigh
 import { BinloadVerifiedTableComponent } from './binload/ui/binload-verified-table/binload-verified-table.component';
 import { BlOverviewComponent } from './dashboard-warehousing/ui/bl-overview/bl-overview.component';
 import { BinloadTableComponent } from './binload/ui/binload-table/binload-table.component';
+import { RawmatsPoTableComponent } from './rawmats-po/ui/rawmats-po-table/rawmats-po-table.component';
+import { RawmatsPoModalComponent } from './rawmats-po/ui/rawmats-po-modal/rawmats-po-modal.component';
+import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-completed/rawmats-po-completed.component';
 
 
 
@@ -268,6 +271,9 @@ import { BinloadTableComponent } from './binload/ui/binload-table/binload-table.
     BinloadVerifiedTableComponent,
     BlOverviewComponent,
     BinloadTableComponent,
+    RawmatsPoTableComponent,
+    RawmatsPoModalComponent,
+    RawmatsPoCompletedComponent,
     
   ],
   imports: [

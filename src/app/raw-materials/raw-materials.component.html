@@ -11,11 +11,11 @@
 <app-raw-materials-table 
     [rawMaterials]="rawMaterials"
     [isLoading]="isLoading"
+    [rawMaterialError]="rawMaterialError"
     [insert]="insert"
     [edit]="edit"
     [stockView]="stockView"
-    (showDialog)="showDialog()"
-    (onSelect)="onSelect($event)"
+    (openDialog)="openDialog($event)"
     (getData)="getData()"
 />
 
@@ -24,11 +24,10 @@
 
 <app-raw-materials-modal 
     [visible]="visible" 
-    [modalHeader]="modalHeader" 
-    [rawMatsForm]="rawMatsForm"
-    [submitLoading]="submitLoading" 
+    [selectedRawMaterial]="selectedRawMaterial"
+    [userID]="userID"
     (getData)="getData()"
-    (toggleDialog)="toggleDialog()"
+    (closeDialog)="closeDialog()"
 />
 
 

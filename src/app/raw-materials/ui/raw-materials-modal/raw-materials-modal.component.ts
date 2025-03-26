@@ -1,42 +1,62 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { RawMaterialsService } from '../../raw-materials.service';
+import { RawMaterial } from '../../raw-materials.model';
 
 @Component({
   selector: 'app-raw-materials-modal',
   templateUrl: 'raw-materials-modal.component.html',
   styleUrls: ['raw-materials-modal.component.css']
 })
-export class RawMaterialsModalComponent implements OnInit, OnDestroy {
+export class RawMaterialsModalComponent implements OnChanges{
 
   @Input() visible: boolean = false;
-  @Input() modalHeader: string = '';
-  @Input() rawMatsForm!: FormGroup;
-  @Input() submitLoading: boolean = false;
-  @Output() submit = new EventEmitter<void>();
-  @Output() toggleDialog = new EventEmitter<void>();
+  @Input() selectedRawMaterial: any;
+  @Input() userID!: string;
   @Output() getData = new EventEmitter<void>();
+  @Output() closeDialog = new EventEmitter<void>();
 
-  userID!: string;
+  submitLoading: boolean = false;
+
+  rawMatsForm: FormGroup = new FormGroup({
+    'RawMaterialID': new FormControl(0),
+    'RawMaterial': new FormControl(null, Validators.required),
+    'Quantity': new FormControl(0),
+    'Weight': new FormControl(0),
+    'MinimumQuantity': new FormControl(null, Validators.required),
+    'MinimumWeight': new FormControl(null, Validators.required),
+    'Category': new FormControl(null, Validators.required),
+    'UserID': new FormControl(0),
+  });
 
   constructor(
     private MessageService: MessageService,
     private RawMaterialsService: RawMaterialsService
   ) {}
 
-
-  ngOnInit(): void {
-
-  }
-
-  ngOnDestroy(): void {
+  ngOnChanges(): void {
     
-  }
-
-  onToggleDialog() {
-    this.toggleDialog.emit();
+    if (this.selectedRawMaterial) {
+      this.rawMatsForm.setValue({
+        ...this.selectedRawMaterial,
+        UserID: this.userID
+      })
+    } else {
+      this.rawMatsForm.reset({
+        RawMaterialID: 0,
+        RawMaterial: null,
+        Quantity: 0,
+        Weight: 0,
+        MinimumQuantity: 0,
+        MinimumWeight: 0,
+        Category: null,
+        UserID: this.userID
+      })
+    }
+    
+    
   }
 
   onGetData() {
@@ -52,19 +72,12 @@ export class RawMaterialsModalComponent implements OnInit, OnDestroy {
 
     this.submitLoading = true;
 
+    const data: RawMaterial = {...this.rawMatsForm.value}
 
     let authObs: Observable<any>;
     authObs = this.RawMaterialsService.saveData
     (
-      this.rawMatsForm.value.RawMaterialID, 
-      this.rawMatsForm.value.RawMaterial, 
-      this.rawMatsForm.value.Category, 
-      this.rawMatsForm.value.Packaging, 
-      this.rawMatsForm.value.Quantity, 
-      this.rawMatsForm.value.Weight, 
-      this.rawMatsForm.value.MinimumQuantity, 
-      this.rawMatsForm.value.MinimumWeight, 
-      this.userID
+      data
     );
 
     authObs.subscribe(response =>{
@@ -72,8 +85,6 @@ export class RawMaterialsModalComponent implements OnInit, OnDestroy {
         this.submitLoading = false;
 
         if( response === 1) {
-
-            this.visible = false;
             this.MessageService.add({ 
                 severity: 'success', 
                 summary: 'Success', 
@@ -81,11 +92,10 @@ export class RawMaterialsModalComponent implements OnInit, OnDestroy {
                 life: 3000 
             });
             this.onGetData();
-            this.onToggleDialog();
+            this.closeDialog.emit();
         } 
         else if ( response === 2) {
 
-            this.visible = false;
             this.MessageService.add({ 
                 severity: 'success', 
                 summary: 'Success', 
@@ -93,7 +103,7 @@ export class RawMaterialsModalComponent implements OnInit, OnDestroy {
                 life: 3000 
             });
             this.onGetData();
-            this.onToggleDialog();
+            this.closeDialog.emit();
         }
         else if ( response === 0) {
 
@@ -107,15 +117,16 @@ export class RawMaterialsModalComponent implements OnInit, OnDestroy {
         }
         
     }, errorMessage => {
-        this.MessageService.add({ 
-            severity: 'error', 
-            summary: 'Danger', 
-            detail: errorMessage, 
-            life: 3000 
-        });
+      this.MessageService.add({ 
+        severity: 'error', 
+        summary: 'Danger', 
+        detail: errorMessage, 
+        life: 3000 
+      });
 
-        this.submitLoading = false;
+      this.submitLoading = false;
     })
+
   }
 
 }

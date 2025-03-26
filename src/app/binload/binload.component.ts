@@ -72,6 +72,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
     position: string = 'center';
 
+    isDeleting: boolean = false;
+
     constructor(
         private BinloadService: BinloadService,
         private PlantService: PlantService,
@@ -180,9 +182,6 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.getDriver();
         this.getTruck();
         this.getUnitOfMeasure();
-
-
-        
 
     }
 
@@ -790,7 +789,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
         this.requestSubmitLoading = true;
 
-        const binloadRequestStatus = 1;
+        // const binloadRequestStatus = 1;
 
         const binloadRequestFormValue: BinloadRequest = {
             BinloadRequestID: this.binloadRequestForm.value.BinloadRequestID,
@@ -807,7 +806,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             RawMaterialID: this.binloadRequestForm.value.RawMaterialID,
             Quantity: this.binloadRequestForm.value.Quantity,
             BinloadUomID: this.binloadRequestForm.value.BinloadUomID,
-            Status: binloadRequestStatus,
+            Status: 0,
             UserID: this.UserID,
             // BinloadDetail: this.binloadDetail
         }
@@ -1176,6 +1175,100 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             rejectButtonStyleClass:"p-button-text",
             accept: () => {
                 this.onVerify(binloadRequestID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+    }
+
+    deleteBinload(data: any) {
+
+        // if (!data.Binloading[0].BinloadingID) {
+        //     alert('No binload ID');
+        //     return
+        // }
+
+        this.isDeleting = true;
+
+        // console.log(data);
+
+        const binloadData = {
+            BinloadRequestID: data.BinloadRequestID,
+            BinloadingID: data.Binloading[0].BinloadingID,
+            WarehouseID: data.WarehouseID,
+            WarehouseLocationID: data.WarehouseLocationID,
+            WarehousePartitionID: data.WarehousePartitionID,
+            WarehousePartitionStockID: data.WarehousePartitionStockID,
+            BinloadingDate: new Date(data.Binloading[0].BinloadingDate?.date).toLocaleDateString(),
+            BinloadingDateTime: new Date(data.Binloading[0].BinloadingDateTime?.date).toLocaleString(),
+            RawMaterialID: data.RawMaterialID,
+            Quantity: data.Binloading[0].Quantity,
+            Weight: data.Binloading[0].Weight,
+        }
+        
+        this.BinloadService.deleteBinload(binloadData).subscribe(
+            response => {
+                if( response === 3) {
+                    this.visible = false;
+                    this.MessageService.add({ 
+                        severity: 'success', 
+                        summary: 'Success', 
+                        detail: 'Successfully recorded', 
+                        life: 3000 
+                    });
+                    this.isDeleting = false;
+                    this.getBinloadRequest();
+                } 
+            },
+            error => {
+                console.log(error);
+                this.isDeleting = false;
+                this.MessageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: error || 'There was an error', 
+                    life: 3000 
+                });
+            }
+        )
+
+    }
+
+
+     // delete shpping transaction form
+     confirmBinloadDelete(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.Binloading[0].ControlNo) {
+            alert('No control no');
+            console.log('no control #');
+            return
+        }
+
+        if(!row.BinloadRequestID) {
+            alert('No binload request id');
+            console.log('no binload request id')
+            return
+        }
+
+        if (!row.Binloading[0].BinloadingID) {
+            alert('No binload ID');
+            return
+        }
+
+        const controlNo = row.Binloading[0].ControlNo;
+
+        this.ConfirmationService.confirm({
+            message: `Delete control Number '${controlNo}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.deleteBinload(row);
             },
             reject: () => {
                 // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });

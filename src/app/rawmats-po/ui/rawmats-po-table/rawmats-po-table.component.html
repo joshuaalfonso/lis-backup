@@ -1,0 +1,190 @@
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+
+<!-- ======= TABLE ======= -->
+<div class="table" *ngIf="!isLoading">
+    <p-table  
+        #dt1 
+        [value]="rawMatsPO" 
+        dataKey="PONo" 
+        [tableStyle]="{ 'width': '100%'}" 
+        [globalFilterFields]="['PONo', 'PODate.date', 'Terms', 'DeliveryDate.date', 'PRNumber', 'SupplierAddress', 'RawMaterial']" 
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+    >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search"  
+                    (input)="onGlobalFilter(dt1, $event)" 
+                />
+
+                <button 
+                    pButton 
+                    pRipple 
+                    class="add__btn" 
+                    (click)="this.openModal.emit()" 
+                    *ngIf="insert"
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Add Item</span>
+                </button>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead" >
+                <th style="width: 5rem"></th>
+                <th pSortableColumn="PONo">   
+                    PO #
+                    <p-sortIcon field="PONo" />
+                </th>
+                <th pSortableColumn="DeliveryDate">   
+                    Delivery Date
+                    <p-sortIcon field="DeliveryDate" />
+                </th>
+                <th pSortableColumn="PRNumber">   
+                    PR #
+                    <p-sortIcon field="PRNumber" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th>Progress</th>
+                <th>   
+                    Balance
+                </th>
+                <th>Status</th>
+                <th *ngIf="edit"></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button 
+                        pRipple 
+                        [style]="{'background': 'none', 'border': 'none', 'color': 'gray'}" 
+                        [pRowToggler]="row" 
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
+                    />
+                </td>
+                <td  data-title="PONo"> 
+                    <span class="">{{ row.PONo }}</span> 
+                    <span class="block text-xs text-gray-500"> 
+                        {{ row.PODate.date | date: 'MMM dd, yyyy' }} 
+                    </span>
+                </td>
+                <td  data-title="PODate"> 
+                    {{ row.DeliveryDate.date | date: 'MMM dd, yyyy' }} 
+                </td>
+                <td  data-title="PRNumber"> 
+                    {{ row.PRNumber }} 
+                </td>
+                <td  data-title="RawMaterial"> 
+                    {{ row.RawMaterial  || '-'}} 
+                    <div class="sub-text">
+                        {{ row.Supplier }}
+                    </div>
+                </td>
+                <td  data-title="Progress" style="width: 200px;"> 
+                    <progress id="progress" value="{{ row.Delivered }}" max="{{ row.Weight }}"> 32% </progress>
+                    <div class="sub-text" >
+                        {{ (row.Delivered | number) || '0'}} / {{ (row.Weight | number) || '-' }} kg
+                    </div>
+                </td>
+                <td  data-title="Balance"  [class.text-red-400]="row.Delivered > row.Weight"> 
+                    {{ (row.Balance | number) || (row.Weight | number) }} kg
+                </td>
+                <td *ngIf="row.Status == 0">
+                    <p-tag severity="warning" value="Pending"/>
+                </td>
+
+                <td *ngIf="row.Status == 1">
+                    <p-tag severity="success" value="Completed"/>
+                </td>
+
+                <td  data-title="Actions" *ngIf="edit">
+
+                    <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
+                    <p-overlayPanel #action>
+                        <div class="actions-overlay">
+                            <p (click)="openModal.emit(row)">
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                                </svg>
+                                Edit
+                            </p>
+                            <p (click)="confirmCompletedPO('center', row)">
+                                <i class="pi pi-check" width="15px" height="15px"> </i>
+                                Completed
+                            </p>
+                        </div>
+                    </p-overlayPanel>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" *ngIf="!isLoading">
+            <tr>
+                <td colspan="3">There is no data found.</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-PO>
+            <tr>
+                <td colspan="12">
+                    <div class="">
+                        <p-table [value]="PO.UnloadingDetail" dataKey="PO">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 5rem"></th>
+                                    <th>Date Unload</th>
+                                    <th>DR #</th>
+                                    <th>Plate #</th>
+                                    <th>Weight</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-detail let-index="index">
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        {{ detail.DateUnload.date | date: 'MM/dd/yyyy' }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.DrNumber }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.PlateNo }}
+                                    </td>
+                                    <td> 
+                                        {{ detail.Weight | number }} kg
+                                    </td>
+                                    
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no unloaded truck for this PO yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+    
+</div>
+

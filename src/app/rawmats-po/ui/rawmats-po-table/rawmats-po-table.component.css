@@ -1,0 +1,15 @@
+td, th {
+    padding: 10px 5px;
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+td {
+    color: var(--font-color);
+    border: 1px var(--divider-border);
+    border-bottom-style: dotted;
+    font-weight: var(--font-500);
+}
+tr:hover {
+    background: #f8f9fa;
+}

@@ -1,5 +1,5 @@
 <p-dialog 
-    header="{{ modalHeader }}" 
+    header="{{ rawMatsForm.value.RawMaterialID ? 'Edit Raw Material' : 'Create Raw Material' }}" 
     [(visible)]="visible" 
     [modal]="true" 
     [breakpoints]="{ '1200px': '500px' }" 
@@ -79,13 +79,17 @@
                 icon="pi pi-times" 
                 label="Cancel" 
                 styleClass="p-button-rounded p-button-text"
-                (click)="onToggleDialog()"
+                (click)="closeDialog.emit()"
             ></p-button>
 
-            <app-submit-button 
-                [submitLoading]="submitLoading" 
-                [form]="rawMatsForm" 
-            /> 
+            <p-button 
+                type="submit"
+                label="{{ rawMatsForm.value.RawMaterialID ? 'Apply changes' : 'Create' }}" 
+                icon="pi pi-check"
+                [loading]="submitLoading" 
+                [disabled]="!rawMatsForm.valid"
+            />
+
         </div>
 
     </form>
