@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { TruckService } from "./truck.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -17,7 +18,7 @@ import { UsersService } from "../users/users.service";
 export class TruckComponent implements OnInit, OnDestroy{
 
     truck: any[] = [];
-
+    truckError: Message[] = [];
     truckType: any[] = [];
 
     trucking: any[] = [];
@@ -46,7 +47,8 @@ export class TruckComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private Auth: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -64,6 +66,7 @@ export class TruckComponent implements OnInit, OnDestroy{
         this.getUserAccess(this.userID);
         this.getData();
         this.getTruckType();
+        this.logTruckView();
     }
 
     ngOnDestroy(): void {
@@ -119,6 +122,11 @@ export class TruckComponent implements OnInit, OnDestroy{
                 this.truck = response;
                 this.isLoading = false;
                 // console.log(response)
+            },
+            error => {
+                console.log(error);
+                this.isLoading = false;
+                this.truckError = [{ severity: 'error', detail: 'There was an error fetching data' }]
             }
         )
     }
@@ -131,6 +139,30 @@ export class TruckComponent implements OnInit, OnDestroy{
                 }
             )
         )
+    }
+
+    logTruckView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Truck'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.truckError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     getTrucking() {

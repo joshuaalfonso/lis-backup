@@ -1,0 +1,65 @@
+<app-content-header [title]="'System Logs'"></app-content-header>
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+
+<div class="table" *ngIf="!isLoading">
+
+    <p-table 
+        [value]="filteredLogs()" 
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+    >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <p-dropdown 
+                    [options]="logs" 
+                    [(ngModel)]="selectedLog" 
+                    optionLabel="logName" 
+                    placeholder="Select a Log" 
+                    optionValue="logID"
+                    [showClear]="true"
+                />
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Functionality</th>
+                <th>Table Name</th>
+                <th>Name</th>
+                <th>Activity</th>
+                <th>Updated Data</th>
+                <th>Date & Time</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="{{getFunction(row.FunctionID)}}"> 
+                    <div class="flex align-items-center ">
+                        <i class="{{ getIcon(row.FunctionID) }} flex text-xl"></i> 
+                        {{ row.Functionality }}
+                    </div>
+                </td>
+                <td>{{ row.TableName }}</td>
+                <td>
+                    {{ row.Name || '-' }}
+                    <span class="sub-text">{{ row.ModuleName || '-'}}</span>
+                </td>
+                <td>{{ row.Activity || '-'}}</td>
+                <td>{{ row.UpdatedData ? row.UpdatedData : '-'}}</td>
+                <td>{{ (row.Time.date | date: 'MM/dd/yyyy hh:mm a') || '-' }}</td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

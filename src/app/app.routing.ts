@@ -56,6 +56,7 @@ import { SecurityComponent } from "./security/security.component";
 import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-inspection.component";
 import { LocalSupplier } from "./supplier-local/local-supplier.component";
 import { BlOverviewComponent } from "./dashboard-warehousing/ui/bl-overview/bl-overview.component";
+import { SystemLogsComponent } from "./system-logs/system-logs.component";
 
 
 
@@ -427,6 +428,10 @@ const routes: Routes = [
                 component: SecurityComponent
             },
         ]
+    },
+    {
+        path: 'system-logs',
+        component: SystemLogsComponent
     },
     {
         path: 'login', 

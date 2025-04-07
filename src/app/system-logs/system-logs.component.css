@@ -1,0 +1,11 @@
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-500);
+}
+
+:host ::ng-deep .table .p-dropdown-label {
+    /* background: red; */
+}

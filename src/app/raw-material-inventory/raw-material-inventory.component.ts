@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RawMaterialInventoryService } from "./raw-material-inventory.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Subscription, Observable } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Subscription, Observable, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { ChangeDetectorRef } from '@angular/core';
 import { Dropdown } from "primeng/dropdown";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -20,6 +21,8 @@ import { AuthService } from "../auth/auth.service";
 export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
 
     inventory: Inventory[] = [];
+
+    inventoryError: Message[] = [];
 
     filterInventory: Inventory[] = [];
 
@@ -49,15 +52,16 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
 
     dialogHeader?: string;
 
+    userID!: string;
+
     private subscription: Subscription = new Subscription();
 
     constructor(
         private RawMaterialInventoryService: RawMaterialInventoryService,
-        private MessageService: MessageService,
-        private ConfirmationService: ConfirmationService,
         private RawMaterialService: RawMaterialsService,
         private UsersService: UsersService,
-        private auth: AuthService
+        private auth: AuthService,
+        private SystemLogsService: SystemLogsService
         
     ) {}
 
@@ -87,12 +91,15 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
         this.auth.user.subscribe(
             user => {
                 if (user) {
+                    this.userID = user.user_id;
                     this.getUserAccess(user!.user_id);
                 }
             }
         )
 
         this.getData();
+        this.getRawMaterial();
+        this.logRawMaterialInventoryView();
     }
 
     getUserAccess(UserID: string) {
@@ -132,6 +139,7 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
         if(this.fromDate && this.toDate) {
             this.filterDateRange();
         }
+
     }
 
     onChangeTo(event: any) {
@@ -142,15 +150,22 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
     }
 
     filterDateRange() {
+        this.isLoading = true;
         this.subscription.add(
             this.RawMaterialInventoryService.FilterData( this.formatDate(this.fromDate),  this.formatDate(this.toDate)).subscribe(
                 response => {
+                    this.isLoading = false;
                     this.inventory = response;
                     this.filterInventory = [...this.inventory];
                     // this.filterInventory = response;
                     // this.isReset = true;
                     // this.getData();
                     this.onSelectRawMaterial();
+                },
+                error => {
+                    this.isLoading = false;
+                    console.log(error);
+                    this.inventoryError = [{ severity: 'error', detail: 'There wass an error fetching Inventory' }]
                 }
             )   
         )
@@ -194,10 +209,16 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
                     this.isLoading = false;
                     this.inventory = response;
                     this.filterInventory = [...this.inventory]
+                },
+                error => {
+                    console.log(error);
+                    this.inventoryError = [{ severity: 'error', detail: 'There wass an error fetching Inventory' }]
                 }
             )
         )
+    }
 
+    getRawMaterial() {
         this.subscription.add(
             this.RawMaterialService.getRawMatsData().subscribe(
                 (response) => {
@@ -208,150 +229,34 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
         )
     }
 
+    logRawMaterialInventoryView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Raw Material Inventory'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.inventoryError = [{ severity: 'error', detail: 'An unkown error occured' }]
+            }
+        );
+
+    }
+
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
     }
-
-    showDialog() {
-        this.visible = true;
-        this.dialogHeader = 'Add Inventory'
-        this.clearForm();
-    }
-
-    clearForm() {
-        this.inventoryForm.reset();
-        this.inventoryForm.patchValue({ 'RawMaterialInventoryID': 0})
-    }
-
-    onSubmit() {
-        let authObs: Observable<ResponseData>;
-        authObs = this.RawMaterialInventoryService.saveData
-        (
-            this.inventoryForm.value.RawMaterialInventoryID, 
-            this.inventoryForm.value.RawMaterialID.RawMaterialID, 
-            this.inventoryForm.value.InventoryDate.toLocaleDateString(), 
-            this.inventoryForm.value.BeginQty, 
-            this.inventoryForm.value.BeginWeight, 
-            this.inventoryForm.value.BeginPrice, 
-            this.inventoryForm.value.IncomingQty, 
-            this.inventoryForm.value.IncomingWeight, 
-            this.inventoryForm.value.IncomingPrice, 
-            this.inventoryForm.value.BinloadingQty, 
-            this.inventoryForm.value.BinloadingWeight, 
-            this.inventoryForm.value.BinloadingPrice, 
-            this.inventoryForm.value.CondemQty, 
-            this.inventoryForm.value.CondemWeight, 
-            this.inventoryForm.value.CondemPrice, 
-            this.inventoryForm.value.EndingQty, 
-            this.inventoryForm.value.EndingWeight, 
-            this.inventoryForm.value.EndingPrice
-        );
-
-        authObs.subscribe(response =>{
-
-            if( response === 1) {
-                this.MessageService.add({ severity: 'success', summary: 'Success', detail: 'Item: ' + this.inventoryForm.value.RawMaterialID.RawMaterial +  ' successfully recorded', life: 3000 });
-                this.getData();
-                this.clearForm();
-            } 
-            else if ( response === 2) {
-                this.MessageService.add({ severity: 'success', summary: 'Success', detail: 'Item: ' + this.inventoryForm.value.RawMaterialID.RawMaterial +  ' successfully updated', life: 3000 });
-                this.getData();
-                this.clearForm();
-            }
-            else if ( response === 0) {
-                this.MessageService.add({ severity: 'error', summary: 'Danger', detail: 'Item: ' + this.inventoryForm.value.RawMaterialID.RawMaterial +  ' already exist', life: 3000 });
-            }
-
-            else if ( response === -1) {
-                this.MessageService.add({ severity: 'error', summary: 'Danger', detail: 'Item: ' + this.inventoryForm.value.RawMaterialID.RawMaterial +  ' Exceeds stocks', life: 3000 });
-            }
-            
-        }, errorMessage => {
-            this.MessageService.add({ severity: 'error', summary: 'Danger', detail: errorMessage, life: 3000 });
-        })
-
-    }
-
-    onSelect(data: any) {
-        this.showDialog();
-        this.dialogHeader = 'Edit Inventory'
-
-        let rawMaterialValue = {};
-      
-        for(let i = 0; i <= this.rawMaterial.length -1; i++) {
-            if(this.rawMaterial[i].RawMaterialID == data.RawMaterialID) {
-                rawMaterialValue = this.rawMaterial[i];
-                break;
-            }
-        }
-
-        this.inventoryForm.setValue({
-            RawMaterialInventoryID: data.RawMaterialInventoryID,
-            RawMaterialID: rawMaterialValue,
-            InventoryDate: new Date(data.InventoryDate.date),
-            BeginQty: data.BeginQty,
-            BeginWeight: data.BeginWeight,
-            BeginPrice: data.BeginPrice,
-            IncomingQty: data.IncomingQty,
-            IncomingWeight: data.IncomingWeight,
-            IncomingPrice: data.IncomingPrice,
-            BinloadingQty: data.BinloadingQty,
-            BinloadingWeight: data.BinloadingWeight,
-            BinloadingPrice: data.BinloadingPrice,
-            CondemQty: data.CondemQty,
-            CondemWeight: data.CondemWeight,
-            CondemPrice: data.CondemPrice,
-            EndingQty: data.EndingQty,
-            EndingWeight: data.EndingWeight,
-            EndingPrice: data.EndingPrice  
-        })
-    }
-
-    onDelete(id: any) {
-        this.RawMaterialInventoryService.onDeleteData(id).subscribe(
-            response => {
-               if (response === 3 ) {
-                    this.MessageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
-                this.getData();
-               }
-               
-           }
-        )
-    }
-
-    confirm(event: Event) {
-        this.ConfirmationService.confirm({
-            target: event.target as EventTarget,
-            // message: 'Please confirm to proceed moving forward.',
-            // icon: 'pi pi-exclamation-circle',
-            // acceptIcon: 'pi pi-check mr-1',
-            // rejectIcon: 'pi pi-times mr-1',
-            // rejectButtonStyleClass: 'p-button-danger p-button-sm',
-            // acceptButtonStyleClass: 'p-button-outlined p-button-sm',
-            // accept: () => {
-            //     this.MessageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-            // },
-            // reject: () => {
-            //     this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-            // }
-        });
-    }
-
-    confirm2(event: Event, id: any) {
-        this.ConfirmationService.confirm({
-            target: event.target as EventTarget,
-            message: 'Do you want to delete this record?',
-            icon: 'pi pi-info-circle',
-            acceptButtonStyleClass: 'p-button-danger p-button-sm',
-            accept: () => {
-                this.onDelete(id);
-            },
-            reject: () => {
-                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-            }
-        });
-    }
+   
 
     // ==== INPUT SEARCH DATA====
     onGlobalFilter(table: Table, event: Event) {
@@ -382,12 +287,5 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
 }
 
 interface Inventory {
-
-}
-interface ResponseData {
-
-}
-
-interface RawMaterial {
 
 }

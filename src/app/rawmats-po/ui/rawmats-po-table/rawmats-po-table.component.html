@@ -3,8 +3,15 @@
 </div>
 
 
+<p-messages 
+    [(value)]="rawMatsPOError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="rawMatsPOError" 
+/>
+
 <!-- ======= TABLE ======= -->
-<div class="table" *ngIf="!isLoading">
+<div class="table" *ngIf="!isLoading && rawMatsPOError.length === 0">
     <p-table  
         #dt1 
         [value]="rawMatsPO" 

@@ -5,36 +5,19 @@
 
 <app-content-header [title]="'Supplier / Import'" />
 
-<!-- ======= SEARCH, ADD, EXPORT ======= -->
-<!-- <div class="controls">
-    <input 
-        pInputText 
-        type="text" 
-        class="p-inputtext-lg pl-3 input__search" 
-        placeholder="Search" 
-        (input)="onGlobalFilter(dt1, $event)"
-    />
-    <button 
-        pButton 
-        pRipple 
-        class="add__btn" 
-        (click)="showDialog()"
-    >
-        <i class='bx bx-plus'></i> 
-        <span>Add Item</span>
-    </button>
-    <button 
-        pButton 
-        pRipple 
-        class="p-button-info export__btn"
-    >
-        <i class='bx bx-file mr-1' ></i> 
-        <span>Export File</span>
-    </button>
-</div> -->
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="supplierError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="supplierError" 
+/>
 
 <!-- ======= TABLE ======= -->
-<div class="table">
+<div class="table" *ngIf="!isLoading && supplierError.length === 0">
 
     <p-table  
         #dt1 
@@ -144,9 +127,6 @@
 
     </p-table>
 
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
 
 </div>
 

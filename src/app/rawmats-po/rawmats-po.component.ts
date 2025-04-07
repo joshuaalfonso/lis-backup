@@ -1,15 +1,16 @@
 import { Component, NgZoneOptions, OnInit } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { RawMatsPOService } from "./rawmats-po.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, take } from "rxjs";
 import { SupplierService } from "../supplier/supplier.service";
 import { TruckService } from "../truck/truck.service";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Dialog } from "primeng/dialog";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { Table } from "primeng/table";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -23,7 +24,7 @@ export class RawMatsPOComponent implements OnInit{
 
     rawMatsPO: any[] = [];
     isLoading: boolean = false;
-
+    rawMatsPOError: Message[] = [];
     rawMatsPOForm!: FormGroup;
 
 
@@ -66,6 +67,7 @@ export class RawMatsPOComponent implements OnInit{
         private UsersService: UsersService,
         private auth: AuthService,
         private ConfirmationService: ConfirmationService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -99,6 +101,7 @@ export class RawMatsPOComponent implements OnInit{
         this.getSupplier();
         // this.getTruck();
         this.getRawMaterial();
+        this.logRawMatsPOView();
     }
 
     getUserAccess(UserID: string) {
@@ -153,6 +156,7 @@ export class RawMatsPOComponent implements OnInit{
                         this.isLoading = false;
                         // Optionally, handle the error (e.g., show an alert)
                         console.error('Error fetching data:', error);
+                        this.rawMatsPOError = [{ severity: 'error', detail: 'There was an error fetching data' }]
                     }
                 )
             );
@@ -163,8 +167,29 @@ export class RawMatsPOComponent implements OnInit{
         }
 
         // console.log('asd');
-        
-    
+    }
+
+    logRawMatsPOView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Raw Material PO'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.rawMatsPOError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
 
     }
 

@@ -37,8 +37,19 @@
     </button>
 </div> -->
 
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="warehouseLocationError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="warehouseLocationError" 
+/>
+
 <!-- ======= TABLE ======= -->
-<div class="table">
+<div class="table" *ngIf="!isLoading && warehouseLocationError.length === 0">
     
     <p-table  
         #dt1  
@@ -136,10 +147,6 @@
         </ng-template>
 
     </p-table>
-
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
 
 </div>
 

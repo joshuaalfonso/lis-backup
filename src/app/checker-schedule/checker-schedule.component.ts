@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CheckerScheduleService } from "./checker-schedule.service";
-import { Subscription } from "rxjs";
+import { Subscription, take } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
-import { MessageService } from "primeng/api";
+import { Message, MessageService } from "primeng/api";
 import { PlantService } from "../plant/plant.service";
 import { CheckerType } from "../checker-type/checker-type.component";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -20,6 +21,7 @@ import { UsersService } from "../users/users.service";
 export class CheckerScheduleComponent implements OnInit, OnDestroy{
 
     checkerSchedule: any[] = [];
+    checkerScheduleError: Message[] = [];
     checker: any[] = [];
     warehouseLocation: any[] = [];
     plant: any[] = [];
@@ -51,7 +53,8 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
         private PlantService: PlantService,
         private CheckerTypeService: CheckerTypeService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {  
@@ -74,7 +77,7 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
         this.getWarehouseLocation();
         this.getPlant();
         this.getCheckerType();
-
+        this.logCheckerScheduleView();
     }
 
     ngOnDestroy(): void {
@@ -124,16 +127,44 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
     }
 
     getData() {
+        this.isLoading = true;
         this.subscriptions.add(
             this.CheckerScheduleService.displayData().subscribe(
                 response => {
-                    this.checkerSchedule = response
+                    this.checkerSchedule = response;
+                    this.isLoading = false;
                 },
                 err => {
                     console.error('Error fetching checker schedule:', err);
+                    this.checkerScheduleError = [{ severity: 'error', detail: 'There was ann error fetching data' }];
+                    this.isLoading = false;
                 }
             )
         )
+    }
+
+    logCheckerScheduleView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Checker Schedule'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.checkerScheduleError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     getChecker() {

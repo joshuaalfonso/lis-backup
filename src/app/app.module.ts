@@ -185,6 +185,7 @@ import { BinloadTableComponent } from './binload/ui/binload-table/binload-table.
 import { RawmatsPoTableComponent } from './rawmats-po/ui/rawmats-po-table/rawmats-po-table.component';
 import { RawmatsPoModalComponent } from './rawmats-po/ui/rawmats-po-modal/rawmats-po-modal.component';
 import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-completed/rawmats-po-completed.component';
+import { SystemLogsComponent } from './system-logs/system-logs.component';
 
 
 
@@ -274,6 +275,7 @@ import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-complete
     RawmatsPoTableComponent,
     RawmatsPoModalComponent,
     RawmatsPoCompletedComponent,
+    SystemLogsComponent,
     
   ],
   imports: [

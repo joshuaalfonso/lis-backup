@@ -152,14 +152,13 @@
                         <i class='bx bx-check'></i>
                     </button>
                     <button 
-
                         pButton 
                         pRipple 
                         class="edit__btn" 
                         class="p-button-danger p-2 border-round mr-2" 
                         (click)="confirmBinloadDelete('center', row)"
                         [disabled]="isDeleting"
-                        *ngIf="row.Binloading.length > 0 && tabValue == 1"
+                        *ngIf="row.Binloading.length > 0 && tabValue == 1 && binloadDelete"
                     >
                         <i class='bx bx-trash'></i>
                     </button>

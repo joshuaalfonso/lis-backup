@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { WarehouseService } from "./warehouse.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Subscription, Observable } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Subscription, Observable, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -16,6 +17,8 @@ import { AuthService } from "../auth/auth.service";
 export class WarehouseComponent implements OnInit, OnDestroy{
 
     warehouse: any[] = [];
+    
+    warehouseError: Message[] = [];
 
     visible!: boolean;
 
@@ -47,7 +50,8 @@ export class WarehouseComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private UsersService: UsersService,
-        private auth: AuthService
+        private auth: AuthService,
+        private SystemLogsService: SystemLogsService
     ){}
 
     ngOnInit(): void {
@@ -75,6 +79,8 @@ export class WarehouseComponent implements OnInit, OnDestroy{
         )
 
         this.getData();
+        this.getWarehouseLocation();
+        this.logWarehouseView();
     }
 
     getUserAccess(UserID: string) {
@@ -112,25 +118,61 @@ export class WarehouseComponent implements OnInit, OnDestroy{
     }
 
     getData() {
+
         this.isLoading = true;
         this.subscription.add(
             this.WarehouseService.getWarehouseData().subscribe( 
-                (response) => {
+                response => {
                     this.warehouse = response;
                     this.isLoading = false;
                     // console.log(response); 
+                },
+                error => {
+                    this.isLoading = false;
+                    console.log(error);
+                    this.warehouseError = [{ severity: 'error', detail: 'An unkown error occured' }];
                 }
             ) 
         )   
 
+    }
+
+    getWarehouseLocation() {
         this.subscription.add(
             this.WarehouseService.getWarehouseLocation().subscribe( 
-                (response) => {
+                response => {
                     this.location = response;
                     // console.log(response)
+                },
+                error => {
+                    console.log(error);
                 } 
             )
         )  
+    }
+
+    logWarehouseView() {
+
+        if (!this.UserID) {
+            alert('No logged in user');
+            return
+        };
+
+        const data = {
+            UserID: this.UserID,
+            TableName: 'Warehouse Name'
+        };
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.warehouseError = [{ severity: 'error', detail: 'An unkown error occured' }]
+            }
+        );
+
     }
 
     ngOnDestroy(): void {

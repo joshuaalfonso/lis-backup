@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { TruckingService } from "./trucking.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -16,6 +17,8 @@ import { AuthService } from "../auth/auth.service";
 export class TruckingComponent implements OnInit, OnDestroy{
 
     trucking: any[] = [];
+
+    truckingError: Message[] = [];
 
     truckingForm!: FormGroup;
 
@@ -35,7 +38,8 @@ export class TruckingComponent implements OnInit, OnDestroy{
         private TruckingService: TruckingService,
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
-        private AuthService: AuthService
+        private AuthService: AuthService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -49,6 +53,7 @@ export class TruckingComponent implements OnInit, OnDestroy{
 
         this.getUser();
         this.getData();
+        this.logTruckingView();
     }
 
     getUser() {
@@ -68,9 +73,38 @@ export class TruckingComponent implements OnInit, OnDestroy{
                 response => {
                     this.trucking = response;
                     this.isLoading = false;
+                },
+                error => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.truckingError =  [{ severity: 'error', detail: 'There was an error fetching data' }];
                 }
             )
         )
+    }
+
+    logTruckingView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Trucking'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.truckingError = [{ severity: 'error', detail: 'There was an error fetching data' }]
+            }
+        );
+
     }
 
     ngOnDestroy(): void {

@@ -9,28 +9,8 @@
 
 <app-content-header [title]="'Warehouse Inventory'"></app-content-header>
 
-
 <!-- ======= SEARCH, ADD, EXPORT ======= -->
-<div class="controls">
-    <!-- <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/> -->
-    <!-- <button pButton pRipple class="bttn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button> -->
 
-    <!-- <span class="mr-3 font-semibold">From</span>
-    <p-calendar  class="mr-3" [style]="{width: '130px'}"></p-calendar>
-
-    <span class="mr-3 font-semibold">To</span>
-    <p-calendar  class="mr-3" [style]="{width: '130px'}"></p-calendar>
- 
-    <button 
-        pButton 
-        pRipple 
-        class="p-button-info bttn"
-    >
-        <i class='bx bx-file mr-1' ></i> 
-        <span>Export File</span>
-    </button> -->
-
-</div>
 
 <!-- <p-selectButton 
     [options]="stateOptions" 
@@ -41,8 +21,19 @@
     class="mb-3"
 ></p-selectButton> -->
 
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="warehouseInventoryError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="warehouseInventoryError" 
+/>
+
 <!-- ======= TABLE ======= -->
-<div class="table" *ngIf="value === 1">
+<div class="table" *ngIf="value === 1 && !isLoading && warehouseInventoryError.length === 0">
     <p-table  
         #dt1 
         [value]="rawMatsInventory"  
@@ -126,9 +117,6 @@
             </tr>
         </ng-template>
     </p-table>
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
 </div>
 
 

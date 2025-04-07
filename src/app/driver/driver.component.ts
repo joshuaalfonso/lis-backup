@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { DriverService } from "./driver.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -15,6 +16,7 @@ import { AuthService } from "../auth/auth.service";
 export class DriverComponent implements OnInit, OnDestroy{
 
     driver: Driver[] = [];
+    driverError: Message[] = [];
 
     driverForm!: FormGroup;
 
@@ -40,7 +42,8 @@ export class DriverComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private UsersService: UsersService,
-        private AuthService: AuthService
+        private AuthService: AuthService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -54,6 +57,7 @@ export class DriverComponent implements OnInit, OnDestroy{
         this.getUser();
         this.getUserAccess(this.userID);
         this.getData();
+        this.logDriverView();
     }
 
     ngOnDestroy(): void {
@@ -66,8 +70,37 @@ export class DriverComponent implements OnInit, OnDestroy{
             (response) => {
                 this.driver = response;
                 this.isLoading = false;
+            },
+            error => {
+                console.log(error);
+                this.isLoading = false;
+                this.driverError = [{ severity: 'error', detail: 'There was an error fetching data' }]
             }
         )
+    }
+
+    logDriverView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Driver'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.driverError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     getUser() {

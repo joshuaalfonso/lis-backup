@@ -25,11 +25,13 @@
 </div>
 
 
+
 <app-rawmats-po-table 
     [rawMatsPO]="rawMatsPO" 
     [isLoading]="isLoading"
     [insert]="insert" 
     [edit]="edit"
+    [rawMatsPOError]="rawMatsPOError"
     (openModal)="openModal($event)"
     (poCompleted)="poCompleted($event)"
     *ngIf="tabValue == 1"

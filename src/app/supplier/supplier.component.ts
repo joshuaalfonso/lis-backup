@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { SupplierService } from "./supplier.service";
 import { FormControl, FormGroup, Validators, FormGroupDirective } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { ConfirmationService } from "primeng/api";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
 import { CountryService } from "../supplier-local/country.service";
 import currencySymbolMap from 'currency-symbol-map';
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 @Component({
     selector: 'app-supplier',
@@ -20,7 +21,8 @@ export class SupplierComponent implements OnInit, OnDestroy{
     supplierForm!: FormGroup;
 
     supplier: Supplier[]= [];
-
+    supplierError: Message[] = []
+;
     visible: boolean= false;
 
     isLoading: boolean = false;
@@ -46,7 +48,8 @@ export class SupplierComponent implements OnInit, OnDestroy{
         private ConfirmationService: ConfirmationService,
         private UsersService: UsersService,
         private CountryService: CountryService,
-        private AuthService: AuthService
+        private AuthService: AuthService,
+        private SystemLogsService: SystemLogsService
     ){}
 
     ngOnInit(): void {
@@ -81,6 +84,7 @@ export class SupplierComponent implements OnInit, OnDestroy{
         this.getAccess();
         this.getSupplier();
         this.getCountry();
+        this.logImportSupplierView();
     }
 
     // ==== GET SUPPLIER DATA ====
@@ -91,9 +95,38 @@ export class SupplierComponent implements OnInit, OnDestroy{
                 response => {
                     this.supplier = response;
                     this.isLoading = false;
+                },
+                error => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.supplierError = [{ severity: 'error', detail: 'There was an error fetching data' }]
                 }
             )
         )
+    }
+
+    logImportSupplierView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Import Supplier'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.supplierError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     // ==== UNSUBSCRIBE ====

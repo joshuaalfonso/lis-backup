@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { WarehousePartitionService } from "./warehouse-partition.service";
-import { Subscription, Observable } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Subscription, Observable, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { WarehouseService } from "../warehouse/warehouse.service";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -18,6 +19,7 @@ import { AuthService } from "../auth/auth.service";
 export class WarehousePartition implements OnInit, OnDestroy {
 
     warehousePartition: any[] = [];
+    warehousePartitionError: Message[] = [];
 
     warehouse: any[] = [];
 
@@ -50,7 +52,8 @@ export class WarehousePartition implements OnInit, OnDestroy {
         private ConfirmationService: ConfirmationService,
         private WarehouseService: WarehouseService,
         private UsersService: UsersService,
-        private auth: AuthService
+        private auth: AuthService,
+        private SystemLogsService: SystemLogsService
     ){}
 
     ngOnInit(): void {
@@ -77,6 +80,7 @@ export class WarehousePartition implements OnInit, OnDestroy {
 
         this.getData();
         this.getWarehouse();
+        this.logWarehousePartitionView();
     } 
 
     getUserAccess(UserID: string) {
@@ -121,12 +125,40 @@ export class WarehousePartition implements OnInit, OnDestroy {
         this.isLoading = true;
         this.subscription.add(
             this.WarehousePartitionService.getWarehousePartitionData().subscribe(
-                (response) => {
+                response => {
                     this.warehousePartition = response;
                     this.isLoading = false;
+                },
+                error => {
+                    console.log(error);
+                    this.warehousePartitionError = [{ severity: 'error', detail: 'There was an error fetching warehouse partition' }];
                 }
             )
         )
+    }
+
+    logWarehousePartitionView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        };
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Warehouse Partition'
+        };
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.warehousePartitionError = [{ severity: 'error', detail: 'An unkown error occured' }]
+            }
+        );
+
     }
 
     getWarehouse() {

@@ -8,39 +8,13 @@
 <!-- <h1 class="title">Warehouse Partition</h1> -->
 <app-content-header [title]="'Warehouse / Partition'"></app-content-header>
 
-<!-- ==== SEARCH, ADD , EXPORT ==== -->
-<!-- <div class="controls">
-    <input 
-        pInputText 
-        type="text" 
-        class="p-inputtext-lg pl-3 input__search" 
-        placeholder="Search" 
-        (input)="onGlobalFilter(dt1, $event)"
-    />
-    <button 
-        pButton 
-        pRipple 
-        class="add__btn" 
-        (click)="showDialog()" 
-        [disabled]="!insert" 
-        *ngIf="insert"
-    >
-        <i class='bx bx-plus'></i> 
-        <span>Add Item</span>
-    </button>
-    <button 
-        pButton 
-        pRipple 
-        class="p-button-info export__btn" 
-        *ngIf="generateReport"
-    >
-        <i class='bx bx-file mr-1' ></i> 
-        <span>Export File</span>
-    </button>
-</div> -->
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
 
 <!-- ======= TABLE ======= -->
-<div class="table">
+<div class="table" *ngIf="!isLoading && warehousePartitionError.length === 0">
     <p-table  
         #dt1  
         [value]="warehousePartition" 
@@ -158,10 +132,6 @@
         </ng-template>
 
     </p-table>
-
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
 
 </div>
 

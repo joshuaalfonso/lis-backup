@@ -419,6 +419,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             },
                         ]
                     },
+                    {
+                        title: 'System Logs',
+                        icon: 'assets/icons/icon-logs.svg',
+                        routerLink: '/system-logs',
+                        view: true,
+                    },
                 ]
             }
         ];

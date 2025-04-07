@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RawMaterialsService } from "./raw-materials.service";
 import { Message } from 'primeng/api';
 import { ConfirmationService, MessageService } from "primeng/api";
-import { Subscription } from "rxjs";
+import { Subscription, take } from "rxjs";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { RawMaterial } from "./raw-materials.model";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 @Component({
     selector: 'app-raw-materials',
@@ -37,6 +38,7 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
         private ConfirmationService: ConfirmationService,
         private auth: AuthService,
         private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ){}
 
     ngOnInit(): void {
@@ -52,8 +54,9 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
             )
         )
 
-        // ==== DISPLAY RAW MATERIALS DATA ====
         this.getData();
+        this.logRawMaterialView();
+
     }
 
     // ==== GET RAW MATERIALS DATA ====
@@ -105,6 +108,30 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
                 }
             )       
        )
+    }
+
+    logRawMaterialView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Raw Material'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.rawMaterialError = [{ severity: 'error', detail: 'An unkown error occured' }]
+            }
+        );
+
     }
 
     ngOnDestroy(): void {

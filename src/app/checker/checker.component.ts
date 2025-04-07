@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CheckerService } from "./checker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -17,6 +18,7 @@ import { UsersService } from "../users/users.service";
 export class CheckerComponent implements OnInit,OnDestroy{
 
     checker: Checker[] = [];
+    checkerError: Message[] = [];
 
     checkerType: any[] = [];
 
@@ -43,7 +45,8 @@ export class CheckerComponent implements OnInit,OnDestroy{
         private ConfirmationService: ConfirmationService,
         private CheckerTypeService: CheckerTypeService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ){}
 
     ngOnInit(): void {
@@ -59,6 +62,7 @@ export class CheckerComponent implements OnInit,OnDestroy{
         this.getUserAccess(this.userID);
         this.getData();
         this.getCheckerType();
+        this.logCheckerkView();
     }
 
     getData() {
@@ -68,9 +72,38 @@ export class CheckerComponent implements OnInit,OnDestroy{
                 (response) => {
                     this.checker = response;
                     this.isLoading = false;
+                },
+                error => {
+                    this.isLoading = false;
+                    console.log(error);
+                    this.checkerError = [{ severity: 'error', detail: 'There was an error fetching data' }];
                 }
             )
         )
+    }
+    
+    logCheckerkView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Checker'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.checkerError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     getCheckerType() {

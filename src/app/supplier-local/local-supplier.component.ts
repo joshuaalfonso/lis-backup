@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { SupplierService } from '../supplier/supplier.service';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CountryService } from './country.service';
 import currencySymbolMap from 'currency-symbol-map';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { AuthService } from '../auth/auth.service';
 import { UsersService } from '../users/users.service';
+import { SystemLogsService } from '../system-logs/system-logs.service';
 
 
 
@@ -20,6 +21,7 @@ export class LocalSupplier implements OnInit, OnDestroy {
 
     
     localSupplier: any[] = [];
+    localSupplierError: Message[] = [];
     isLoading: boolean = false;
     visible: boolean = false;
     submitLoading: boolean = false;
@@ -44,7 +46,8 @@ export class LocalSupplier implements OnInit, OnDestroy {
         private CountryService: CountryService,
         private MessageService: MessageService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
 
@@ -56,7 +59,7 @@ export class LocalSupplier implements OnInit, OnDestroy {
         // console.log(currencySymbolMap('USD'));
         this.getUser();
         this.getAccess();       
-
+        this.logLocalSupplierView();
     }
 
     ngOnDestroy(): void {
@@ -127,18 +130,45 @@ export class LocalSupplier implements OnInit, OnDestroy {
     }
 
     getLocalSupplier() {
-        this.isLoading = false;
+
+        this.isLoading = true;
 
         this.subscriptions.add(
             this.SupplierService.getLocalSupplier().subscribe(
                 response => {
                     this.localSupplier = response;
+                    this.isLoading = false;
                 }, error => {
                     console.log(error);
-                    
+                    this.isLoading = false;
+                    this.localSupplierError = [{ severity: 'error', detail: 'There was an error fetching data' }]
                 }
             )
         )
+
+    }
+
+    logLocalSupplierView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Local Supplier'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.localSupplierError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
 
     }
 

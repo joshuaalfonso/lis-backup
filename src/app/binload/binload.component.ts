@@ -58,6 +58,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
     generateReport: boolean = false;
     checkerInsert: boolean = false;
     binloadVerify: boolean = false;
+    binloadDelete: boolean = false;
 
     partitionDetails: any[] = [];
     unitOfMeasure: any[] = [];
@@ -73,6 +74,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
     position: string = 'center';
 
     isDeleting: boolean = false;
+    
 
     constructor(
         private BinloadService: BinloadService,
@@ -223,6 +225,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                                 break;
                             case '3.4.6':
                                 this.binloadVerify = true;
+                                break;
+                            case '3.4.7':
+                                this.binloadDelete = true;
                                 break;
                             default:
                                 break;
@@ -1145,10 +1150,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         table.filterGlobal(inputValue, 'contains');
     }
 
-    // delete shpping transaction form
+    // delete binload
     confirmBinloadVerified(position: string, row: any) {
         this.position = position;        
-        
 
         if (!row.Binloading[0].ControlNo) {
             alert('Unknown error occured');
@@ -1206,6 +1210,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             RawMaterialID: data.RawMaterialID,
             Quantity: data.Binloading[0].Quantity,
             Weight: data.Binloading[0].Weight,
+            UserID: this.UserID
         }
         
         this.BinloadService.deleteBinload(binloadData).subscribe(
@@ -1240,6 +1245,9 @@ export class BinloadingComponent implements OnInit, OnDestroy {
      // delete shpping transaction form
      confirmBinloadDelete(position: string, row: any) {
         this.position = position;        
+
+        console.log(row);
+        
 
         if (!row.Binloading[0].ControlNo) {
             alert('No control no');

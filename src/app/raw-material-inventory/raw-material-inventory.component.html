@@ -4,124 +4,30 @@
 <!-- <h1 class="title">Raw Material Inventory</h1> -->
 <app-content-header [title]="'Inventory / Raw Material '"></app-content-header>
 
-<!-- ======= SEARCH, ADD, EXPORT ======= -->
-<div class="controls">
-    <!-- <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search" (input)="onGlobalFilter(dt1, $event)"/> -->
-    <!-- <button pButton pRipple class="bttn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button> -->
 
-    <!-- <p-dropdown 
-        #dropdown1 
-        [options]="rawMaterial" 
-        optionLabel="RawMaterial" 
-        (onChange)="onChangeProduct($event)" 
-        [showClear]="true" 
-        placeholder="Raw Material" 
-        class="mr-2" 
-    ></p-dropdown> -->
-
-    <!-- <span class="mr-3 font-semibold">
-        From
-    </span>
-
-    <p-calendar 
-        [(ngModel)]="fromDate"  
-        class="mr-3"  
-        [minDate]="minDate" 
-        [maxDate]="maxDate" 
-        [style]="{width: '130px'}"
-    ></p-calendar> -->
-
-    <!-- <span class="mr-3 font-semibold">
-        To
-    </span>
-
-    <p-calendar  
-        [(ngModel)]="toDate"  
-        class="mr-3" 
-        [minDate]="minDate" 
-        [maxDate]="maxDate" 
-        [style]="{width: '130px'}"
-    ></p-calendar> -->
-
-    <!-- <button 
-        pButton 
-        pRipple 
-        class="p-button-secondary bttn" 
-        (click)="filterDateRange()" 
-        *ngIf="!isReset" 
-        [disabled]="!fromDate || !toDate"
-    >
-        Generate
-    </button> -->
-
-    <!-- <button 
-        pButton 
-        pRipple 
-        *ngIf="isReset" 
-        class="p-button-secondary bttn" 
-        (click)="resetFilter(dt1)"
-    >
-        <span>Reset</span>
-    </button> -->
-
-    <!-- <button 
-        pButton 
-        pRipple 
-        class="p-button-info bttn" 
-        *ngIf="generateReport"
-    >
-        <i class='bx bx-file mr-1'></i> 
-        <span>Export File</span>
-    </button> -->
-
-    <!-- <span>Filter :</span>
-
-    <p-overlayPanel #op>
-        <ng-template pTemplate="content">
-            <button pButton pRipple class="p-button-secondary bttn" (click)="filterDateRange()" *ngIf="!isReset" [disabled]="!fromDate || !toDate">Generate</button>
-            <button pButton pRipple *ngIf="isReset" class="p-button-secondary bttn" (click)="resetFilter(dt1)"><span>Reset</span></button>
-            <hr class="mb-5">
-            <span class="p-float-label inline-block">
-                <p-calendar id="fromDate" [(ngModel)]="fromDate"  class="mr-3"  [minDate]="minDate" [maxDate]="maxDate" [style]="{width: '130px'}"></p-calendar>
-                <label for="fromDate">From</label>
-            </span>
-            <span class="p-float-label inline-block">
-                <p-calendar id="toDate" [(ngModel)]="toDate"  class="mr-3" [minDate]="minDate" [maxDate]="maxDate" [style]="{width: '130px'}"></p-calendar>
-                <label for="toDate">To</label>
-            </span>
-
-        </ng-template>
-    </p-overlayPanel> -->
-    <!-- <p-button (click)="op.toggle($event)" icon="pi pi-image" label="Show"></p-button> -->
-        <!-- <span (click)="op.toggle($event)" class="flex">Date <i class="pi pi-chevron-down"></i></span> -->
-
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
 </div>
 
-<!-- <div class="flex gap-2 mb-4">
-    <span class="p-float-label">
-        <p-calendar id="from_date" [showIcon]="true" (onSelect)="onChangeFrom($event)" [(ngModel)]="fromDate"></p-calendar>
-        <label for="from_date" appendTo="body" class="text-sm">From</label>
-    </span>
-    
-    <span class="p-float-label">
-        <p-calendar id="to_date" [showIcon]="true" (onSelect)="onChangeTo($event)" [(ngModel)]="toDate"></p-calendar>
-        <label for="to_date" appendTo="body" class="text-sm">To</label>
-    </span>
-</div> -->
-
-<!-- <p *ngIf="filterInventory?.length"> {{ filterInventory?.length }} results found.</p> -->
-
+<p-messages 
+    [(value)]="inventoryError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="inventoryError" 
+/>
 
 <!-- ======= TABLE ======= -->
-<div class="table mt-4">
+<div class="table mt-4" *ngIf="!isLoading && inventoryError.length === 0">
 
     <p-table  
         #dt1 
         [value]="filterInventory"  
         [tableStyle]="{ 'width': '100%'}" 
         [globalFilterFields]="['RawMaterial', 'InventoryDate.date']"  
-        [scrollable]="true" 
-        scrollHeight="700px" 
+
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
     >
 
         <ng-template pTemplate="caption">
@@ -228,7 +134,7 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-            <tr *ngIf="!isLoading">
+            <tr>
 
                 <td data-title="">
                     <span class="font-medium"> {{row.InventoryDate?.date  | date: 'MMM dd, yyyy' }}</span>
@@ -268,157 +174,6 @@
 
     </p-table>
 
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
-
 </div>
 
 
-<!-- ========= MODAL FORM ========== -->
-<p-dialog 
-    header="{{dialogHeader}}" 
-    [(visible)]="visible" 
-    [modal]="true" 
-    [breakpoints]="{ '1515px': '550px' }" 
-    [style]="{ width: '35vw' }" 
-    [draggable]="false" 
-    [resizable]="false"
->
-    <form [formGroup]="inventoryForm" class="p-fluid" (ngSubmit)="onSubmit()">  
-
-        <div class="field">
-
-            <label class="font-semibold" >Raw Material</label>
-
-            <div class="card flex justify-content-center">
-                <p-dropdown 
-                    [options]="rawMaterial"  
-                    formControlName="RawMaterialID" 
-                    optionLabel="RawMaterial" 
-                    [style]="{'height': '40px', 'border': '1px solid white'}" 
-                    [showClear]="true" 
-                    placeholder="Select Raw Material"
-                ></p-dropdown>
-            </div>
-
-        </div>
-
-        <div class="field">
-
-            <label class="font-semibold" >Inventory Date</label>
-
-            <p-calendar 
-                formControlName="InventoryDate" 
-                [showIcon]="true" 
-                placeholder="mm/dd/yyyy" 
-                appendTo="body">
-            </p-calendar>
-
-        </div>
-
-        <div class="grid">
-
-            <div class="col">
-                <div class="field">
-
-                    <label class="font-semibold" >
-                        Binloading Qty
-                    </label>
-
-                    <p-inputNumber 
-                        formControlName="BinloadingQty" 
-                        inputId="integeronly" 
-                        autocomplete="off" 
-                    ></p-inputNumber> 
-                    
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-
-                    <label class="font-semibold" >
-                        Binloading Weight
-                    </label>
-
-                    <p-inputNumber 
-                        formControlName="BinloadingWeight" 
-                        inputId="integeronly" 
-                        autocomplete="off" 
-                    ></p-inputNumber> 
-                    
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-
-                    <label class="font-semibold" >
-                        Binloading Price
-                    </label>
-
-                    <p-inputNumber 
-                        formControlName="BinloadingPrice" 
-                        inputId="integeronly" 
-                        autocomplete="off" 
-                    ></p-inputNumber> 
-
-                </div>
-            </div>
-
-        </div>       
-
-       
-        <div class="grid">
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >Condem Qty</label>
-                    <p-inputNumber 
-                        formControlName="CondemQty" 
-                        inputId="integeronly" 
-                        autocomplete="off" 
-                    ></p-inputNumber> 
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Condem Weight
-                    </label>
-                    <p-inputNumber 
-                        formControlName="CondemWeight" 
-                        inputId="integeronly" 
-                        autocomplete="off" 
-                    ></p-inputNumber> 
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="field">
-                    <label class="font-semibold" >
-                        Condem Price
-                    </label>
-                    <p-inputNumber 
-                        formControlName="CondemPrice" 
-                        inputId="integeronly" 
-                        autocomplete="off" 
-                    ></p-inputNumber> 
-                </div>
-            </div>
-
-        </div>
-
-
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!inventoryForm.valid"
-        ></button>
-
-    </form>
-</p-dialog>
