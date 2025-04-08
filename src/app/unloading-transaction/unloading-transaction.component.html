@@ -28,9 +28,16 @@
     <app-loader></app-loader>
 </div>
 
+<p-messages 
+    [(value)]="unloadingError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="unloadingError" 
+/>
+
 
 <!-- ===== TABLE ====== -->
-<div class="table" *ngIf="(value === 1 || 2) && !isLoading">
+<div class="table" *ngIf="(value === 1 || 2) && !isLoading && unloadingError.length === 0">
     
     <p-table #dt1 
         [value]="unloadingTransaction" 

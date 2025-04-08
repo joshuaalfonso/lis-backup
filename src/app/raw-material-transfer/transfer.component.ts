@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { TransferRequestModel, TransferService } from "./transfer.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Subscription, Observable } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Subscription, Observable, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { CheckerService } from "../checker/checker.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
@@ -18,6 +18,7 @@ import { UsersService } from "../users/users.service";
 import { DispatcherService } from "../dispatcher/dispatcher.service";
 import { GuardService } from "../guard/guard.service";
 import { Dialog } from "primeng/dialog";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -28,6 +29,8 @@ import { Dialog } from "primeng/dialog";
 export class TransferComponent implements OnInit, OnDestroy {
 
     transferRequest: any = [];
+
+    transferError: Message[] = [];
 
     transfer: any = [];
 
@@ -175,7 +178,8 @@ export class TransferComponent implements OnInit, OnDestroy {
         private auth: AuthService,
         private UsersService: UsersService,
         private DispatcherService: DispatcherService,
-        private GuardService: GuardService
+        private GuardService: GuardService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -334,7 +338,7 @@ export class TransferComponent implements OnInit, OnDestroy {
         this.getWeigher();
         this.getDispatcher();
         this.getGuard();
-        
+        this.logTransferView();
     }
 
     getUserAccess(UserID: string) {
@@ -403,6 +407,30 @@ export class TransferComponent implements OnInit, OnDestroy {
                 }
             )
         )
+    }
+
+    logTransferView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Raw Material Transfer'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                // console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.transferError = [ { severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     getData() {

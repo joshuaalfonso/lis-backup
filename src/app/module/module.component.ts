@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ModuleService } from "./module.service";
-import { Subscription, Observable } from "rxjs";
+import { Subscription, Observable, take } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -16,6 +17,7 @@ import { UsersService } from "../users/users.service";
 export class ModuleComponent implements OnInit, OnDestroy{
 
     module: Module[] = [];
+    moduleError: Message[] = [];
 
     moduleForm!: FormGroup;
 
@@ -41,7 +43,8 @@ export class ModuleComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -54,6 +57,7 @@ export class ModuleComponent implements OnInit, OnDestroy{
         this.getUser();
         this.getAccess();
         this.getData();
+        this.logModuleView();
     }
 
     getUser() {
@@ -100,12 +104,43 @@ export class ModuleComponent implements OnInit, OnDestroy{
         this.isLoading = true;
         this.subscription.add(
             this.ModuleService.getModuleData().subscribe(
-                (response) => {
+                response => {
                     this.module = response;
                     this.isLoading = false;
+                    this.moduleError = [];
+                },
+                error => {
+                    this.isLoading = false;
+                    console.log(error);
+                    this.moduleError = [{ severity: 'error', detail: 'There was an error fetching data' }]
                 }
             )
         )   
+    }
+
+    logModuleView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Module'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                // console.log(response);
+                this.moduleError = [];
+            },
+            error => {
+                console.log(error);
+                this.moduleError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     ngOnDestroy(): void {

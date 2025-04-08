@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, take } from "rxjs";
 import { BankService } from "./bank.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MessageService } from "primeng/api";
+import { Message, MessageService } from "primeng/api";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -16,6 +17,8 @@ import { UsersService } from "../users/users.service";
 export class BankComponent implements OnInit, OnDestroy{
 
     bank: any[] = [];
+    bankError: Message[] = [];
+    isLoading: boolean = false;
 
     bankForm!: FormGroup;
 
@@ -36,7 +39,8 @@ export class BankComponent implements OnInit, OnDestroy{
         private BankService: BankService,
         private MessageService: MessageService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -50,6 +54,7 @@ export class BankComponent implements OnInit, OnDestroy{
         this.getUser();
         this.getAccess();
         this.getData();
+        this.logBankView();
     }
 
     getUser() {
@@ -93,13 +98,44 @@ export class BankComponent implements OnInit, OnDestroy{
     }
 
     getData() {
+        this.isLoading = true;
         this.subscription.add(
             this.BankService.getData().subscribe(
                 response => {
+                    this.isLoading = false;
                     this.bank = response;
+                },
+                error => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.bankError = [{ severity: 'error', detail: 'There was an error fetching data' }];
                 }
             )
         )
+    }
+
+    logBankView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Bank'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.bankError = [{ severity: 'error', detail: 'Unkown error occured' }];
+            }
+        );
+
     }
 
     ngOnDestroy(): void {

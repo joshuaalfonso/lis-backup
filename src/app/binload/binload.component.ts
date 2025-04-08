@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BinloadRequest, BinloadService } from "./binload.service";
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subscription, take } from "rxjs";
 import { PlantService } from "../plant/plant.service";
 import { CheckerService } from "../checker/checker.service";
 import { WarehouseService } from "../warehouse/warehouse.service";
 import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { DriverService } from "../driver/driver.service";
 import { TruckService } from "../truck/truck.service";
 import { Table } from "primeng/table";
@@ -15,6 +15,7 @@ import { Dialog } from "primeng/dialog";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -25,6 +26,7 @@ import { WarehouseLocationService } from "../warehouse-location/warehouse-locati
 export class BinloadingComponent implements OnInit, OnDestroy {
 
     binload: any[] = [];
+    binloadError: Message[] = [];
     binloadRequest: any[] = [];
     binloadDetail: any[] = [];
     plant: any[] = [];
@@ -89,7 +91,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         private UsersService: UsersService,
         private auth: AuthService,
         private WarehouseLocation: WarehouseLocationService,
-        private ConfirmationService: ConfirmationService
+        private ConfirmationService: ConfirmationService,
+        private SystemLogsService: SystemLogsService
     )
     {}
 
@@ -184,7 +187,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.getDriver();
         this.getTruck();
         this.getUnitOfMeasure();
-
+        this.logBinloadView();
     }
 
     userRights() {
@@ -272,6 +275,30 @@ export class BinloadingComponent implements OnInit, OnDestroy {
 
     }
 
+    logBinloadView() {
+
+        if (!this.UserID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.UserID,
+            TableName: 'Binloading'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                // console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.binloadError = [ { severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
+    }
+
 
     getVerifiedBinload() {
         this.isLoading = true;
@@ -290,6 +317,10 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             error => {
                 console.error('Error: ' + error);
                 this.isLoading = false;
+                this.binloadError = [{ severity: 'error', detail: 'There was an error fetching verified data' }]
+            },
+            () => {
+                this.binloadError = [];
             }
           )
         )
@@ -308,6 +339,10 @@ export class BinloadingComponent implements OnInit, OnDestroy {
                 error => {
                     console.error('Error: ' + error);
                     this.isLoading = false;
+                    this.binloadError = [{ severity: 'error', detail: 'There was an error fetching binload request' }]
+                },
+                () => {
+                    this.binloadError = [];
                 }
             )
         )

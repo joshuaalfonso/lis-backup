@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ContractPerformaService } from "./contract-performa.service";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { ShippingLineService } from "../shipping-line/shipping-line.service";
 import { ContainerTypeService } from "../container-type/container-type.service";
 import { SupplierService } from "../supplier/supplier.service";
@@ -16,6 +16,7 @@ import { PortOfDischargeService } from "../port-of-discharge/port-of-discharge.s
 import { AppComponent } from "../app.component";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -124,6 +125,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
 
     position: string = 'center';
 
+    impotationError: Message[] = [];
+
     constructor(
         private ContractPerformaService: ContractPerformaService,
         private MessageService: MessageService,
@@ -139,7 +142,8 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
         private PortOfDischargeService: PortOfDischargeService,
         private AppComponent: AppComponent,
         private UsersService: UsersService,
-        private auth: AuthService
+        private auth: AuthService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -264,13 +268,13 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
         })
 
         this.subscription.add(
-            this.auth.user.subscribe(
+            this.auth.user.pipe(take(1)).subscribe(
                 user => {
                     if (user) {
                         this.userID = user!.user_id;
                         this.getUserAccess(this.userID);
                     }
-                }
+                }  
             )
         )
 
@@ -288,6 +292,7 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
         this.getPortOfDischarge();
 
         this.onFilterShippingTransaction();
+        this.logImportationView();
     }
 
     ngOnDestroy(): void {
@@ -322,6 +327,31 @@ export class ContractPerformaComponent implements OnInit, OnDestroy{
                 }
             )       
         )
+    }
+
+
+    logImportationView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Importation'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                // console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.impotationError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
  
 

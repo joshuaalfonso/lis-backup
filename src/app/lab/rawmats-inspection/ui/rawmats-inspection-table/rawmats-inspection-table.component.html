@@ -1,4 +1,9 @@
-<div class="table">
+<div class="text-center my-3" *ngIf="isLoading ">
+  <app-loader></app-loader>
+</div>
+
+
+<div class="table" *ngIf="!isLoading && rawMatsInspectionError.length === 0">
 
     <p-table 
         #dt1 

@@ -6,8 +6,19 @@
 
 <app-content-header [title]="'Module'"></app-content-header>
 
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="moduleError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="moduleError" 
+/>
+
 <!-- ======= TABLE ======= -->
-<div class="table">
+<div class="table" *ngIf="!isLoading && moduleError.length === 0">
     <p-table  #dt1 [value]="module" [tableStyle]="{ 'width': '100%'}" [globalFilterFields]="['ModuleName']">
 
         <ng-template pTemplate="caption">
@@ -57,10 +68,6 @@
         </ng-template>
 
     </p-table>
-
-    <div class="text-center my-3" *ngIf="isLoading">
-        <app-loader></app-loader>
-    </div>
 
 </div>
 

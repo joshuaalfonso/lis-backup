@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { RawMaterialsService } from '../../raw-materials/raw-materials.service';
 import { RawMatsInspectionService } from './rawmats-inspection.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { SystemLogsService } from 'src/app/system-logs/system-logs.service';
+import { Message } from 'primeng/api';
 
 @Component({
   selector: 'app-rawmats-inspection',
@@ -14,6 +17,7 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
   rawMatsInspection: any[] = [];
   analysisInformation: any[] = [];
   isLoading: boolean = false;
+  rawMatsInspectionError: Message[] = [];
 
   rawMatsInspectionForm!: FormGroup;
 
@@ -28,10 +32,12 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
   minDate: Date = new Date();
 
   maxDate: Date = new Date();
-
+  userID!: string;
 
   constructor(
-    private RawMatsInspectionService: RawMatsInspectionService
+    private RawMatsInspectionService: RawMatsInspectionService,
+    private AuthService: AuthService,
+    private SystemLogsService: SystemLogsService
   )  {}
 
 
@@ -57,26 +63,67 @@ export class RawmatsInspectionComponent implements OnInit, OnDestroy{
       'Remarks': new FormControl(null),
       'UserID': new FormControl(0, Validators.required),
     })
-    
+    this.getUser();
     this.getInspectionList();
     this.getParameterList(); 
-
+    this.logInspectionView();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
+  getUser() {
+    this.AuthService.user.pipe(take(1)).subscribe(user => {
+      if (user) {
+          this.userID = user.user_id;
+      }
+    })
+  }
+
   getInspectionList() {
+    this.isLoading = true;
 
     this.subscriptions.add(
       this.RawMatsInspectionService.getInspectionList().subscribe(
         response => {
           this.rawMatsInspection = response;
-          
+          this.isLoading = false
+        },
+        error => {
+          this.rawMatsInspectionError = [ { severity: 'error', detail: 'There was an error fetching data' }]
+          console.log(error);
+          this.isLoading = false
+        },
+        () => {
+          this.rawMatsInspectionError = [];
         }
       )
     )
+
+  }
+
+  logInspectionView() {
+
+    if (!this.userID) {
+        alert('No logged in user');
+        return
+    }
+
+    const data = {
+        UserID: this.userID,
+        TableName: 'Raw Material Inspection'
+    }
+
+    this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+        response => {
+            // console.log(response);
+        },
+        error => {
+            console.log(error);
+            this.rawMatsInspectionError = [ { severity: 'error', detail: 'Unkown error occured' }]
+        }
+    );
 
   }
 

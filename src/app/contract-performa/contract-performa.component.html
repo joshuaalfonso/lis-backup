@@ -8,36 +8,6 @@
 <!-- <h1 class="title">Importation</h1> -->
 <app-content-header [title]="'Importation'"></app-content-header>
 
-<!-- ==== SEARCH, ADD , EXPORT ==== -->
-<!-- <div class="controls">
-    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"/>
-    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
-    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
-</div> -->
-
-<!-- <p-selectButton 
-    [options]="stateOptions" 
-    [(ngModel)]="value" 
-    optionLabel="label" 
-    optionValue="value" 
-    class="mb-3" 
-    (ngModelChange)="onSelectFilter()"
->
-</p-selectButton> -->
-
-<!-- <div class="flex align-items-center justify-content-between mb-3">
-    <div>
-        <p-selectButton 
-            [options]="stateOptions" 
-            [(ngModel)]="value" 
-            optionLabel="label" 
-            optionValue="value" 
-            class="mb-3" 
-            (ngModelChange)="onSelectFilter()"
-        >
-        </p-selectButton>
-    </div>
-</div> -->
 
 <div class="radio-inputs">
     <label class="radio">
@@ -48,10 +18,18 @@
          <input name="radio" type="radio" value="Completed" [(ngModel)]="value" (ngModelChange)="onSelectFilter()"/>
          <span class="name" [class.active]="value == 'Completed'"> Completed </span>
     </label>
-  </div>
+</div>
 
+
+<p-messages 
+    [(value)]="impotationError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="impotationError" 
+/>
 
 <!-- ===== TABLE ====== -->
+
 <div class="table mb-4">
 
     <p-table 

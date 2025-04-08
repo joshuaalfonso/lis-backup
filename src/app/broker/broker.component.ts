@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { FormControl, Validators } from "@angular/forms";
 import { BrokerService } from "./broker.service";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -20,6 +21,7 @@ export class BrokerComponent implements OnInit, OnDestroy{
     value: string | undefined;
 
     broker: Broker[] = [];
+    brokerError: Message[] = [];
 
     brokerForm!: FormGroup;
 
@@ -43,7 +45,8 @@ export class BrokerComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ){}
 
     ngOnInit(): void {
@@ -58,6 +61,7 @@ export class BrokerComponent implements OnInit, OnDestroy{
         this.getUser();
         this.getAccess();
         this.getData();
+        this.logBrokerView();
     }
 
     ngOnDestroy(): void {
@@ -73,9 +77,38 @@ export class BrokerComponent implements OnInit, OnDestroy{
                 response => {
                     this.broker = response;
                     this.isLoading = false;
+                },
+                error => {
+                    this.isLoading = false;
+                    console.log(error);
+                    this.brokerError = [{ severity: 'error', detail: 'There was an error fetching data' }];
                 }
             )
         )
+    }
+
+    logBrokerView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Broker'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.brokerError = [{ severity: 'error', detail: 'Unkown error occured' }];
+            }
+        );
+
     }
 
     getUser() {

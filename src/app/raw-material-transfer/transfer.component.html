@@ -60,6 +60,13 @@
     </label> -->
 </div>
 
+<p-messages 
+    [(value)]="transferError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="transferError" 
+/>
+
 
 <!-- ======= TABLE ======= -->
 <div class="table">

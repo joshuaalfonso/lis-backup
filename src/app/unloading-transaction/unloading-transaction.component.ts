@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UnloadingTransactionService } from "./unloading-transaction.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { CheckerService } from "../checker/checker.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, take } from "rxjs";
 import { TruckService } from "../truck/truck.service";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { WarehouseService } from "../warehouse/warehouse.service";
 import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
@@ -15,6 +15,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { FileSelectEvent, FileUploadEvent, UploadEvent } from "primeng/fileupload";
 import { environment } from "../environments/environment";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 @Component({
     selector: 'app-unloading-transaction',
@@ -24,6 +25,7 @@ import { environment } from "../environments/environment";
 export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     unloadingTransaction: any[] = [];
+    unloadingError: Message[] = [];
     checker: any[] = [];
     truck: any[] = [];
     rawMaterial: any[] = [];
@@ -134,7 +136,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         private TruckingService: TruckService,
         private UsersService: UsersService,
         private auth: AuthService,
-        private CofirmationService: ConfirmationService
+        private CofirmationService: ConfirmationService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -227,6 +230,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         this.getTrucking();
         this.getTruckType();
         // this.getverified();
+        this.logUnloadingView();
     }
 
 
@@ -283,8 +287,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                         this.unloadingTransaction = response;
                     }, error => {
                         console.log(error);
-                        alert('There was an error  fetching data')
                         this.isLoading = false;
+                        this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
                     }
                 )
             )
@@ -299,6 +303,30 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     }
 
+    logUnloadingView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Unloading'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                // console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.unloadingError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
+    }
+
     getverified() {
         this.isLoading = true;
         this.subscription.add(
@@ -309,7 +337,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     
                 }, error => {
                     console.log(error);
-                    alert('There was an error  fetching data')
+                    this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
                     this.isLoading = false;
                 }
             )

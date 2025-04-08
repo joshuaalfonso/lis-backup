@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UsersService } from "./users.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ModuleService } from "../module/module.service";
-import { Observable, Subscription } from "rxjs";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { Observable, Subscription, take } from "rxjs";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Dialog } from "primeng/dialog";
 import { AuthService } from "../auth/auth.service";
 import { Table } from "primeng/table";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -19,6 +20,7 @@ import { Table } from "primeng/table";
 export class UsersComponent implements OnInit, OnDestroy{
 
     users: any[] = [];
+    usersError: Message[] = [];
 
     userForm!: FormGroup;
 
@@ -57,7 +59,8 @@ export class UsersComponent implements OnInit, OnDestroy{
         private ModuleService: ModuleService,
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
-        private AuthService: AuthService
+        private AuthService: AuthService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -84,16 +87,42 @@ export class UsersComponent implements OnInit, OnDestroy{
         this.getModule();
         this.getModuleAccess();
         this.getDepartment();
+        this.logUsersView();
     }
 
     getUser() {
         this.subscription.add(
-            this.AuthService.user.subscribe(user => {
+            this.AuthService.user.pipe(take(1)).subscribe(user => {
                 if(user) {
                     this.userID = user.user_id;
                 }
             })
         )
+    }
+
+    logUsersView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Users'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                // console.log(response);
+                this.usersError = [];
+            },
+            error => {
+                console.log(error);
+                this.usersError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     getAccess() {
@@ -133,6 +162,12 @@ export class UsersComponent implements OnInit, OnDestroy{
                 response => {
                     this.isLoading = false;
                     this.users = response;
+                    this.usersError = [];
+                }, 
+                error => {
+                    this.isLoading = false;
+                    this.usersError = [{ severity: 'error', detail: 'There was an error fetching users' }]
+                    console.log(error);
                 }
             )
         )

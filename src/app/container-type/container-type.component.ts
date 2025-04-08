@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ContainerTypeService } from "./container-type.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, take } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 
@@ -17,6 +18,7 @@ import { UsersService } from "../users/users.service";
 export class ContainerTypeComponent implements OnInit, OnDestroy {
 
     containerType: any[] = [];
+    containerTypeError: any[] = [];
 
     containerTypeForm!: FormGroup;
 
@@ -40,7 +42,8 @@ export class ContainerTypeComponent implements OnInit, OnDestroy {
         private MessageService: MessageService,
         private ConfirmationService: ConfirmationService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
 
     ) {}
 
@@ -54,6 +57,7 @@ export class ContainerTypeComponent implements OnInit, OnDestroy {
         this.getUser();
         this.getAccess();
         this.getData();
+        this.logContainerTypeView();
     }
 
     ngOnDestroy(): void {
@@ -106,8 +110,37 @@ export class ContainerTypeComponent implements OnInit, OnDestroy {
             response => {
                 this.containerType = response;
                 this.isLoading = false;
+            },
+            error => {
+                this.isLoading = false;
+                this.containerTypeError = [{ severity: 'error', detail: 'There was an error fetching data' }];
+                console.log(error);
             }
         )
+    }
+
+    logContainerTypeView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Container Type'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.containerTypeError = [{ severity: 'error', detail: 'Unkown error occured' }];
+            }
+        );
+
     }
 
     showDialog() {

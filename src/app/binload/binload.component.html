@@ -25,7 +25,14 @@
     <app-loader></app-loader>
 </div>
 
-<div class="table" *ngIf="!isLoading">
+<p-messages 
+    [(value)]="binloadError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="binloadError" 
+/>
+
+<div class="table" *ngIf="!isLoading && binloadError.length === 0">
 
     <p-table 
         #dt2 

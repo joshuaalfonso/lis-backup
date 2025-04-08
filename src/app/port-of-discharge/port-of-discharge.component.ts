@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PortOfDischargeService } from "./port-of-discharge.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, take } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MessageService } from "primeng/api";
+import { Message, MessageService } from "primeng/api";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
+import { SystemLogsService } from "../system-logs/system-logs.service";
 
 
 @Component({
@@ -17,6 +18,7 @@ export class PortOfDischarge implements OnInit, OnDestroy{
     private subscription: Subscription = new Subscription;
 
     portOfDischarge: any[] = [];
+    portOfDischargeError: Message[] = [];
 
     portOfDischargeForm!: FormGroup;
 
@@ -37,7 +39,8 @@ export class PortOfDischarge implements OnInit, OnDestroy{
         private PortOfDischargeService: PortOfDischargeService,
         private MessageService: MessageService,
         private AuthService: AuthService,
-        private UsersService: UsersService
+        private UsersService: UsersService,
+        private SystemLogsService: SystemLogsService
     ) {}
 
     ngOnInit(): void {
@@ -51,6 +54,7 @@ export class PortOfDischarge implements OnInit, OnDestroy{
         this.getUser();
         this.getAccess();
         this.getData();
+        this.logPortOfDischargeView();
     }
 
     ngOnDestroy(): void {
@@ -103,8 +107,37 @@ export class PortOfDischarge implements OnInit, OnDestroy{
             response => {
                 this.portOfDischarge = response;
                 this.isLoading = false;
+            },
+            error => {
+                console.log(error);
+                this.isLoading = false;
+                this.portOfDischargeError = [{ severity: 'error', detail: 'There was an error fetching data' }]
             }
         )
+    }
+
+    logPortOfDischargeView() {
+
+        if (!this.userID) {
+            alert('No logged in user');
+            return
+        }
+
+        const data = {
+            UserID: this.userID,
+            TableName: 'Port of Discharge'
+        }
+
+        this.SystemLogsService.sytemLogView(data).pipe(take(1)).subscribe(
+            response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+                this.portOfDischargeError = [{ severity: 'error', detail: 'Unkown error occured' }]
+            }
+        );
+
     }
 
     showDialog() {

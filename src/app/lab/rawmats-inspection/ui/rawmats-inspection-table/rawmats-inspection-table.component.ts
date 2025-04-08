@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Message } from 'primeng/api';
 
 @Component({
   selector: 'app-rawmats-inspection-table',
@@ -18,6 +19,7 @@ export class RawmatsInspectionTableComponent {
 
   @Input() rawMatsInspection: any[] = [];
   @Input() isLoading: boolean = false;
+  @Input() rawMatsInspectionError: Message[] = [];
   @Output() showDialog = new EventEmitter<void>();
   @Output() onSelect = new EventEmitter<void>();
 
