@@ -344,54 +344,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             },
                         ]
                     },
-                    // {
-                    //     title: 'Checker',
-                    //     icon: 'assets/icons/icon-user-check.svg',
-                    //     isCollapse: false,
-                    //     view: true,
-                    //     subMenu: [
-                    //         {
-                    //             title: 'Checker',
-                    //             routerLink: '/checker',
-                    //             view: true,
-                    //             insert: true,
-                    //             edit: true
-                    //         },
-                    //         {
-                    //             title: 'Checker Type',
-                    //             routerLink: '/checker-type',
-                    //             view: true,
-                    //             insert: true,
-                    //             edit: true
-                    //         },
-                    //         {
-                    //             title: 'Checker Schedule',
-                    //             routerLink: '/checker-schedule',
-                    //             view: true,
-                    //             insert: true,
-                    //             edit: true
-                    //         },
-                    //     ]
-                    // },
-                    // {
-                    //     title: 'Dispatcher',
-                    //     icon: 'assets/icons/icon-user-dispatch.svg',
-                    //     routerLink: '/dispatcher',
-                    //     view: true,
-                    // },
                     {
                         title: 'Legal',
                         icon: 'assets/icons/icon-legal-case.svg',
                         isCollapse: false,
                         view: true,
                         subMenu: [ 
-                            // {
-                            //     title: 'Sales Agent',
-                            //     routerLink: '/sales-agent',
-                            //     view: true,
-                            //     insert: true,
-                            //     edit: true
-                            // },
                             {
                                 title: 'Shipping Line',
                                 routerLink: '/shipping-line',
@@ -423,7 +381,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         title: 'System Logs',
                         icon: 'assets/icons/icon-logs.svg',
                         routerLink: '/system-logs',
-                        view: true,
+                        view: false,
                     },
                 ]
             }
@@ -440,20 +398,6 @@ export class SidebarComponent implements OnInit, OnDestroy{
             }
         });
 
-        // this.BinloadService.getBinloadData(this.UserID).subscribe(
-        //     response => {
-        //         if (response) {
-        //             // const unverified = response.length;
-
-        //             const unverified = response.filter(
-        //                 (item: any) => item.Status != 3
-        //             );
-
-                    
-        //             this.BinloadService.binloadNotVerified.next(unverified.length);
-        //         }
-        //     }
-        // )
 
         this.BinloadService.binloadNotVerified.subscribe(
             response => {
@@ -562,82 +506,15 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         case '4' :
                             this.menus[3].view = true;
                             break;
+                        case '5.1' :
+                            this.menus[3].subMenu[2].view = true;
+                            break;
                         default:
                             break;
                     }
                 })
 
-                // case 2.1:
-                //     this.FinishProductView = true;
-                //     this.menus[1].subMenu[0].subMenu[1].view = true;
-                //     break
-
-                // for (let i = 0; i < this.userAccessRights.length; i++) {
-                //     switch (this.userAccessRights[i].AccessRight) {
-                //         case 1.1:
-                //             this.RawMatView = true;
-                //             this.menus[1].subMenu[0].view = true;
-                //             break
-                //         case 3.1:
-                //             this.RawMatInventoryView = true;
-                //             this.menus[1].subMenu[1].subMenu[0].view = true;
-                //             break
-                //         case 4.1:
-                //             this.FinishProductInventoryView = true;
-                //             // this.menus[1].subMenu[1].subMenu[1].view = true;
-                //             break; 
-                //         case 5.1:
-                //             this.WarehouseNameView = true;
-                //             this.menus[1].subMenu[2].subMenu[1].view = true;
-                //             break;
-                //         case 6.1:
-                //             this.WarehouseLocationView = true;
-                //             this.menus[1].subMenu[2].subMenu[0].view = true;
-                //             break;
-                //         case 7.1:
-                //             this.WarehousePartitionView = true;
-                //             this.menus[1].subMenu[2].subMenu[2].view = true;
-                //             break;
-                //         case 21.1:
-                //             this.RawMatsPOView = true;
-                //             this.menus[2].subMenu[0].view = true;
-                //             break;
-                //         case 22.1:
-                //             this.ContractPerformaView = true;
-                //             this.menus[2].subMenu[1].view = true;
-                //             break;
-                //         case 23.1:
-                //             this.UnloadingView = true;
-                //             this.menus[2].subMenu[2].view = true;
-                //             break;
-                //         case 24.1:
-                //             this.BinloadView = true;
-                //             this.menus[2].subMenu[3].view = true;
-                //             break;
-                //         case 25.1:
-                //             this.RawMatsTransferView = true;
-                //             this.menus[2].subMenu[4].subMenu[0].view = true;
-                //             break;
-                //         case 26.1:
-                //             this.FinishProductTransferView = true;
-                //             this.menus[2].subMenu[4].subMenu[1].view = true;
-                //             break;
-                //         case 27.1:
-                //             this.ProductionOutputView = true;
-                //             break;
-                //         case 28.1:
-                //             this.DeliveryScheduleView = true;
-                //             break;
-                //         case 29.1:
-                //             this.DeliveryView = true;
-                //             break;
-                //         case 50.1:
-                //             this.ProfileView = true;
-                //             break;
-                //         default:
-                //             break;
-                //     }
-                // }
+             
 
             }
         )

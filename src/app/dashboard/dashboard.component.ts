@@ -82,7 +82,6 @@ export class DashboardComponent implements OnInit, OnDestroy{
         private UserService: UsersService
     ) {}
 
-        
     ngOnInit(): void {
 
         this.userSubscription = this.AuthService.user.subscribe(user => {
@@ -92,11 +91,11 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
         this.getUserAccess(this.userID);
         this.getRawMaterial();
-        this.getWarehouseLocation();
-        this.getLandedShipping();
+        // this.getWarehouseLocation();
+        // this.getLandedShipping();
         // this.getUnloadingTransaction();
-        this.getRecentBinload();
-        this.getRecentTransfer();
+        // this.getRecentBinload();
+        // this.getRecentTransfer();
 
         this.products = Array.from({ length: 7 }).map((_, i) => `Item #${i}`);    
 

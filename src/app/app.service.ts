@@ -9,6 +9,18 @@ import { throwError } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 
 
+// {
+//   "/api/*": {
+//     "target": "http://10.10.2.120/",
+//     "pathRewrite": {
+//       "^/api": ""
+//     },
+//     "changeOrigin": true,
+//     "secure": false,
+//     "logLevel": "debug"
+//   }
+// }
+
 
 export class Service {
 

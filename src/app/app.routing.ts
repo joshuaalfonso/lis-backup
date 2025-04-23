@@ -431,7 +431,11 @@ const routes: Routes = [
     },
     {
         path: 'system-logs',
-        component: SystemLogsComponent
+        component: SystemLogsComponent,
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '5.1'
+        }
     },
     {
         path: 'login', 

@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, tap, throwError } from "rxjs";
 import { environment } from "../environments/environment";
@@ -14,9 +14,35 @@ export class RawMaterialsService {
     // baseUrl = this.parsedUrl.origin;
 
     baseUrl: string = environment.backend.baseURL;
+ 
+    // const requestOptions = { headers: headers };
+
+    // return this.http
+    // .post(
+    //    this.baseUrl+ '/api/mssql/b_item.php',
+    //   {
+    //     item_id : item_id,
+    //     item_code:item_code,
+    //     item_name: item_name,
+    //     price: price,
+    //     unit: unit,
+    //   },
+    //   requestOptions,
+    // )
 
     getRawMatsData(){
         return this.http.get<any>( this.baseUrl + '/project/a_rawmaterial.php');
+    }
+
+    getRawMatsToken() {
+        //  const headers = new HttpHeaders({
+        //     'Content-Type': 'application/json',
+        //     'Token': token
+        // });
+
+        // const requestOptions = { headers: headers };
+
+        return this.http.get<any>( this.baseUrl + '/project/a_testing.php');
     }
 
     onDeleteData(id:string) {

@@ -14,11 +14,15 @@ export class SystemLogsService {
     ) {}
 
     getSystemLogs() {
-        return this.http.get<any>( this.baseUrl + 'project/a_SystemLog.php' );
+        return this.http.get<any>( this.baseUrl + '/project/a_SystemLog.php' );
     }
 
     sytemLogView(data: any) {
-        return this.http.post( this.baseUrl + 'project/b_SystemLogView.php', data );
+        return this.http.post( this.baseUrl + '/project/b_SystemLogView.php', data );
+    }
+
+    filterDate(fromDate: string | null, toDate: string | null) {
+        return this.http.post( this.baseUrl + '/project/b_SystemLogsFilter.php', {date: fromDate, date1: toDate})
     }
 
 

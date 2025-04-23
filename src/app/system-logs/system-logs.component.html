@@ -5,7 +5,7 @@
 </div>
 
 
-<div class="table" *ngIf="!isLoading">
+<div class="table" *ngIf="!isLoading && view">
 
     <p-table 
         [value]="filteredLogs()" 
@@ -16,7 +16,41 @@
     >
 
         <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between mb-2">
+            <div div class="flex gap-2 mb-4 ">
+
+                <span class="p-float-label">
+                    <p-calendar 
+                        id="from_date" 
+                        [showIcon]="true" 
+                        [(ngModel)]="fromDate"
+                        (onSelect)="onFilterData(fromDate, toDate)"
+                        [style]="{'width': '200px'}"
+                    ></p-calendar>
+                    <label 
+                        for="from_date" 
+                        appendTo="body" 
+                     
+                    >
+                        Start date
+                    </label>
+                </span>
+                
+                <span class="p-float-label">
+                    <p-calendar 
+                        id="to_date" 
+                        [showIcon]="true" 
+                        [(ngModel)]="toDate"
+                        (onSelect)="onFilterData(fromDate, toDate)"
+                        [style]="{'width': '200px'}"
+                    ></p-calendar>
+                    <label 
+                        for="to_date" 
+                        appendTo="body" 
+                     
+                    >
+                        End date
+                    </label>
+                </span>
 
                 <p-dropdown 
                     [options]="logs" 
@@ -24,11 +58,34 @@
                     optionLabel="logName" 
                     placeholder="Select a Log" 
                     optionValue="logID"
-                    [showClear]="true"
                     [style]="{width: '170px'}"
+                    [(ngModel)]="selectedLog"
                 />
 
             </div>
+
+            <span class="filter-container" *ngIf="(fromDate && toDate) || selectedLog">
+                <span class="title">
+                    Filter: 
+                </span>
+                
+                <p-chip 
+                    label="{{fromDate | date: 'MMM dd, yyyy' }} - {{ toDate | date: 'MMM dd, yyyy'}}" 
+                    [removable]="true" 
+                    class="mr-2"
+                    (onRemove)="handleChipRemove()"
+                    *ngIf="fromDate && toDate"
+                />
+
+                <p-chip 
+                    label="{{findLogName(selectedLog)}}" 
+                    [removable]="true" 
+                    (onRemove)="onRemoveLogChip()"
+                    *ngIf="selectedLog"
+                />
+
+            </span>
+
         </ng-template>
 
         <ng-template pTemplate="header">

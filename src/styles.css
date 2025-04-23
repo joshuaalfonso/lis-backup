@@ -242,13 +242,6 @@ body {
     color: #9e9e9e;
 }
 
-/* Modal  */
-
-
-/* input {
-    padding: 7px 10px;
-    background: var(--surface-color);
-} */
 
 input {
     background: var(--surface-color);
@@ -258,17 +251,7 @@ input {
     padding: 7px 10px;
 }
 
-/* .p-inputtext {
-    background: var(--surface-color);
-    border: var(--card-border);
-    box-shadow: var(--input-box-shadow);
-    color: var(--font-color);
-} */
 
-
-/* p-inputNumber ::ng-deep input {
-    padding: 7px 10px;
-} */
 .submit {
     padding: 7px 0;
 }
@@ -401,24 +384,6 @@ input {
     color: var(--font-color);
 }
 
-
-
-/* .p-highlight {
-    background: var(--tab-color)
-} */
-
-
-/* .p-menuitem{
-    background: blue
-} */
-
-/* .p-focus {
-    background: red !important;
-}
-
-.p-menu .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
-    color: red;
-} */
 
 @media screens and (min-width: 1024px) {
         

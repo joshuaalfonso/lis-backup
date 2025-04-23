@@ -186,6 +186,7 @@ import { RawmatsPoTableComponent } from './rawmats-po/ui/rawmats-po-table/rawmat
 import { RawmatsPoModalComponent } from './rawmats-po/ui/rawmats-po-modal/rawmats-po-modal.component';
 import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-completed/rawmats-po-completed.component';
 import { SystemLogsComponent } from './system-logs/system-logs.component';
+import { AuthInterceptorService } from './auth/auth.interceptor.service';
 
 
 
@@ -376,7 +377,8 @@ import { SystemLogsComponent } from './system-logs/system-logs.component';
     CardModule,
     RippleModule
   ],
-  providers: [ConfirmationService],
+  providers: [ConfirmationService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+// , {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}

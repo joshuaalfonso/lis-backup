@@ -29,6 +29,7 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
     stockView: boolean = false;
 
     userID: string = '';
+    token!: string | null;
 
     private subscription: Subscription = new Subscription();
 
@@ -49,6 +50,7 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
                     if (user) {
                         this.userID = user!.user_id;
                         this.getUserAccess(this.userID);
+                        this.token = user.token;
                     }
                 }
             )

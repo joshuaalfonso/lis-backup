@@ -117,6 +117,10 @@ export class AuthService {
         return this.http.get<any>( this.baseUrl + '/project/a_Access.php?UserID=' + UserID );
     }
 
+    get token(): string | null {
+        return this.user.value?.token || null;
+    }
+
     
 
 }
