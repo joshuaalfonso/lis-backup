@@ -16,7 +16,7 @@
                    <span class="p-column-title">Date Unload</span>
 
                    <p>
-                        <span>{{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}</span>
+                        <span><button routerLink="unloading/{{row.UnloadingTransactionID}}">view</button>{{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}</span>
                         <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
                    </p>
               </td>

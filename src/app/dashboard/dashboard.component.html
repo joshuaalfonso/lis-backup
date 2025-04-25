@@ -6,11 +6,15 @@
 />
 
 <!-- greet message -->
-<p class="greet">
+<p class="greet" [class.hidden]="(route.firstChild?.routeConfig?.path?.startsWith('unloading'))">
      Hi 
      <span>{{ userName }}</span>, 
      Welcome to LIS!
 </p>
+
+<!-- <div class="bg-red-200 max-w-xl"> -->
+     <router-outlet />
+<!-- </div> -->
 
 <!-- user access loading -->
 <div *ngIf="isLoading" class="flex justify-content-center" >
@@ -18,20 +22,22 @@
 </div>
 
 <!-- warehousing dashboard --> 
-<section *ngIf="LogisticsDashboard && !isLoading">
+<section *ngIf="LogisticsDashboard && !isLoading " [class.hidden]="(route.firstChild?.routeConfig?.path?.startsWith('unloading'))">
      <app-dashboard-warehousing 
-          [isnightMode]="isnightMode"
+          [isnightMode]="isnightMode" 
      />
 </section>
 
 <!-- dispatcher dashboard -->
-<section *ngIf="DispatchingDashboard">
+<section *ngIf="DispatchingDashboard" >
      <app-dispatcher-dashboard />
 </section>
 
-<section class="mt-3" *ngIf="ImportationDashboard">
+<section class="mt-3" *ngIf="ImportationDashboard" [class.hidden]="(route.firstChild?.routeConfig?.path?.startsWith('unloading'))" >
      <app-importation-dashboard />
 </section>
+
+
 
 
 

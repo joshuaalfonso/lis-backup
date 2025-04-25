@@ -9,7 +9,6 @@ import { CustomerService } from "../cutomer/customer.service";
 import { FinishProductService } from "../finish-product/finish-product.service";
 import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { Dialog } from "primeng/dialog";
-import { DeliveryScheduleService } from "../delivery-schedule/delivery-schedule.service";
 import { TruckService } from "../truck/truck.service";
 import { AuthService } from "../auth/auth.service";
 import { UsersService } from "../users/users.service";
@@ -71,7 +70,6 @@ export class DeliveryComponent implements OnInit, OnDestroy{
         private CustomerService: CustomerService,
         private FinishProductService: FinishProductService,
         private WarehousePartitionService: WarehousePartitionService,
-        private DeliveryScheduleService: DeliveryScheduleService,
         private TruckService: TruckService,
         private auth: AuthService,
         private UsersService: UsersService
@@ -284,24 +282,23 @@ export class DeliveryComponent implements OnInit, OnDestroy{
         this.showDialog(dialog);
         this.dialogHeader = 'Edit Delivery';
 
-        this.DeliveryScheduleService.getDeliveryScheduleData().subscribe(
-            response => {
-                let deliveryScheduleResponse = response
+        // this.DeliveryScheduleService.getDeliveryScheduleData().subscribe(
+        //     response => {
+        //         let deliveryScheduleResponse = response
 
-                let selectedDeliverySchedule;
+        //         let selectedDeliverySchedule;
 
-                for (let i = 0; i <= deliveryScheduleResponse.length -1; i++) {
-                    if (data.SONumber == deliveryScheduleResponse[i].SONumber) {
-                        selectedDeliverySchedule = deliveryScheduleResponse[i];
-                        break;
-                    }
-                }
+        //         for (let i = 0; i <= deliveryScheduleResponse.length -1; i++) {
+        //             if (data.SONumber == deliveryScheduleResponse[i].SONumber) {
+        //                 selectedDeliverySchedule = deliveryScheduleResponse[i];
+        //                 break;
+        //             }
+        //         }
 
-                // reuse onSelectSoNumber function
-                this.onSelectSoNumber(selectedDeliverySchedule, data.DeliveryID) 
-            }
+        //         this.onSelectSoNumber(selectedDeliverySchedule, data.DeliveryID) 
+        //     }
             
-        )
+        // )
 
         this.deliveryForm.patchValue({
             DeliveryID: data.DeliveryID,
@@ -348,55 +345,55 @@ export class DeliveryComponent implements OnInit, OnDestroy{
             }
         }
         
-        this.DeliveryScheduleService.getDeliveryScheduleDetailData(data.DeliveryScheduleID).subscribe(
-            response => {
-                let deliveryDetailsResponse = response;
+        // this.DeliveryScheduleService.getDeliveryScheduleDetailData(data.DeliveryScheduleID).subscribe(
+        //     response => {
+        //         let deliveryDetailsResponse = response;
 
-                this.DeliveryDetail = [];
-                for ( let i = 0; i <= deliveryDetailsResponse.length -1; i++) {                    
+        //         this.DeliveryDetail = [];
+        //         for ( let i = 0; i <= deliveryDetailsResponse.length -1; i++) {                    
 
-                    let selected_product;
+        //             let selected_product;
 
-                    for (let row = 0; row <= this.finishProduct.length -1; row++) {
-                        if (deliveryDetailsResponse[i].FinishProductID == this.finishProduct[row].FinishProductID) {
-                            selected_product = this.finishProduct[row];
-                            break;
-                        }
-                    }
+        //             for (let row = 0; row <= this.finishProduct.length -1; row++) {
+        //                 if (deliveryDetailsResponse[i].FinishProductID == this.finishProduct[row].FinishProductID) {
+        //                     selected_product = this.finishProduct[row];
+        //                     break;
+        //                 }
+        //             }
                                     
-                    let data = {
-                        DeliveryScheduleDetailsID: deliveryDetailsResponse[i].DeliveryScheduleDetailsID,
-                        Index: i,
-                        FinishProductID: selected_product,
-                        Quantity: deliveryDetailsResponse[i].Quantity,
-                        Orders: []
-                    };
+        //             let data = {
+        //                 DeliveryScheduleDetailsID: deliveryDetailsResponse[i].DeliveryScheduleDetailsID,
+        //                 Index: i,
+        //                 FinishProductID: selected_product,
+        //                 Quantity: deliveryDetailsResponse[i].Quantity,
+        //                 Orders: []
+        //             };
               
-                    this.DeliveryDetail.push(data);
-                } 
+        //             this.DeliveryDetail.push(data);
+        //         } 
                 
-                if (DeliveryID) {
-                    this.DeliveryService.getOrderDetails(DeliveryID).subscribe(
-                        response => {
-                            let deliveryDetailsResponse = response;
+        //         if (DeliveryID) {
+        //             this.DeliveryService.getOrderDetails(DeliveryID).subscribe(
+        //                 response => {
+        //                     let deliveryDetailsResponse = response;
 
-                            for (let i = 0; i <= this.DeliveryDetail.length -1; i++) {
-                                for (let j = 0; j <= deliveryDetailsResponse.length -1; j++) {
-                                    if (this.DeliveryDetail[i].FinishProductID.FinishProductID == deliveryDetailsResponse[j].FinishProductID ) {
-                                        this.DeliveryDetail[i].Orders.push(deliveryDetailsResponse[j]);
-                                    }
-                                }
-                            } 
-                            this.ComputeTotalWeight();
-                        }
-                    )
-                }
-            },
+        //                     for (let i = 0; i <= this.DeliveryDetail.length -1; i++) {
+        //                         for (let j = 0; j <= deliveryDetailsResponse.length -1; j++) {
+        //                             if (this.DeliveryDetail[i].FinishProductID.FinishProductID == deliveryDetailsResponse[j].FinishProductID ) {
+        //                                 this.DeliveryDetail[i].Orders.push(deliveryDetailsResponse[j]);
+        //                             }
+        //                         }
+        //                     } 
+        //                     this.ComputeTotalWeight();
+        //                 }
+        //             )
+        //         }
+        //     },
 
-            error => {
-                console.error('Error fetching data:', error)
-            }
-        )
+        //     error => {
+        //         console.error('Error fetching data:', error)
+        //     }
+        // )
 
         this.deliveryForm.patchValue({
             SONumber: data.SONumber,

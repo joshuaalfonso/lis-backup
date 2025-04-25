@@ -36,7 +36,6 @@ import { ShippingDocumentComponent } from "./shipping-document/shipping-document
 import { WeighingTransactionDetailsComponent } from "./weighing-transaction-details/weighing-transaction-details.component";
 import { UnloadingTransactionComponent } from "./unloading-transaction/unloading-transaction.component";
 import { AddDeliveryComponent } from "./delivery-add/add-delivery.component";
-import { DeliveryScheduleComponent } from "./delivery-schedule/delivery-schedule.component";
 import { BinloadingComponent } from "./binload/binload.component";
 import { DispatcherComponent } from "./dispatcher/dispatcher.component";
 import { CheckerType } from "./checker-type/checker-type.component";
@@ -57,6 +56,7 @@ import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-ins
 import { LocalSupplier } from "./supplier-local/local-supplier.component";
 import { BlOverviewComponent } from "./dashboard-warehousing/ui/bl-overview/bl-overview.component";
 import { SystemLogsComponent } from "./system-logs/system-logs.component";
+import { UnloadingDetailComponent } from "./unloading-detail/unloading-detail.component";
 
 
 
@@ -69,6 +69,12 @@ const routes: Routes = [
     {
         path: 'dashboard', 
         component: DashboardComponent, 
+        children: [
+            {
+                path: 'unloading/:id',
+                component: UnloadingDetailComponent
+            }
+        ],
         canActivate: [AuthGuard],
     },
     {
@@ -188,14 +194,14 @@ const routes: Routes = [
             'role': 27.1
         }
     },
-    {
-        path: 'delivery-schedule', 
-        component: DeliveryScheduleComponent, 
-        canActivate: [AuthGuard, HasRoleGuard], 
-        data: {
-            'role': 28.1
-        }
-    },
+    // {
+    //     path: 'delivery-schedule', 
+    //     component: DeliveryScheduleComponent, 
+    //     canActivate: [AuthGuard, HasRoleGuard], 
+    //     data: {
+    //         'role': 28.1
+    //     }
+    // },
     {
         path: 'delivery', 
         component: DeliveryComponent, 

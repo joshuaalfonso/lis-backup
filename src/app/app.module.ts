@@ -140,7 +140,6 @@ import { ShippingDocumentComponent } from './shipping-document/shipping-document
 import { WeighingTransactionDetailsComponent } from './weighing-transaction-details/weighing-transaction-details.component';
 import { UnloadingTransactionComponent } from './unloading-transaction/unloading-transaction.component';
 import { AddDeliveryComponent } from './delivery-add/add-delivery.component';
-import { DeliveryScheduleComponent } from './delivery-schedule/delivery-schedule.component';
 import { BinloadingComponent } from './binload/binload.component';
 import { DispatcherComponent } from './dispatcher/dispatcher.component';
 import { CheckerType } from './checker-type/checker-type.component';
@@ -187,6 +186,7 @@ import { RawmatsPoModalComponent } from './rawmats-po/ui/rawmats-po-modal/rawmat
 import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-completed/rawmats-po-completed.component';
 import { SystemLogsComponent } from './system-logs/system-logs.component';
 import { AuthInterceptorService } from './auth/auth.interceptor.service';
+import { UnloadingDetailComponent } from './unloading-detail/unloading-detail.component';
 
 
 
@@ -215,7 +215,6 @@ import { AuthInterceptorService } from './auth/auth.interceptor.service';
     DeliveryComponent,
     AddDeliveryComponent,
     DeliveryDetailComponent,
-    DeliveryScheduleComponent,
     FinishProductComponent,
     FinishProductInventory,
     FinishProductTrasfer,
@@ -277,6 +276,7 @@ import { AuthInterceptorService } from './auth/auth.interceptor.service';
     RawmatsPoModalComponent,
     RawmatsPoCompletedComponent,
     SystemLogsComponent,
+    UnloadingDetailComponent,
     
   ],
   imports: [

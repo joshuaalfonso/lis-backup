@@ -69,6 +69,10 @@ export class UnloadingTransactionService {
         );
     }
 
+    getUnloadingItem(unloadingID: number) {
+        return this.http.get<any>(this.baseUrl + '/project/a_UnloadingTransactionView.php?id=' + unloadingID)
+    }
+
     getUnloadedToday() {
         return this.http.get<any>( this.baseUrl + '/project/a_UnloadingTransactionToday.php')
     }

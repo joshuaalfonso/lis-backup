@@ -1,0 +1,83 @@
+<!-- <p>unloading-detail works!  {{id}} <button (click)="goBack()">back</button></p> -->
+
+
+<section>
+
+    <div class="text-center my-3" *ngIf="isLoading">
+        <app-loader></app-loader>
+    </div>
+
+    <div class="detail-title" *ngIf="!isLoading">
+        <h1>Purchase Order #{{unloadingItem.PONo}}</h1>
+        <a (click)="goBack()"><i class="fi fi-rr-arrow-left flex"></i>Back</a>
+    </div>
+    
+    <div class="detail-container" *ngIf="!isLoading">
+
+        <div class="detail-header">
+            <div class="flex align-items-center">
+                <i class="fi fi-rr-truck-arrow-left flex text-3xl"></i> 
+                <span>Delivery Receipt #{{unloadingItem.DrNumber}}</span>
+            </div>
+
+            <span>{{unloadingItem.DateTimeUnload.date | date: 'EEEE, MMM dd yyyy'}}</span>
+        </div>
+
+        <div class="detail-content">
+
+            <div class="flex gap-2 mb-4">
+                <div class="flex gap-1">
+                    <i class="fi fi-bs-horizontal-rule flex align-items-center"></i>
+                    {{ unloadingItem.RawMaterial }}
+                </div>
+                <div class="text-secondary flex gap-2">
+                    •
+                    <span style="font-weight: 400;"> {{ unloadingItem.Weight | number }} kg</span>
+                </div>
+                <div class="text-secondary flex gap-2">
+                    •
+                    <span style="font-weight: 400;"> {{ unloadingItem.Quantity | number }} bag/s</span>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-3">
+
+                <div class="flex gap-3">
+                    <div class="flex gap-1"> 
+                        <i class="fi fi-rr-supplier-alt icon flex align-items-center"></i> 
+                        <span>Supplier </span>
+                    </div>
+                    <div class="" style="font-weight: 400;">
+                        {{ unloadingItem.Supplier }}
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <div class="flex gap-1"> 
+                        <i class="fi fi-rs-truck-container icon flex align-items-center"></i> 
+                        <span>Plate # </span>
+                    </div>
+                    <div class="" style="font-weight: 400;">
+                        {{ unloadingItem.PlateNo }} 
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <div class="flex gap-1"> 
+                        <i class="fi fi-rr-garage icon flex align-items-center"></i> 
+                        <span>Location </span>
+                    </div>
+                    <div class="" style="font-weight: 400;">
+                        {{ unloadingItem.WarehouseLocation }}/{{ unloadingItem.Warehouse_Name }}/{{ unloadingItem.WarehousePartitionName }}
+                    </div>
+                </div>
+
+                <img src="{{ '10.10.2.120/project/' + unloadingItem.ImageDetail[0].ImageUrl }}" />
+
+            </div>
+        </div>
+        
+    </div>
+
+
+</section>

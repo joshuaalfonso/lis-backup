@@ -10,6 +10,7 @@ import { MessageService } from "primeng/api";
 import { BinloadService } from "../binload/binload.service";
 import { TransferService } from "../raw-material-transfer/transfer.service";
 import { UsersService } from "../users/users.service";
+import { ActivatedRoute } from "@angular/router";
 
 
 
@@ -79,7 +80,8 @@ export class DashboardComponent implements OnInit, OnDestroy{
         private MessageService: MessageService,
         private BinloadService: BinloadService,
         private RawMaterialTransferService: TransferService,
-        private UserService: UsersService
+        private UserService: UsersService,
+        public route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
