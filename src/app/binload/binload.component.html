@@ -232,7 +232,19 @@
 
 <!-- <app-binload-verified-table *ngIf="tabValue == 2"/> -->
 
-
+<p-dialog 
+    header="Warehouse stock" 
+    [(visible)]="warehouseStockVisible" 
+    [modal]="true" 
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+    [style]="{ width: '50vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <app-warehouse-stock-table 
+        [warehouseStock]="warehouseStock"
+    />
+</p-dialog>
 
 
 <!-- ======= BINLOAD REQUEST MODAL FORM ======== -->
@@ -301,6 +313,7 @@
                     placeholder="Select Raw Material"
                     optionValue="RawMaterialID"
                     [filter]="true"
+                    (onChange)="onSelectRawMaterial($event.value)"
                 ></p-dropdown>
         </div>
 

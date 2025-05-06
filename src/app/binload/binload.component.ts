@@ -41,6 +41,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
     driver: any[] = [];
     truck: any[] = [];
     rawMatsPartitionStock: any[] = [];
+    warehouseStock: any[] = [];
+    warehouseStockVisible: boolean = false;
     binloadForm!: FormGroup;
     binloadRequestForm!: FormGroup;
 
@@ -660,6 +662,8 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         // this.onSubmit();
     }
 
+
+
     onSelectLocation(data: any) {
 
         if (!data) {
@@ -739,17 +743,36 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.partitionModal = !this.partitionModal;
     }
 
-    onSelectRawMaterial(data: any) {
-        if (data.value == null) return;
-        this.showPartitionStockDialog();
+    // onSelectRawMaterial(data: any) {
+    //     if (data.value == null) return;
+    //     this.showPartitionStockDialog();
 
-       this.subscription.add(
-            this.BinloadService.getRawMatsPartitionStock(data.value.RawMaterialID).subscribe(
+    //    this.subscription.add(
+    //         this.BinloadService.getRawMatsPartitionStock(data.value.RawMaterialID).subscribe(
+    //             response => {
+    //                 this.rawMatsPartitionStock = response;
+    //             }
+    //         )
+    //     )
+    // }
+
+    onSelectRawMaterial(eventValue: number) {
+        if (!eventValue) return
+        const rawMaterialID = eventValue;
+
+        this.subscription.add(
+            this.BinloadService.getWarehouseFilter(rawMaterialID).subscribe(
                 response => {
-                    this.rawMatsPartitionStock = response;
+                    console.log(response);
+                    this.warehouseStockVisible = true;
+                    this.warehouseStock = response;
+                },
+                error => {
+                    console.log('Error :' + error)
                 }
             )
         )
+
     }
 
     ngOnDestroy(): void {

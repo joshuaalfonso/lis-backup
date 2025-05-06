@@ -23,6 +23,8 @@ export class SystemLogsComponent implements OnInit, OnDestroy {
 
   userID!: string;
 
+  tableNames: any[] = [];
+  selectedTableName!: string;
 
   subscriptions: Subscription = new Subscription;
 
@@ -47,10 +49,116 @@ export class SystemLogsComponent implements OnInit, OnDestroy {
     
     this.getSystemLogs();
     this.getLogs();
+    this.getTableName();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  getTableName() {
+    this.tableNames = [
+      {
+        tableNameID: 1,
+        tableName: 'Raw Material',
+      },
+      {
+        tableNameID: 2,
+        tableName: 'Warehouse Location',
+      },
+      {
+        tableNameID: 3,
+        tableName: 'Warehouse Partition',
+      },
+      {
+        tableNameID: 4,
+        tableName: 'Raw Material Inventory',
+      },
+      {
+        tableNameID: 5,
+        tableName: 'Raw Material Inventory',
+      },
+      {
+        tableNameID: 6,
+        tableName: 'Warehouse Inventory',
+      },
+      {
+        tableNameID: 7,
+        tableName: 'Truck',
+      },
+      {
+        tableNameID: 8,
+        tableName: 'Trucking',
+      },
+      {
+        tableNameID: 9,
+        tableName: 'Checker',
+      },
+      {
+        tableNameID: 10,
+        tableName: 'Local Supplier',
+      },
+      {
+        tableNameID: 11,
+        tableName: 'Import Supplier',
+      },
+      {
+        tableNameID: 12,
+        tableName: 'Raw Material PO',
+      },
+      {
+        tableNameID: 13,
+        tableName: 'Importation',
+      },
+      {
+        tableNameID: 14,
+        tableName: 'Unloading',
+      },
+      {
+        tableNameID: 15,
+        tableName: 'Binloading',
+      },
+      {
+        tableNameID: 16,
+        tableName: 'Raw Material Transfer',
+      },
+      {
+        tableNameID: 17,
+        tableName: 'Raw Material Transfer',
+      },
+      {
+        tableNameID: 18,
+        tableName: 'Raw Material Inspection',
+      },
+      {
+        tableNameID: 19,
+        tableName: 'Users',
+      },
+      {
+        tableNameID: 20,
+        tableName: 'Module',
+      },
+      {
+        tableNameID: 21,
+        tableName: 'Shipping Line',
+      },
+      {
+        tableNameID: 22,
+        tableName: 'Port of Discharge',
+      },
+      {
+        tableNameID: 23,
+        tableName: 'Bank',
+      },
+      {
+        tableNameID: 23,
+        tableName: 'Broker',
+      },
+      {
+        tableNameID: 24,
+        tableName: 'Container Type',
+      },
+    ]
   }
 
   getUserAccess(UserID: string) {
@@ -96,11 +204,21 @@ export class SystemLogsComponent implements OnInit, OnDestroy {
 
   filteredLogs() {
 
-    if (this.selectedLog) {
-      return this.systemLogs.filter(log => log.FunctionID === this.selectedLog);
-    }
+    return this.systemLogs.filter(log => {
+      const matchesLog = this.selectedLog ? log.FunctionID === this.selectedLog : true;
+      const matchesTable = this.selectedTableName ? log.TableName === this.selectedTableName : true;
+      return matchesLog && matchesTable;
+    });
 
-    return this.systemLogs; 
+    // if (this.selectedLog) {
+    //   return this.systemLogs.filter(log => log.FunctionID === this.selectedLog);
+    // }
+
+    // if (this.selectedTableName) {
+    //   return this.systemLogs.filter(log => log.TableName === this.selectedTableName);
+    // }
+
+    // return this.systemLogs; 
   }
 
   onFilterData(date1: any, date2: any) {
@@ -133,6 +251,10 @@ export class SystemLogsComponent implements OnInit, OnDestroy {
     this.toDate = null;
     
     this.getSystemLogs();
+  }
+
+  onRmoveTableChip() {
+    this.selectedTableName = '';
   }
 
   

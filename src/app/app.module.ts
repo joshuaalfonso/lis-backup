@@ -187,6 +187,8 @@ import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-complete
 import { SystemLogsComponent } from './system-logs/system-logs.component';
 import { AuthInterceptorService } from './auth/auth.interceptor.service';
 import { UnloadingDetailComponent } from './unloading-detail/unloading-detail.component';
+import { TransferDetailComponent } from './transfer-detail/transfer-detail.component';
+import { WarehouseStockTableComponent } from './binload/ui/warehouse-stock-table/warehouse-stock-table.component';
 
 
 
@@ -277,6 +279,8 @@ import { UnloadingDetailComponent } from './unloading-detail/unloading-detail.co
     RawmatsPoCompletedComponent,
     SystemLogsComponent,
     UnloadingDetailComponent,
+    TransferDetailComponent,
+    WarehouseStockTableComponent,
     
   ],
   imports: [

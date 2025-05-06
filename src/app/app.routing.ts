@@ -57,6 +57,7 @@ import { LocalSupplier } from "./supplier-local/local-supplier.component";
 import { BlOverviewComponent } from "./dashboard-warehousing/ui/bl-overview/bl-overview.component";
 import { SystemLogsComponent } from "./system-logs/system-logs.component";
 import { UnloadingDetailComponent } from "./unloading-detail/unloading-detail.component";
+import { TransferDetailComponent } from "./transfer-detail/transfer-detail.component";
 
 
 
@@ -69,13 +70,21 @@ const routes: Routes = [
     {
         path: 'dashboard', 
         component: DashboardComponent, 
-        children: [
-            {
-                path: 'unloading/:id',
-                component: UnloadingDetailComponent
-            }
-        ],
+        // children: [
+        //     {
+        //         path: 'unloading/:id',
+        //         component: UnloadingDetailComponent
+        //     },
+        //     {
+        //         path: 'transfer/:id',
+        //         component: TransferDetailComponent
+        //     }
+        // ],
         canActivate: [AuthGuard],
+    },
+    {
+        path: 'dashboard/unloading/:id',
+        component: UnloadingDetailComponent
     },
     {
         path: 'dashboard/bl/:id', 

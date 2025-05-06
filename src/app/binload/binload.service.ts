@@ -63,6 +63,10 @@ export class BinloadService {
         return this.http.get<any>( this.baseUrl + '/project/a_BinloadDashboard.php')
     }
 
+    getWarehouseFilter(rawMaterialID: number) {
+        return this.http.get<any>( this.baseUrl + '/project/a_WarehouseFiltered.php?id=' + rawMaterialID  )
+    }
+
     saveData(binloadObj: Binload) {
         return this.http.post
         ( this.baseUrl + '/project/b_Binloading.php', binloadObj )

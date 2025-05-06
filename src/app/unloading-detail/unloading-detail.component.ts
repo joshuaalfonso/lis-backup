@@ -16,6 +16,12 @@ export class UnloadingDetailComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  displayBasic: boolean = false;
+
+  images: any[] | undefined;
+
+  imageUrl: string = 'http://10.10.2.120/project/';
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -29,8 +35,9 @@ export class UnloadingDetailComponent implements OnInit {
     this.unloadingService.
     getUnloadingItem(Number(this.id)).pipe(take(1)).subscribe(
       response => {
-        console.log(response);
+        // console.log(response);
         this.unloadingItem = response[0];
+        this.images = response[0].ImageDetail
         this.isLoading = false;
       },
 
@@ -40,6 +47,15 @@ export class UnloadingDetailComponent implements OnInit {
       }
     )
 
+  }
+
+  showImages() {
+    console.log('working')
+    if (this.images?.length === 0) {
+      alert('no images found');
+      return
+    }
+    this.displayBasic = true;
   }
 
   goBack(): void {

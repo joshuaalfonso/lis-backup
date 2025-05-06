@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Message } from 'primeng/api';
+import { RawMatsInspectionService } from '../../rawmats-inspection.service';
 
 @Component({
   selector: 'app-rawmats-inspection-table',
@@ -23,6 +24,10 @@ export class RawmatsInspectionTableComponent {
   @Output() showDialog = new EventEmitter<void>();
   @Output() onSelect = new EventEmitter<void>();
 
+  constructor(
+    private RawMatsInspectionService: RawMatsInspectionService
+  ) {}
+
   onToggleDialog() {
     this.showDialog.emit();
   }
@@ -31,7 +36,8 @@ export class RawmatsInspectionTableComponent {
     this.onSelect.emit(row);
   }
 
-
+  getPdf(id: number) {
+    window.open('http://10.10.2.120/project/lab/InspectionReport.php?id=' + id, '_blank');
+  }
  
-
 }

@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-recent-unload',
@@ -12,12 +13,18 @@ export class DashboardRecentUnloadComponent implements OnInit, OnDestroy {
 
   loadingLength: any[] = [];
 
+  constructor(private router: Router) {}
+
   ngOnInit(): void {
     this.loadingLength = Array.from({ length: 7 }).map((_, i) => `Item #${i}`);
   }
 
   ngOnDestroy(): void {
     
+  }
+
+  goToUnloadingDetail(id: number) {
+    this.router.navigate([`/dashboard/unloading/${id}`]);
   }
 
 }

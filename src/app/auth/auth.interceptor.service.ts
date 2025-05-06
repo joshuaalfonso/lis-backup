@@ -21,9 +21,9 @@ export class AuthInterceptorService implements HttpInterceptor{
         const tokenizedReq = req.clone({
             headers: 
             req.headers
-            .set('Content-Type', 'application/json')
             .set('Token', token)
         })
+        // .set('Content-Type', 'application/json')
 
         return next.handle(tokenizedReq);
     }

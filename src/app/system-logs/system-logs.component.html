@@ -62,9 +62,18 @@
                     [(ngModel)]="selectedLog"
                 />
 
+                <p-dropdown 
+                    [options]="tableNames" 
+                    optionLabel="tableName" 
+                    placeholder="Select a Table" 
+                    optionValue="tableName"
+                    [style]="{width: 'auto'}"
+                    [(ngModel)]="selectedTableName"
+                />
+
             </div>
 
-            <span class="filter-container" *ngIf="(fromDate && toDate) || selectedLog">
+            <span class="filter-container" *ngIf="(fromDate && toDate) || selectedLog || selectedTableName">
                 <span class="title">
                     Filter: 
                 </span>
@@ -82,6 +91,13 @@
                     [removable]="true" 
                     (onRemove)="onRemoveLogChip()"
                     *ngIf="selectedLog"
+                />
+
+                <p-chip 
+                    label="{{selectedTableName}}" 
+                    [removable]="true" 
+                    (onRemove)="onRmoveTableChip()"
+                    *ngIf="selectedTableName"
                 />
 
             </span>

@@ -1,0 +1,23 @@
+
+
+
+<p-table [value]="warehouseStock" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Raw Material</th>
+            <th>Location</th>
+            <th>Warehouse</th>
+            <th>Quantity</th>
+            <th>Weight</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>{{ product.RawMaterial }}</td>
+            <td>{{ product.WarehouseLocation }}</td>
+            <td>{{ product.Warehouse_Name }}</td>
+            <td>{{ product.RawMatsQty | number }}</td>
+            <td>{{ product.RawMatsWeight | number }}</td>
+        </tr>
+    </ng-template>
+</p-table>

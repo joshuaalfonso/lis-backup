@@ -71,3 +71,20 @@ section {
     color: #9e9e9e;
 }
 
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    background: var(--tab-color);
+}
+
+.view-images {
+    font-weight: var(--font-400); 
+    color: var(--primary-color);
+    cursor: pointer;
+}
+.view-images:hover {
+    text-decoration: underline;
+}

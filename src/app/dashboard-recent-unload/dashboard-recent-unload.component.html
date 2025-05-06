@@ -16,15 +16,15 @@
                    <span class="p-column-title">Date Unload</span>
 
                    <p>
-                        <span><button routerLink="unloading/{{row.UnloadingTransactionID}}">view</button>{{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}</span>
-                        <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
+                         {{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}
+                         <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
                    </p>
               </td>
               <td>
                    <span class="p-column-title">P.O #</span>
 
                    <p>
-                        <span>{{ row.PONo }}</span>
+                        <span>{{ +row.PO ? row.PONo : row.BLNumber }}</span>
                         <span class="sub-text"> {{ row.Supplier }}</span>
                    </p>
               </td>
@@ -46,6 +46,15 @@
                         <span>{{ row.WarehouseLocation }} </span>
                         <span class="sub-text"> {{ row.Warehouse_Name }}</span>
                    </p>
+              </td>
+              <td>
+                    <!-- <button routerLink="unloading/{{row.UnloadingTransactionID}}">view</button> -->
+                    <!-- routerLink="dashboard/unloading/{{row.UnloadingTransactionID}}" -->
+                    <span 
+                         (click)="goToUnloadingDetail(row.UnloadingTransactionID)"
+                         style="color: var(--primary-color);"
+                         class="cursor-pointer hover:underline"
+                    > Details </span>
               </td>
          </tr>
     </ng-template>

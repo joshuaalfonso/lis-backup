@@ -36,4 +36,8 @@ export class RawMatsInspectionService {
         return this.http.get<any>( this.baseUrl + '/project/lab/a_ParameterValue.php' );
     }
 
+    getPdf(id: number) {
+        return this.http.get<any>( this.baseUrl + '/project/lab/InspectionReport.php?id=' + id )
+    }
+
 }

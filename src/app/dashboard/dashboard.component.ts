@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { AuthService } from "../auth/auth.service";
-import { Subscription } from "rxjs";
+import { Subscription, filter } from "rxjs";
 import { AppComponent } from "../app.component";
 import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
@@ -10,7 +10,7 @@ import { MessageService } from "primeng/api";
 import { BinloadService } from "../binload/binload.service";
 import { TransferService } from "../raw-material-transfer/transfer.service";
 import { UsersService } from "../users/users.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 
 
 
@@ -81,7 +81,8 @@ export class DashboardComponent implements OnInit, OnDestroy{
         private BinloadService: BinloadService,
         private RawMaterialTransferService: TransferService,
         private UserService: UsersService,
-        public route: ActivatedRoute
+        public route: ActivatedRoute,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
