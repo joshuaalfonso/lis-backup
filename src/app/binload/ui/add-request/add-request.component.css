@@ -1,0 +1,22 @@
+:host ::ng-deep p-calendar.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+:host ::ng-deep .p-inputtext.disabled{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+:host ::ng-deep p-inputnumber.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+
+:host ::ng-deep p-dropdown.disabled .p-dropdown{
+    background-color: gainsboro; 
+}
+
+.required {
+    color: rgb(228, 84, 84);
+}

@@ -1,0 +1,280 @@
+
+<!-- <p-button label="Add Request" /> -->
+
+<button 
+    pButton 
+    pRipple 
+    class="add__btn" 
+    (click)="showRequestDialog(requestDialog)" 
+>
+    <!-- *ngIf="insert && tabValue == 1" -->
+    <i class='bx bx-plus'></i> 
+    <span>Add Request</span>
+</button>
+
+
+
+<!-- ======= BINLOAD REQUEST MODAL FORM ======== -->
+<p-dialog 
+    header="Create request" 
+    [(visible)]="visibleRequestModal" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    (onHide)="initiateForm()"
+    #requestDialog
+>
+    <form 
+        [formGroup]="binloadRequestForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmitBinloadRequest()"
+    >  
+
+        <div class="grid">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > Request Date <span class="required">*</span></label>
+                    <p-calendar 
+                        formControlName="RequestDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy" 
+                        [showTime]="true" 
+                        hourFormat="12" 
+                        appendTo="body" 
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >Plant <span class="required">*</span></label>
+                        <p-dropdown 
+                            [options]="plant" 
+                            formControlName="PlantID" 
+                            optionLabel="PlantName" 
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plant" 
+                            optionValue="PlantID"
+                        ></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material 
+                <span class="required">*</span>
+            </label>
+                <p-dropdown 
+                    [options]="rawMaterial" 
+                    formControlName="RawMaterialID" 
+                    optionLabel="RawMaterial" 
+                    [style]="{'height': '40px'}" 
+                    [showClear]="true" 
+                    placeholder="Select Raw Material"
+                    optionValue="RawMaterialID"
+                    [filter]="true"
+                    (onChange)="onSelectRawMaterial($event.value)"
+                ></p-dropdown>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > 
+                Location 
+                <span class="required">*</span>
+            </label>
+            <div>
+                <p-dropdown 
+                    [options]="warehouseLocation" 
+                    formControlName="WarehouseLocationID" 
+                    optionLabel="WarehouseLocation" 
+                    [style]="{'height': '40px'}" 
+                    [showClear]="true" 
+                    placeholder="Select Location" 
+                    (onChange)="onSelectLocation($event.value)"
+                    optionValue="WarehouseLocationID"
+                    [class.disabled]="true"
+                ></p-dropdown>
+                    <!-- [class.disabled]="binloadRequestForm.value.RawMaterialID == null" -->
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold">Warehouse</label>
+                <p-dropdown 
+                    formControlName="WarehouseID"
+                    [options]="warehouse" 
+                    optionLabel="LocationName" 
+                    [style]="{'height': '40px'}" 
+                    [showClear]="true" 
+                    placeholder="Select Warehouse" 
+                    appendTo="body" 
+                    optionValue="WarehouseID"
+                    [class.disabled]="true"
+                />
+            </div>
+
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Quantity 
+                        <span class="required">*</span>
+                    </label>
+                    <p-inputNumber 
+                        class="block" 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="No of bags" 
+                        [style]="{'width': '100%'}"
+                    ></p-inputNumber> 
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" > 
+                        Unit Of Measure 
+                        <span class="required">*</span>
+                    </label>
+
+                    <p-dropdown 
+                        [options]="unitOfMeasure" 
+                        formControlName="BinloadUomID" 
+                        optionLabel="BinloadUom" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Unit of Measure" 
+                        optionValue="BinloadUomID"
+                    ></p-dropdown>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Driver 
+                        <span class="required">*</span>
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="driver" 
+                            formControlName="DriverID" 
+                            optionLabel="DriverName" 
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            placeholder="Select Driver"
+                            optionValue="DriverID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Plate No 
+                        <span class="required">*</span>
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="truck" 
+                            formControlName="TruckID" 
+                            optionLabel="PlateNo" 
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            placeholder="Select Plate No." 
+                            optionValue="TruckID"
+                            [filter]="true"
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex justify-content-end align-items-center">
+            <app-submit-button 
+                [submitLoading]="requestSubmitLoading" 
+                [form]="binloadRequestForm" 
+            /> 
+        </div>
+
+  
+    </form>
+</p-dialog>
+
+
+<p-dialog 
+    header="Warehouse stock" 
+    [(visible)]="warehouseStockVisible" 
+    [modal]="true" 
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+    [style]="{ width: '50vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+>
+    <!-- <app-warehouse-stock-table 
+        [warehouseStock]="warehouseStock"
+    /> -->
+
+    <!-- {{ selectedWarehouse | json }} -->
+
+    <p-table 
+        [value]="warehouseStock" 
+        [tableStyle]="{ 'min-width': '50rem' }"
+        selectionMode="single"
+        [(selection)]="selectedWarehouse" 
+    >
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem"></th>
+                <th>Raw Material</th>
+                <th>Location</th>
+                <th>Warehouse</th>
+                <th>Quantity</th>
+                <th>Weight</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td>
+                    <p-tableRadioButton [value]="row" (click)="onSelectWarehouse()"/>
+                </td>
+                <td>{{ row.RawMaterial }}</td>
+                <td>{{ row.WarehouseLocation }}</td>
+                <td>{{ row.Warehouse_Name }}</td>
+                <td>{{ row.RawMatsQty | number }}</td>
+                <td>{{ row.RawMatsWeight | number }}</td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+    <ng-template pTemplate="footer">
+        <button 
+            type="button" 
+            pButton 
+            pRipple 
+            icon="pi pi-times" 
+            (click)="warehouseStockVisible = false" 
+            label="Close" 
+            class="p-button-text"
+        >
+        </button>
+    </ng-template>  
+</p-dialog>

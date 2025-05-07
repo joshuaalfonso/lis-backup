@@ -189,6 +189,8 @@ import { AuthInterceptorService } from './auth/auth.interceptor.service';
 import { UnloadingDetailComponent } from './unloading-detail/unloading-detail.component';
 import { TransferDetailComponent } from './transfer-detail/transfer-detail.component';
 import { WarehouseStockTableComponent } from './binload/ui/warehouse-stock-table/warehouse-stock-table.component';
+import { AddRequestComponent } from './binload/ui/add-request/add-request.component';
+import { VerifyRequestComponent } from './binload/ui/verify-request/verify-request.component';
 
 
 
@@ -281,6 +283,8 @@ import { WarehouseStockTableComponent } from './binload/ui/warehouse-stock-table
     UnloadingDetailComponent,
     TransferDetailComponent,
     WarehouseStockTableComponent,
+    AddRequestComponent,
+    VerifyRequestComponent,
     
   ],
   imports: [

@@ -57,7 +57,7 @@
                     (input)="onGlobalFilter(dt2, $event)" 
                 />
 
-                <button 
+                <!-- <button 
                     pButton 
                     pRipple 
                     class="add__btn" 
@@ -66,8 +66,18 @@
                 >
                     <i class='bx bx-plus'></i> 
                     <span>Add Request</span>
-                </button>
+                </button> -->
 
+                
+                <app-add-request 
+                    [plant]="plant"
+                    [rawMaterial]="rawMaterial"
+                    [warehouseLocation]="warehouseLocation"
+                    [warehouse]="warehouse"
+                    [unitOfMeasure]="unitOfMeasure"
+                    [truck]="truck"
+                    [driver]="driver"
+                />
             </div>
 
         </ng-template>
@@ -148,7 +158,7 @@
                         <i class='bx bx-plus'></i>
                     </button>
 
-                    <button 
+                    <!-- <button 
                         pButton 
                         pRipple 
                         class="edit__btn" 
@@ -157,7 +167,10 @@
                         *ngIf="row.Binloading.length > 0 && tabValue == 1 && binloadVerify"
                     >
                         <i class='bx bx-check'></i>
-                    </button>
+                    </button> -->
+
+                    <app-verify-request />
+
                     <button 
                         pButton 
                         pRipple 
@@ -459,11 +472,12 @@
                     [showClear]="true" 
                     placeholder="Select Warehouse" 
                     appendTo="body" 
-                    (onChange)="onSelectWarehouse($event)"
                     [class.disabled]="selectedWarehouse.length == 0" 
                     optionValue="WarehouseID"
+                    (onChange)="onSelectWarehouse($event)"
                 />
             </div>
+            <!-- (onChange)="onSelectWarehouse($event)" -->
         <!-- </div> -->
 
 
