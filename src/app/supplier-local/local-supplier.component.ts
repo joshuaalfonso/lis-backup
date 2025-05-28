@@ -8,6 +8,7 @@ import { Message, MessageService } from 'primeng/api';
 import { AuthService } from '../auth/auth.service';
 import { UsersService } from '../users/users.service';
 import { SystemLogsService } from '../system-logs/system-logs.service';
+import { Table } from 'primeng/table';
 
 
 
@@ -179,12 +180,19 @@ export class LocalSupplier implements OnInit, OnDestroy {
         this.selectedLocal = [];
 
         for (let i=0; i<= this.country.length-1; i++) {
-            if (this.country[i].code=='PHP') {
-                this.selectedLocal = this.country[i];  
-                this.localSupplierForm.patchValue(
-                    {Origin: this.selectedLocal}
-                );
+
+            if (this.country[i].code == 'PHP') {
+
+                this.selectedLocal = this.country[i];
+                const currency = currencySymbolMap(this.country[i].code); 
+
+                this.localSupplierForm.patchValue({
+                    Origin: this.selectedLocal,
+                    Currency: currency
+                });
+
             }
+
         }
 
     }
@@ -327,6 +335,12 @@ export class LocalSupplier implements OnInit, OnDestroy {
 
         return null;
 
+    }
+
+
+    onGlobalFilter(table: Table, event: Event) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        table.filterGlobal(inputValue, 'contains');
     }
 
 }

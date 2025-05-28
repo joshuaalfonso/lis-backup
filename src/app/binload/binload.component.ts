@@ -708,6 +708,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         // console.log(data);
 
         const selectedWarehouse = data.value;
+        console.log(selectedWarehouse);
 
         const selectedRawMaterial = this.binloadRequestForm.value.RawMaterialID;
 
@@ -720,6 +721,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.subscription.add(
             this.BinloadService.getRawMatsPartitionStock(selectedRawMaterial).subscribe(
                 response => {
+                    console.log(response)
                     this.rawMatsPartitionStock = response.filter((item: any) => item.WarehouseID === selectedWarehouse);
                 }
             )
@@ -750,6 +752,7 @@ export class BinloadingComponent implements OnInit, OnDestroy {
        this.subscription.add(
             this.BinloadService.getRawMatsPartitionStock(data.value.RawMaterialID).subscribe(
                 response => {
+                    console.log(response)
                     this.rawMatsPartitionStock = response;
                 }
             )
@@ -858,10 +861,10 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             BinloadRequestID: this.binloadRequestForm.value.BinloadRequestID,
             WarehouseLocationID: this.binloadRequestForm.value.WarehouseLocationID,
             WarehouseID: this.binloadRequestForm.value.WarehouseID,
-            WarehousePartitionID: this.binloadRequestForm.value.WarehousePartitionID,
-            WarehousePartitionStockID: this.binloadRequestForm.value.WarehousePartitionStockID,
-            PO: this.binloadRequestForm.value.PO,
-            BL: this.binloadRequestForm.value.BL,
+            // WarehousePartitionID: this.binloadRequestForm.value.WarehousePartitionID,
+            // WarehousePartitionStockID: this.binloadRequestForm.value.WarehousePartitionStockID,
+            // PO: this.binloadRequestForm.value.PO,
+            // BL: this.binloadRequestForm.value.BL,
             PlantID: this.binloadRequestForm.value.PlantID,
             DriverID: this.binloadRequestForm.value.DriverID,
             TruckID: this.binloadRequestForm.value.TruckID,
@@ -1140,11 +1143,19 @@ export class BinloadingComponent implements OnInit, OnDestroy {
             Weight: this.binloadForm.value.Weight,
             Status: this.binloadForm.value.Status,
             UserID: this.UserID,
-            // BinloadDetail: this.binloadDetail
         }
 
+        // const binloadOBJ = {
+        //     RequestWeight: this.binloadForm.value.Weight,
+        //     RequestQty: this.binloadForm.value.Quantity,
+        //     RawMaterialID: this.binloadForm.value.RawMaterialID,
+        //     WarehouseLocationID: this.binloadForm.value.WarehouseLocationID,
+        //     WarehouseID: this.binloadForm.value.WarehouseID
+        // }
+
         // console.log(binloadOBJ);
-        this.BinloadService.saveBinload(binloadOBJ).subscribe(
+
+        this.BinloadService.saveBinloadChecker(binloadOBJ).subscribe(
             response => {
 
                 this.binloadSubmitLoading= false;

@@ -1,0 +1,90 @@
+
+<app-content-header 
+    [title]="'Stocking'"
+></app-content-header>
+
+
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+
+<div 
+    class="table" 
+    *ngIf="!isLoading"
+>
+
+    <p-table 
+        #dt1 
+        [value]="rawMaterials" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RawMaterial', 'Category']"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        responsiveLayout="stack" 
+        [breakpoint]="'1100px'" 
+    >
+
+        <ng-template pTemplate="caption">
+
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                    (input)="onGlobalFilter(dt1, $event)"
+                />
+
+            </div>
+
+          
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>#</th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                </th>
+                <th >   
+                    Actual Stocking
+                </th>
+                <th>
+                    Verified Stocking
+                </th>
+                
+            </tr>
+        </ng-template>
+      
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr  *ngIf="!isLoading">
+                <td>  
+                    <span class="p-column-title">#</span> 
+                    {{ rowIndex + 1 }} 
+                </td>
+                <td>
+                    <span class="p-column-title">Raw Material</span> 
+                    {{ row.RawMaterial }}
+                </td>
+                <td >
+                    <span class="p-column-title">Weight</span> 
+                    {{ row.TotalWeight | number}} kg
+                    <div class="sub-text"> {{ row.TotalQty | number}} bag/s</div>
+                </td>
+                <td >
+                    <span class="p-column-title">Weight</span> 
+                    {{ row.TotalWeightVerify | number}} kg
+                    <div class="sub-text"> {{ row.TotalQtyVerify | number}} bag/s</div>
+                </td>
+
+            </tr>
+        </ng-template>
+
+
+    </p-table>
+
+</div>

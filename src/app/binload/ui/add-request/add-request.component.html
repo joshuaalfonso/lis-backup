@@ -41,7 +41,6 @@
                         formControlName="RequestDate" 
                         [showIcon]="true" 
                         placeholder="mm/dd/yyyy" 
-                        [showTime]="true" 
                         hourFormat="12" 
                         appendTo="body" 
                     ></p-calendar>
@@ -85,7 +84,6 @@
         <div class="field">
             <label class="font-semibold" > 
                 Location 
-                <span class="required">*</span>
             </label>
             <div>
                 <p-dropdown 
@@ -258,8 +256,8 @@
                 <td>{{ row.RawMaterial }}</td>
                 <td>{{ row.WarehouseLocation }}</td>
                 <td>{{ row.Warehouse_Name }}</td>
-                <td>{{ row.RawMatsQty | number }}</td>
-                <td>{{ row.RawMatsWeight | number }}</td>
+                <td>{{ row.QuantityPerWarehouse | number }}</td>
+                <td>{{ row.WeightPerWarehouse | number }}</td>
             </tr>
         </ng-template>
 

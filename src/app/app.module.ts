@@ -191,6 +191,7 @@ import { TransferDetailComponent } from './transfer-detail/transfer-detail.compo
 import { WarehouseStockTableComponent } from './binload/ui/warehouse-stock-table/warehouse-stock-table.component';
 import { AddRequestComponent } from './binload/ui/add-request/add-request.component';
 import { VerifyRequestComponent } from './binload/ui/verify-request/verify-request.component';
+import { StockingComponent } from './pages/stocking/stocking.component';
 
 
 
@@ -285,6 +286,7 @@ import { VerifyRequestComponent } from './binload/ui/verify-request/verify-reque
     WarehouseStockTableComponent,
     AddRequestComponent,
     VerifyRequestComponent,
+    StockingComponent,
     
   ],
   imports: [

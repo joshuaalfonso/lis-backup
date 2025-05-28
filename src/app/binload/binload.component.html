@@ -77,7 +77,11 @@
                     [unitOfMeasure]="unitOfMeasure"
                     [truck]="truck"
                     [driver]="driver"
+                    (getBinloadRequest)="getBinloadRequest()"
+                    [UserID]="UserID"
+                    *ngIf="insert && tabValue == 1"
                 />
+
             </div>
 
         </ng-template>
@@ -169,7 +173,20 @@
                         <i class='bx bx-check'></i>
                     </button> -->
 
-                    <app-verify-request />
+                    <app-verify-request 
+                        [plant]="plant"
+                        [rawMaterial]="rawMaterial"
+                        [warehouseLocation]="warehouseLocation"
+                        [warehouse]="warehouse"
+                        [warehousePartition]="warehousePartition"
+                        [unitOfMeasure]="unitOfMeasure"
+                        [truck]="truck"
+                        [driver]="driver"
+                        [intake]="intake"
+                        [row]="row"
+                        [UserID]="UserID"
+                        *ngIf="row.Binloading.length > 0 && tabValue == 1 && binloadVerify"
+                    />
 
                     <button 
                         pButton 
@@ -257,6 +274,7 @@
     <app-warehouse-stock-table 
         [warehouseStock]="warehouseStock"
     />
+
 </p-dialog>
 
 
@@ -317,17 +335,17 @@
                 Raw Material 
                 <span class="required">*</span>
             </label>
-                <p-dropdown 
-                    [options]="rawMaterial" 
-                    formControlName="RawMaterialID" 
-                    optionLabel="RawMaterial" 
-                    [style]="{'height': '40px'}" 
-                    [showClear]="true" 
-                    placeholder="Select Raw Material"
-                    optionValue="RawMaterialID"
-                    [filter]="true"
-                    (onChange)="onSelectRawMaterial($event.value)"
-                ></p-dropdown>
+            <p-dropdown 
+                [options]="rawMaterial" 
+                formControlName="RawMaterialID" 
+                optionLabel="RawMaterial" 
+                [style]="{'height': '40px'}" 
+                [showClear]="true" 
+                placeholder="Select Raw Material"
+                optionValue="RawMaterialID"
+                [filter]="true"
+                (onChange)="onSelectRawMaterial($event.value)"
+            ></p-dropdown>
         </div>
 
         <div class="field">
@@ -475,6 +493,7 @@
                     [class.disabled]="selectedWarehouse.length == 0" 
                     optionValue="WarehouseID"
                     (onChange)="onSelectWarehouse($event)"
+                    
                 />
             </div>
             <!-- (onChange)="onSelectWarehouse($event)" -->
@@ -483,7 +502,6 @@
 
         <div class="field">
             <label class="font-semibold">Partition</label>
-            <!-- <div class="card flex justify-content-center"> -->
                 <p-dropdown 
                     formControlName="WarehousePartitionID"
                     [options]="warehousePartition" 
@@ -495,7 +513,6 @@
                     [class.disabled]="selectedPartition.length == 0" 
                     optionValue="WarehousePartitionID"
                 ></p-dropdown>
-            <!-- </div> -->
         </div>
 
 
@@ -732,7 +749,7 @@
                 </div>
             </div>
 
-            <div class="col">
+            <!-- <div class="col">
                 <div class="field">
                     <label class="font-semibold" > Partition </label>
                    
@@ -748,7 +765,7 @@
                             optionValue="WarehousePartitionID"
                         ></p-dropdown>
                 </div>
-            </div>
+            </div> -->
         </div>
 
 
@@ -1151,7 +1168,6 @@
     <form 
         class="w-full mb-3" 
     >  
-
         <div class="zxc">
             <p-table #dt_orders [value]="rawMatsPartitionStock"   [scrollable]="true"    scrollHeight="flex" >
                 <ng-template pTemplate="header">

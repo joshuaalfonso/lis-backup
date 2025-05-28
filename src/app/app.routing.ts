@@ -58,6 +58,7 @@ import { BlOverviewComponent } from "./dashboard-warehousing/ui/bl-overview/bl-o
 import { SystemLogsComponent } from "./system-logs/system-logs.component";
 import { UnloadingDetailComponent } from "./unloading-detail/unloading-detail.component";
 import { TransferDetailComponent } from "./transfer-detail/transfer-detail.component";
+import { StockingComponent } from "./pages/stocking/stocking.component";
 
 
 
@@ -146,6 +147,11 @@ const routes: Routes = [
         data: {
             'role': '2.4.1'
         }
+    },
+    {
+        path: 'stocking',
+        component: StockingComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'contract-po', 

@@ -27,8 +27,16 @@ export class BinloadService {
         return this.http.post( this.baseUrl + '/project/b_Binloading.php', binloadOBJ);
     }
 
+    saveBinloadChecker(binloadOBJ: any) {
+        return this.http.post(  this.baseUrl + '/project/b_BinloadingDispatcher.php', binloadOBJ )
+    }
+
     verifyBinload(binloadingRequestID: any) {
         return this.http.post( this.baseUrl + '/project/b_BinloadingVerify.php', {BinloadRequestID: binloadingRequestID});
+    }
+
+    verifyStock(data: any) {
+        return this.http.post( this.baseUrl + '/project/b_BinloadingVerifying.php', data );
     }
 
     getWarehousePartitionStock(id: any) {
@@ -67,6 +75,10 @@ export class BinloadService {
         return this.http.get<any>( this.baseUrl + '/project/a_WarehouseFiltered.php?id=' + rawMaterialID  )
     }
 
+    getDispatcherStock(rawMaterialID: number) {
+        return this.http.get<any>( this.baseUrl + '/project/a_WarehouseStockingPerWarehouse.php?id=' + rawMaterialID );
+    }
+
     saveData(binloadObj: Binload) {
         return this.http.post
         ( this.baseUrl + '/project/b_Binloading.php', binloadObj )
@@ -90,10 +102,10 @@ export interface BinloadRequest {
     BinloadRequestID: string,
     WarehouseLocationID: number,
     WarehouseID: number,
-    WarehousePartitionID: number,
-    WarehousePartitionStockID: number,
-    PO: string,
-    BL: string,
+    // WarehousePartitionID: number,
+    // WarehousePartitionStockID: number,
+    // PO: string,
+    // BL: string,
     PlantID: number,
     DriverID: number,
     TruckID: number,

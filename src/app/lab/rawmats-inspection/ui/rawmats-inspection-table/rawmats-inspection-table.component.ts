@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Message } from 'primeng/api';
 import { RawMatsInspectionService } from '../../rawmats-inspection.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-rawmats-inspection-table',
@@ -38,6 +39,12 @@ export class RawmatsInspectionTableComponent {
 
   getPdf(id: number) {
     window.open('http://10.10.2.120/project/lab/InspectionReport.php?id=' + id, '_blank');
+  }
+
+   // ==== INPUT SEARCH DATA====
+   onGlobalFilter(table: Table, event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    table.filterGlobal(inputValue, 'contains');
   }
  
 }

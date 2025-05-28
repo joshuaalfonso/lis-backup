@@ -20,7 +20,7 @@
 
 <!-- ===== TABLE ====== -->
 <div class="table" *ngIf="!isLoading && driverError.length === 0">
-  <p-table #dt1 [value]="driver" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial']">
+  <p-table #dt1 [value]="driver" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['DriverName', 'ContactNumber']">
 
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between mb-2">
@@ -30,6 +30,7 @@
           type="text" 
           class="p-inputtext-lg pl-3 input__search" 
           placeholder="Search"
+          (input)="onGlobalFilter(dt1, $event)"
         />
         <button 
           pButton 

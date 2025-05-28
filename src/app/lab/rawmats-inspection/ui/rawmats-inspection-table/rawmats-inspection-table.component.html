@@ -9,7 +9,7 @@
         #dt1 
         [value]="rawMatsInspection" 
         [tableStyle]="{ 'width': '100%' }" 
-        [globalFilterFields]="['RawMaterial', 'Category']"
+        [globalFilterFields]="['InspectionDate', 'SampleCode', 'RawMaterial', 'DRNumber', 'DRNumber', 'DateTimeReleased']"
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
@@ -25,6 +25,7 @@
                         type="text" 
                         class="p-inputtext-lg pl-3 input__search" 
                         placeholder="Search" 
+                        (input)="onGlobalFilter(dt1, $event)"
                     />
                     <!-- <button type="button" (click)="generatePDF()">pdf</button> -->
                 </div>

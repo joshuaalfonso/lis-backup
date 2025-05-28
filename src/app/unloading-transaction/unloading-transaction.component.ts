@@ -162,7 +162,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             'ContainerNumber': new FormControl(null),
             'DateTimeUnload': new FormControl(null),
             'DateUnload': new FormControl(null, Validators.required),
-            'DrNumber': new FormControl(null, Validators.required),
+            'DrNumber': new FormControl(null, [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/), Validators.minLength(2)]),
             'TruckID': new FormControl(null, Validators.required),
             'RawMaterialID': new FormControl(null, Validators.required),
             'WarehouseLocationID': new FormControl(null), 

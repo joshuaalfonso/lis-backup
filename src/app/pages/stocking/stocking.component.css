@@ -1,0 +1,7 @@
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-medium);
+}

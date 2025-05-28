@@ -171,6 +171,11 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             routerLink: '/warehouse-inventory',
                             view: false,
                         },
+                        {
+                            title: 'Stocking',
+                            routerLink: '/stocking',
+                            view: true,
+                        },
                     ],
                 },
 

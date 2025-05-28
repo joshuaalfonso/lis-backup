@@ -22,7 +22,7 @@
         #dt1 
         [value]="localSupplier" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['Supplier', 'Address', 'ContactPerson', 'ContactNumber']" 
+        [globalFilterFields]="['Supplier', 'Origin', 'Address']" 
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
@@ -36,6 +36,7 @@
                     type="text" 
                     class="p-inputtext-lg pl-3 input__search" 
                     placeholder="Search" 
+                    (input)="onGlobalFilter(dt1, $event)"
                 />
                 <button 
                     pButton 
