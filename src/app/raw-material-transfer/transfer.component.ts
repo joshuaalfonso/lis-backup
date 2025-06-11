@@ -6,19 +6,19 @@ import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { CheckerService } from "../checker/checker.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
-import { WarehouseService } from "../warehouse/warehouse.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
-import { TruckService } from "../truck/truck.service";
-import { DriverService } from "../driver/driver.service";
-import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
+import { DriverService } from "../pages/driver/driver.service";
 import { WeigherService } from "../weigher/weigher.service";
 import { BinloadService } from "../binload/binload.service";
 import { AuthService } from "../auth/auth.service";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { DispatcherService } from "../dispatcher/dispatcher.service";
 import { GuardService } from "../guard/guard.service";
 import { Dialog } from "primeng/dialog";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
+import { WarehouseService } from "../pages/warehouse/warehouse.service";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
+import { TruckService } from "../pages/truck/truck.service";
+import { WarehouseLocationService } from "../pages/warehouse-location/warehouse-location.service";
 
 
 @Component({

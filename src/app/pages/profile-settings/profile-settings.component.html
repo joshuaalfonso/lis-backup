@@ -1,0 +1,53 @@
+<app-content-header [title]="'Settings'" />
+
+
+
+
+<div class="flex flex-column lg:flex-row lg:gap-3 p-2 xl:mx-8">
+
+    <div class="flex flex-column gap-3 lg:w-19rem">
+
+        <!-- <div class="flex gap-3">
+            <img src="assets/gamer.png" alt="avatar" width="40px">
+            <div>
+                <span class="text-800 font-medium">Joshua</span>
+                <span class="sub-text">Administrator</span>
+            </div>
+        </div> -->
+
+        <span class="text-sm text-500 uppercase font-medium">
+            Personal
+        </span>
+
+        <ul class=" p-0">
+            <li 
+                class="mb-2 py-2 px-3 cursor-pointer border-round" 
+                routerLink="/settings/account" 
+                routerLinkActive="link-active"
+            >
+                <a class="flex align-items-center gap-3 font-semibold">
+                    <i class="pi pi-user "></i>
+                    <span>Account Details</span>
+                </a>
+            </li>
+            <li 
+                class=" mb-2 py-2 px-3 cursor-pointer border-round" 
+                routerLink="/settings/security" 
+                routerLinkActive="link-active"
+            >
+                <a class="flex align-items-center gap-3 font-semibold">
+                    <i class="pi pi-lock "></i>
+                    <span>Security</span>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+
+
+    <div class=" py-4 px-4 lg:w-full border-round account-details p-fluid">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>

@@ -1,0 +1,9 @@
+td, th {
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+td {
+    color: var(--font-color);
+    font-weight: var(--font-500);
+}

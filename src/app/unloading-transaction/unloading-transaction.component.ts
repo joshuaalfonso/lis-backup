@@ -3,19 +3,20 @@ import { UnloadingTransactionService } from "./unloading-transaction.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { CheckerService } from "../checker/checker.service";
 import { Observable, Subscription, take } from "rxjs";
-import { TruckService } from "../truck/truck.service";
 import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
-import { WarehouseService } from "../warehouse/warehouse.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
-import { SupplierService } from "../supplier/supplier.service";
 import { Dialog } from "primeng/dialog";
 import { Table } from "primeng/table";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { FileSelectEvent, FileUploadEvent, UploadEvent } from "primeng/fileupload";
 import { environment } from "../environments/environment";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
+import { TruckService } from "../pages/truck/truck.service";
+import { WarehouseService } from "../pages/warehouse/warehouse.service";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
+import { SupplierService } from "../pages/supplier/supplier.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: 'app-unloading-transaction',
@@ -122,6 +123,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     selectedRow = {};
 
+    searchText: string = '';
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -137,7 +140,9 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         private UsersService: UsersService,
         private auth: AuthService,
         private CofirmationService: ConfirmationService,
-        private SystemLogsService: SystemLogsService
+        private SystemLogsService: SystemLogsService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -215,9 +220,30 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                 }
             )
         )
+
+
+        this.route.queryParamMap.subscribe(params => {
+            const po = params.get('po')?.toLowerCase() || '';
+            const bl = params.get('bl')?.toLowerCase() || '';
+            const isTransactionId = params.get('transactionId')?.toLowerCase() || '';
+            const status = params.get('status')?.toLowerCase() || '';
+            console.log(po, bl, isTransactionId, status)
+            // apply filters using these values
+            // this.applyFilter();
+
+            if (status === '2') {
+                this.value = 3;
+                this.getverified();
+                return
+            }
+
+            this.value = isTransactionId ? Number(isTransactionId) : 1;
+            this.onFilterTab(this.value)
+
+        });
         
         // this.getData();
-        this.onFilterUnloading();
+        // this.onFilterUnloading();
         this.getWarehousePartition();
         this.getWarehouse();
         this.getRawMats();
@@ -273,11 +299,23 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
         )
     }
 
-    onFilterUnloading() {
-        
+    onFilterTab(isTransactionID: number) {
+        this.isLoading = true;
+            this.subscription.add(
+                this.UnloadingTransactionService.filterUnloadingTransaction({id: isTransactionID, checkerID: this.userID}).subscribe(
+                    response => {
+                        this.isLoading = false;
+                        this.unloadingTransaction = response;
+                    }, error => {
+                        console.log(error);
+                        this.isLoading = false;
+                        this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
+                    }
+                )
+            )
+    }
 
-        // if (this.value == 1 || 2) {
-        //     console.log('1 and 2');
+    onFilterUnloading() {
             
             this.isLoading = true;
             this.subscription.add(
@@ -292,14 +330,6 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     }
                 )
             )
-        // }
-
-        // if (this.value == 3) {
-        //     console.log(this.value)
-        //     this.getverified();
-        // }
-
-        // console.log(this.value)
 
     }
 

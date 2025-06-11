@@ -1,7 +1,14 @@
  <div class="cards">
 
     <div class="left-col">
-        <h6 class="card__title">{{row.WarehouseLocation}}</h6>
+        <a
+            [routerLink]="['/warehouse-location']"
+            [queryParams]="{ location: row.WarehouseLocation.toLowerCase()}"
+            class="card__title"
+        >
+            {{row.WarehouseLocation}}
+        </a>
+        <!-- <h6 class="card__title">{{row.WarehouseLocation}}</h6> -->
         
         <div> 
 

@@ -4,10 +4,6 @@ import { environment } from "src/app/environments/environment";
 
 
 
-
-
-
-
 @Injectable({providedIn: 'root'})
 export class StockingService {
 

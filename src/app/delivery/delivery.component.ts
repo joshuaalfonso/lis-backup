@@ -7,11 +7,11 @@ import { Subscription } from "rxjs";
 import { Table } from "primeng/table";
 import { CustomerService } from "../cutomer/customer.service";
 import { FinishProductService } from "../finish-product/finish-product.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { Dialog } from "primeng/dialog";
-import { TruckService } from "../truck/truck.service";
 import { AuthService } from "../auth/auth.service";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
+import { TruckService } from "../pages/truck/truck.service";
 
 
 @Component({

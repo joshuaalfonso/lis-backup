@@ -1,0 +1,93 @@
+<!-- ======= TOAST NOTIFICATION ======== -->
+<p-toast></p-toast>
+
+<!-- ======== CONFIRM POP-UP======== -->
+<p-confirmPopup></p-confirmPopup>
+
+<app-content-header [title]="'Profile / Container Type'"></app-content-header>
+
+<!-- ==== SEARCH, ADD , EXPORT ==== -->
+<!-- <div class="controls">
+    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"  />
+    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
+</div> -->
+
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div> 
+
+<p-messages 
+    [(value)]="containerTypeError" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="containerTypeError" 
+/>
+
+<!-- ===== TABLE ====== -->
+<div class="table" *ngIf="!isLoading && containerTypeError.length === 0">
+    <p-table #dt1 [value]="containerType" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial']">
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"  />
+                <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add Item</span></button>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>#</th>
+                <th>Container Type</th>
+                <th *ngIf="edit"></th>
+            </tr>
+        </ng-template>
+
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr>
+              <td data-title="#">{{ rowIndex + 1 }}</td>
+              <td data-title="Raw Material">{{ row.Container }}</td>
+              <td data-title="Action" *ngIf="edit">
+                <!-- <button pButton pRipple class="edit__btn" class="p-button-success p-2 border-round mr-2" (click)="onSelect(row)"><i class='bx bx-edit-alt'></i></button>
+                <button pButton pRipple class="delete__btn" class="p-button-danger p-2 border-round" (click)="confirm2($event, row.ContainerTypeID)"><i class='bx bx-trash' ></i></button> -->
+
+                <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
+                <p-overlayPanel #action>
+                    <div class="actions-overlay">
+                        <p (click)="onSelect(row)">
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p>
+                        <p>
+                            <svg  width="15px" height="15px">
+                            <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                        </svg>
+                        Delete
+                    </p>
+                    </div>
+                </p-overlayPanel>
+              </td>
+          </tr>
+      </ng-template>
+    </p-table>
+</div>
+
+
+<!-- ======= MODAL FORM ======== -->
+<p-dialog header="{{ dialogHeader }}" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1200px': '500px' }" [style]="{ width: '35vw' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="containerTypeForm" class="p-fluid" (ngSubmit)="onSubmit()" >  
+  
+        <div class="field">
+          <label class="font-semibold" >Container Type</label>
+          <input pInputText formControlName="Container" autocomplete="off" class="input" placeholder="Enter container type">
+        </div>
+  
+        <button pButton pRipple label="Submit" class="bg-indigo-500 border-round border-none submit" [disabled]="!containerTypeForm.valid"></button>
+  
+    </form>
+  </p-dialog>

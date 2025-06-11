@@ -1091,16 +1091,15 @@
                 Trucking 
                 <span class="required">*</span>
             </label>
-            <!-- <div class="card flex justify-content-center"> -->
-                <p-dropdown 
+            <p-dropdown 
                 [options]="trucking" 
                 formControlName="TruckingID" 
                 optionLabel="TruckingName" 
                 [style]="{'height': '40px', 'border': '1px solid white'}" 
                 [showClear]="true" 
                 placeholder="Select Trucking"
-                ></p-dropdown>
-            <!-- </div> -->
+                [filter]="true"
+            ></p-dropdown>
         
         </div>
 
@@ -1155,20 +1154,12 @@
 
         </div>
 
-        <!-- <div>
-            <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit" 
-            [disabled]="!truckForm.valid"
-            ></button>
-        </div> -->
-
-        <app-submit-button 
+        <div class="flex justify-content-end">
+            <app-submit-button 
             [submitLoading]="submitLoading" 
             [form]="truckForm" 
         /> 
+        </div>
 
     </form>
   

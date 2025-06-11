@@ -3,14 +3,14 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { weighingTransactionService } from "./weighing.service";
 import { Observable, Subscription } from "rxjs";
 import { MessageService } from "primeng/api";
-import { TruckService } from "../truck/truck.service";
-import { DriverService } from "../driver/driver.service";
+import { DriverService } from "../pages/driver/driver.service";
 import { CheckerService } from "../checker/checker.service";
-import { SupplierService } from "../supplier/supplier.service";
 import { CustomerService } from "../cutomer/customer.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { FinishProductService } from "../finish-product/finish-product.service";
-import { ShippingLineService } from "../shipping-line/shipping-line.service";
+import { TruckService } from "../pages/truck/truck.service";
+import { SupplierService } from "../pages/supplier/supplier.service";
+import { ShippingLineService } from "../pages/shipping-line/shipping-line.service";
 
 
 @Component({

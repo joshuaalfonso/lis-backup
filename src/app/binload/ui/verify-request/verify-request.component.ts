@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { BinloadService } from '../../binload.service';
@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './verify-request.component.html',
   styleUrls: ['./verify-request.component.css']
 })
-export class VerifyRequestComponent implements OnInit{
+export class VerifyRequestComponent implements OnInit, OnDestroy{
 
 
   binloadVerifyForm!: FormGroup;
@@ -49,6 +49,10 @@ export class VerifyRequestComponent implements OnInit{
     this.initiateForm();
     // console.log(this.row)
     // console.log(this.warehousePartition)
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   initiateForm() {
@@ -146,7 +150,7 @@ export class VerifyRequestComponent implements OnInit{
         response => {
   
           const data = response.filter((stock: any) => stock.WarehouseID === this.row.WarehouseID && stock.WarehousePartitionID === eventValue)
-          console.log(data)
+          // console.log(data)
         }, 
         error => {
           console.log(error);

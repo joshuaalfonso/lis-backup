@@ -4,8 +4,8 @@ import { CustomerService } from "../cutomer/customer.service";
 import { Observable, Subscription } from "rxjs";
 import { FinishProductService } from "../finish-product/finish-product.service";
 import { AddDeliveryService } from "./add-delivery.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { MessageService } from "primeng/api";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
 
 
 @Component({

@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
 
 

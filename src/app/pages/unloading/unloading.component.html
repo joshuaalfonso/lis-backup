@@ -1,0 +1,32 @@
+<!-- title header -->
+<app-content-header [title]="'Unloading Transaction'"></app-content-header>
+
+<!-- tab buttons -->
+<div class="radio-inputs">
+    <label class="radio">
+        <input checked="" name="radio" type="radio" [value]="1" [(ngModel)]="tabValue" />
+        <span class="name" [class.active]="tabValue === 1"> Local </span>
+    </label>
+    <label class="radio">
+        <input name="radio" type="radio" [value]="2" [(ngModel)]="tabValue" />
+        <span class="name" [class.active]="tabValue === 2"> Import </span>
+    </label>
+    <!-- *ngIf="verifiedView" -->
+    <label class="radio">
+        <input name="radio" type="radio" [value]="3" [(ngModel)]="tabValue" />
+        <span class="name" [class.active]="tabValue === 3"> Verified </span>
+    </label>
+</div>
+
+<!-- local unloading table -->
+<app-local-table 
+    [tabValue]="tabValue"
+    [userID]="userID"
+    [view]="view"
+    [insert]="insert"
+    [edit]="edit"
+    [generateReport]="generateReport"
+    [verifiedView]="verifiedView"
+    [delete]="delete"
+    *ngIf="tabValue === 1"
+/>

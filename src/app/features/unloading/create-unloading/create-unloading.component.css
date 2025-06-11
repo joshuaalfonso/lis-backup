@@ -1,0 +1,115 @@
+:host ::ng-deep p-calendar.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+:host ::ng-deep .p-inputtext.disabled{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+:host ::ng-deep p-inputnumber.disabled input{
+    background: gainsboro;
+    cursor: not-allowed;
+}
+
+
+:host ::ng-deep p-dropdown.disabled .p-dropdown{
+    background-color: gainsboro; 
+}
+
+:host ::ng-deep .p-buttonset .p-button{
+    padding: 5px 10px;
+    margin-bottom: 15px;
+}
+
+:host ::ng-deep .p-dialog .p-button {
+    padding: 7px 10px;
+    border-radius: 5px;
+} 
+
+:host ::ng-deep .p-fileupload-buttonbar p-button {
+    display: none;
+}
+
+
+required {
+    color: rgb(228, 84, 84);
+}
+
+:host ::ng-deep .p-calendar {
+    height: 41px;
+}
+
+:host ::ng-deep .p-calendar button{
+    border-top-right-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+
+
+:host ::ng-deep .p-dropdown-label {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep p-dropdown ul {
+    padding: 0;
+}
+
+input {
+    padding: 7px 10px;
+}
+
+:host ::ng-deep .p-dropdown {
+    background: var(--surface-color);
+    border: var(--card-border) !important;
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}
+
+:host ::ng-deep .p-dropdown-items, :host ::ng-deep .p-dropdown-items-wrapper {
+    background: var(--surface-color);
+}
+
+:host ::ng-deep .p-dropdown-item, :host ::ng-deep .p-dropdown-label  {
+    color: var(--font-color);
+}
+
+:host ::ng-deep .p-dropdown-item:hover {
+    background: var(--body-color);
+}
+
+:host ::ng-deep .p-dropdown .p-highlight {
+    background: var(--body-color);
+    color: var(--first-color);
+}
+
+:host ::ng-deep .p-dropdown-header {
+    background: var(--surface-color);
+    border-bottom: 1px solid var(--divider-border);
+}
+
+p-inputNumber ::ng-deep input {
+    padding: 7px 10px;
+}
+
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ced4da;
+}
+
+:host ::ng-deep p-fileupload, :host ::ng-deep .p-fileupload {
+    border: none !important;
+}
+
+:host ::ng-deep .p-fileupload-buttonbar {
+    background: var(--body-color);
+    border: none !important;
+    border: var(--card-border) !important;
+    box-shadow: var(--input-box-shadow);
+}
+
+:host ::ng-deep .p-fileupload-content {
+    background: var(--surface-color);
+    border: none !important;
+    border: var(--card-border) !important;
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+}

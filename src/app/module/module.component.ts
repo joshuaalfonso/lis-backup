@@ -5,8 +5,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { AuthService } from "../auth/auth.service";
-import { UsersService } from "../users/users.service";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { UsersService } from "../pages/users/users.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
 
 
 @Component({

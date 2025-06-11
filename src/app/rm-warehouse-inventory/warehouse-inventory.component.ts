@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { WarehouseInventoryService } from "./warehouse-inventory.service";
 import { Subscription, take } from "rxjs";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
 import { AuthService } from "../auth/auth.service";
 import { Message } from "primeng/api";
 

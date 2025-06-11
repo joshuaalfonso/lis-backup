@@ -3,10 +3,10 @@ import { RawMaterialsService } from "./raw-materials.service";
 import { Message } from 'primeng/api';
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Subscription, take } from "rxjs";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { RawMaterial } from "./raw-materials.model";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
 
 @Component({
     selector: 'app-raw-materials',

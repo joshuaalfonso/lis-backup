@@ -1,33 +1,25 @@
 import { RouterModule, Routes } from "@angular/router";
 import { AuthComponent } from "./auth/auth.component";
 import { NgModule } from "@angular/core";
-import { DashboardComponent } from "./dashboard/dashboard.component";
+import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { AuthGuard } from "./auth/auth.guard";
 import { RawMaterialsComponent } from "./raw-materials/raw-materials.component";
-import { SupplierComponent } from "./supplier/supplier.component";
-import { BrokerComponent } from "./broker/broker.component";
-import { WarehouseComponent } from "./warehouse/warehouse.component";
-import { WarehouseLocationComponent } from "./warehouse-location/warehouse-location.component";
-import { WarehousePartition } from "./warehouse-partition/warehouse-partition.component";
+import { BrokerComponent } from "./pages/broker/broker.component";
 import { CheckerComponent } from "./checker/checker.component";
-import { ShippingLineComponent } from "./shipping-line/shipping-line.component";
 import { TruckTypeComponent } from "./truck-type/truck-type.component";
 import { ModuleComponent } from "./module/module.component";
-import { PlantComponent } from "./plant/plant.component";
-import { RawMaterialInventoryComponent } from "./raw-material-inventory/raw-material-inventory.component";
 import { TransferComponent } from "./raw-material-transfer/transfer.component";
 import { DeliveryComponent } from "./delivery/delivery.component";
 import { DeliveryDetailComponent } from "./delivery-detail/delivery-detail.component";
-import { TruckingComponent } from "./trucking/trucking.component";
-import { TruckComponent } from "./truck/truck.component";
+import { TruckingComponent } from "./pages/trucking/trucking.component";
 import { FinishProductComponent } from "./finish-product/finish-product.component";
 import { FinishProductInventory } from "./finish-product-inventory/finish-product-inventory.component";
 import { FinishProductTrasfer } from "./finish-product-transfer/finish-product-transfer.component";
 import { CustomerComponent } from "./cutomer/customer.component";
 import { SalesAgentComponent } from "./sales-agent/sales-agent.component";
-import { ContainerTypeComponent } from "./container-type/container-type.component";
+import { ContainerTypeComponent } from "./pages/container-type/container-type.component";
 import { ContractPerformaComponent } from "./contract-performa/contract-performa.component";
-import { DriverComponent } from "./driver/driver.component";
+import { DriverComponent } from "./pages/driver/driver.component";
 import { IndentorComponent } from "./indentor/indentor.component";
 import { WeighingTransactionComponent } from "./weighing-transaction/weighing.component";
 import { ProductionOutputComponent } from "./production-output/production-output.component";
@@ -41,24 +33,32 @@ import { DispatcherComponent } from "./dispatcher/dispatcher.component";
 import { CheckerType } from "./checker-type/checker-type.component";
 import { WeigherComponent } from "./weigher/weigher.component";
 import { WarehouseInventoryComponent } from "./rm-warehouse-inventory/warehouse-inventory.component";
-import { BankComponent } from "./bank/bank.component";
+import { BankComponent } from "./pages/bank/bank.component";
 import { RawMatsPOComponent } from "./rawmats-po/rawmats-po.component";
-import { PortOfDischarge } from "./port-of-discharge/port-of-discharge.component";
-import { UsersComponent } from "./users/users.component";
+import { UsersComponent } from "./pages/users/users.component";
 import { HasRoleGuard } from "./auth/hasRole.guard";
 import { UnauthorizedComponent } from "./unauthorized/unauthorized.component";
 import { GuardComponent } from "./guard/guard.component";
 import { CheckerScheduleComponent } from "./checker-schedule/checker-schedule.component";
-import { ProfileSettingsComponent } from "./profile-settings/profile-settings.component";
-import { AccountDetailsComponent } from "./account-details/account-details.component";
-import { SecurityComponent } from "./security/security.component";
+import { ProfileSettingsComponent } from "./pages/profile-settings/profile-settings.component";
+import { AccountDetailsComponent } from "./features/profile-settings/account-details/account-details.component";
+import { SecurityComponent } from "./features/profile-settings/security/security.component";
 import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-inspection.component";
-import { LocalSupplier } from "./supplier-local/local-supplier.component";
-import { BlOverviewComponent } from "./dashboard-warehousing/ui/bl-overview/bl-overview.component";
-import { SystemLogsComponent } from "./system-logs/system-logs.component";
+import { SystemLogsComponent } from "./pages/system-logs/system-logs.component";
 import { UnloadingDetailComponent } from "./unloading-detail/unloading-detail.component";
 import { TransferDetailComponent } from "./transfer-detail/transfer-detail.component";
 import { StockingComponent } from "./pages/stocking/stocking.component";
+import { RawMaterialInventoryComponent } from "./pages/raw-material-inventory/raw-material-inventory.component";
+import { WarehouseComponent } from "./pages/warehouse/warehouse.component";
+import { WarehouseLocationComponent } from "./pages/warehouse-location/warehouse-location.component";
+import { WarehousePartition } from "./pages/warehouse-partition/warehouse-partition.component";
+import { SupplierComponent } from "./pages/supplier/supplier.component";
+import { LocalSupplier } from "./pages/supplier-local/local-supplier.component";
+import { ShippingLineComponent } from "./pages/shipping-line/shipping-line.component";
+import { TruckComponent } from "./pages/truck/truck.component";
+import { PlantComponent } from "./pages/plant/plant.component";
+import { PortOfDischarge } from "./pages/port-of-discharge/port-of-discharge.component";
+import { UnloadingComponent } from "./pages/unloading/unloading.component";
 
 
 
@@ -86,11 +86,6 @@ const routes: Routes = [
     {
         path: 'dashboard/unloading/:id',
         component: UnloadingDetailComponent
-    },
-    {
-        path: 'dashboard/bl/:id', 
-        component: BlOverviewComponent, 
-        canActivate: [AuthGuard],
     },
     {
         path: 'raw-materials', 
@@ -172,6 +167,14 @@ const routes: Routes = [
     {
         path: 'unloading-transaction', 
         component: UnloadingTransactionComponent, 
+        canActivate: [AuthGuard, HasRoleGuard], 
+        data: {
+            'role': '3.3.1'
+        }
+    },
+    {
+        path: 'unloading', 
+        component: UnloadingComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
             'role': '3.3.1'

@@ -2,20 +2,20 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BinloadRequest, BinloadService } from "./binload.service";
 import { BehaviorSubject, Observable, Subscription, take } from "rxjs";
-import { PlantService } from "../plant/plant.service";
 import { CheckerService } from "../checker/checker.service";
-import { WarehouseService } from "../warehouse/warehouse.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { ConfirmationService, Message, MessageService } from "primeng/api";
-import { DriverService } from "../driver/driver.service";
-import { TruckService } from "../truck/truck.service";
+import { DriverService } from "../pages/driver/driver.service";
 import { Table } from "primeng/table";
 import { Dialog } from "primeng/dialog";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
-import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
+import { PlantService } from "../pages/plant/plant.service";
+import { WarehouseService } from "../pages/warehouse/warehouse.service";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
+import { TruckService } from "../pages/truck/truck.service";
+import { WarehouseLocationService } from "../pages/warehouse-location/warehouse-location.service";
 
 
 @Component({

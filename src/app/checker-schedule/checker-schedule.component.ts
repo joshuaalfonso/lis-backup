@@ -2,14 +2,14 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CheckerScheduleService } from "./checker-schedule.service";
 import { Subscription, take } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { WarehouseLocationService } from "../warehouse-location/warehouse-location.service";
 import { Message, MessageService } from "primeng/api";
-import { PlantService } from "../plant/plant.service";
 import { CheckerType } from "../checker-type/checker-type.component";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
 import { AuthService } from "../auth/auth.service";
-import { UsersService } from "../users/users.service";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { UsersService } from "../pages/users/users.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
+import { WarehouseLocationService } from "../pages/warehouse-location/warehouse-location.service";
+import { PlantService } from "../pages/plant/plant.service";
 
 
 

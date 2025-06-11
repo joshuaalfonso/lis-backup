@@ -3,11 +3,11 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ProductionOutputService } from "./production-output.service";
 import { Observable, Subscription } from "rxjs";
 import { MessageService } from "primeng/api";
-import { WarehouseService } from "../warehouse/warehouse.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
 import { FinishProductService } from "../finish-product/finish-product.service";
 import { AuthService } from "../auth/auth.service";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
+import { WarehouseService } from "../pages/warehouse/warehouse.service";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
 
 
 

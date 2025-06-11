@@ -102,36 +102,27 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AuthComponent } from './auth/auth.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AppRoutingModule } from './app.routing';
 import { RawMaterialsComponent } from './raw-materials/raw-materials.component';
-import { SupplierComponent } from './supplier/supplier.component';
 import { ConfirmationService } from 'primeng/api';
-import { BrokerComponent } from './broker/broker.component';
-import { WarehouseComponent } from './warehouse/warehouse.component';
-import { WarehouseLocationComponent } from './warehouse-location/warehouse-location.component';
-import { WarehousePartition} from './warehouse-partition/warehouse-partition.component';
+import { BrokerComponent } from './pages/broker/broker.component';
 import { CheckerComponent } from './checker/checker.component';
-import { ShippingLineComponent } from './shipping-line/shipping-line.component';
 import { TruckTypeComponent } from './truck-type/truck-type.component';
 import { ModuleComponent } from './module/module.component';
-import { PlantComponent } from './plant/plant.component';
-import { RawMaterialInventoryComponent } from './raw-material-inventory/raw-material-inventory.component';
 import { TransferComponent } from './raw-material-transfer/transfer.component';
 import { DeliveryComponent } from './delivery/delivery.component';
 import { DeliveryDetailComponent } from './delivery-detail/delivery-detail.component';
-import { TruckingComponent } from './trucking/trucking.component';
-import { TruckComponent } from './truck/truck.component';
+import { TruckingComponent } from './pages/trucking/trucking.component';
 import { FinishProductComponent } from './finish-product/finish-product.component';
 import { FinishProductInventory } from './finish-product-inventory/finish-product-inventory.component';
 import { FinishProductTrasfer } from './finish-product-transfer/finish-product-transfer.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { LoaderComponent } from './loader/loader.component';
 import { CustomerComponent } from './cutomer/customer.component';
 import { SalesAgentComponent } from './sales-agent/sales-agent.component';
-import { ContainerTypeComponent } from './container-type/container-type.component';
+import { ContainerTypeComponent } from './pages/container-type/container-type.component';
 import { ContractPerformaComponent } from './contract-performa/contract-performa.component';
-import { DriverComponent } from './driver/driver.component';
+import { DriverComponent } from './pages/driver/driver.component';
 import { IndentorComponent } from './indentor/indentor.component';
 import { WeighingTransactionComponent } from './weighing-transaction/weighing.component';
 import { ProductionOutputComponent } from './production-output/production-output.component';
@@ -145,11 +136,9 @@ import { DispatcherComponent } from './dispatcher/dispatcher.component';
 import { CheckerType } from './checker-type/checker-type.component';
 import { WeigherComponent } from './weigher/weigher.component';
 import { WarehouseInventoryComponent } from './rm-warehouse-inventory/warehouse-inventory.component';
-import { BankComponent } from './bank/bank.component';
+import { BankComponent } from './pages/bank/bank.component';
 import { RawMatsPOComponent } from './rawmats-po/rawmats-po.component';
-import { PortOfDischarge } from './port-of-discharge/port-of-discharge.component';
 import { ContentHeaderComponent } from './content-header/content-header.component';
-import { UsersComponent } from './users/users.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { GuardComponent } from './guard/guard.component';
 import { CheckerScheduleComponent } from './checker-schedule/checker-schedule.component';
@@ -157,34 +146,27 @@ import { CardsLocationComponent } from './cards-location/cards-location.componen
 import { CardsLocationLoaderComponent } from './cards-location-loader/cards-location-loader.component';
 import { CardsTransferComponent } from './cards-transfer/cards-transfer.component';
 import { CardsTransferLoaderComponent } from './cards-transfer-loader/cards-transfer-loader.component';
-import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
-import { SecurityComponent } from './security/security.component';
-import { AccountDetailsComponent } from './account-details/account-details.component';
-import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-dashboard.component';
+import { ProfileSettingsComponent } from './pages/profile-settings/profile-settings.component';
+import { SecurityComponent } from './features/profile-settings/security/security.component';
+import { AccountDetailsComponent } from './features/profile-settings/account-details/account-details.component';
+import { DispatcherDashboardComponent } from './features/dashboard/dispatcher-dashboard/dispatcher-dashboard.component';
 import { SubmitButtonComponent } from './submit-button/submit-button.component';
 import { DashboardWarehousingComponent } from './dashboard-warehousing/dashboard-warehousing.component';
-import { TabComponent } from './tab/tab.component';
-import { DashboardRecentUnloadComponent } from './dashboard-recent-unload/dashboard-recent-unload.component';
-import { DashboardRecentBinloadComponent } from './dashboard-recent-binload/dashboard-recent-binload.component';
-import { DashboardRecentTransferComponent } from './dashboard-recent-transfer/dashboard-recent-transfer.component';
-import { DashboardReceivedComponent } from './dashboard-received/dashboard-received.component';
-import { DashboardRawmatsComponent } from './dashboard-rawmats/dashboard-rawmats.component';
+import { DashboardReceivedComponent } from './features/dashboard/dashboard-received/dashboard-received.component';
+import { DashboardRawmatsComponent } from './features/dashboard/dashboard-rawmats/dashboard-rawmats.component';
 import { DashbTableLoaderComponent } from './dashb-table-loader/dashb-table-loader.component';
-import { ImportationDashboardComponent } from './importation-dashboard/importation-dashboard.component';
+import { ImportationDashboardComponent } from './features/dashboard/importation-dashboard/importation-dashboard.component';
 import { RawmatsInspectionComponent } from './lab/rawmats-inspection/rawmats-inspection.component';
 import { RawmatsInspectionFormComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-form/rawmats-inspection-form.component';
 import { RawmatsInspectionTableComponent } from './lab/rawmats-inspection/ui/rawmats-inspection-table/rawmats-inspection-table.component';
 import { RawMaterialsModalComponent } from './raw-materials/ui/raw-materials-modal/raw-materials-modal.component';
 import { RawMaterialsTableComponent } from './raw-materials/ui/raw-materials-table/raw-materials-table.component';
-import { LocalSupplier } from './supplier-local/local-supplier.component';
-import { EditWeightComponent } from './unloading-transaction/features/edit-weight/edit-weight.component';
 import { BinloadVerifiedTableComponent } from './binload/ui/binload-verified-table/binload-verified-table.component';
-import { BlOverviewComponent } from './dashboard-warehousing/ui/bl-overview/bl-overview.component';
 import { BinloadTableComponent } from './binload/ui/binload-table/binload-table.component';
 import { RawmatsPoTableComponent } from './rawmats-po/ui/rawmats-po-table/rawmats-po-table.component';
 import { RawmatsPoModalComponent } from './rawmats-po/ui/rawmats-po-modal/rawmats-po-modal.component';
 import { RawmatsPoCompletedComponent } from './rawmats-po/ui/rawmats-po-completed/rawmats-po-completed.component';
-import { SystemLogsComponent } from './system-logs/system-logs.component';
+import { SystemLogsComponent } from './pages/system-logs/system-logs.component';
 import { AuthInterceptorService } from './auth/auth.interceptor.service';
 import { UnloadingDetailComponent } from './unloading-detail/unloading-detail.component';
 import { TransferDetailComponent } from './transfer-detail/transfer-detail.component';
@@ -192,6 +174,25 @@ import { WarehouseStockTableComponent } from './binload/ui/warehouse-stock-table
 import { AddRequestComponent } from './binload/ui/add-request/add-request.component';
 import { VerifyRequestComponent } from './binload/ui/verify-request/verify-request.component';
 import { StockingComponent } from './pages/stocking/stocking.component';
+import { LocalSupplier } from './pages/supplier-local/local-supplier.component';
+import { RawMaterialInventoryComponent } from './pages/raw-material-inventory/raw-material-inventory.component';
+import { SupplierComponent } from './pages/supplier/supplier.component';
+import { WarehouseComponent } from './pages/warehouse/warehouse.component';
+import { WarehouseLocationComponent } from './pages/warehouse-location/warehouse-location.component';
+import { WarehousePartition } from './pages/warehouse-partition/warehouse-partition.component';
+import { ShippingLineComponent } from './pages/shipping-line/shipping-line.component';
+import { TruckComponent } from './pages/truck/truck.component';
+import { PlantComponent } from './pages/plant/plant.component';
+import { PortOfDischarge } from './pages/port-of-discharge/port-of-discharge.component';
+import { DashboardRecentTransferComponent } from './features/dashboard/dashboard-recent-transfer/dashboard-recent-transfer.component';
+import { DashboardRecentUnloadComponent } from './features/dashboard/dashboard-recent-unload/dashboard-recent-unload.component';
+import { DashboardRecentBinloadComponent } from './features/dashboard/dashboard-recent-binload/dashboard-recent-binload.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import { TabComponent } from './components/tab/tab.component';
+import { UsersComponent } from './pages/users/users.component';
+import { UnloadingComponent } from './pages/unloading/unloading.component';
+import { LocalTableComponent } from './features/unloading/local-table/local-table.component';
+import { CreateUnloadingComponent } from './features/unloading/create-unloading/create-unloading.component';
 
 
 
@@ -258,7 +259,7 @@ import { StockingComponent } from './pages/stocking/stocking.component';
     AccountDetailsComponent,
     DispatcherDashboardComponent,
     SubmitButtonComponent,
-    RawMaterialsModalComponent,
+    RawMaterialsModalComponent, 
     DashboardWarehousingComponent,
     TabComponent,
     DashboardRecentUnloadComponent,
@@ -273,9 +274,7 @@ import { StockingComponent } from './pages/stocking/stocking.component';
     RawmatsInspectionTableComponent,
     RawMaterialsTableComponent,
     LocalSupplier,
-    EditWeightComponent,
     BinloadVerifiedTableComponent,
-    BlOverviewComponent,
     BinloadTableComponent,
     RawmatsPoTableComponent,
     RawmatsPoModalComponent,
@@ -287,6 +286,9 @@ import { StockingComponent } from './pages/stocking/stocking.component';
     AddRequestComponent,
     VerifyRequestComponent,
     StockingComponent,
+    UnloadingComponent,
+    LocalTableComponent,
+    CreateUnloadingComponent,
     
   ],
   imports: [

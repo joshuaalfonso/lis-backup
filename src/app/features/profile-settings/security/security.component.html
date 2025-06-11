@@ -1,0 +1,39 @@
+
+<p-messages [(value)]="messages" [enableService]="false" />
+
+<form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+    
+
+    <div class="field">
+        <label>Current password <span class="text-red-500">*</span></label>
+        <p-password  [toggleMask]="true"  [feedback]="false" formControlName="CurrentPassword"/>
+    </div>
+    
+    <div class="field">
+        <label>New password <span class="text-red-500">*</span></label>
+        <p-password  [toggleMask]="true" [feedback]="false"  id="NewPassword" formControlName="NewPassword"/>
+        <div *ngIf="passwordForm.get('NewPassword')?.errors?.['minlength']" class="text-sm text-red-500 mt-2">
+            Password must be at least 8 characters long.
+        </div>
+    </div>  
+
+    <!-- passwordForm.value.NewPassword.errors?.['minlength'] -->
+    
+    <div class="field">
+        <label>Confirm new password <span class="text-red-500">*</span></label>
+        <p-password  [toggleMask]="true"  [feedback]="false" formControlName="ConfirmNewPassword"/>
+    </div>
+
+
+    <div class=" flex justify-content-end ">
+
+        <p-button 
+            type="submit"
+            label="Save changes" 
+            [style]="{'border-radius': '5px', 'padding': '7px 10px'}"
+            [disabled]="!passwordForm.valid"
+        ></p-button>
+    
+    </div>
+</form>
+

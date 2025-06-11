@@ -6,8 +6,8 @@ import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
 import { AuthService } from "../auth/auth.service";
-import { UsersService } from "../users/users.service";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { UsersService } from "../pages/users/users.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
 
 
 @Component({

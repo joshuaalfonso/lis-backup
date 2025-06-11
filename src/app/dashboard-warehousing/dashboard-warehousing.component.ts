@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WarehouseLocationService } from '../warehouse-location/warehouse-location.service';
 import { BinloadService } from '../binload/binload.service';
 import { UnloadingTransactionService } from '../unloading-transaction/unloading-transaction.service';
 import { ContractPerformaService } from '../contract-performa/contract-performa.service';
 import { RawMaterialsService } from '../raw-materials/raw-materials.service';
 import { MessageService } from 'primeng/api';
+import { WarehouseLocationService } from '../pages/warehouse-location/warehouse-location.service';
 
 @Component({
   selector: 'app-dashboard-warehousing',

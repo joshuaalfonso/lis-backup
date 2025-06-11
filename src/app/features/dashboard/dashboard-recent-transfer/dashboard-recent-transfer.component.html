@@ -1,0 +1,29 @@
+<h6 class="container__title">Recent Transfer</h6>
+
+<p-carousel 
+    [value]="recentTransfer" 
+    [numVisible]="1" 
+    [numScroll]="1" 
+    *ngIf="!transferLoading && recentTransfer.length > 0"
+>
+
+    <ng-template let-row pTemplate="item">
+ 
+            <app-cards-transfer 
+                [row]="row" 
+            ></app-cards-transfer>
+
+    </ng-template>
+
+</p-carousel>
+
+
+<div *ngIf="recentTransfer.length === 0 && !transferLoading" class="no-data-container">
+    <img src="assets/empty.png" width="60px"/>
+    No data found 
+</div>
+
+
+<app-cards-transfer-loader 
+    *ngIf="transferLoading"
+/>

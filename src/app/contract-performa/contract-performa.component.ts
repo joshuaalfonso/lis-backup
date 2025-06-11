@@ -3,20 +3,20 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ContractPerformaService } from "./contract-performa.service";
 import { Observable, Subscription, take } from "rxjs";
 import { ConfirmationService, Message, MessageService } from "primeng/api";
-import { ShippingLineService } from "../shipping-line/shipping-line.service";
-import { ContainerTypeService } from "../container-type/container-type.service";
-import { SupplierService } from "../supplier/supplier.service";
+import { ContainerTypeService } from "../pages/container-type/container-type.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
-import { BrokerService } from "../broker/broker.service";
+import { BrokerService } from "../pages/broker/broker.service";
 import { Dialog } from "primeng/dialog";
-import { TruckingService } from "../trucking/trucking.service";
+import { TruckingService } from "../pages/trucking/trucking.service";
 import { Table } from "primeng/table";
-import { BankService } from "../bank/bank.service";
-import { PortOfDischargeService } from "../port-of-discharge/port-of-discharge.service";
+import { BankService } from "../pages/bank/bank.service";
 import { AppComponent } from "../app.component";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
-import { SystemLogsService } from "../system-logs/system-logs.service";
+import { SystemLogsService } from "../pages/system-logs/system-logs.service";
+import { ShippingLineService } from "../pages/shipping-line/shipping-line.service";
+import { SupplierService } from "../pages/supplier/supplier.service";
+import { PortOfDischargeService } from "../pages/port-of-discharge/port-of-discharge.service";
 
 
 @Component({

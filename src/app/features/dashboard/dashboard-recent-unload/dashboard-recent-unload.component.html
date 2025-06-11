@@ -1,0 +1,91 @@
+
+
+
+<p-table 
+     [value]="recentUnload" 
+     responsiveLayout="stack" 
+     [breakpoint]="'960px'" 
+     responsiveLayout="stack" 
+     [breakpoint]="'960px'" 
+     *ngIf="!unloadLoading"  
+>  
+
+    <ng-template pTemplate="body" let-row>
+         <tr>
+              <td >
+                   <span class="p-column-title">Date Unload</span>
+
+                   <p>
+                         {{ row.DateTimeUnload.date | date: 'MMM dd, yyyy' }}
+                         <span class="sub-text"> {{row.DateTimeUnload.date | date: 'EEEE' }}</span>
+                   </p>
+              </td>
+              <td>
+                   <span class="p-column-title">
+                         P.O #
+                    </span>
+
+                   <p>
+                    <a
+                         style="color: var(--primary-color);"
+                         [routerLink]="['/unloading-transaction']"
+                         [queryParams]="{ 
+                              po: row.PONo,
+                              transactionId: row.isTransactionID,
+                              status: row.Status,
+                         }"
+                    >
+                         <span>{{ row.PONo || null }}</span>
+                    </a>
+                    <a
+                         style="color: var(--primary-color);"
+                         [routerLink]="['/unloading-transaction']"
+                         [queryParams]="{ 
+                              bl: row.BLNumber,
+                              transactionId: row.isTransactionID,
+                              status: row.Status,
+
+                         }"
+                    >
+                         <span>{{ row.BLNumber || null }}</span>
+                    </a>
+                        <!-- <span>{{ +row.PO ? row.PONo : row.BLNumber }}</span> -->
+                        <span class="sub-text"> {{ row.Supplier }}</span>
+                   </p>
+              </td>
+              <td>
+                   <span class="p-column-title">Raw Material</span>
+                   <span>{{ row.RawMaterial }}</span>
+              </td>
+              <td>
+                   <span class="p-column-title">Total</span>
+
+                   <p>
+                        <span>{{ row.Weight | number}} KG</span>
+                        <span class="sub-text"> {{ row.Quantity | number }} Bags</span>
+                   </p>
+              </td>
+              <td>
+                   <span class="p-column-title">Location</span>
+                   <p>
+                        <span>{{ row.WarehouseLocation }} </span>
+                        <span class="sub-text"> {{ row.Warehouse_Name }}</span>
+                   </p>
+              </td>
+              <!-- <td>
+                    <span 
+                         (click)="goToUnloadingDetail(row.UnloadingTransactionID)"
+                         style="color: var(--primary-color);"
+                         class="cursor-pointer hover:underline"
+                    > Details </span>
+              </td> -->
+         </tr>
+    </ng-template>
+
+</p-table>
+
+
+<app-dashb-table-loader 
+     *ngIf="unloadLoading"
+/>
+

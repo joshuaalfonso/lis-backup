@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
-import { SupplierService } from 'src/app/supplier/supplier.service';
 import { RawMatsInspectionService } from '../../rawmats-inspection.service';
 import { MessageService } from 'primeng/api';
+import { SupplierService } from 'src/app/pages/supplier/supplier.service';
 
 @Component({
   selector: 'app-rawmats-inspection-form',

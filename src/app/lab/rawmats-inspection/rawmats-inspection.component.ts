@@ -4,7 +4,7 @@ import { Subscription, take } from 'rxjs';
 import { RawMaterialsService } from '../../raw-materials/raw-materials.service';
 import { RawMatsInspectionService } from './rawmats-inspection.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { SystemLogsService } from 'src/app/system-logs/system-logs.service';
+import { SystemLogsService } from 'src/app/pages/system-logs/system-logs.service';
 import { Message } from 'primeng/api';
 
 @Component({

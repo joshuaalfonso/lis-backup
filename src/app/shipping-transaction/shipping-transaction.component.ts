@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ShippingTransactionService } from "./shipping-transaction.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ShippingLineService } from "../shipping-line/shipping-line.service";
 import { Subscription, Observable } from "rxjs";
-import { ContainerTypeService } from "../container-type/container-type.service";
-import { SupplierService } from "../supplier/supplier.service";
+import { ContainerTypeService } from "../pages/container-type/container-type.service";
 import { RawMaterialsService } from "../raw-materials/raw-materials.service";
 import { MessageService } from "primeng/api";
-import { BrokerService } from "../broker/broker.service";
+import { BrokerService } from "../pages/broker/broker.service";
+import { ShippingLineService } from "../pages/shipping-line/shipping-line.service";
+import { SupplierService } from "../pages/supplier/supplier.service";
 
 
 

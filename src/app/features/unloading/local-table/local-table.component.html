@@ -1,0 +1,217 @@
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<div class="text-center my-3">
+    <p-messages 
+        [(value)]="unloadingError" 
+        [enableService]="false" 
+        [closable]="false"
+        *ngIf="unloadingError" 
+    />
+</div>
+
+
+
+<!-- ===== TABLE ====== -->
+<div class="table" *ngIf="!isLoading && unloadingError.length === 0">
+    
+    <p-table #dt1 
+        [value]="localUnload" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['PONo', 'MBL', 'RawMaterial', 'ContainerNumber', 'DrNumber', 'Supplier', 'CheckerName']" 
+        [scrollable]="true" 
+        [paginator]="!isLoading"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+    >
+
+        <ng-template pTemplate="caption">
+                
+            <div class="flex justify-content-between gap-2 mb-4 ">
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search"  
+                    />
+                    <!-- (input)="onGlobalFilter(dt1, $event)" -->
+                <!-- <button 
+                    pButton pRipple 
+                    class="add__btn" 
+                    *ngIf="insert"
+                    (click)="showDialog(unloadingModal)" 
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Add Item</span>
+                </button> -->
+                <app-create-unloading />
+            </div>
+
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th pSortableColumn="DateUnload.date">   
+                    Date Unload
+                    <p-sortIcon field="DateUnload.date" />
+                </th>
+                <th pSortableColumn="PONo">   
+                    P.O #
+                    <p-sortIcon field="PONo" />
+                </th>
+                <th> Dr # </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+
+                <th pSortableColumn="Weight">   
+                    Weight
+                    <p-sortIcon field="Weight" />
+                </th>
+                <th> Warehouse </th>
+                <th> Checker </th>
+                <th *ngIf="edit">  </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td data-title="DateUnload">
+                    <span class="text"> {{ row.DateUnload.date | date: 'MMM dd, yyyy'}}</span> 
+                    <span class="sub-text"> {{ row.DateUnload.date | date: 'EEEE' }} </span>
+                </td>
+                <td data-title="PO" >
+                    <span class="">{{ row.PONo}} </span> 
+                    <span 
+                        class="sub-text white-space-nowrap overflow-hidden text-overflow-ellipsis" 
+                        style="width: 150px;" 
+                        pTooltip="{{ row.Supplier }}"  
+                        tooltipPosition="top" 
+                    > 
+                        {{ row.Supplier }} 
+                    </span>
+                </td>
+
+                <td data-title="DrNumber">
+                    <span class="">{{ row.DrNumber}} </span> 
+                    <span class="sub-text"> {{ row.PlateNo }} </span>
+                </td>
+                    <td data-title="RawMaterial">
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="Weight"> 
+                    <span class="">{{ row.Weight | number }} kg</span> 
+                    <span class="sub-text"> {{ row.Quantity | number }} bags </span>
+                </td>
+                <td data-title="Warehouse">
+                    <span class="">  {{ row.Warehouse_Name}} ({{ row.WarehousePartitionName }})</span> 
+                    <span class="sub-text"> {{ row.WarehouseLocation}} </span>
+                </td>
+                <td data-title="CheckerID">
+                    {{ row.Name }}
+                </td>
+
+                <td data-title="Action" *ngIf="edit || insert">
+
+
+                    <div class="flex gap-2">
+
+                        <!-- Add weight  -->
+                        <!-- (click)="onAddWeight(row, addWeightModal)"  -->
+                        <button pButton pRipple 
+                            class="p-button-warning p-2 border-round"  
+                            pTooltip="Add Weight"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 0 && insert"
+                        >
+                            <i class='pi pi pi-plus' ></i>
+                        </button>      
+
+                        <!-- get image -->
+                        <!-- (click)="getImage(row)"   -->
+                        <button pButton pRipple 
+                            class="p-button-info p-2 border-round" 
+                            pTooltip="Images"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 1 || row.Status == 2"
+                        >
+                            <i class='pi pi pi-image' ></i>
+                        </button>   
+                        
+                        <!-- verify -->
+                        <!-- (click)="confirmVerify('center', row)"  -->
+                        <button pButton pRipple 
+                            class="p-button-primary p-2 border-round"  
+                            pTooltip="Verify"
+                            tooltipPosition="top" 
+                            *ngIf="row.Status == 1 && verifiedView"
+                        >
+                            <i class='pi pi pi-check' ></i>
+                        </button>   
+
+                        <!-- delete unloaded -->
+                        <!-- (click)="confirmDelete('center', row)"  -->
+                        <!-- [disabled]="isDeleting"  -->
+                        <button pButton pRipple 
+                            class="p-button-danger p-2 border-round"  
+                            pTooltip="Delete"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 1 && delete"
+                        >
+                            <i class='pi pi pi-trash' ></i>
+                        </button>   
+
+                        <!-- delete not unloaded -->
+                        <!-- (click)="confirmDeleteStatus('center', row)"   -->
+                        <!-- [disabled]="isDeleting" -->
+                        <button pButton pRipple 
+                            class="p-button-danger p-2 border-round"  
+                            pTooltip="Delete"
+                            tooltipPosition="top"
+                            *ngIf="row.Status == 0 && delete"
+                        >
+                            <i class='pi pi pi-trash' ></i>
+                        </button>   
+
+                    </div>
+
+
+                    <p-overlayPanel #unloadingOverlay>
+                        <div class="actions-overlay">
+
+                            <!-- (click)="onAddWeight(row, addWeightModal)"   -->
+                            <p  
+                                *ngIf="row.Status == 0 && insert"
+                            >
+                                <i class="pi pi-plus" width="15px" height="15px"></i>
+                                Add Weight
+                            </p>
+
+                            <!-- (click)="confirmVerify('center', row)"   -->
+                            <p  
+                                *ngIf="row.Status == 1 && verifiedView"
+                            >
+                                <i class="pi pi-check" width="15px" height="15px"></i>
+                                Verify
+                            </p>
+
+                            <!-- (click)="getImage(row)"   -->
+                            <p  
+                                *ngIf="row.Status == 1 || row.Status == 2"
+                            >
+                                <i class="pi pi-images"></i>
+                                View Images
+                            </p>
+    
+    
+                        </div>
+                    </p-overlayPanel>
+                </td>
+
+            </tr>
+        </ng-template>
+
+    </p-table>

@@ -5,10 +5,10 @@ import { Observable, Subscription } from "rxjs";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { FinishProductService } from "../finish-product/finish-product.service";
-import { WarehouseService } from "../warehouse/warehouse.service";
-import { WarehousePartitionService } from "../warehouse-partition/warehouse-partition.service";
-import { UsersService } from "../users/users.service";
+import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
+import { WarehouseService } from "../pages/warehouse/warehouse.service";
+import { WarehousePartitionService } from "../pages/warehouse-partition/warehouse-partition.service";
 
 
 
