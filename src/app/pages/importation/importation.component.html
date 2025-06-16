@@ -1,0 +1,108 @@
+<app-content-header [title]="'Importation'"></app-content-header>
+
+
+<div class="radio-inputs">
+    <label class="radio">
+        <!-- (ngModelChange)="onSelectFilter()" -->
+         <input checked="" name="radio" type="radio" value="Active" [(ngModel)]="tabValue" (ngModelChange)="getContract()"/>
+         <span class="name" [class.active]="tabValue == 'Active'"> Active </span>
+    </label>
+
+    <!-- (ngModelChange)="onSelectFilter()" -->
+    <label class="radio">
+         <input name="radio" type="radio" value="Completed" [(ngModel)]="tabValue" (ngModelChange)="getContract()"/>
+         <span class="name" [class.active]="tabValue == 'Completed'"> Completed </span>
+    </label>
+</div>
+
+
+
+<div [ngSwitch]="tabValue">
+
+    <app-active-contract-table 
+        [view]="view"
+        [insert]="insert"
+        [edit]="edit"
+        [generateReport]="generateReport"
+        [contract]="contract"
+        [isLoading]="isLoading"
+        (showDialog)="showContractDialog($event)"
+        [class.hidden]="tabValue !== 'Active'"
+        />
+        
+        <!-- (selectRow)="selectContractRow($event)" -->
+    <app-completed-contract-table 
+        [view]="view"
+        [insert]="insert"
+        [edit]="edit"
+        [generateReport]="generateReport"
+        [contract]="contract"
+        [isLoading]="isLoading"
+        [class.hidden]="tabValue !== 'Completed'"
+    />
+
+</div>
+
+<div class="radio-inputs">
+    <label class="radio">
+        <!-- (ngModelChange)="onSelectFilter()" -->
+         <input checked="" name="radio" type="radio" [value]="1" [(ngModel)]="statusValue" />
+         <span class="name" [class.active]="statusValue === 1"> Sailing </span>
+    </label>
+
+    <!-- (ngModelChange)="onSelectFilter()" -->
+    <label class="radio">
+         <input name="radio" type="radio" [value]="2" [(ngModel)]="statusValue" />
+         <span class="name" [class.active]="statusValue === 2"> Landed </span>
+    </label>
+
+    <label class="radio">
+         <input name="radio" type="radio" [value]="3" [(ngModel)]="statusValue" />
+         <span class="name" [class.active]="statusValue === 3"> Pull Out </span>
+    </label>
+
+    <label class="radio">
+         <input name="radio" type="radio" [value]="4" [(ngModel)]="statusValue" />
+         <span class="name" [class.active]="statusValue === 4"> Received </span>
+    </label>
+
+    <label class="radio">
+         <input name="radio" type="radio" [value]="5" [(ngModel)]="statusValue" />
+         <span class="name" [class.active]="statusValue === 5"> Unloaded </span>
+    </label>
+    
+
+</div>
+
+<!-- shippingTransactionFilter: any[] = [
+{ label: 'Sailing', value: 1}, 
+{ label: 'Landed', value: 2}, 
+// { label: 'Pull Out', value: 3, disabled: true}, 
+{ label: 'Received', value: 4}, 
+{ label: 'Unloaded', value: 5}, 
+] -->
+
+
+
+<app-active-contract-dialog 
+    [rawMaterial]="rawMaterial"
+    [supplier]="supplier"
+    [portOfDischarge]="portOfDischarge"
+    [userID]="userID"
+    [row]="selectedContractRow"
+    [visible]="contractDialogVisible"
+    (getContract)="getContract()"
+    (closeDialog)="closeContractDialog()"
+/>
+
+
+
+
+<!-- (getContract)="getContract()"
+[rawMaterial]="rawMaterial"
+[supplier]="supplier"
+[portOfDischarge]="portOfDischarge"
+[userID]="userID" -->
+
+
+    

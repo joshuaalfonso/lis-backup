@@ -59,6 +59,7 @@ import { TruckComponent } from "./pages/truck/truck.component";
 import { PlantComponent } from "./pages/plant/plant.component";
 import { PortOfDischarge } from "./pages/port-of-discharge/port-of-discharge.component";
 import { UnloadingComponent } from "./pages/unloading/unloading.component";
+import { ImportationComponent } from "./pages/importation/importation.component";
 
 
 
@@ -159,6 +160,14 @@ const routes: Routes = [
     {
         path: 'contract-performa', 
         component: ContractPerformaComponent, 
+        canActivate: [AuthGuard, HasRoleGuard], 
+        data: {
+            'role': '3.2.1'
+        }
+    },
+    {
+        path: 'importation', 
+        component: ImportationComponent, 
         canActivate: [AuthGuard, HasRoleGuard], 
         data: {
             'role': '3.2.1'

@@ -24,6 +24,6 @@ export class SystemLogsService {
     filterDate(fromDate: string | null, toDate: string | null) {
         return this.http.post( this.baseUrl + '/project/b_SystemLogsFilter.php', {date: fromDate, date1: toDate})
     }
+    
 
-
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

@@ -251,6 +251,12 @@ input {
     padding: 7px 10px;
 }
 
+.p-button {
+    width: auto;
+    border-radius: 5px;
+    padding: 8px 10px;
+}
+
 
 .submit {
     padding: 7px 0;
@@ -258,17 +264,13 @@ input {
 
 .p-calendar {
     height: 41px;
-    /* background: red; */
 }
 
 .p-calendar button {
     border-top-right-radius: 5px; 
     border-bottom-right-radius: 5px; 
-    /* background: red; */
 }
-/* .p-inputtext.ng-dirty.ng-invalid {
-    color: red;
-} */
+
 .p-inputtext.ng-dirty.ng-invalid {
     border-color: #ced4da;
 }
@@ -278,12 +280,12 @@ input {
     pointer-events: none; /* prevents interactions */
 }
 
-/* .p-dropdown {
+.p-dropdown {
     background: var(--surface-color);
     border: var(--card-border);
     box-shadow: var(--input-box-shadow);
     color: var(--font-color);
-} */
+}
 
 .p-dropdown-items {
     padding: 0;
@@ -303,11 +305,9 @@ input {
 }
 
 .p-overlaypanel:after {
-    /* background: var(--surface-color) */
     display: none;
 }
 .p-overlaypanel:before {
-    /* border: solid blue; */
     display: none;
 }
 
@@ -384,6 +384,10 @@ input {
     color: var(--font-color);
 }
 
+
+.p-dropdown .p-inputtext{
+    padding: 7px 10px;
+}
 
 @media screens and (min-width: 1024px) {
         

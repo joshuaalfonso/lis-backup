@@ -193,6 +193,10 @@ import { UsersComponent } from './pages/users/users.component';
 import { UnloadingComponent } from './pages/unloading/unloading.component';
 import { LocalTableComponent } from './features/unloading/local-table/local-table.component';
 import { CreateUnloadingComponent } from './features/unloading/create-unloading/create-unloading.component';
+import { ImportationComponent } from './pages/importation/importation.component';
+import { ActiveContractTableComponent } from './features/importation/active-contract-table/active-contract-table.component';
+import { ActiveContractDialogComponent } from './features/importation/active-contract-dialog/active-contract-dialog.component';
+import { CompletedContractTableComponent } from './features/importation/completed-contract-table/completed-contract-table.component';
 
 
 
@@ -289,6 +293,10 @@ import { CreateUnloadingComponent } from './features/unloading/create-unloading/
     UnloadingComponent,
     LocalTableComponent,
     CreateUnloadingComponent,
+    ImportationComponent,
+    ActiveContractTableComponent,
+    ActiveContractDialogComponent,
+    CompletedContractTableComponent,
     
   ],
   imports: [
