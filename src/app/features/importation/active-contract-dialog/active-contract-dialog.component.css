@@ -1,0 +1,25 @@
+:host ::ng-deep .p-buttonset .p-button{
+    padding: 5px 10px;
+}
+
+:host ::ng-deep form .p-button {
+    width: auto;
+    border-radius: 5px;
+    padding: 8px 10px;
+}
+
+/* :host ::ng-deep .p-dropdown {
+    border: var(--card-border);
+    box-shadow: var(--input-box-shadow);
+    color: var(--font-color);
+} */
+:host ::ng-deep p-dropdown.disabled .p-dropdown{
+    background-color: gainsboro; 
+}
+
+:host ::ng-deep fieldset:disabled input {
+    background: gainsboro;
+}
+
+
+

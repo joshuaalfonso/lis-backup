@@ -1,0 +1,15 @@
+td, th {
+    padding: 10px 10px;
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+th {
+    white-space: nowrap;
+}
+
+td {
+    color: var(--font-color);
+    font-weight: var(--font-500);
+}
+

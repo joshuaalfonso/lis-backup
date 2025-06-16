@@ -1,0 +1,306 @@
+
+<!-- <button 
+    pButton 
+    pRipple 
+    class="add__btn" 
+    (click)="showDialog()" 
+>
+    <i class='bx bx-plus'></i> 
+    <span>New Contract</span>
+</button> -->
+
+<!-- <p 
+    *ngIf="row" 
+    (click)="showDialog()" 
+>
+    <svg  width="15px" height="15px">
+        <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+    </svg>
+    Edit
+</p> -->
+
+
+<!-- ======= MODAL FORM ======== -->
+<p-dialog 
+    header="{{ row ? 'Edit Contract' : 'Create Contract' }}" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false"
+    (onHide)="closeDialog.emit()"
+    appendTo="body"
+>
+
+    <form [formGroup]="contractPerformaform" class="p-fluid" (ngSubmit)="onSubmit()" >  
+  
+        <div class="field">
+            <label class="font-semibold" >
+                Contract No.
+                <span class="p-error">*</span>
+            </label>
+            <input 
+                pInputText 
+                formControlName="ContractNo" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter Contract No"
+            >
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Raw Material
+                        <span class="p-error">*</span>
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="rawMaterial" 
+                            formControlName="RawMaterialID" 
+                            optionLabel="RawMaterial" 
+                            optionValue="RawMaterialID"
+                            [showClear]="true" 
+                            [filter]="true"
+                            placeholder="Select "
+                            appendTo="body"
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="field">
+                    <label class="font-semibold" >
+                        Quantity
+                        <span class="p-error">*</span>
+                    </label>
+                    <p-inputNumber 
+                        formControlName="Quantity" 
+                        inputId="integeronly" 
+                        autocomplete="off" 
+                        placeholder="Enter Quantity"
+                    ></p-inputNumber> 
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Packaging
+                        <span class="p-error">*</span>
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="packaging" 
+                            formControlName="Packaging" 
+                            optionLabel="Packaging" 
+                            optionValue="PackagingID"
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            placeholder="Select"
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Packed In
+                        <span class="p-error">*</span>
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="packedIn" 
+                            formControlName="PackedInID" 
+                            optionLabel="PackedIn"
+                            optionValue="PackedInID" 
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            placeholder="Select "
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="field">
+            <label class="font-semibold" >
+                Estimated Containers/Trucks
+                <span class="p-error">*</span>
+            </label>
+            <input 
+                pInputText 
+                formControlName="EstimatedContainer" 
+                autocomplete="off" 
+                class="input" 
+                placeholder="Enter Estimated Container"
+            >
+        </div>
+
+        <!-- <div class="field">
+            <label class="font-semibold" >Container Type<span class="required">*</span></label>
+            <div class="card flex justify-content-center">
+                <p-dropdown [options]="containerType" formControlName="ContainerTypeID" optionLabel="Container" [style]="{'height': '40px', 'border': '1px solid white'}" [showClear]="true" placeholder="Select Container Type"></p-dropdown>
+            </div>
+        </div> -->
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Supplier
+                        <span class="p-error">*</span>
+                    </label>
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            [options]="supplier" 
+                            formControlName="SupplierID" 
+                            optionLabel="Supplier"
+                            optionValue="SupplierID" 
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            [filter]="true"
+                            placeholder="Select" 
+                            (onChange)="onSelectSupplier($event)"
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Address
+                        <span class="p-error">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="SupplierAddress" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Address"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Country Of Origin
+                        <span class="p-error">*</span>
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="CountryOfOrigin" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Country of Origin"
+                    >
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Port Of Discharge
+                        <span class="p-error">*</span>
+                    </label>
+                    <!-- <input pInputText formControlName="PortOfDischarge" autocomplete="off" class="input" placeholder="Enter Port of Discharge"> -->
+                    <!-- <div class="card flex justify-content-center"> -->
+                        <p-dropdown 
+                            formControlName="PortOfDischargeID" 
+                            [options]="portOfDischarge" 
+                            optionLabel="PortOfDischarge" 
+                            optionValue="PortOfDischargeID" 
+                            [style]="{'height': '40px'}" 
+                            [showClear]="true" 
+                            placeholder="Select" 
+                        ></p-dropdown>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+        </div>
+    
+
+        <div class="field">
+            <label class="font-semibold" >
+                Shipment Period
+                <span class="p-error">*</span>
+            </label>
+            <!-- <input pInputText formControlName="ShipmentPeriod" autocomplete="off" class="input" placeholder="Enter Shipment Period"> -->
+            <div class="grid">
+                <div class="col">
+                    <p-calendar 
+                        formControlName="FromShipmentPeriod" 
+                        [showIcon]="true" 
+                        placeholder="From" 
+                        [showClear]="true" 
+                        appendTo="body"
+                    ></p-calendar>
+                </div>
+                <div class="col">
+                    <p-calendar 
+                        formControlName="ToShipmentPeriod" 
+                        [showIcon]="true" 
+                        placeholder="To" 
+                        [showClear]="true" 
+                        appendTo="body"
+                    ></p-calendar>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="field">
+            <label class="font-semibold" >Status</label>
+            <input pInputText formControlName="Status" autocomplete="off" class="input">
+        </div> -->
+  
+        <!-- <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit" 
+            [disabled]="!contractPerformaform.valid"
+        ></button> -->
+
+        <div class="flex justify-content-end gap-2">
+
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancel" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="visible = false"
+            ></p-button>
+
+            <p-button 
+                type="submit"
+                [label]="row ? 'Apply changes' : 'Create'" 
+                icon="pi pi-check"
+                [loading]="submitContractLoading" 
+                [disabled]="!contractPerformaform.valid"
+            />
+        </div>
+  
+    </form>
+</p-dialog>

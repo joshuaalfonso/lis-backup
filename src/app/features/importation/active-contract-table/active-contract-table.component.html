@@ -1,0 +1,183 @@
+
+{{selectedContract}}
+<div class="table mb-4">
+
+    <p-table 
+        #contractTable 
+        [value]="contract" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['ContractNo', 'RawMaterial', 'Supplier', 'Address', 'PortOfDischarge', 'CountryOfOrigin']" 
+        class="contract_table" 
+        [scrollable]="true" 
+        scrollHeight="300px"
+        selectionMode="single" 
+        [(selection)]="selectedContract" 
+    >
+
+        <ng-template pTemplate="caption"> 
+            <div class="flex align-items-center justify-content-between">
+                <span class="table-header-title ">Contract</span>
+                <div>
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn"  
+                        (click)="showDialog.emit()"
+                    >
+                        <i class='bx bx-plus'></i> 
+                        <span>New Contract</span>
+                    </button>
+
+
+                    <input 
+                        pInputText 
+                        type="text" 
+                        placeholder="Search keyword" 
+                        (input)="onGlobalFilter(contractTable, $event)" 
+                    />
+                        <!-- (input)="onGlobalFilter(dt1, $event)"  -->
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead contract_row" >
+                <th pFrozenColumn>Contract #</th>
+                <th>Raw Material</th>
+                <th>Served</th>
+                <th>Packaging</th>
+                <th>Supplier</th>
+                <th>Port Of Discharge</th>
+                <th>Country Of Origin</th>
+                <th >Status</th>
+                <th alignFrozen="right" pFrozenColumn *ngIf="edit"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <!-- (click)="onSelectContract(row)" 
+            [class.selected]="row.ContractPerformaID === selectedContractPerformaID"
+            *ngIf="!isLoading" -->
+            <tr 
+                [pSelectableRow]="row.ContractPerformaID"
+                *ngIf="!isLoading"
+            >
+                <td data-title="Contract No" pFrozenColumn>
+                    <span class="">{{ row.ContractNo }}</span> 
+                    <span class="sub-text">  
+                        {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }} 
+                    </span>
+                </td>
+                <td data-title="RawMaterialID" class="white-space-nowrap">
+                    <span class="">{{ row.RawMaterial}}</span> 
+                    <span class="sub-text"> {{ row.Quantity | number}} MT </span>
+                </td>
+                
+                <td data-title="Served">
+                    <span class="">  {{ (row.Served_Container | number) + ' / ' + (row.EstimatedContainer | number) }} </span> 
+                    <span class="sub-text">  {{ row.Balance_Container | number}} BAL </span>
+                </td>
+
+                <td data-title="Packaging">
+                    <span class="">{{ row.Packaging == 1 ? 'Containerized' : 'Bulk'}}</span> 
+                    <span class="sub-text  white-space-nowrap"> {{ row.PackedIn}} </span>
+                </td>
+                <td data-title="SupplierID" class="">
+                    <div 
+                        class="supplier white-space-nowrap overflow-hidden text-overflow-ellipsis"  
+                        pTooltip="{{row.Supplier}}" 
+                        tooltipPosition="top" 
+                        style="width: 150px;"
+                    >
+                        {{ row.Supplier }}
+                    </div> 
+                    <span 
+                        class="sub-text white-space-nowrap overflow-hidden text-overflow-ellipsis"  
+                        style="width:150px" 
+                        pTooltip="{{row.SupplierAddress}}" 
+                        tooltipPosition="top"
+                    > 
+                        {{ row.SupplierAddress}} 
+                    </span>
+                </td>
+                <td data-title="PortOfDischarge">
+                    {{ row.PortOfDischarge }}
+                </td>
+                <td data-title="CountryOfOrigin">
+                    {{ row.CountryOfOrigin }}
+                </td>
+                <td data-title="Status" >
+                    <p-tag [severity]="row.Status === 'Active' ? 'success' : row.Status ==='Completed' ? 'info' : ''">
+                        {{ row.Status }}
+                    </p-tag></td>
+                <td data-title="Action" class="text-center z-20" alignFrozen="right" pFrozenColumn *ngIf="edit">
+
+                    <i 
+                        (click)="contractOverlay.toggle($event)"
+                        (click)="toggleContractOverlay($event, contractOverlay)" 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle"
+                    ></i>
+
+                    <p-overlayPanel #contractOverlay>
+                        <div class="actions-overlay">
+    
+                            <!-- <app-active-contract-dialog 
+                                [row]="row"
+                                [rawMaterial]="rawMaterial"
+                                [supplier]="supplier"
+                                [portOfDischarge]="portOfDischarge"
+                                (getActiveContract)="getActiveContract()"
+                                [userID]="userID"
+                            /> -->
+                            <!-- sailing edit button -->
+                            <!-- (click)="onSelect($event, row)" -->
+                            <p  
+                                (click)="showDialog.emit(row)"
+                            >
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                                </svg>
+                                Edit
+                            </p>
+    
+                            <!-- landed edit button -->
+                            <!-- (click)="onAddTransaction($event, row, ShippingDialog)" -->
+                            <p  
+                            >
+                                <i class="pi pi-plus" width="15px" height="15px"></i>
+                                Add Shipping
+                            </p>
+
+                            <!-- (click)="confirmCompleted('center', row)" -->
+                            <p  
+                            >
+                                <i class="pi pi-check" width="15px" height="15px"></i>
+                                Completed
+                            </p>
+    
+                            <!-- delete button -->
+                            <!-- (click)="confirmDeleteContract('center', row)" -->
+                            <p
+                            >
+                                <svg  width="15px" height="15px">
+                                    <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                                </svg>
+                                Delete
+                            </p>
+    
+    
+                        </div>
+                    </p-overlayPanel>
+
+
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+  
+    <div class="text-center my-3" *ngIf="isLoading">
+      <app-loader></app-loader>
+    </div>
+
+</div>
+
