@@ -1,0 +1,809 @@
+<!-- ======= SHIPPING TRANSACTION MODAL FORM ======== -->
+<p-dialog 
+    header="Add Shipping Transaction" 
+    [(visible)]="shippingDialogVisisble" 
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    [draggable]="false" 
+    [resizable]="false" 
+    (onHide)="closeShippingDialog.emit()"
+    #ShippingDialog
+>
+    <form 
+        [formGroup]="shippingTransactionForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()" 
+    >  
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Contract #
+                    </label>
+                    <fieldset [disabled]="true">
+                        <input 
+                            pInputText 
+                            formControlName="ContractNo" 
+                            autocomplete="off" 
+                            class="input"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Lot #
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-inputNumber 
+                            formControlName="Lot" 
+                            inputId="integeronly" 
+                            autocomplete="off" 
+                            placeholder="Enter Lot #"
+                        ></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Raw Material
+            </label>
+            
+            <p-dropdown 
+                formControlName="RawMaterialID" 
+                [options]="rawMaterial" 
+                optionLabel="RawMaterial" 
+                [style]="{'height': '40px'}" 
+                [showClear]="true" 
+                placeholder="Select Raw Material"
+                [class.disabled]="true"
+            ></p-dropdown>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Supplier
+                    </label>
+                    
+                    <p-dropdown 
+                        formControlName="SupplierID" 
+                        [options]="supplier" 
+                        optionLabel="Supplier" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Supplier"
+                        [class.disabled]="true"
+                    ></p-dropdown>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Address
+                    </label>
+                    <fieldset [disabled]="true">
+                        <input 
+                            pInputText 
+                            formControlName="SupplierAddress" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Address"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Packaging
+            </label>
+            
+            <p-dropdown 
+                formControlName="Packaging" 
+                [options]="packaging" 
+                optionLabel="Packaging" 
+                [style]="{'height': '40px'}" 
+                [showClear]="true" 
+                placeholder="Select Raw Material"
+                [class.disabled]="true"
+            ></p-dropdown>
+           
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" > 
+                Advanced Documents Received
+            </label>
+            <fieldset [disabled]="statusValue === 2">
+                <p-calendar 
+                    formControlName="AdvanceDocumentsReceived" 
+                    [showIcon]="true" 
+                    placeholder="mm/dd/yyyy" 
+                    [showClear]="true" 
+                    appendTo="body"
+                ></p-calendar>
+            </fieldset>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BAI SPS IC
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <input 
+                            pInputText 
+                            formControlName="BAI_SPS_IC" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter BAI SPS IC"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BAI Validity
+                    </label>
+                    <div class="grid">
+                        <div class="col">
+                            <fieldset [disabled]="statusValue === 2">
+                                <p-calendar 
+                                    formControlName="FromBAIValidity" 
+                                    placeholder="From" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+                        <div class="col">
+                            <fieldset [disabled]="statusValue === 2">
+                                <p-calendar 
+                                    formControlName="ToBAIValidity" 
+                                    placeholder="To" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid" *ngIf="shippingTransactionForm.value.Packaging === 2">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BPI SPS IC
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <input 
+                            pInputText 
+                            formControlName="BPI_SPS_IC" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter BAI SPS IC"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BPI Validity
+                    </label>
+                    <div class="grid">
+
+                        <div class="col">
+                            <fieldset [disabled]="statusValue === 2">
+                                <p-calendar 
+                                    formControlName="FromBPIValidity" 
+                                    placeholder="From" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+
+                        <div class="col">
+                            <fieldset [disabled]="statusValue === 2">
+                                <p-calendar 
+                                    formControlName="ToBPIValidity" 
+                                    placeholder="To" 
+                                    [showIcon]="true" 
+                                    [showClear]="true"
+                                />
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        MBL #
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <input 
+                            pInputText 
+                            formControlName="MBL" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter MBL #"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BL #
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <input 
+                            pInputText 
+                            formControlName="BL" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter MBL #"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Shipping Line
+                    </label>
+                    <p-dropdown 
+                        [options]="shippingLine" 
+                        formControlName="ShippingLineID" 
+                        optionLabel="ShippingLine" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Shipping Line"
+                        [class.disabled]="statusValue === 2"
+                    ></p-dropdown>
+                
+                  </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Vessel
+                    </label>
+                    <input 
+                        pInputText 
+                        formControlName="Vessel" 
+                        autocomplete="off" 
+                        class="input" 
+                        placeholder="Enter Vessel"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid" *ngIf="shippingTransactionForm.value.Packaging === 1">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        HBL #
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <input 
+                            pInputText 
+                            formControlName="HBL" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter HBL #"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <div class="field">
+                        <label class="font-semibold" >
+                            Forwarder
+                        </label>
+                        <fieldset [disabled]="statusValue === 2">
+                            <input 
+                                pInputText 
+                                formControlName="Forwarder" 
+                                autocomplete="off" 
+                                class="input" 
+                                placeholder="Enter Forwarder"
+                            >
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold">
+                        ETD
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="ETD" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy" 
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        ETA
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="ETA" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1">
+                <div class="field">
+                    <label class="font-semibold">
+                        Container Type
+                    </label>
+                
+                    <p-dropdown 
+                        [options]="containerType" 
+                        optionLabel="Container" 
+                        formControlName="ContainerTypeID" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Container Type"
+                        [class.disabled]="statusValue === 2"
+                    ></p-dropdown>
+                 
+                </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        No Of Container
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <input 
+                            pInputText 
+                            formControlName="NoOfContainer" 
+                            autocomplete="off" 
+                            class="input" 
+                            placeholder="Enter No. of Container"
+                        >
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        # of Trucks
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-inputNumber 
+                            formControlName="NoOfTruck" 
+                            inputId="integeronly" 
+                            autocomplete="off" 
+                            placeholder="Enter No of Trucks"
+                        ></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Quantity (MT)
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-inputNumber 
+                            formControlName="Quantity" 
+                            inputId="integeronly" 
+                            autocomplete="off" 
+                            placeholder="Enter Quantity"
+                            [minFractionDigits]="3" 
+                        ></p-inputNumber> 
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Broker
+                    </label>
+                
+                    <p-dropdown 
+                        [options]="broker" 
+                        optionLabel="Broker" 
+                        formControlName="BrokerID" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Broker"
+                        [class.disabled]="statusValue === 2"
+                    ></p-dropdown>
+               
+                </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 2">
+                <div class="field">
+                    <label class="font-semibold">
+                        Date Advance Docs Received By Broker
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="DateDocsReceivedByBroker" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="grid">
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Advance Received By Broker
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="DateDocsReceivedByBroker" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                  </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BAI SPS IC (Date)
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="BAI_SPS_IC_Date" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        BPI SPS IC (Date)
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="BPI_SPS_IC_Date" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Availability
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="OriginalDocsAvailavilityDate" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy" 
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Bank
+                    </label>
+                  
+                    <p-dropdown 
+                        formControlName="BankID" 
+                        [options]="bank" 
+                        optionLabel="Bank" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Bank"
+                        [class.disabled]="statusValue === 2"
+                    ></p-dropdown>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Date Pickup
+                    </label>
+                    <fieldset [disabled]="statusValue === 2">
+                        <p-calendar 
+                            formControlName="DateOfPickup" 
+                            [showIcon]="true" 
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body" 
+                            [showClear]="true"
+                        ></p-calendar>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Port Of Discharge
+            </label>
+            <fieldset [disabled]="statusValue === 2">
+                <input 
+                    pInputText 
+                    formControlName="PortOfDischarge" 
+                    autocomplete="off" 
+                    class="input"
+                >
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >
+                Remarks
+            </label>
+            <fieldset [disabled]="statusValue === 2">
+                <input 
+                    pInputText 
+                    formControlName="Remarks" 
+                    autocomplete="off" 
+                    class="input" 
+                    placeholder="Enter Remarks"
+                >
+            </fieldset>
+        </div>
+
+        <div class="field" *ngIf="statusValue === 2">
+            <label class="font-semibold" >
+                ATA
+            </label>
+            <p-calendar 
+                formControlName="ATA" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy"  
+                appendTo="body" 
+                [showClear]="true"
+            ></p-calendar>
+        </div>
+
+        <div class="field" *ngIf="statusValue === 2">
+            <label class="font-semibold" >
+                Date Of Last Discharge
+            </label>
+            <p-calendar 
+                formControlName="DateOfDischarge" 
+                [showIcon]="true" 
+                placeholder="mm/dd/yyyy"  
+                appendTo="body" 
+                [showClear]="true"
+            ></p-calendar>
+        </div>
+
+        <div class="grid" *ngIf="statusValue === 2">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Lodgement Date
+                    </label>
+                    <p-calendar 
+                        formControlName="LodgementDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Lodgement Bank
+                    </label>
+                  
+                    <p-dropdown 
+                        formControlName="LodgementBankID" 
+                        [options]="bank" 
+                        optionLabel="Bank" 
+                        [style]="{'height': '40px'}" 
+                        [showClear]="true" 
+                        placeholder="Select Bank"
+                    ></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid" *ngIf="shippingTransactionForm.value.Packaging === 1 && statusValue === 2">
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Gatepass Received</label>
+                    <p-calendar 
+                        formControlName="GatepassRecieved" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Acknowledged By Logistics
+                    </label>
+                    <p-calendar 
+                        formControlName="AcknowledgeByLogistics" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col" *ngIf="statusValue === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Storage (LFD)
+                    </label>
+                    <p-calendar 
+                        formControlName="StorageLastFreeDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <!-- <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2"> -->
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1 && statusValue === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Demurrage (LFD)
+                    </label>
+                    <p-calendar 
+                        formControlName="DemurrageDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <!-- <div class="col" *ngIf="selectedPackaging === 1 && value2 === 2"> -->
+            <div class="col" *ngIf="shippingTransactionForm.value.Packaging === 1 && statusValue === 2">
+                <div class="field">
+                    <label class="font-semibold" >
+                        Detention (LFD)
+                    </label>
+                    <p-calendar 
+                        formControlName="DetentionDate" 
+                        [showIcon]="true" 
+                        placeholder="mm/dd/yyyy"  
+                        appendTo="body" 
+                        [showClear]="true"
+                    ></p-calendar>
+                </div>
+            </div>
+        </div>
+
+        
+     
+        <div class="flex justify-content-end gap-2">
+
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancel" 
+                styleClass="p-button-rounded p-button-text"
+                (click)="shippingDialogVisisble = false"
+            ></p-button>
+
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check"
+                [loading]="isSubmitting" 
+            />
+        </div>
+        
+  
+    </form>
+</p-dialog>

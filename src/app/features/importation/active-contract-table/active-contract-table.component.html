@@ -1,5 +1,5 @@
 
-{{selectedContract}}
+<!-- {{selectedContractID}} -->
 <div class="table mb-4">
 
     <p-table 
@@ -11,7 +11,7 @@
         [scrollable]="true" 
         scrollHeight="300px"
         selectionMode="single" 
-        [(selection)]="selectedContract" 
+        [(selection)]="selectedContractID" 
     >
 
         <ng-template pTemplate="caption"> 
@@ -59,10 +59,11 @@
             [class.selected]="row.ContractPerformaID === selectedContractPerformaID"
             *ngIf="!isLoading" -->
             <tr 
+                (click)="onSelectContract.emit(row.ContractPerformaID)"
                 [pSelectableRow]="row.ContractPerformaID"
                 *ngIf="!isLoading"
             >
-                <td data-title="Contract No" pFrozenColumn>
+                <td data-title="Contract No" pFrozenColumn >
                     <span class="">{{ row.ContractNo }}</span> 
                     <span class="sub-text">  
                         {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }} 
@@ -80,7 +81,7 @@
 
                 <td data-title="Packaging">
                     <span class="">{{ row.Packaging == 1 ? 'Containerized' : 'Bulk'}}</span> 
-                    <span class="sub-text  white-space-nowrap"> {{ row.PackedIn}} </span>
+                    <span class="sub-text  text-nowrap"> {{ row.PackedIn}} </span>
                 </td>
                 <td data-title="SupplierID" class="">
                     <div 
@@ -143,6 +144,7 @@
                             <!-- landed edit button -->
                             <!-- (click)="onAddTransaction($event, row, ShippingDialog)" -->
                             <p  
+                                (click)="showShippingDialog.emit(row)"
                             >
                                 <i class="pi pi-plus" width="15px" height="15px"></i>
                                 Add Shipping

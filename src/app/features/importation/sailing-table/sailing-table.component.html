@@ -1,0 +1,283 @@
+  <!-- ===== SHIPPING TRANSACTION TABLE ====== -->
+  <div class="table">
+    <p-table 
+        [value]="shippingTransaction" 
+        [scrollable]="true" 
+        scrollHeight="330px"  
+        [tableStyle]="{ 'width': '100%', 'position': 'relative' }" 
+        [globalFilterFields]="['MBL', 'BL', 'BAI_SPS_IC', 'Lot', 'ContractNo', 'ShippingLine', 'Vessel', 'HBL', 'Forwarder', 'RawMaterial', 'Supplier', 'PortOfDischarge', 'Broker', 'ETA', 'ETD', 'ATA', 'StorageLastFreeDate', 'Bank', 'Remarks']" 
+        #sailingTable 
+        *ngIf="!shippingTransactionIsLoading" 
+    >      
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <span class="table-header-title ">Shipping Transaction</span>
+                <input 
+                    pInputText 
+                    type="text" 
+                    (input)="onGlobalFilter(sailingTable, $event)" 
+                    placeholder="Search keyword" 
+                />
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th pFrozenColumn class="z-50">
+                    Lot
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    BL
+                </th>
+
+                <th>
+                    Containers/Trucks
+                </th>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Port Of Discharge
+                </th>
+
+                <th >
+                    ETD
+                </th>
+                <th>
+                    ETA
+                </th>
+
+                <th>
+                    Broker
+                </th>
+             
+                <th>
+                    SPS IC
+                </th>         
+
+                <th  pTooltip="ADVANCE DOCUMENTS RECEIVED" tooltipPosition="top">
+                    Adv Docs Rec
+                </th>
+               
+                <th>
+                    Broker Assigned
+                </th>
+            
+                <th >
+                    Remarks
+                </th>
+                <th alignFrozen="right" pFrozenColumn >
+                    Status
+                </th>
+                <th alignFrozen="right" pFrozenColumn >
+                    
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <!-- [class.landed]="row.Status == 2 && value2 == 1" 
+            [class.pullout]="row.Status == 3 && (value2 === 1 || 2)"  -->
+            <tr 
+                class="white-space-nowrap"
+                [class.landed]="row.Status == 2" 
+                [class.pullout]="row.Status == 3" 
+            >
+                <td data-title="Lot" pFrozenColumn>
+                    {{ row.Lot == 0 ? '-' : row.Lot}}
+                    <div class="sub-text">
+                        {{ row.ContractNo }}
+                    </div>
+                </td>
+                <td data-title="Quantity" >
+                    {{ row.Quantity == 0 ? '-' : row.Quantity | number }}
+                    <span *ngIf="row.Quantity != 0">MT</span>
+                </td>
+                <td data-title="BL" >
+                    <span *ngIf="row.Packaging === 1" >
+                        {{ row.MBL}}
+                        <small class="sub-text">
+                            <span *ngIf="row.Forwarder !== ''" pTooltip="Forwarder" tooltipPosition="top" >{{row.Forwarder + ' / '}}</span> 
+                            <span pTooltip="Shipping Line" tooltipPosition="top">{{ row.ShippingLine === null ? ' -' : row.ShippingLine}}</span>
+                        </small>
+                    </span>
+                    <span *ngIf="row.Packaging === 2">
+                        {{ row.BL}}
+                        <span class="sub-text" pTooltip="Vessel" tooltipPosition="top" >{{ row.Vessel || ' -' }}</span>
+                    </span>
+                </td>
+
+                <td data-title="Containers/Trucks">
+                    <div *ngIf="row.Packaging === 1">
+                        {{ row.NoOfContainer == 0 ? '-' : row.NoOfContainer}}
+                        <small class="text-xs text-secondary" *ngIf="row.NoOfContainer !== 0">  {{ row.Container}}</small>
+                    </div>
+                    <div *ngIf="row.Packaging === 2">
+                        {{ row.NoOfTruck == 0 ? '-' : row.NoOfTruck}}
+                        <small class="text-secondary" *ngIf="row.NoOfTruck != 0">Truck/s</small>
+                    </div>
+                </td>
+                <td data-title="Product" >
+                    {{ row.RawMaterial }}
+                </td>
+                <td data-title="PortOfDischarge">
+                    {{ row.PortOfDischarge === '' ? '-' : row.PortOfDischarge}}
+                </td>
+
+                <td data-title="ETD">
+                    {{ row.ETD == null ? '-' : (row.ETD.date | date: 'MM/dd/yyyy') }}
+                </td>
+                <td data-title="ETA">
+                    {{ row.ETA == null ? '-' : (row.ETA.date | date: 'MM/dd/yyyy') }}
+                </td>
+
+                <td data-title="BrokerID">
+                    {{ row.Broker === null ? '-' : row.Broker}}
+                </td>
+              
+                <td data-title="BAI_SPS_IC" >
+                    <span  
+                        pTooltip="BAI SPS IC" 
+                        tooltipPosition="top"
+                    >
+                        {{ row.BAI_SPS_IC == '' ? '-' : row.BAI_SPS_IC}}
+                    </span>
+                    <span  
+                        pTooltip="BPI SPS IC" 
+                        tooltipPosition="top" 
+                        *ngIf="row.Packaging === 2"
+                    >
+                        {{ row.BPI_SPS_IC == '' ? '' : ' / ' + row.BPI_SPS_IC}}
+                    </span>
+                    <div>
+                        <small 
+                            class="text-secondary"  
+                            pTooltip="VALIDITY (BAI)" 
+                            tooltipPosition="top"
+                        >
+                            {{  getDate(row.FromBAIValidity) + ' - ' + getDate(row.ToBAIValidity)}}
+                        </small>
+
+                        <small 
+                            class="text-secondary"  
+                            pTooltip="VALIDITY (BPI)" 
+                            tooltipPosition="top"  
+                            *ngIf="row.Packaging === 2 && row.BPI_SPS_IC != ''"
+                        >
+                            {{  ',  ' + getDate(row.FromBPIValidity) + ' - ' + getDate(row.ToBPIValidity)}}
+                        </small>
+                    </div>
+                </td>     
+
+                <td data-title="AdvanceDocumentsReceived" >
+                    {{ row.AdvanceDocumentsReceived == null ? '-' : (row.AdvanceDocumentsReceived.date  | date: 'MM/dd/yyyy')}}
+                </td>
+              
+                <td data-title="DateDocsRecievedByBroker" >
+                    {{ row.DateDocsReceivedByBroker == null ? '-' : (row.DateDocsReceivedByBroker.date | date: 'MM/dd/yyyy') }}
+                </td>
+               
+                <td data-title="Remarks">
+                    {{ row.Remarks === '' ? '-' : row.Remarks}}
+                </td>
+                <td data-title="Status" alignFrozen="right" pFrozenColumn >
+                    <p-tag [severity]="getSeverity(row.Status)">
+                        {{ getStatus(row.Status) }}
+                    </p-tag>
+                </td>
+                <td data-title="Action" class="text-center" alignFrozen="right" pFrozenColumn *ngIf="edit">
+
+                    <i 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" 
+                        (click)="action.toggle($event)"
+                    ></i>
+
+                </td>
+
+                <p-overlayPanel #action>
+                    <div class="actions-overlay">
+
+                        <!-- sailing edit button -->
+                        <!-- <p  
+                            (click)="onSelectShipping( row, ShippingDialog)"
+                            *ngIf="value2 == 1 && (row.Status === 1 || row.Status === 2 || row.Status === 3)"
+                        >
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p> -->
+
+                        <!-- landed button -->
+                        <!-- <p
+                            (click)="showLandedForm(row)"  
+                            *ngIf="value2 == 1 && row.Status === 1"
+                        >
+                            <i class="pi pi-check" width="15px" height="15px"></i>
+                            Landed
+                        </p> -->
+
+                        <!-- landed edit button -->
+                        <!-- <p  
+                            (click)="onSelectShipping(row, ShippingDialog)" 
+                            *ngIf="value2 === 2"
+                        >
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p> -->
+
+                        <!-- <p  
+                            (click)="confirmLandedToSailing('center', row)" 
+                            *ngIf="value2 === 2"
+                        >
+                            <i class="pi pi-replay" width="15px" height="15px"></i>
+                            Revert to Sailing
+                        </p> -->
+
+                        <!-- pull out button -->
+                        <!-- <p
+                            (click)="confirmPullOutShippingTransaction('center', row)" 
+                            *ngIf="value2 == 2 && row.Status == 2 && row.Packaging == 1"
+                        >
+                            <i class="pi pi-check" width="15px" height="15px"></i>
+                            Pull Out
+                        </p> -->
+
+                        <!-- delete button -->
+                        <!-- (click)="onDeleteShippingTransaction(row)" -->
+                        <!-- <p
+                            (click)="confirmDeleteShippingTransaction('center', row)" 
+                        >
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-delete.svg#delete"></use>
+                            </svg>
+                            Delete
+                        </p> -->
+
+
+                    </div>
+                </p-overlayPanel>
+            </tr>
+        </ng-template>
+        
+      <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3">There is no transaction found.</td>
+            </tr>
+      </ng-template>
+
+    </p-table>
+
+    <div class="text-center my-3" *ngIf="shippingTransactionIsLoading">
+        <app-loader></app-loader>
+    </div>
+
+   
+  
+</div>

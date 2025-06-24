@@ -197,6 +197,9 @@ import { ImportationComponent } from './pages/importation/importation.component'
 import { ActiveContractTableComponent } from './features/importation/active-contract-table/active-contract-table.component';
 import { ActiveContractDialogComponent } from './features/importation/active-contract-dialog/active-contract-dialog.component';
 import { CompletedContractTableComponent } from './features/importation/completed-contract-table/completed-contract-table.component';
+import { SailingTableComponent } from './features/importation/sailing-table/sailing-table.component';
+import { LandedTableComponent } from './features/importation/landed-table/landed-table.component';
+import { CreateShippingTransactionComponent } from './features/importation/create-shipping-transaction/create-shipping-transaction.component';
 
 
 
@@ -297,6 +300,9 @@ import { CompletedContractTableComponent } from './features/importation/complete
     ActiveContractTableComponent,
     ActiveContractDialogComponent,
     CompletedContractTableComponent,
+    SailingTableComponent,
+    LandedTableComponent,
+    CreateShippingTransactionComponent,
     
   ],
   imports: [

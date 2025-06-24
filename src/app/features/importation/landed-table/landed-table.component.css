@@ -1,0 +1,23 @@
+td, th {
+    padding: 10px 10px;
+    /* text-align: center; */
+    font-size: var(--font-sm);
+}
+
+th {
+    white-space: nowrap;
+}
+
+td {
+    color: var(--font-color);
+    font-weight: var(--font-500);
+}
+
+.landed {
+    /* background: #F0F8FF; */
+    background: #dce9f5;
+}
+
+.pullout {
+    background: rgb(216, 243, 216);
+}

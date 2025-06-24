@@ -36,7 +36,7 @@
         #dt1 
         [value]="contractPerforma" 
         [tableStyle]="{ 'width': '100%' }" 
-        [globalFilterFields]="['ContractNo', 'RawMaterial', 'Supplier', 'Address', 'PortOfDischarge', 'CountryOfOrigin']" 
+        [globalFilterFields]="['ContractNo', 'RawMaterial', 'Supplier', 'Address', 'PortOfDischarge', 'CountryOfOrigin', 'created_at']" 
         class="contract_table" 
         [scrollable]="true" 
         scrollHeight="300px"
@@ -83,6 +83,7 @@
                 <!-- <th>Shipment Period</th> -->
                 <th>Country Of Origin</th>
                 <th >Status</th>
+                <th alignFrozen="right" pFrozenColumn pSortableColumn="created_at.date">Created At <p-sortIcon field="created_at.date" /></th>
                 <th alignFrozen="right" pFrozenColumn *ngIf="edit"></th>
             </tr>
         </ng-template>
@@ -154,7 +155,11 @@
                 <td data-title="Status" >
                     <p-tag [severity]="row.Status === 'Active' ? 'success' : row.Status ==='Completed' ? 'info' : ''">
                         {{ row.Status }}
-                    </p-tag></td>
+                    </p-tag>
+                </td>
+                <td alignFrozen="right" pFrozenColumn class="text-nowrap">
+                    {{ row.created_at.date | date: 'MMM dd, yyyy' }}
+                </td>
                 <!-- <p-tag [severity]="row.Status === 'Pending' ? 'warning' : row.Status ==='Completed' ? 'success' : ''">{{ row.Status }}</p-tag> -->
                 <td data-title="Action" class="text-center z-20" alignFrozen="right" pFrozenColumn *ngIf="edit">
 
@@ -1438,15 +1443,7 @@
                 <th *ngIf="value2 === 1" >
                     Qty (MT)
                 </th>
-                <!-- <th>
-                    # Of Trucks
-                </th> -->
-                <!-- <th *ngIf="value2 === 1" >
-                    Served
-                </th>
-                <th *ngIf="value2 === 1" >
-                    Bal
-                </th> -->
+             
                 <th *ngIf="value2 === 1" >
                     BAI SPS IC
                 </th>

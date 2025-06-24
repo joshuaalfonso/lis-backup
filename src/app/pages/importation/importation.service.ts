@@ -22,6 +22,10 @@ export class ImportationService {
         return this.http.get<ActiveContractList[]>( this.baseUrl + '/project/a_ContractPerformaFilter.php?status=' + status);
     }
 
+    getShippingTransactionFilter(status: number, id: number) {
+        return this.http.get<any>( this.baseUrl + '/project/a_ShippingTransactionFilter.php?status=' + status + '&id=' + id);
+    }
+
     saveContract(newContract: ContractPost)
     {
         return this.http.post(

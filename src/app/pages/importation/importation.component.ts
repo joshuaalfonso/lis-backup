@@ -6,6 +6,11 @@ import { SupplierService } from '../supplier/supplier.service';
 import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
 import { PortOfDischargeService } from '../port-of-discharge/port-of-discharge.service';
 import { ImportationService } from './importation.service';
+import { ActivatedRoute } from '@angular/router';
+import { ShippingLineService } from '../shipping-line/shipping-line.service';
+import { ContainerTypeService } from '../container-type/container-type.service';
+import { BrokerService } from '../broker/broker.service';
+import { BankService } from '../bank/bank.service';
 
 @Component({
   selector: 'app-importation',
@@ -22,6 +27,10 @@ export class ImportationComponent implements OnInit, OnDestroy {
     isLoading: boolean = false;
 
     contractDialogVisible: boolean = false;
+    shippingDialogVisisble: boolean = false;
+
+    shippingTransaction: any[] = [];
+    shippingTransactionIsLoading: boolean = false;
 
     subscriptions: Subscription = new Subscription;
 
@@ -35,8 +44,14 @@ export class ImportationComponent implements OnInit, OnDestroy {
     supplier: any[] = [];
     rawMaterial: any[] = [];
     portOfDischarge: any[] = [];
+    shippingLine: any[] = [];
+    containerType: any[] = [];
+    broker: any[] = [];
+    bank: any[] = [];
 
     selectedContractRow: {} | null = null;
+    selectedContractID: number = 0;
+    selectedShippingRow: {} | null = null;
 
     constructor(
         private auth: AuthService,
@@ -44,7 +59,12 @@ export class ImportationComponent implements OnInit, OnDestroy {
         private supplierService: SupplierService,
         private rawMaterialService: RawMaterialsService,
         private portOfDischargeService: PortOfDischargeService,
-        private importationService: ImportationService
+        private importationService: ImportationService,
+        private shippingLineService: ShippingLineService,
+        private containerTypeService: ContainerTypeService,
+        private brokerService: BrokerService,
+        private bankService: BankService,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -53,12 +73,19 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.getSupplier();
         this.getRawMaterials();
         this.getPortOfDischarge();
+        this.getShippingLine();
+        this.getContainerType();
+        this.getBroker();
+        this.getShippingTransaction();
+
+
     }
 
     ngOnDestroy(): void {
-        
+        this.subscriptions.unsubscribe();
     }
 
+    // get user id 
     getUser() {
         this.subscriptions.add(
             this.auth.user.pipe(take(1)).subscribe(
@@ -72,6 +99,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
+    // get user access
     getUserAccess(UserID: string) {
         this.subscriptions.add(
             this.userService.getUserAccess(UserID).subscribe(
@@ -102,6 +130,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
+    // get contract
     getContract() {
         this.isLoading = true;
         this.subscriptions.add(
@@ -120,6 +149,50 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
+    // get shipping transaction
+    getShippingTransaction() {
+        this.shippingTransactionIsLoading = true;
+        this.subscriptions.add(
+            this.importationService.getShippingTransactionFilter(this.statusValue, this.selectedContractID)
+            .subscribe(response => {
+                this.shippingTransaction = response;
+                this.shippingTransactionIsLoading = false;
+                // console.log(response)
+            }, error => {
+                this.shippingTransactionIsLoading = false;
+                console.log(error)
+            })
+        )
+    }
+
+    // selecte contract
+    onSelectContract(contractID: number) {
+
+        if (this.selectedContractID === contractID) {
+            this.selectedContractID = 0;
+            this.getShippingTransaction();
+            return;
+        }
+
+        this.selectedContractID = contractID;
+        this.getShippingTransaction();
+        // console.log(this.selectedContractID);
+    }
+
+    onSelectShippingTransactionStatus(event: any) {
+        const selectedStatus = Number(event.value);
+
+        if (selectedStatus === this.statusValue) return;
+
+        this.statusValue = selectedStatus;
+
+        this.getShippingTransaction();
+
+        // console.log(selectedStatus)
+    }
+
+
+    // get supplier
     getSupplier() {
         this.subscriptions.add(
             this.supplierService.getSupplierData().subscribe(
@@ -133,6 +206,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
+    // get raw materials
     getRawMaterials() {
         this.subscriptions.add(
             this.rawMaterialService.getRawMatsData().subscribe(
@@ -146,6 +220,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
+    // get port of discharge
     getPortOfDischarge() {
         this.subscriptions.add(
             this.portOfDischargeService.getData().subscribe(
@@ -159,14 +234,84 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
+    // get shipping line
+    getShippingLine() {
+        this.subscriptions.add(
+            this.shippingLineService.getShippingLineData().subscribe(
+                response => {
+                    this.shippingLine = response;
+                },
+                err => {
+                    console.error(err)
+                }
+            )
+        )
+    }
+
+
+    getContainerType() {
+        this.subscriptions.add(
+            this.containerTypeService.getContainerTypeData().subscribe(
+                response => {
+                    this.containerType = response;
+                },
+                err => {
+                    console.error(err)
+                }
+            )
+        )
+    }
+
+    getBroker() {
+        this.subscriptions.add(
+            this.brokerService.getBrokerData().subscribe(
+                response => {
+                    this.broker = response;
+                },
+                err => {
+                    console.error(err)
+                }
+            )
+        )
+    }
+
+    getBank() {
+        this.subscriptions.add(
+            this.bankService.getData().subscribe(
+                response => {
+                    this.bank = response;
+                },
+                err => {
+                    console.error(err)
+                }
+            )
+        )
+    }
+
+    // contract dialog
     showContractDialog(row?: any) {
         this.selectedContractRow = row || null;
         this.contractDialogVisible = true;
     }
 
+    // close contract dialog
     closeContractDialog() {
         this.contractDialogVisible = false;
         this.selectedContractRow = null;
+    }
+
+    // show shipping transaction dialog
+    showShippingDialog(row?: any) {
+        this.selectedShippingRow = row || null;
+        this.shippingDialogVisisble = true;
+        // console.log(this.shippingDialogVisisble)
+        console.log(row);
+    }
+
+    // close shipping transaction dialog
+    closeShippingDialog() {
+        this.shippingDialogVisisble = false;
+        this.selectedShippingRow = null;
     }
 
 
