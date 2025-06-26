@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ImportationService } from 'src/app/pages/importation/importation.service';
-import { ActiveContractList } from './active-contract.model';
 import { Table } from 'primeng/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-active-contract-table',
@@ -16,6 +15,8 @@ export class ActiveContractTableComponent implements OnInit, OnDestroy{
     // isLoading: boolean = false;
 
     selectedContract: number = 0;
+
+    isDeleting: boolean = false;
 
     @Input() view: boolean = false;
     @Input() insert: boolean = false;
@@ -35,26 +36,22 @@ export class ActiveContractTableComponent implements OnInit, OnDestroy{
     @Output() selectRow = new EventEmitter();
     @Output() onSelectContract = new EventEmitter();
     @Output() showShippingDialog = new EventEmitter();
+    @Output() getContract = new EventEmitter();
+    @Output() onRemoveContract = new EventEmitter();
+    @Output() getShippingTransaction = new EventEmitter();
     
     subscriptions: Subscription = new Subscription;
 
+    position: string = 'center';
+
     constructor(
         private importationService: ImportationService,
-        private route: ActivatedRoute,
-        private router: Router
+        private confirmationService: ConfirmationService,
+        private messageService: MessageService,
     ) {}
 
     ngOnInit(): void {
-        // this.getActiveContract();
 
-        // this.route.queryParams.subscribe(params => {
-
-        //     setTimeout(() => {
-        //         this.onSelectContract.emit(params['id']);
-        //     });
-
-        //     console.log(params)
-        // });
     }   
 
     ngOnDestroy(): void {
@@ -87,27 +84,120 @@ export class ActiveContractTableComponent implements OnInit, OnDestroy{
     }
 
 
-    navigateWithParams(id: number) {
 
+    // delete contract
+    onDeleteContract(contractID: any) {
 
-        console.log(id, this.selectedContractID)
-        if (id === this.selectedContract) {
-            this.selectedContract = 0
-        } else {
-            this.selectedContract = id;
+        this.isDeleting = true;
+
+        this.importationService.deleteContract(contractID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.isDeleting = false;
+                    this.messageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Deleted!' 
+                    });
+                    this.onRemoveContract.emit(contractID);
+                } 
+            }, error => {
+                this.isDeleting = false;
+                console.log(error);
+                this.messageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+
+    }
+
+    // delete contract form
+    confirmDeleteContract(position: string, row: any) {
+        this.position = position;        
+
+        if (!row.ContractPerformaID) {
+            alert('Unknown error occured');
+            return
         }
 
-        // console.log(this.selectedContract)
+        const contractPerformaID = row.ContractPerformaID;
+        const contractNo = row.ContractNo;
 
-        // if (contractID == this.selectedContractID) {
-        //     console.log('same')
-        // }
-
-        this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { id: this.selectedContract },
-            queryParamsHandling: 'merge' 
+        this.confirmationService.confirm({
+            message: `Are you sure you want to delete contract '${contractNo}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.onDeleteContract(contractPerformaID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
         });
+    }
+
+    contractCompleted(contractPerformaID: any) {
+
+        this.importationService.ActiveToCompleted(contractPerformaID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.messageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Updated!' 
+                    });
+                    this.onRemoveContract.emit(contractPerformaID);
+                } 
+            }, error => {
+                console.log(error)
+                this.messageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+
+    }
+
+    // completed contract confimation form
+    confirmCompleted(position: string, row: any) {
+
+        this.position = position;        
+
+        if (!row.ContractPerformaID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const contractPerformaID = row.ContractPerformaID;
+        const contractNo = row.ContractNo;
+
+        this.confirmationService.confirm({
+            message: `Are you sure contract '${contractNo}' is now completed ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.contractCompleted(contractPerformaID);
+            },
+            reject: () => {
+                // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
+            },
+            key: 'positionDialog'
+        });
+        
     }
 
     

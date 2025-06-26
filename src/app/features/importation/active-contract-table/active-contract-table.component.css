@@ -13,3 +13,7 @@ td {
     font-weight: var(--font-500);
 }
 
+.disabled {
+    pointer-events: none;
+    opacity: 0.33;
+}

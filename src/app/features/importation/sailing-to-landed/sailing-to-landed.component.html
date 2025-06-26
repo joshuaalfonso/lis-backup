@@ -1,0 +1,36 @@
+<p-dialog 
+    header="Arrived" 
+    [(visible)]="visibleLandedForm"  
+    [modal]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '35vw' }" 
+    (onHide)="closeLandedDialog.emit()"
+>
+    <form 
+        [formGroup]="landedForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()"
+    >  
+  
+        <div class="field">
+            <label class="font-semibold" >ATA</label>
+            <p-calendar 
+                formControlName="ATA" 
+                placeholder="mm/dd/yyyy" 
+                appendTo="body" 
+                [showClear]="true"
+            ></p-calendar>
+        </div>
+  
+        <div class="flex justify-content-end ">
+            <button 
+                pButton 
+                pRipple 
+                label="Submit" 
+                class="bg-indigo-500 border-round border-none submit" 
+                [disabled]="!landedForm.valid"
+            ></button>
+        </div>
+  
+    </form>
+</p-dialog>

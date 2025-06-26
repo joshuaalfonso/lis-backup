@@ -1,0 +1,9 @@
+:host ::ng-deep p-dropdown.disabled .p-dropdown {
+    background-color: gainsboro; 
+    /* cursor: not-allowed; */
+}
+
+:host ::ng-deep fieldset:disabled input {
+    background: gainsboro;
+    /* cursor: not-allowed; */
+}

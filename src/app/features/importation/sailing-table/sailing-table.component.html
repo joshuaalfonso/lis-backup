@@ -202,24 +202,25 @@
                     <div class="actions-overlay">
 
                         <!-- sailing edit button -->
-                        <!-- <p  
-                            (click)="onSelectShipping( row, ShippingDialog)"
-                            *ngIf="value2 == 1 && (row.Status === 1 || row.Status === 2 || row.Status === 3)"
+                        <!-- *ngIf="value2 == 1 && (row.Status === 1 || row.Status === 2 || row.Status === 3)" -->
+                        <p  
+                            (click)="showShippingDialog.emit(row)"
                         >
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
                             </svg>
                             Edit
-                        </p> -->
+                        </p>
 
                         <!-- landed button -->
-                        <!-- <p
-                            (click)="showLandedForm(row)"  
-                            *ngIf="value2 == 1 && row.Status === 1"
+                        <!-- (click)="showLandedForm(row)"   -->
+                        <!-- *ngIf="value2 == 1 && row.Status === 1" -->
+                        <p
+                            (click)="showLandedDialog(row.ShippingTransactionID)"
                         >
                             <i class="pi pi-check" width="15px" height="15px"></i>
                             Landed
-                        </p> -->
+                        </p>
 
                         <!-- landed edit button -->
                         <!-- <p  
@@ -251,14 +252,14 @@
 
                         <!-- delete button -->
                         <!-- (click)="onDeleteShippingTransaction(row)" -->
-                        <!-- <p
+                        <p
                             (click)="confirmDeleteShippingTransaction('center', row)" 
                         >
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-delete.svg#delete"></use>
                             </svg>
                             Delete
-                        </p> -->
+                        </p>
 
 
                     </div>
@@ -281,3 +282,10 @@
    
   
 </div>
+
+<app-sailing-to-landed 
+    [visibleLandedForm]="visibleLandedForm"
+    [selectedShippingID]="selectedShippingID"
+    (showLandedDialog)="showLandedDialog($event)"
+    (closeLandedDialog)="closeLandedDialog()"
+/>

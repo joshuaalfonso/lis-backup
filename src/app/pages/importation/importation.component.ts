@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription, take } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UsersService } from '../users/users.service';
@@ -11,6 +11,8 @@ import { ShippingLineService } from '../shipping-line/shipping-line.service';
 import { ContainerTypeService } from '../container-type/container-type.service';
 import { BrokerService } from '../broker/broker.service';
 import { BankService } from '../bank/bank.service';
+import { Dialog } from 'primeng/dialog';
+import { CreateShippingTransactionComponent } from 'src/app/features/importation/create-shipping-transaction/create-shipping-transaction.component';
 
 @Component({
   selector: 'app-importation',
@@ -53,6 +55,8 @@ export class ImportationComponent implements OnInit, OnDestroy {
     selectedContractID: number = 0;
     selectedShippingRow: {} | null = null;
 
+    @ViewChild(CreateShippingTransactionComponent) shippingDialogComp!: CreateShippingTransactionComponent;
+
     constructor(
         private auth: AuthService,
         private userService: UsersService,
@@ -64,7 +68,6 @@ export class ImportationComponent implements OnInit, OnDestroy {
         private containerTypeService: ContainerTypeService,
         private brokerService: BrokerService,
         private bankService: BankService,
-        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -77,7 +80,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.getContainerType();
         this.getBroker();
         this.getShippingTransaction();
-
+        this.getBank();
 
     }
 
@@ -179,7 +182,17 @@ export class ImportationComponent implements OnInit, OnDestroy {
         // console.log(this.selectedContractID);
     }
 
+    onRemoveContract(contractPerformaID: number) {
+        this.contract = this.contract.filter(item => item.ContractPerformaID !== contractPerformaID);     
+        this.shippingTransaction = this.shippingTransaction.filter(item => item.ContractPerformaID !== contractPerformaID);
+    }
+
+    onRemoveShipping(shippingTransactionID: number) {
+        this.shippingTransaction = this.shippingTransaction.filter(item => item.ShippingTransactionID !== shippingTransactionID);
+    }
+
     onSelectShippingTransactionStatus(event: any) {
+
         const selectedStatus = Number(event.value);
 
         if (selectedStatus === this.statusValue) return;
@@ -306,6 +319,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.shippingDialogVisisble = true;
         // console.log(this.shippingDialogVisisble)
         console.log(row);
+        this.shippingDialogComp.maximize();
     }
 
     // close shipping transaction dialog

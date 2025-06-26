@@ -1,5 +1,6 @@
 <!-- ======= SHIPPING TRANSACTION MODAL FORM ======== -->
 <p-dialog 
+    #ShippingDialog
     header="Add Shipping Transaction" 
     [(visible)]="shippingDialogVisisble" 
     [modal]="true" 
@@ -7,8 +8,8 @@
     [style]="{ width: '35vw' }" 
     [draggable]="false" 
     [resizable]="false" 
+    [maximizable]="true"
     (onHide)="closeShippingDialog.emit()"
-    #ShippingDialog
 >
     <form 
         [formGroup]="shippingTransactionForm" 
@@ -60,6 +61,7 @@
             <p-dropdown 
                 formControlName="RawMaterialID" 
                 [options]="rawMaterial" 
+                optionValue="RawMaterialID"
                 optionLabel="RawMaterial" 
                 [style]="{'height': '40px'}" 
                 [showClear]="true" 
@@ -79,6 +81,7 @@
                     <p-dropdown 
                         formControlName="SupplierID" 
                         [options]="supplier" 
+                        optionValue="SupplierID"
                         optionLabel="Supplier" 
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
@@ -116,6 +119,7 @@
             <p-dropdown 
                 formControlName="Packaging" 
                 [options]="packaging" 
+                optionValue="PackagingID"
                 optionLabel="Packaging" 
                 [style]="{'height': '40px'}" 
                 [showClear]="true" 
@@ -288,6 +292,7 @@
                     <p-dropdown 
                         [options]="shippingLine" 
                         formControlName="ShippingLineID" 
+                        optionValue="ShippingLineID"
                         optionLabel="ShippingLine" 
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
@@ -405,6 +410,7 @@
                         [options]="containerType" 
                         optionLabel="Container" 
                         formControlName="ContainerTypeID" 
+                        optionValue="ContainerTypeID"
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
                         placeholder="Select Container Type"
@@ -477,6 +483,7 @@
                     <p-dropdown 
                         [options]="broker" 
                         optionLabel="Broker" 
+                        optionValue="BrokerID"
                         formControlName="BrokerID" 
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
@@ -587,6 +594,7 @@
                     <p-dropdown 
                         formControlName="BankID" 
                         [options]="bank" 
+                        optionValue="BankID"
                         optionLabel="Bank" 
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 
@@ -696,6 +704,7 @@
                     <p-dropdown 
                         formControlName="LodgementBankID" 
                         [options]="bank" 
+                        optionValue="BankID"
                         optionLabel="Bank" 
                         [style]="{'height': '40px'}" 
                         [showClear]="true" 

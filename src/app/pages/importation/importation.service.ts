@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { catchError, tap, throwError } from "rxjs";
 import { environment } from "src/app/environments/environment";
 import { ActiveContractList } from "src/app/features/importation/active-contract-table/active-contract.model";
-import { ContractPost } from "./importation.model";
+import { ContractPost, ShippingPost } from "./importation.model";
 
 
 
@@ -44,6 +44,64 @@ export class ImportationService {
         let errorMessage = 'An unknown error occurred!';
         return throwError(errorMessage);
     }
+
+    saveShippingTransaction(shippingTransactionData: ShippingPost)
+    {
+        return this.http.post
+        (
+            this.baseUrl + '/project/b_ShippingTransaction.php', shippingTransactionData
+        )
+        .pipe(
+            catchError(this.handleError),
+            tap(resData => {
+                return resData;
+            })
+        );
+    }
+
+    deleteContract(id: any) {
+        return this.http.post( 
+            this.baseUrl + '/project/d_ContractPerforma.php', 
+            {
+                ContractPerformaID: id
+            }
+        )
+    }
+
+    ActiveToCompleted(id: any) {
+        return this.http.post(
+            this.baseUrl + '/project/b_ContractCompleted.php', 
+            {
+                ContractPerformaID: id
+            }
+        )
+    }
+
+    sailingToLanded(data: {ShippingTransactionID: number, ATA: string | null}) {
+        return this.http.post(
+            this.baseUrl + '/project/b_ShippingSailingToLanded.php', 
+            data
+        )
+    }
+
+    landedToSaling(id: any) {
+        return this.http.post(
+            this.baseUrl + '/project/b_ShippingLanded.php', 
+            {
+                ShippingTransactionID: id
+            }
+        )
+    }
+
+    deleteShippingTransaction(id: any) {
+        return this.http.post( 
+            this.baseUrl + '/project/d_ShippingTransaction.php', 
+            {
+                ShippingTransactionID: id
+            }
+        )
+    }
+    
 
 
 }

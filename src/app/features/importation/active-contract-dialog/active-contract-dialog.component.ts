@@ -97,6 +97,7 @@ export class ActiveContractDialogComponent implements OnDestroy, OnChanges{
             })
         } else {
             this.contractPerformaform?.reset();
+            this.contractPerformaform.patchValue({ContractPerformaID: 0})
         }
     }
 

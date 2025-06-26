@@ -82,7 +82,7 @@
                 <th>Port Of Discharge</th>
                 <!-- <th>Shipment Period</th> -->
                 <th>Country Of Origin</th>
-                <th >Status</th>
+                <!-- <th >Status</th> -->
                 <th alignFrozen="right" pFrozenColumn pSortableColumn="created_at.date">Created At <p-sortIcon field="created_at.date" /></th>
                 <th alignFrozen="right" pFrozenColumn *ngIf="edit"></th>
             </tr>
@@ -152,11 +152,11 @@
                 <td data-title="CountryOfOrigin">
                     {{ row.CountryOfOrigin }}
                 </td>
-                <td data-title="Status" >
+                <!-- <td data-title="Status" >
                     <p-tag [severity]="row.Status === 'Active' ? 'success' : row.Status ==='Completed' ? 'info' : ''">
                         {{ row.Status }}
                     </p-tag>
-                </td>
+                </td> -->
                 <td alignFrozen="right" pFrozenColumn class="text-nowrap">
                     {{ row.created_at.date | date: 'MMM dd, yyyy' }}
                 </td>

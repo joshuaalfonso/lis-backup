@@ -117,6 +117,7 @@
                         (click)="contractOverlay.toggle($event)"
                         (click)="toggleContractOverlay($event, contractOverlay)" 
                         class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle"
+                        [class.disabled]="isDeleting"
                     ></i>
 
                     <p-overlayPanel #contractOverlay>
@@ -150,16 +151,16 @@
                                 Add Shipping
                             </p>
 
-                            <!-- (click)="confirmCompleted('center', row)" -->
                             <p  
+                                (click)="confirmCompleted('center', row)"
                             >
                                 <i class="pi pi-check" width="15px" height="15px"></i>
                                 Completed
                             </p>
     
                             <!-- delete button -->
-                            <!-- (click)="confirmDeleteContract('center', row)" -->
                             <p
+                                (click)="confirmDeleteContract('center', row)"
                             >
                                 <svg  width="15px" height="15px">
                                     <use href="assets/icons/icon-file-delete.svg#delete"></use>
@@ -183,3 +184,8 @@
 
 </div>
 
+<p-confirmDialog 
+    key="positionDialog" 
+    [position]="position" 
+    rejectButtonStyleClass="p-button-outlined" 
+/>

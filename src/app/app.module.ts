@@ -200,6 +200,7 @@ import { CompletedContractTableComponent } from './features/importation/complete
 import { SailingTableComponent } from './features/importation/sailing-table/sailing-table.component';
 import { LandedTableComponent } from './features/importation/landed-table/landed-table.component';
 import { CreateShippingTransactionComponent } from './features/importation/create-shipping-transaction/create-shipping-transaction.component';
+import { SailingToLandedComponent } from './features/importation/sailing-to-landed/sailing-to-landed.component';
 
 
 
@@ -303,6 +304,7 @@ import { CreateShippingTransactionComponent } from './features/importation/creat
     SailingTableComponent,
     LandedTableComponent,
     CreateShippingTransactionComponent,
+    SailingToLandedComponent,
     
   ],
   imports: [

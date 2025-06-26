@@ -40,8 +40,6 @@
     </label>
 </div>
 
-
-
 <!-- contract tables -->
 <div [ngSwitch]="tabValue">
 
@@ -55,6 +53,8 @@
         (showDialog)="showContractDialog($event)"
         [class.hidden]="tabValue !== 'Active'"
         [selectedContractID]="selectedContractID"
+        (getContract)="getContract()"
+        (onRemoveContract)="onRemoveContract($event)"
         (onSelectContract)="onSelectContract($event)"
         (showShippingDialog)="showShippingDialog($event)"
     />
@@ -160,6 +160,10 @@
     [shippingTransaction]="shippingTransaction"
     [shippingTransactionIsLoading]="shippingTransactionIsLoading"
     [edit]="edit"
+    (getContract)="getContract()"
+    (getShippingTransaction)="getShippingTransaction()"
+    (showShippingDialog)="showShippingDialog($event)"
+    (onRemoveShipping)="onRemoveShipping($event)"
     *ngIf="statusValue === 1"
 />
 
@@ -182,6 +186,7 @@
     [userID]="userID"
     [row]="selectedContractRow"
     [visible]="contractDialogVisible"
+    (getContract)="getContract()"
     (closeDialog)="closeContractDialog()"
 />
     <!-- (getContract)="getContract()" -->
@@ -196,6 +201,8 @@
     [broker]="broker"
     [bank]="bank"
     [row]="selectedShippingRow"
+    [UserID]="userID"
+    (getShippingTransaction)="getShippingTransaction()"
     (closeShippingDialog)="closeShippingDialog()"
 />
 
