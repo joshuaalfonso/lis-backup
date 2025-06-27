@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { ShippingPost } from 'src/app/pages/importation/importation.model';
 import { ImportationService } from 'src/app/pages/importation/importation.service';
 
+
 @Component({
   selector: 'app-create-shipping-transaction',
   templateUrl: './create-shipping-transaction.component.html',
@@ -105,7 +106,6 @@ export class CreateShippingTransactionComponent implements OnChanges{
 
 
   ngOnChanges(): void {
-    console.log(this.row)
     if (this.row) {
 
       this.shippingTransactionForm.patchValue({
@@ -153,7 +153,7 @@ export class CreateShippingTransactionComponent implements OnChanges{
         DateOfPickup: this.row.DateOfPickup?.date ? new Date(this.row.DateOfPickup?.date) : null,
         PortOfDischarge: this.row.PortOfDischarge || null,
         Status:  typeof this.row.Status === 'number' ? this.row.Status : 1,
-        DateOfDischarge: this.row.DateOfDischarge?.date ? new Date(this.row.DateOfDischarge?.date) : null,
+        DateOfDischarge: this.row.DateofDischarge?.date ? new Date(this.row.DateofDischarge?.date) : null,
         LodgementDate: this.row.LodgementDate?.date ? new Date(this.row.LodgementDate?.date) : null,
         LodgementBankID: this.row.LodgementBankID || null,
         GatepassRecieved: this.row.GatepassRecieved?.date ? new Date(this.row.GatepassRecieved?.date) : null,
@@ -224,17 +224,13 @@ export class CreateShippingTransactionComponent implements OnChanges{
       UserID: this.UserID,
     }
 
+    // console.log(data)
+
     this.isSubmitting = true;
 
     this.importationService.saveShippingTransaction(data).pipe(take(1)).subscribe(
       response => {
         if( response === 1) {
-          this.messageService.add({ 
-            severity: 'success', 
-            summary: 'Success', 
-            detail: 'Item: ' + this.shippingTransactionForm.value.ContractPerformaID +  ' successfully recorded', 
-            life: 3000 
-          });
           this.getShippingTransaction.emit();
           this.closeShippingDialog.emit()
           this.isSubmitting = false;
@@ -253,7 +249,7 @@ export class CreateShippingTransactionComponent implements OnChanges{
         else if ( response === 0) {
             this.messageService.add({ 
               severity: 'error', 
-              summary: 'Danger', 
+              summary: 'Warning', 
               detail: 'Item: ' + this.shippingTransactionForm.value.ShippingTransactionID +  ' already exist', 
               life: 3000 
             });
@@ -262,6 +258,12 @@ export class CreateShippingTransactionComponent implements OnChanges{
       },
       err => {
         console.log(err);
+        this.messageService.add({
+          severity: 'error', 
+          summary: 'Danger', 
+          detail: 'An unkown error occured' ,
+          life: 3000 
+        })
       }
     )
 

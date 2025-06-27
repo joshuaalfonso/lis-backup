@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -12,6 +12,11 @@ export class LandedTableComponent {
   @Input() shippingTransactionIsLoading: boolean = false;
 
   @Input() edit: boolean = false;
+
+  @Output() showShippingDialog = new EventEmitter();
+  @Output() confirmDeleteShippingTransaction = new EventEmitter();
+  @Output() confirmLandedToSailing = new EventEmitter;
+  @Output() confirmLandedToPullOut = new EventEmitter;
 
 
   onGlobalFilter(table: Table, event: Event) {
@@ -57,6 +62,10 @@ export class LandedTableComponent {
           throw new Error(`Unknown status: ${status}`);
     }
 
+  }
+
+  trackByFn(index: number, item: any): any {
+    return item.id || index; // use a unique identifier
   }
 
 }

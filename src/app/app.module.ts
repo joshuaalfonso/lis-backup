@@ -201,6 +201,8 @@ import { SailingTableComponent } from './features/importation/sailing-table/sail
 import { LandedTableComponent } from './features/importation/landed-table/landed-table.component';
 import { CreateShippingTransactionComponent } from './features/importation/create-shipping-transaction/create-shipping-transaction.component';
 import { SailingToLandedComponent } from './features/importation/sailing-to-landed/sailing-to-landed.component';
+import { PulloutTableComponent } from './features/importation/pullout-table/pullout-table.component';
+import { PulloutDialogComponent } from './features/importation/pullout-dialog/pullout-dialog.component';
 
 
 
@@ -305,6 +307,8 @@ import { SailingToLandedComponent } from './features/importation/sailing-to-land
     LandedTableComponent,
     CreateShippingTransactionComponent,
     SailingToLandedComponent,
+    PulloutTableComponent,
+    PulloutDialogComponent,
     
   ],
   imports: [

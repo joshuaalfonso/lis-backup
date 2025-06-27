@@ -17,6 +17,7 @@ export class SailingTableComponent {
 
   @Output() showShippingDialog = new EventEmitter()
   @Output() onRemoveShipping = new EventEmitter()
+  @Output() confirmDeleteShippingTransaction = new EventEmitter()
 
   position: string = 'center';
 
@@ -75,67 +76,6 @@ export class SailingTableComponent {
     }
   }
 
-  // delete shipping transaction function
-  onDeleteShippingTransaction(shippingTransactionID: any) {
-
-    this.importationService.deleteShippingTransaction(shippingTransactionID).subscribe(
-      response => {
-        if( response === 2) {
-          this.messageService.add({ 
-              severity: 'info', 
-              summary: 'Confirmed', 
-              detail: 'Successfully Deleted!' 
-          });
-          this.onRemoveShipping.emit(shippingTransactionID)
-        } 
-      }, error => {
-        console.log(error)
-        this.messageService.add({ 
-          severity: 'error', 
-          summary: 'Danger', 
-          detail: 'An unknown error occured', 
-          life: 3000 
-        });
-      }
-          
-    )
-
-  }
-
-
-  // delete shpping transaction form
-  confirmDeleteShippingTransaction(position: string, row: any) {
-    this.position = position;        
-
-    if (!row.ShippingTransactionID) {
-      alert('Unknown error occured');
-      return
-    }
-
-    const shippingTransactionID = row.ShippingTransactionID;
-    const mbl = row.MBL == 0 ? row.BL : row.MBL;
-    const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
-
-    // const shippingTransactionID = row.ShippingTransactionID;
-    // const lot = row.Lot;
-
-    this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${blMBL} '${mbl}' ?`,
-      header: 'Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
-      accept: () => {
-          this.onDeleteShippingTransaction(shippingTransactionID);
-      },
-      reject: () => {
-          // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', life: 3000 });
-      },
-      key: 'positionDialog'
-    });
-  }
-
   showLandedDialog(shippingTransactionID: number) {
     console.log(shippingTransactionID)
     this.visibleLandedForm = true;
@@ -145,6 +85,10 @@ export class SailingTableComponent {
   closeLandedDialog() {
     this.selectedShippingID = 0;
     this.visibleLandedForm = false;
+  }
+
+  handeRemoveShipping(shippingTransactionID: number) {
+    this.onRemoveShipping.emit(shippingTransactionID);
   }
 
 }

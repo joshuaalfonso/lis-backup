@@ -93,6 +93,15 @@ export class ImportationService {
         )
     }
 
+    landedToPullout(shippingTransactionID: number) {
+        return this.http.post(
+            this.baseUrl + '/project/b_ShippingLandedToPullOut.php', 
+            {
+                ShippingTransactionID: shippingTransactionID
+            }
+        )
+    }
+
     deleteShippingTransaction(id: any) {
         return this.http.post( 
             this.baseUrl + '/project/d_ShippingTransaction.php', 

@@ -13,6 +13,7 @@ import { BrokerService } from '../broker/broker.service';
 import { BankService } from '../bank/bank.service';
 import { Dialog } from 'primeng/dialog';
 import { CreateShippingTransactionComponent } from 'src/app/features/importation/create-shipping-transaction/create-shipping-transaction.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-importation',
@@ -55,6 +56,8 @@ export class ImportationComponent implements OnInit, OnDestroy {
     selectedContractID: number = 0;
     selectedShippingRow: {} | null = null;
 
+    position: string = 'center';
+
     @ViewChild(CreateShippingTransactionComponent) shippingDialogComp!: CreateShippingTransactionComponent;
 
     constructor(
@@ -68,6 +71,8 @@ export class ImportationComponent implements OnInit, OnDestroy {
         private containerTypeService: ContainerTypeService,
         private brokerService: BrokerService,
         private bankService: BankService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
     ) {}
 
     ngOnInit(): void {
@@ -326,6 +331,171 @@ export class ImportationComponent implements OnInit, OnDestroy {
     closeShippingDialog() {
         this.shippingDialogVisisble = false;
         this.selectedShippingRow = null;
+    }
+
+
+    // delete shipping transaction function
+    onDeleteShippingTransaction(shippingTransactionID: any) {
+
+        this.importationService.deleteShippingTransaction(shippingTransactionID).subscribe(
+        response => {
+            if( response === 2) {
+            this.messageService.add({ 
+                severity: 'info', 
+                summary: 'Confirmed', 
+                detail: 'Successfully Deleted!' 
+            });
+            this.onRemoveShipping(shippingTransactionID)
+            } 
+        }, error => {
+            console.log(error)
+            this.messageService.add({ 
+            severity: 'error', 
+            summary: 'Danger', 
+            detail: 'An unknown error occured', 
+            life: 3000 
+            });
+        }
+            
+        )
+
+    }
+
+    // delete shpping transaction form
+    confirmDeleteShippingTransaction(row: any) {     
+
+        if (!row.ShippingTransactionID) {
+        alert('Unknown error occured');
+        return
+        }
+
+        const shippingTransactionID = row.ShippingTransactionID;
+        const mbl = row.MBL == 0 ? row.BL : row.MBL;
+        const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
+
+        this.confirmationService.confirm({
+        message: `Are you sure you want to delete ${blMBL} '${mbl}' ?`,
+        header: 'Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptIcon:"none",
+        rejectIcon:"none",
+        rejectButtonStyleClass:"p-button-text",
+        accept: () => {
+            this.onDeleteShippingTransaction(shippingTransactionID);
+        },
+        reject: () => {
+
+        },
+            key: 'positionDialog'
+        });
+    }
+
+    LandedToSailing(shippingTransactionID: any) {
+
+        this.importationService.landedToSaling(shippingTransactionID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.messageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Updated!' 
+                    });
+                    this.onRemoveShipping(shippingTransactionID);
+                } 
+            }, error => {
+                console.log(error);
+                this.messageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+       
+    }
+
+    confirmLandedToSailing(row: any) {       
+
+        if (!row.ShippingTransactionID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const shippingTransactionID = row.ShippingTransactionID;
+        const mbl = row.MBL == 0 ? row.BL : row.MBL;
+        const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
+
+        this.confirmationService.confirm({
+            message: `Are you sure you want to revert ${blMBL} '${mbl}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.LandedToSailing(shippingTransactionID);
+            },
+            reject: () => {
+
+            },
+            key: 'positionDialog'
+        });
+    }
+
+
+    LandedToPullout(shippingTransactionID: any) {
+
+        this.importationService.landedToPullout(shippingTransactionID).subscribe(
+            response => {
+                if( response === 2) {
+                    this.messageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Successfully Updated!' 
+                    });
+                    this.onRemoveShipping(shippingTransactionID);
+                } 
+            }, error => {
+                console.log(error);
+                this.messageService.add({ 
+                    severity: 'error', 
+                    summary: 'Danger', 
+                    detail: 'An unknown error occured', 
+                    life: 3000 
+                });
+            }
+        )
+       
+    }
+
+    confirmLandedToPullOut( row: any) {  
+
+        if (!row.ShippingTransactionID) {
+            alert('Unknown error occured');
+            return
+        }
+
+        const mbl = row.MBL == 0 ? row.BL : row.MBL;
+        const blMBL = row.MBL == 0 ? 'BL' : 'MBL';
+
+        const shippingTransactionID = row.ShippingTransactionID;
+
+        this.confirmationService.confirm({
+            message: `Are you sure you want to Pull Out ${blMBL} '${mbl}' ?`,
+            header: 'Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptIcon:"none",
+            rejectIcon:"none",
+            rejectButtonStyleClass:"p-button-text",
+            accept: () => {
+                this.LandedToPullout(shippingTransactionID);
+            },
+            reject: () => {
+
+            },
+            key: 'positionDialog'
+        });
     }
 
 

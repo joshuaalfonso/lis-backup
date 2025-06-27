@@ -1,0 +1,233 @@
+<p-dialog 
+    header="Add PullOut" 
+    [(visible)]="pullOutVisible" 
+    [modal]="true" 
+    [maximizable]="true" 
+    [breakpoints]="{ '1200px': '500px' }" 
+    [style]="{ width: '50vw' }" 
+    (onHide)="onClosePullOut.emit()"
+    #PullOutDialog
+>
+    <form 
+        [formGroup]="pulloutForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()"
+    >  
+  
+        <div class="field">
+            <label class="font-semibold" >BL #</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="MBL" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >HBL</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="HBL" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Supplier</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="Supplier" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Broker</label>
+            <fieldset [disabled]="true">
+                <input pInputText formControlName="Broker" autocomplete="off" class="input">
+            </fieldset>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold" >Pull Out Details</label>
+            <p-table #dt_orders [value]="PullOutDetail" [tableStyle]="{ 'width': '100%'}" *ngIf="!isLoading">
+                <ng-template pTemplate="header">
+                    <tr class="thead">
+                        <th> Container # </th>  
+                        <th> Date Of Discharge </th>  
+                        <th> Storage (LFD) </th>
+                        <th> Demurrage (LFD) </th>
+                        <th> Pull Out Date </th>
+                        <th> Date In </th>
+                        <th> Date Out </th>
+                        <th> Detention (LFD)</th>
+                        <th> Return Date </th>
+                        <th> Trucking </th>
+                        <th> Remarks </th>
+                        <th> Remove </th>
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-data let-DetailIndex="rowIndex" >
+                <tr>
+
+                    <td data-title="ContainerNumber">
+                        <input 
+                            pInputText 
+                            [(ngModel)]="data.ContainerNumber"
+                            placeholder="Enter Cont. #"  
+                            autocomplete="off" 
+                            class="input"
+                            [ngModelOptions]="{standalone: true}" 
+                        >
+                    </td>
+
+                    <td data-title="Date Of Discharge">
+                        <p-calendar   
+                            [(ngModel)]="data.DateOfDischarge"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="Storage">
+                        <p-calendar   
+                            [(ngModel)]="data.Storage"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="Demurrage">
+                        <p-calendar   
+                            [(ngModel)]="data.Demurrage"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="PullOutDate">
+                        <p-calendar   
+                            [(ngModel)]="data.PullOutDate"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="DateIn">
+                        <p-calendar   
+                            [(ngModel)]="data.DateIn"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+
+                    <td data-title="DateOut">
+                        <p-calendar   
+                            [(ngModel)]="data.DateOut"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td> 
+
+                    <td data-title="Detention">
+                        <p-calendar   
+                            [(ngModel)]="data.Detention"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td data-title="ReturnDate">
+                        <p-calendar   
+                            [(ngModel)]="data.ReturnDate"  
+                            placeholder="mm/dd/yyyy"  
+                            appendTo="body"
+                            [ngModelOptions]="{standalone: true}" 
+                            [showClear]="true"
+                        >
+                        </p-calendar>
+                    </td>
+
+                    <td>
+                        <p-dropdown 
+                            [options]="trucking" 
+                            optionLabel="TruckingName" 
+                            [(ngModel)]="data.TruckingID"  
+                            [showClear]="true" 
+                            placeholder="Select Trucking"
+                            [ngModelOptions]="{standalone: true}" 
+                            appendTo="body"
+                        >
+                        </p-dropdown>
+                    </td>
+
+                    <td data-title="Remarks">
+                        <input 
+                            pInputText 
+                            [(ngModel)]="data.Remarks"
+                            placeholder="Enter Remarks"  
+                            autocomplete="off" 
+                            class="input"
+                            [ngModelOptions]="{standalone: true}" 
+                        >
+                    </td>
+
+                    <td class="text-center" data-title="Remove">
+                        <ng-container>
+                        <i class="pi pi-times hover:text-red-500 cursor-pointer" (click)="removePullOutRow(DetailIndex)"></i>
+                        </ng-container> 
+                    </td>
+                </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+
+                        <td colspan="1">There is no container yet.</td>
+
+                </ng-template>
+            </p-table>
+
+            <div class="text-center my-3" *ngIf="isLoading">
+                <app-loader></app-loader>
+            </div>
+
+        </div>
+
+        <div class="field text-right">
+
+            <button pButton pRipple 
+                label="Add row" 
+                type="button" 
+                class="bg-indigo-500 border-round border-none submit w-2" 
+                (click)="addPullOutRow()"
+            >
+            </button>
+
+        </div>
+  
+        <button 
+            pButton 
+            pRipple 
+            label="Submit" 
+            class="bg-indigo-500 border-round border-none submit"
+        ></button>
+  
+    </form>
+</p-dialog>

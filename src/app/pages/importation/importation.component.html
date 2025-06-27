@@ -164,14 +164,25 @@
     (getShippingTransaction)="getShippingTransaction()"
     (showShippingDialog)="showShippingDialog($event)"
     (onRemoveShipping)="onRemoveShipping($event)"
+    (confirmDeleteShippingTransaction)="confirmDeleteShippingTransaction($event)"
     *ngIf="statusValue === 1"
 />
 
 <app-landed-table 
     [shippingTransaction]="shippingTransaction"
     [shippingTransactionIsLoading]="shippingTransactionIsLoading"
+    (showShippingDialog)="showShippingDialog($event)"
+    (confirmDeleteShippingTransaction)="confirmDeleteShippingTransaction($event)"
+    (confirmLandedToSailing)="confirmLandedToSailing($event)"
+    (confirmLandedToPullOut)="confirmLandedToPullOut($event)"
     [edit]="edit"
     *ngIf="statusValue === 2"
+/>
+
+<app-pullout-table 
+    [shippingTransaction]="shippingTransaction"
+    [shippingTransactionIsLoading]="shippingTransactionIsLoading"
+    *ngIf="statusValue === 3"
 />
 
 

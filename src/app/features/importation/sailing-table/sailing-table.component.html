@@ -123,6 +123,7 @@
                 </td>
                 <td data-title="Product" >
                     {{ row.RawMaterial }}
+                    <span class="sub-text" *ngIf="row.RawMaterial">{{ row.Supplier == null ? '-' : row.Supplier }}</span>
                 </td>
                 <td data-title="PortOfDischarge">
                     {{ row.PortOfDischarge === '' ? '-' : row.PortOfDischarge}}
@@ -217,6 +218,7 @@
                         <!-- *ngIf="value2 == 1 && row.Status === 1" -->
                         <p
                             (click)="showLandedDialog(row.ShippingTransactionID)"
+                            *ngIf="row.Status === 1"
                         >
                             <i class="pi pi-check" width="15px" height="15px"></i>
                             Landed
@@ -253,7 +255,7 @@
                         <!-- delete button -->
                         <!-- (click)="onDeleteShippingTransaction(row)" -->
                         <p
-                            (click)="confirmDeleteShippingTransaction('center', row)" 
+                            (click)="confirmDeleteShippingTransaction.emit(row)" 
                         >
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-delete.svg#delete"></use>
@@ -283,9 +285,12 @@
   
 </div>
 
+
+
 <app-sailing-to-landed 
     [visibleLandedForm]="visibleLandedForm"
     [selectedShippingID]="selectedShippingID"
     (showLandedDialog)="showLandedDialog($event)"
     (closeLandedDialog)="closeLandedDialog()"
+    (handeRemoveShipping)="handeRemoveShipping($event)"
 />

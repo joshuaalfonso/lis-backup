@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { take } from 'rxjs';
 import { ImportationService } from 'src/app/pages/importation/importation.service';
 
@@ -14,6 +15,7 @@ export class SailingToLandedComponent implements OnChanges{
   @Input() selectedShippingID: number = 0;
   @Output() showLandedDialog = new EventEmitter;
   @Output() closeLandedDialog = new EventEmitter;
+  @Output() handeRemoveShipping = new EventEmitter;
 
   landedForm = new FormGroup({
     'ShippingTransactionID': new FormControl(0),
@@ -21,7 +23,8 @@ export class SailingToLandedComponent implements OnChanges{
   })
 
   constructor(
-    private importationService: ImportationService
+    private importationService: ImportationService,
+    private messageService: MessageService
   ) {}
 
   ngOnChanges(): void {
@@ -30,7 +33,6 @@ export class SailingToLandedComponent implements OnChanges{
         ShippingTransactionID: this.selectedShippingID
       })
     } else {
-      console.log('reset')
       this.landedForm.reset();
     }
   }
@@ -50,9 +52,25 @@ export class SailingToLandedComponent implements OnChanges{
     this.importationService.sailingToLanded(data).pipe(take(1)).subscribe(
       response => {
         console.log(response)
+        if (response === 2) {
+          this.messageService.add({
+            severity: 'success', 
+            summary: 'Success', 
+            detail: 'Successfully updated!', 
+            life: 3000 
+          })
+          this.handeRemoveShipping.emit(this.selectedShippingID);
+          this.closeLandedDialog.emit();
+        }
       },
       err => {
         console.log(err)
+        this.messageService.add({
+          severity: 'error', 
+          summary: 'Danger', 
+          detail: 'An unkown error occured' ,
+          life: 3000 
+        })
       }
     )
 
