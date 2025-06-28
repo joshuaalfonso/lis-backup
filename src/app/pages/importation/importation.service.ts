@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { catchError, tap, throwError } from "rxjs";
 import { environment } from "src/app/environments/environment";
 import { ActiveContractList } from "src/app/features/importation/active-contract-table/active-contract.model";
-import { ContractPost, ShippingPost } from "./importation.model";
+import { ContractPost, PullOutPost, ShippingPost } from "./importation.model";
 
 
 
@@ -102,6 +102,7 @@ export class ImportationService {
         )
     }
 
+
     deleteShippingTransaction(id: any) {
         return this.http.post( 
             this.baseUrl + '/project/d_ShippingTransaction.php', 
@@ -110,8 +111,29 @@ export class ImportationService {
             }
         )
     }
-    
 
+    // for pull out dialog
+    getPullOutDetail(id: string) {
+        return this.http.get<any>( this.baseUrl + '/project/a_PullOut.php?mbl=' + id);
+    }
+    
+    savePullOut
+    (
+        data: PullOutPost
+    )
+    {
+        return this.http.post
+        (
+            this.baseUrl + '/project/b_PullOut.php',
+            data
+        )
+        .pipe(
+            catchError(this.handleError),
+            tap(resData => {
+                return resData;
+            })
+        );
+    }
 
 }
 

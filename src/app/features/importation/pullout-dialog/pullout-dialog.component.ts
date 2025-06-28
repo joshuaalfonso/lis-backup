@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
+import { take } from 'rxjs';
+import { ImportationService } from 'src/app/pages/importation/importation.service';
 
 @Component({
   selector: 'app-pullout-dialog',
@@ -10,9 +13,10 @@ import { Dialog } from 'primeng/dialog';
 export class PulloutDialogComponent implements OnChanges{
 
   @Input() pullOutVisible: boolean = false;
-  @Input() PullOutDetail: any[] = [];
   @Input() trucking: any[] = [];
   @Input() selectedPullOut: any = null;
+
+  PullOutDetail: any[] = [];
 
   isLoading: boolean = false;
 
@@ -20,7 +24,9 @@ export class PulloutDialogComponent implements OnChanges{
 
   @ViewChild('PullOutDialog') dialog!: Dialog;
 
-  pulloutForm = new FormGroup({
+  isSubmitting: boolean = false;
+
+  pulloutForm:FormGroup = new FormGroup({
     'MBL': new FormControl(null),
     'HBL': new FormControl(null),
     'Supplier': new FormControl(null),
@@ -32,6 +38,11 @@ export class PulloutDialogComponent implements OnChanges{
     'UserID': new FormControl(0),
   })
 
+  constructor(
+    private importationService: ImportationService,
+    private messageService: MessageService
+  ) {}
+
   ngOnChanges(): void {
     if (this.selectedPullOut) {
       
@@ -40,77 +51,159 @@ export class PulloutDialogComponent implements OnChanges{
         HBL: this.selectedPullOut.MBL,
         Supplier: this.selectedPullOut.Supplier,
         Broker: this.selectedPullOut.Broker,
-      })
+        DateOfDischarge: this.selectedPullOut.DateOfDischarge,
+        StorageLastFreeDate: this.selectedPullOut.StorageLastFreeDate,
+        DemurrageDate: this.selectedPullOut.DemurrageDate,
+        DetentionDate: this.selectedPullOut.DetentionDate
+      }) 
 
-      // this.PullOutDetail = this.selectedPullOut.PullOutDetail
+      this.isLoading = true;
+      this.importationService.getPullOutDetail(this.selectedPullOut.MBL).pipe(take(1)).subscribe
+      (response => {
+        this.isLoading = false;
+        
+        this.PullOutDetail = response.map((item: any) => ({
+          PullOutID: item.PullOutID,
+          PullOutDate: item.PullOutDate == null ? null : new Date(item.PullOutDate.date),
+          ContainerNumber: item.ContainerNumber,
+          DateIn: item.DateIn == null ? null : new Date(item.DateIn.date),
+          DateOut: item.DateOut == null ? null : new Date(item.DateOut.date),
+          ReturnDate: item.ReturnDate == null ? null : new Date(item.ReturnDate.date),
+          TruckingID: item.TruckingID,
+          DateOfDischarge: item.DateOfDischarge == null ? null : new Date(item.DateOfDischarge.date),
+          Storage: item.Storage == null ? null : new Date(item.Storage.date),
+          Demurrage: item.Demurrage == null ? null : new Date(item.Demurrage.date),
+          Detention: item.Detention == null ? null : new Date(item.Detention.date),
+          Remarks: item.Remarks,
+          deleted: item.deleted
+        }))
+
+      },
+        error => {
+          console.log(error)
+          alert('An unknwon error occured')
+        }
+      )
 
     } else {
+      this.PullOutDetail = [];
     }
   }
-
-//   onSelectPullOut(data: any, dialog: Dialog) {
-//     // console.log(data);
-//     dialog.maximize();
-//     this.showPullOutDialog();
-//     this.PullOutDetail = [];
-
-//     this.pulloutForm.patchValue({
-//         MBL: data.MBL,
-//         HBL: data.HBL,
-//         Supplier: data.Supplier,
-//         Broker: data.Broker,
-//         DateOfDischarge: data.DateOfDischarge,
-//         StorageLastFreeDate: data.StorageLastFreeDate,
-//         DemurrageDate: data.DemurrageDate,
-//         DetentionDate: data.DetentionDate
-//     })
-
-//     // console.log(this.pulloutForm.value)
-
-
-//     this.isLoading3 = true;
-
-//     this.ContractPerformaService.getPullOutDetail(data.MBL).subscribe(
-//         response => {
-//             for (let i = 0; i < response.length; i++) {
-//                 let TruckingValue = this.findObjectByID(response[i].TruckingID, 'TruckingID', this.trucking);
-//                 let data = {
-//                     PullOutID: response[i].PullOutID,
-//                     PullOutDate: response[i].PullOutDate == null ? null : new Date(response[i].PullOutDate.date),
-//                     ContainerNumber: response[i].ContainerNumber,
-//                     DateIn: response[i].DateIn == null ? null : new Date(response[i].DateIn.date),
-//                     DateOut: response[i].DateOut == null ? null : new Date(response[i].DateOut.date),
-//                     ReturnDate: response[i].ReturnDate == null ? null : new Date(response[i].ReturnDate.date),
-//                     TruckingID: TruckingValue,
-//                     DateOfDischarge: response[i].DateOfDischarge == null ? null : new Date(response[i].DateOfDischarge.date),
-//                     Storage: response[i].Storage == null ? null : new Date(response[i].Storage.date),
-//                     Demurrage: response[i].Demurrage == null ? null : new Date(response[i].Demurrage.date),
-//                     Detention: response[i].Detention == null ? null : new Date(response[i].Detention.date),
-//                     Remarks: response[i].Remarks,
-//                     deleted: response[i].deleted
-//                 }
-//                 this.PullOutDetail.push(data)
-//             }
-//             this.isLoading3 = false;
-//         }
-//     )
-
-// }
 
   maximize() {
     this.dialog.maximize();
   }
 
-  onSubmit() {
-
+  addPullOutRow() {
+    let data = {
+      PullOutID: 0,
+      PullOutDate: null,
+      ContainerNumber: null,
+      DateIn: null,
+      DateOut: null,
+      ReturnDate: null,
+      TruckingID: null,
+      DateOfDischarge: this.pulloutForm.value.DateOfDischarge == null ? null : new Date(this.pulloutForm.value.DateOfDischarge.date),
+      Storage: this.pulloutForm.value.StorageLastFreeDate == null ? null : new Date(this.pulloutForm.value.StorageLastFreeDate.date),
+      Demurrage:  this.pulloutForm.value.DemurrageDate == null ? null : new Date(this.pulloutForm.value.DemurrageDate.date),
+      Detention:  this.pulloutForm.value.DetentionDate == null ? null : new Date(this.pulloutForm.value.DetentionDate.date),
+      Remarks: null,
+      deleted: 0
+    }
+    this.PullOutDetail.push(data)
   }
 
   removePullOutRow(index: number) {
-
+      this.PullOutDetail.splice(index, 1);
   }
 
-  addPullOutRow() {
+  onSubmit() {
 
+    let TransformedArray: {
+        PullOutID: number,
+        PullOutDate: string | null,
+        ContainerNumber: number,
+        DateIn: string | null,
+        DateOut: string | null,
+        ReturnDate: string | null,
+        TruckingID: any
+        Storage: string | null,
+        DateOfDischarge: string | null,
+        Demurrage: string | null,
+        Detention: string | null,
+        Remarks: String | null,
+        deleted: number
+    }[] = [];
+    
+    this.PullOutDetail.forEach(item => {
+        TransformedArray.push({
+            PullOutID: item.PullOutID,
+            PullOutDate: item.PullOutDate === null ? null : new Date(item.PullOutDate).toLocaleDateString(),
+            ContainerNumber: item.ContainerNumber,
+            DateIn: item.DateIn === null ? null : new Date(item.DateIn).toLocaleDateString(),
+            DateOut: item.DateOut === null ? null : new Date(item.DateOut).toLocaleDateString(),
+            ReturnDate: item.ReturnDate === null ? null : new Date(item.ReturnDate).toLocaleDateString(),
+            TruckingID: item.TruckingID,
+            DateOfDischarge: item.DateOfDischarge === null ? null : new Date(item.DateOfDischarge).toLocaleDateString(),
+            Storage: item.Storage === null ? null : new Date(item.Storage).toLocaleDateString(),
+            Demurrage: item.Demurrage === null ? null : new Date(item.Demurrage).toLocaleDateString(),
+            Detention: item.Detention === null ? null : new Date(item.Detention).toLocaleDateString(),
+            Remarks: item.Remarks,
+            deleted: item.deleted
+        });
+    });
+    // console.log(TransformedArray);
+
+    const data = {
+      MBL: this.pulloutForm.value.MBL,
+      HBL: this.pulloutForm.value.HBL,
+      UserID: this.pulloutForm.value.UserID,
+      PullOutDetail: TransformedArray
+    }
+
+    console.log(data);
+
+    this.isSubmitting = true;
+    
+   
+    this.importationService.savePullOut(data).pipe(take(1)).subscribe(response => {
+
+      this.isSubmitting = false;
+
+      if( response === 1) {
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Success', 
+          detail: ' successfully updated', 
+          life: 3000 
+        });
+          // this.onFilterShippingTransaction();
+          this.onClosePullOut.emit();
+      } 
+      else if ( response === 2) {
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Success', 
+          detail: ' successfully updated', 
+          life: 3000 
+        });
+          // this.onFilterShippingTransaction();
+          this.onClosePullOut.emit();
+      }
+        
+    }, 
+
+    errorMessage => {
+      this.isSubmitting = false;
+      this.messageService.add({ 
+        severity: 'error', summary: 'Danger', 
+        detail: errorMessage, 
+        life: 3000 
+      });
+    })
+    
   }
+
+
 
 }

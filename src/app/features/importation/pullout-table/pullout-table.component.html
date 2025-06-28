@@ -110,7 +110,8 @@
                                     {{ detail.ContainerNumber }}
                                 </td>
                                 <td>
-                                    {{ (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') === '01/01/1900' ? '-' : (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') }}
+                                    <!-- {{ (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') === '01/01/1900' ? '-' : (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') }} -->
+                                    {{ detail.DateOfDischarge === null ? '-' : (detail.DateOfDischarge.date | date: 'MM/dd/yyyy') }}
                                 </td>
                                 <td [class.red]="(detail.PullOutDate?.date || null) > (detail.Storage?.date || null) ">
                                     {{ detail.Storage == null ? '-' : detail.Storage.date | date: 'MM/dd/yyyy' }}

@@ -168,6 +168,7 @@
                     <td>
                         <p-dropdown 
                             [options]="trucking" 
+                            optionValue="TruckingID"
                             optionLabel="TruckingName" 
                             [(ngModel)]="data.TruckingID"  
                             [showClear]="true" 
@@ -210,7 +211,7 @@
 
         </div>
 
-        <div class="field text-right">
+        <div class="field text-right" *ngIf="!isLoading">
 
             <button pButton pRipple 
                 label="Add row" 
@@ -222,12 +223,41 @@
 
         </div>
   
-        <button 
-            pButton 
-            pRipple 
-            label="Submit" 
-            class="bg-indigo-500 border-round border-none submit"
-        ></button>
-  
+        <!-- <div>
+            <button 
+                pButton 
+                pRipple 
+                label="Submit" 
+                class="bg-indigo-500 border-round border-none submit"
+            ></button>
+        </div> -->
     </form>
+
+    <ng-template pTemplate="footer">
+        <!-- <p-button 
+            label="Cancel" 
+            severity="secondary"
+            (click)="onClosePullOut.emit()" 
+            class="mr-2"
+        /> -->
+        <p-button 
+            icon="pi pi-times" 
+            label="Cancel" 
+            styleClass="p-button-rounded p-button-text"
+            (click)="onClosePullOut.emit()" 
+            class="mr-2"
+        ></p-button>
+
+        <p-button 
+            label="Submit" 
+            icon="pi pi-check"
+            [loading]="isSubmitting" 
+            (click)="onSubmit()" 
+        />
+        <!-- <p-button 
+            label="Save" 
+            severity="secondary"
+            (click)="onSubmit()" 
+          /> -->
+    </ng-template>
 </p-dialog>

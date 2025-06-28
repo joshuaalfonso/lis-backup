@@ -70,3 +70,11 @@ export interface ShippingPost {
     Remarks: string | null,
     UserID: string
 }
+
+
+export interface PullOutPost {
+    MBL: String,
+    HBL: String,
+    UserID: string,
+    PullOutDetail: any[]
+}
