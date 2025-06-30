@@ -59,7 +59,7 @@
             [class.selected]="row.ContractPerformaID === selectedContractPerformaID"
             *ngIf="!isLoading" -->
             <tr 
-                (click)="onSelectContract.emit(row.ContractPerformaID)"
+                (click)="onSelectContract.emit(row)"
                 [pSelectableRow]="row.ContractPerformaID"
                 *ngIf="!isLoading"
             >

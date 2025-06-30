@@ -15,12 +15,14 @@ export class PulloutDialogComponent implements OnChanges{
   @Input() pullOutVisible: boolean = false;
   @Input() trucking: any[] = [];
   @Input() selectedPullOut: any = null;
+  @Input() userID: any;
 
   PullOutDetail: any[] = [];
 
   isLoading: boolean = false;
 
   @Output() onClosePullOut = new EventEmitter();
+  @Output() getShippingTransaction = new EventEmitter;
 
   @ViewChild('PullOutDialog') dialog!: Dialog;
 
@@ -43,9 +45,9 @@ export class PulloutDialogComponent implements OnChanges{
     private messageService: MessageService
   ) {}
 
+
   ngOnChanges(): void {
     if (this.selectedPullOut) {
-      
       this.pulloutForm.patchValue({
         MBL: this.selectedPullOut.MBL,
         HBL: this.selectedPullOut.MBL,
@@ -157,7 +159,7 @@ export class PulloutDialogComponent implements OnChanges{
     const data = {
       MBL: this.pulloutForm.value.MBL,
       HBL: this.pulloutForm.value.HBL,
-      UserID: this.pulloutForm.value.UserID,
+      UserID: this.userID,
       PullOutDetail: TransformedArray
     }
 
@@ -179,6 +181,7 @@ export class PulloutDialogComponent implements OnChanges{
         });
           // this.onFilterShippingTransaction();
           this.onClosePullOut.emit();
+          this.getShippingTransaction.emit()
       } 
       else if ( response === 2) {
         this.messageService.add({ 
@@ -189,6 +192,7 @@ export class PulloutDialogComponent implements OnChanges{
         });
           // this.onFilterShippingTransaction();
           this.onClosePullOut.emit();
+          this.getShippingTransaction.emit();
       }
         
     }, 

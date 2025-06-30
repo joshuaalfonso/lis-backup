@@ -26,6 +26,14 @@ export class ImportationService {
         return this.http.get<any>( this.baseUrl + '/project/a_ShippingTransactionFilter.php?status=' + status + '&id=' + id);
     }
 
+    getReceived(id: number) {
+        return this.http.get<any>( this.baseUrl + '/project/a_received.php?id=' + id);
+    }
+
+    getUnloadedBL(id: number) {
+        return this.http.get<any>( this.baseUrl + '/project/a_UnloadedBLView.php?id=' + id);
+    }  
+
     saveContract(newContract: ContractPost)
     {
         return this.http.post(

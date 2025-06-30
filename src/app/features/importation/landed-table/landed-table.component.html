@@ -13,12 +13,12 @@
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <span class="table-header-title ">Shipping Transaction</span>
-                <input 
+                <!-- <input 
                     pInputText 
                     type="text" 
                     (input)="onGlobalFilter(landedTable, $event)" 
                     placeholder="Search keyword" 
-                />
+                /> -->
             </div>
         </ng-template>
 
@@ -85,15 +85,36 @@
             >
                 <td data-title="BL" >
                     <span *ngIf="row.Packaging === 1" >
-                        {{ row.MBL}}
+                        
+                        <span *ngIf="row.MBL" [innerHTML]="row.MBL | highlight:searchValue">
+                            {{ row.MBL}}
+                        </span>
+                        <span *ngIf="!row.MBL">-</span>
+
                         <small class="sub-text">
-                            <span *ngIf="row.Forwarder !== ''" pTooltip="Forwarder" tooltipPosition="top" >{{row.Forwarder + ' / '}}</span> 
-                            <span pTooltip="Shipping Line" tooltipPosition="top">{{ row.ShippingLine === null ? ' -' : row.ShippingLine}}</span>
+
+                            <span *ngIf="row.Forwarder !== ''" [innerHTML]="row.Forwarder | highlight:searchValue" pTooltip="Forwarder" tooltipPosition="top" >
+                                {{row.Forwarder}}
+                            </span>
+                            <span *ngIf="row.Forwarder !== ''"> {{ ' / ' }}</span>
+                            <!-- <span *ngIf="!row.Forwarder"> {{ ' - ' }} </span> -->
+                            
+                            
+                            <span pTooltip="Shipping Line" tooltipPosition="top" *ngIf="row.ShippingLine"  [innerHTML]="row.ShippingLine | highlight:searchValue">
+                                {{ row.ShippingLine}}
+                            </span>
+                            <span *ngIf="!row.ShippingLine"> {{ ' - ' }} </span>
+
                         </small>
                     </span>
                     <span *ngIf="row.Packaging === 2">
-                        {{ row.BL}}
-                        <span class="sub-text" pTooltip="Vessel" tooltipPosition="top" >{{ row.Vessel || ' -' }}</span>
+                        <span *ngIf="row.BL" [innerHTML]="row.BL | highlight:searchValue">{{ row.BL}}</span>
+                        <span *ngIf="!row.BL"> {{ ' - ' }} </span>
+
+                        <span class="sub-text" pTooltip="Vessel" tooltipPosition="top" *ngIf="row.Vessel" [innerHTML]="row.Vessel | highlight:searchValue" >
+                            {{ row.Vessel }}
+                        </span>
+                        <span *ngIf="!row.Vessel"> {{ ' - ' }}</span>
                     </span>
                 </td>
 
@@ -107,15 +128,24 @@
                         <small class="text-secondary" *ngIf="row.NoOfTruck != 0">Truck/s</small>
                     </div>
                 </td>
-                <td data-title="Product" >
-                    {{ row.RawMaterial }}
-                    <small class="sub-text" pTooltip="Supplier" tooltipPosition="top"> {{ row.Supplier ? row.Supplier : '-' }} </small>
+                <td data-title="Product">
+                    <span [innerHTML]="row.RawMaterial | highlight:searchValue" *ngIf="row.RawMaterial">{{ row.RawMaterial }}</span>
+                    <span *ngIf="!row.RawMaterial">-</span>
+
+                    <span class="sub-text" *ngIf="row.Supplier" [innerHTML]="row.Supplier | highlight:searchValue">{{ row.Supplier }}</span>
+                    <span class="sub-text" *ngIf="!row.Supplier">-</span>
                 </td>
                 <td data-title="PortOfDischarge">
-                    {{ row.PortOfDischarge === '' ? '-' : row.PortOfDischarge}}
+                    <span *ngIf="row.PortOfDischarge" [innerHTML]="row.PortOfDischarge | highlight:searchValue">
+                        {{ row.PortOfDischarge}}
+                    </span>
+                    <span *ngIf="!row.PortOfDischarge">-</span>
                 </td>
                 <td data-title="Broker">
-                    {{ row.Broker === null ? '-' : row.Broker }}
+                    <span *ngIf="row.Broker" [innerHTML]="row.Broker | highlight:searchValue">
+                        {{ row.Broker || '-'}} 
+                    </span>
+                    <span *ngIf="!row.Broker">-</span>
                 </td>
 
                 <td data-title="ATA">
@@ -176,7 +206,10 @@
                 </td>
                
                 <td data-title="Remarks">
-                    {{ row.Remarks === '' ? '-' : row.Remarks}}
+                    <span *ngIf="row.Remarks" [innerHTML]="row.Remarks | highlight:searchValue">
+                        {{ row.Remarks === '' ? '-' : row.Remarks}}
+                    </span>
+                    <span *ngIf="!row.Remarks">-</span>
                 </td>
                 <td data-title="Status" alignFrozen="right" pFrozenColumn >
                     <p-tag [severity]="getSeverity(row.Status)">

@@ -203,6 +203,10 @@ import { CreateShippingTransactionComponent } from './features/importation/creat
 import { SailingToLandedComponent } from './features/importation/sailing-to-landed/sailing-to-landed.component';
 import { PulloutTableComponent } from './features/importation/pullout-table/pullout-table.component';
 import { PulloutDialogComponent } from './features/importation/pullout-dialog/pullout-dialog.component';
+import { ReceivedTableComponent } from './features/importation/received-table/received-table.component';
+import { UnloadedTableComponent } from './features/importation/unloaded-table/unloaded-table.component';
+import { ShippingSearchComponent } from './features/importation/shipping-search/shipping-search.component';
+import { HighlightPipe } from './pages/importation/highlight.pipe';
 
 
 
@@ -309,7 +313,10 @@ import { PulloutDialogComponent } from './features/importation/pullout-dialog/pu
     SailingToLandedComponent,
     PulloutTableComponent,
     PulloutDialogComponent,
-    
+    ReceivedTableComponent,
+    UnloadedTableComponent,
+    ShippingSearchComponent,
+    HighlightPipe
   ],
   imports: [
     BrowserModule,

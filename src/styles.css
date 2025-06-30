@@ -393,6 +393,16 @@ input {
     padding: 7px 10px;
 }
 
+.highlight {
+    font-weight: var(--font-medium);
+
+    /* background-color: #ECE9F9;
+    color: var(--first-color); */
+
+    background: var(--first-color);
+    color: white;
+}
+
 @media screens and (min-width: 1024px) {
         
 }

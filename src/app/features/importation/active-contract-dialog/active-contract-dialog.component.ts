@@ -24,6 +24,7 @@ export class ActiveContractDialogComponent implements OnDestroy, OnChanges{
 
     @Output() closeDialog = new EventEmitter();
     @Output() getContract = new EventEmitter();
+    @Output() getShippingTransaction = new EventEmitter();
 
 
     packaging: Packaging[] = [
@@ -108,6 +109,7 @@ export class ActiveContractDialogComponent implements OnDestroy, OnChanges{
     // refetch contract
     handleGetActiveContract() {
         this.getContract.emit();
+        this.getShippingTransaction.emit();
     }
 
 

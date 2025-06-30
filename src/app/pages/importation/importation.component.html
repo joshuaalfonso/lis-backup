@@ -74,87 +74,92 @@
 
 
 <!-- status tab -->
-<div class="radio-inputs">
+<div class="flex justify-content-between">
+    <div class="radio-inputs">
 
-    <label class="radio">
+        <label class="radio">
+            <!-- (ngModelChange)="onSelectFilter()" -->
+            <input 
+                checked="" 
+                name="radio" 
+                type="radio" 
+                [value]="1" 
+                (click)="onSelectShippingTransactionStatus($event.target)"
+            />
+             <span 
+                class="name" 
+                [class.active]="statusValue === 1"
+            > 
+                Sailing 
+            </span>
+        </label>
+    
         <!-- (ngModelChange)="onSelectFilter()" -->
-        <input 
-            checked="" 
-            name="radio" 
-            type="radio" 
-            [value]="1" 
-            (click)="onSelectShippingTransactionStatus($event.target)"
-        />
-         <span 
-            class="name" 
-            [class.active]="statusValue === 1"
-        > 
-            Sailing 
-        </span>
-    </label>
-
-    <!-- (ngModelChange)="onSelectFilter()" -->
-    <label class="radio">
-        <input 
-            name="radio" 
-            type="radio" 
-            [value]="2" 
-            (click)="onSelectShippingTransactionStatus($event.target)"
-        />
-        <span 
-            class="name" 
-            [class.active]="statusValue === 2"
-        > 
-            Landed 
-        </span>
-    </label>
-
-    <label class="radio">
-        <input 
-            name="radio" 
-            type="radio" 
-            [value]="3" 
-            (click)="onSelectShippingTransactionStatus($event.target)"
-        />
-        <span 
-            class="name" 
-            [class.active]="statusValue === 3"
-        > 
-            Pull Out 
-        </span>
-    </label>
-
-    <label class="radio">
-        <input 
-            name="radio" 
-            type="radio" 
-            [value]="4" 
-            (click)="onSelectShippingTransactionStatus($event.target)"
-        />
-        <span 
-            class="name" 
-            [class.active]="statusValue === 4"
-        > 
-            Received 
-        </span>
-    </label>
-
-    <label class="radio">
-        <input 
-            name="radio" 
-            type="radio" 
-            [value]="5" 
-            (click)="onSelectShippingTransactionStatus($event.target)"
-        />
-        <span 
-            class="name" 
-            [class.active]="statusValue === 5"
-        > 
-            Unloaded 
-        </span>
-    </label>
-
+        <label class="radio">
+            <input 
+                name="radio" 
+                type="radio" 
+                [value]="2" 
+                (click)="onSelectShippingTransactionStatus($event.target)"
+            />
+            <span 
+                class="name" 
+                [class.active]="statusValue === 2"
+            > 
+                Landed 
+            </span>
+        </label>
+    
+        <label class="radio">
+            <input 
+                name="radio" 
+                type="radio" 
+                [value]="3" 
+                (click)="onSelectShippingTransactionStatus($event.target)"
+            />
+            <span 
+                class="name" 
+                [class.active]="statusValue === 3"
+            > 
+                Pull Out 
+            </span>
+        </label>
+    
+        <label class="radio">
+            <input 
+                name="radio" 
+                type="radio" 
+                [value]="4" 
+                (click)="onSelectShippingTransactionStatus($event.target)"
+            />
+            <span 
+                class="name" 
+                [class.active]="statusValue === 4"
+            > 
+                Received 
+            </span>
+        </label>
+    
+        <label class="radio">
+            <input 
+                name="radio" 
+                type="radio" 
+                [value]="5" 
+                (click)="onSelectShippingTransactionStatus($event.target)"
+            />
+            <span 
+                class="name" 
+                [class.active]="statusValue === 5"
+            > 
+                Unloaded 
+            </span>
+        </label>
+    
+    </div>
+    
+    <app-shipping-search />
 </div>
+
 
 <app-sailing-table
     [shippingTransaction]="shippingTransaction"
@@ -182,7 +187,20 @@
 <app-pullout-table 
     [shippingTransaction]="shippingTransaction"
     [shippingTransactionIsLoading]="shippingTransactionIsLoading"
+    (getShippingTransaction)="getShippingTransaction()"
+    [userID]="userID"
     *ngIf="statusValue === 3"
+/>
+
+<app-received-table 
+    [selectedContractID]="selectedContractID"
+    [selectedPackaging]="selectedPackaging"
+    *ngIf="statusValue === 4"
+/>
+
+<app-unloaded-table 
+    [selectedContractID]="selectedContractID"
+    *ngIf="statusValue === 5"
 />
 
 
@@ -198,6 +216,7 @@
     [row]="selectedContractRow"
     [visible]="contractDialogVisible"
     (getContract)="getContract()"
+    (getShippingTransaction)="getShippingTransaction()"
     (closeDialog)="closeContractDialog()"
 />
     <!-- (getContract)="getContract()" -->

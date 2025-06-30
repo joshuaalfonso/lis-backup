@@ -52,13 +52,20 @@
                     </button> -->
                     <!-- *ngIf="selectedRowPackaging === 1" -->
                 <td data-title="MBL" >
-                    {{ row.MBL }}
+                    <span *ngIf="row.MBL" [innerHTML]="row.MBL | highlight:searchValue">
+                        {{ row.MBL}}
+                    </span>
+                    <span *ngIf="!row.MBL">-</span>
                 </td>
                 <td data-title="Supplier">
-                    {{ row.Supplier }}
+                    <span *ngIf="row.Supplier" [innerHTML]="row.Supplier | highlight:searchValue">{{ row.Supplier }}</span>
+                    <span *ngIf="!row.Supplier">-</span>
                 </td>
                 <td data-title="BrokerID">
-                    {{ row.Broker === null ? '-' : row.Broker}}
+                    <span *ngIf="row.Broker" [innerHTML]="row.Broker | highlight:searchValue">
+                        {{ row.Broker || '-'}} 
+                    </span>
+                    <span *ngIf="!row.Broker">-</span>
                 </td>
 
                 <td data-title="Action">
@@ -169,5 +176,7 @@
     [trucking]="trucking" 
     [pullOutVisible]="pullOutVisible"
     [selectedPullOut]="selectedPullOut"
+    [userID]="userID"
+    (getShippingTransaction)="handleGetShipping()"
     (onClosePullOut)="onClosePullOut()"
 />

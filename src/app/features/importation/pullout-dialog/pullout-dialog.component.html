@@ -213,13 +213,20 @@
 
         <div class="field text-right" *ngIf="!isLoading">
 
-            <button pButton pRipple 
+            <!-- <button pButton pRipple 
                 label="Add row" 
                 type="button" 
                 class="bg-indigo-500 border-round border-none submit w-2" 
                 (click)="addPullOutRow()"
             >
-            </button>
+            </button> -->
+
+            <p-button 
+                icon="pi pi-plus" 
+                label="Add row" 
+                styleClass="p-button-rounded p-button-secondary"
+            class="mr-2"
+        ></p-button>
 
         </div>
   

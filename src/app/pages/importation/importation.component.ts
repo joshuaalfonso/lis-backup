@@ -11,7 +11,6 @@ import { ShippingLineService } from '../shipping-line/shipping-line.service';
 import { ContainerTypeService } from '../container-type/container-type.service';
 import { BrokerService } from '../broker/broker.service';
 import { BankService } from '../bank/bank.service';
-import { Dialog } from 'primeng/dialog';
 import { CreateShippingTransactionComponent } from 'src/app/features/importation/create-shipping-transaction/create-shipping-transaction.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -33,6 +32,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
     shippingDialogVisisble: boolean = false;
 
     shippingTransaction: any[] = [];
+    allShippingTransactions: any[] = [];
     shippingTransactionIsLoading: boolean = false;
 
     subscriptions: Subscription = new Subscription;
@@ -54,9 +54,12 @@ export class ImportationComponent implements OnInit, OnDestroy {
 
     selectedContractRow: {} | null = null;
     selectedContractID: number = 0;
+    selectedPackaging: number = 0;
     selectedShippingRow: {} | null = null;
 
     position: string = 'center';
+
+    searchValue: string = '';
 
     @ViewChild(CreateShippingTransactionComponent) shippingDialogComp!: CreateShippingTransactionComponent;
 
@@ -72,7 +75,8 @@ export class ImportationComponent implements OnInit, OnDestroy {
         private brokerService: BrokerService,
         private bankService: BankService,
         private messageService: MessageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private route: ActivatedRoute,
     ) {}
 
     ngOnInit(): void {
@@ -86,6 +90,18 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.getBroker();
         this.getShippingTransaction();
         this.getBank();
+        // applyFilter(isLoading: boolean, data: any[], filteredData: any[]) 
+
+        this.route.queryParams.subscribe(params => {
+            this.searchValue = params['search']?.toLowerCase() || '';
+            console.log('Search:', this.searchValue);
+            // this.filterData(searchValue)
+            
+            if (this.statusValue === 1 || this.statusValue === 2 || this.statusValue === 3) {
+                this.shippingTransaction = this.applyFilter(this.shippingTransactionIsLoading, this.allShippingTransactions);
+            }
+
+        });
 
     }
 
@@ -163,8 +179,10 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.importationService.getShippingTransactionFilter(this.statusValue, this.selectedContractID)
             .subscribe(response => {
+                this.allShippingTransactions = response;
                 this.shippingTransaction = response;
                 this.shippingTransactionIsLoading = false;
+                this.shippingTransaction = this.applyFilter(this.shippingTransactionIsLoading, this.allShippingTransactions);
                 // console.log(response)
             }, error => {
                 this.shippingTransactionIsLoading = false;
@@ -173,16 +191,72 @@ export class ImportationComponent implements OnInit, OnDestroy {
         )
     }
 
-    // selecte contract
-    onSelectContract(contractID: number) {
+    // applyFilter() {
+    //     if (!this.shippingTransactionIsLoading) {
 
-        if (this.selectedContractID === contractID) {
+    //         this.shippingTransaction = this.searchValue ? (
+    //             this.allShippingTransactions.filter(item =>
+    //                 Object.values(item).some(val => 
+    //                     String(val).toLowerCase().includes(this.searchValue)    
+    //                 ) 
+    //             )
+    //         ) : [...this.allShippingTransactions];
+
+    //     }
+    // }
+
+    applyFilter(isLoading: boolean, data: any[]): any[] {
+        if (isLoading) return [];
+    
+        const search = this.searchValue?.toLowerCase().trim();
+    
+        if (!search) {
+            return [...data];
+        }
+    
+        return data.filter(item =>
+            Object.values(item).some(val =>
+                val !== null &&
+                val !== undefined &&
+                val.toString().toLowerCase().includes(search)
+            )
+        );
+    }
+
+    // applyFilter() {
+    //     if (this.shippingTransactionIsLoading) return;
+    
+    //     const search = this.searchValue?.toLowerCase().trim();
+    
+    //     if (!search) {
+    //         this.shippingTransaction = [...this.allShippingTransactions];
+    //         return;
+    //     }
+    
+    //     this.shippingTransaction = this.allShippingTransactions.filter(item =>
+    //         Object.values(item).some(val =>
+    //             val !== null &&
+    //             val !== undefined &&
+    //             val.toString().toLowerCase().includes(search)
+    //         )
+    //     );
+    // }
+
+    // selecte contract
+    onSelectContract(contractRow: any) {
+        // console.log(contractRow)
+        if (this.selectedContractID === contractRow.ContractPerformaID) {
             this.selectedContractID = 0;
+            this.selectedPackaging = 0;
+            if (this.statusValue == 4 || this.statusValue == 5) return;
             this.getShippingTransaction();
             return;
         }
 
-        this.selectedContractID = contractID;
+        this.selectedContractID = contractRow.ContractPerformaID;
+        this.selectedPackaging = contractRow.Packaging
+        if (this.statusValue == 4 || this.statusValue == 5) return;
+
         this.getShippingTransaction();
         // console.log(this.selectedContractID);
     }
@@ -203,6 +277,8 @@ export class ImportationComponent implements OnInit, OnDestroy {
         if (selectedStatus === this.statusValue) return;
 
         this.statusValue = selectedStatus;
+
+        if (this.statusValue === 4 || this.statusValue === 5) return;
 
         this.getShippingTransaction();
 

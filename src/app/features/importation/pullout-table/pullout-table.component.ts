@@ -1,7 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { PulloutDialogComponent } from '../pullout-dialog/pullout-dialog.component';
 import { Subscription } from 'rxjs';
 import { TruckingService } from 'src/app/pages/trucking/trucking.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pullout-table',
@@ -12,6 +13,10 @@ export class PulloutTableComponent implements OnInit, OnDestroy{
 
   @Input() shippingTransaction: any[] = [];
   @Input() shippingTransactionIsLoading: boolean = false;
+
+  @Input() userID: any;
+
+  @Output() getShippingTransaction = new EventEmitter;
 
   @ViewChild(PulloutDialogComponent) pullOutDialogComp!: PulloutDialogComponent;
 
@@ -25,17 +30,31 @@ export class PulloutTableComponent implements OnInit, OnDestroy{
 
   subscriptions: Subscription = new Subscription;
 
+  searchValue: string = '';
+
+  constructor(
+    private truckingService: TruckingService,
+    private route: ActivatedRoute
+  ) {}
+  
+
   ngOnInit(): void {
     this.getTrucking();
+
+   
+      this.route.queryParams.subscribe(params => {
+        const searchValue = params['search'] || '';
+        // console.log('Searchzxc:', searchValue);
+        // this.filterData(searchValue)
+        this.searchValue = searchValue;
+      });
+  
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  constructor(
-    private truckingService: TruckingService
-  ) {}
 
   getTrucking() {
     this.subscriptions.add(
@@ -66,6 +85,10 @@ export class PulloutTableComponent implements OnInit, OnDestroy{
   onClosePullOut() {
     this.pullOutVisible = false;
     this.selectedPullOut = null;
+  }
+
+  handleGetShipping() {
+    this.getShippingTransaction.emit()
   }
 
 }

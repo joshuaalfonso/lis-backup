@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -6,7 +7,7 @@ import { Table } from 'primeng/table';
   templateUrl: './landed-table.component.html',
   styleUrls: ['./landed-table.component.css']
 })
-export class LandedTableComponent {
+export class LandedTableComponent implements OnInit{
 
   @Input() shippingTransaction: any[] = [];
   @Input() shippingTransactionIsLoading: boolean = false;
@@ -17,6 +18,20 @@ export class LandedTableComponent {
   @Output() confirmDeleteShippingTransaction = new EventEmitter();
   @Output() confirmLandedToSailing = new EventEmitter;
   @Output() confirmLandedToPullOut = new EventEmitter;
+
+  searchValue: string = '';
+
+  constructor(
+    private route: ActivatedRoute,
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const searchValue = params['search'] || '';
+      
+      this.searchValue = searchValue;
+    });
+  }
 
 
   onGlobalFilter(table: Table, event: Event) {

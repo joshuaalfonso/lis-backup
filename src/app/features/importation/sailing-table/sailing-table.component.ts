@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ImportationService } from 'src/app/pages/importation/importation.service';
@@ -8,7 +9,7 @@ import { ImportationService } from 'src/app/pages/importation/importation.servic
   templateUrl: './sailing-table.component.html',
   styleUrls: ['./sailing-table.component.css']
 })
-export class SailingTableComponent {
+export class SailingTableComponent implements OnInit{
 
   @Input() shippingTransaction: any[] = [];
   @Input() shippingTransactionIsLoading: boolean = false;
@@ -25,12 +26,48 @@ export class SailingTableComponent {
 
   selectedShippingID: number = 0;
 
+  searchValue: string = '';
+
+  @ViewChild('sailingTable') sailingTable!: Table;
+
   constructor(
-    private importationService: ImportationService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const searchValue = params['search'] || '';
+      // console.log('Searchzxc:', searchValue);
+      // this.filterData(searchValue)
+      this.searchValue = searchValue;
+    });
+  }
+
+
+  onSearchChange(term: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: term },
+      queryParamsHandling: 'merge'
+    });
+
+    // this.filterData(term);
+  } 
+
+
+  // filterData(search: string) {
+  //   if (!search) {
+  //     return
+  //   }
+  //   this.filteredData = this.shippingTransaction.filter(item =>
+  //     Object.values(item).some(value =>
+  //       value != null && // check for null and undefined
+  //       value.toString().toLowerCase().includes(search.toLowerCase())
+  //     )
+  //   );
+  // }
 
   onGlobalFilter(table: Table, event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;

@@ -13,12 +13,14 @@
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <span class="table-header-title ">Shipping Transaction</span>
-                <input 
+                <!-- <input 
                     pInputText 
                     type="text" 
-                    (input)="onGlobalFilter(sailingTable, $event)" 
                     placeholder="Search keyword" 
-                />
+                    (ngModelChange)="onSearchChange($event)"
+                    [(ngModel)]="searchTerm"
+                    /> -->
+                    <!-- (input)="onGlobalFilter(sailingTable, $event)"  -->
             </div>
         </ng-template>
 
@@ -87,28 +89,52 @@
                 [class.landed]="row.Status == 2" 
                 [class.pullout]="row.Status == 3" 
             >
-                <td data-title="Lot" pFrozenColumn>
-                    {{ row.Lot == 0 ? '-' : row.Lot}}
-                    <div class="sub-text">
+                <td data-title="Lot" pFrozenColumn >
+                    <span *ngIf="row.Lot">
+                        {{ row.Lot}}
+                    </span>
+                    <span *ngIf="!row.Lot">
+                        -
+                    </span>
+
+                    <span class="sub-text" *ngIf="row.ContractNo" [innerHTML]="row.ContractNo | highlight:searchValue">
                         {{ row.ContractNo }}
-                    </div>
+                    </span>
+                    <span *ngIf="!row.ContractNo">
+                        -
+                    </span>
+
                 </td>
                 <td data-title="Quantity" >
                     {{ row.Quantity == 0 ? '-' : row.Quantity | number }}
                     <span *ngIf="row.Quantity != 0">MT</span>
                 </td>
                 <td data-title="BL" >
+
                     <span *ngIf="row.Packaging === 1" >
-                        {{ row.MBL}}
+                        
+                        <span  [innerHTML]="row.MBL | highlight:searchValue" *ngIf="row.MBL">{{ row.MBL}}</span>
+                        <span *ngIf="!row.MBL">-</span>
+
                         <small class="sub-text">
-                            <span *ngIf="row.Forwarder !== ''" pTooltip="Forwarder" tooltipPosition="top" >{{row.Forwarder + ' / '}}</span> 
-                            <span pTooltip="Shipping Line" tooltipPosition="top">{{ row.ShippingLine === null ? ' -' : row.ShippingLine}}</span>
+                            <span *ngIf="row.Forwarder !== ''" pTooltip="Forwarder" tooltipPosition="top" [innerHTML]="row.Forwarder | highlight:searchValue">
+                                {{row.Forwarder}}
+                            </span> 
+                            <span *ngIf="row.Forwarder"> {{  ' / ' }} </span>
+
+                            <span pTooltip="Shipping Line" tooltipPosition="top" *ngIf="row.ShippingLine" [innerHTML]="row.ShippingLine | highlight:searchValue">
+                                {{  row.ShippingLine}}
+                            </span>
+                            <span *ngIf="!row.ShippingLine"> {{ ' - ' }} </span>
                         </small>
                     </span>
+
                     <span *ngIf="row.Packaging === 2">
-                        {{ row.BL}}
+                        <span [innerHTML]="row.BL | highlight:searchValue" *ngIf="row.BL">{{ row.BL }}</span>
+                        <span *ngIf="!row.BL">-</span>
                         <span class="sub-text" pTooltip="Vessel" tooltipPosition="top" >{{ row.Vessel || ' -' }}</span>
                     </span>
+
                 </td>
 
                 <td data-title="Containers/Trucks">
@@ -121,12 +147,18 @@
                         <small class="text-secondary" *ngIf="row.NoOfTruck != 0">Truck/s</small>
                     </div>
                 </td>
-                <td data-title="Product" >
-                    {{ row.RawMaterial }}
-                    <span class="sub-text" *ngIf="row.RawMaterial">{{ row.Supplier == null ? '-' : row.Supplier }}</span>
+                <td data-title="Product">
+                    <span [innerHTML]="row.RawMaterial | highlight:searchValue" *ngIf="row.RawMaterial">{{ row.RawMaterial }}</span>
+                    <span *ngIf="!row.RawMaterial">-</span>
+
+                    <span class="sub-text" *ngIf="row.Supplier" [innerHTML]="row.Supplier | highlight:searchValue">{{ row.Supplier }}</span>
+                    <span class="sub-text" *ngIf="!row.Supplier">-</span>
                 </td>
-                <td data-title="PortOfDischarge">
-                    {{ row.PortOfDischarge === '' ? '-' : row.PortOfDischarge}}
+                <td data-title="PortOfDischarge" >
+                    <span *ngIf="row.PortOfDischarge" [innerHTML]="row.PortOfDischarge | highlight:searchValue">
+                        {{ row.PortOfDischarge}}
+                    </span>
+                    <span *ngIf="!row.PortOfDischarge">-</span>
                 </td>
 
                 <td data-title="ETD">
@@ -136,23 +168,36 @@
                     {{ row.ETA == null ? '-' : (row.ETA.date | date: 'MM/dd/yyyy') }}
                 </td>
 
-                <td data-title="BrokerID">
-                    {{ row.Broker === null ? '-' : row.Broker}}
+                <td data-title="Broker">
+                    <span *ngIf="row.Broker" [innerHTML]="row.Broker | highlight:searchValue">
+                        {{ row.Broker || '-'}} 
+                    </span>
+                    <span *ngIf="!row.Broker">-</span>
                 </td>
               
                 <td data-title="BAI_SPS_IC" >
+
                     <span  
                         pTooltip="BAI SPS IC" 
                         tooltipPosition="top"
+                        *ngIf="row.BAI_SPS_IC"
+                        [innerHTML]="row.BAI_SPS_IC | highlight:searchValue"
                     >
-                        {{ row.BAI_SPS_IC == '' ? '-' : row.BAI_SPS_IC}}
+                        {{ row.BAI_SPS_IC}}
                     </span>
+                    <span *ngIf="!row.BAI_SPS_IC">-</span>
+
                     <span  
                         pTooltip="BPI SPS IC" 
-                        tooltipPosition="top" 
+                        tooltipPosition="top"
                         *ngIf="row.Packaging === 2"
                     >
-                        {{ row.BPI_SPS_IC == '' ? '' : ' / ' + row.BPI_SPS_IC}}
+                        <span *ngIf="row.BPI_SPS_IC">{{ row.BPI_SPS_IC ? ' / ' : '' }}</span>
+                        <span [innerHTML]="row.BPI_SPS_IC | highlight:searchValue" *ngIf="row.BPI_SPS_IC">
+                            {{  row.BPI_SPS_IC}}
+                        </span>
+                        <span *ngIf="!row.BPI_SPS_IC">{{ ' - ' }}</span>
+                        
                     </span>
                     <div>
                         <small 
@@ -183,7 +228,10 @@
                 </td>
                
                 <td data-title="Remarks">
-                    {{ row.Remarks === '' ? '-' : row.Remarks}}
+                    <span *ngIf="row.Remarks" [innerHTML]="row.Remarks | highlight:searchValue">
+                        {{ row.Remarks === '' ? '-' : row.Remarks}}
+                    </span>
+                    <span *ngIf="!row.Remarks">-</span>
                 </td>
                 <td data-title="Status" alignFrozen="right" pFrozenColumn >
                     <p-tag [severity]="getSeverity(row.Status)">
