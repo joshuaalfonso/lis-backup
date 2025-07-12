@@ -31,11 +31,25 @@
                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" 
                     />
                 </td>
-                <td>{{ row.MBL == 0 ? '-' : row.MBL }}</td>
-                <td>{{ row.BL == 0 ? '-' : row.BL }}</td>
-                <td>{{ row.RawMaterial }}</td>
+                <td>
+                    <span *ngIf="row.MBL" [innerHTML]="row.MBL | highlight:searchValue">
+                        {{ row.MBL}}
+                    </span>
+                    <span *ngIf="!row.MBL">-</span>
+                </td>
+                <td>
+                    <span *ngIf="row.BL != 0" [innerHTML]="row.BL | highlight:searchValue">{{ row.BL}}</span>
+                    <span *ngIf="row.BL == 0"> {{ ' - ' }} </span>
+                </td>
+                <td>
+                    <span [innerHTML]="row.RawMaterial | highlight:searchValue" *ngIf="row.RawMaterial">{{ row.RawMaterial }}</span>
+                    <span *ngIf="!row.RawMaterial">-</span>
+                </td>
                 <td>{{ row.Quantity | number}}</td>
-                <td>{{ row.Supplier }}</td>
+                <td>
+                    <span *ngIf="row.Supplier" [innerHTML]="row.Supplier | highlight:searchValue">{{ row.Supplier }}</span>
+                    <span *ngIf="!row.Supplier">-</span>
+                </td>
                 <td>{{ row.NoofLoaded == 0 ? '-' : row.NoofLoaded }}</td>
                 <td>{{ row.TotalWeight == 0 ? '-' : row.TotalWeight | number}}</td>
             </tr>

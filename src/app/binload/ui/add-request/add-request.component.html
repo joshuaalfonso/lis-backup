@@ -219,8 +219,8 @@
     header="Warehouse stock" 
     [(visible)]="warehouseStockVisible" 
     [modal]="true" 
-    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
-    [style]="{ width: '50vw' }" 
+    [breakpoints]="{ '1199px': '75vw', '675px': '90vw' }" 
+    [style]="{ width: '55vw' }" 
     [draggable]="false" 
     [resizable]="false"
 >
@@ -232,7 +232,7 @@
 
     <p-table 
         [value]="warehouseStock" 
-        [tableStyle]="{ 'min-width': '50rem' }"
+        [tableStyle]="{ 'min-width': '40rem' }"
         selectionMode="single"
         [(selection)]="selectedWarehouse" 
     >
@@ -243,7 +243,7 @@
                 <th>Raw Material</th>
                 <th>Location</th>
                 <th>Warehouse</th>
-                <th>Quantity</th>
+                <!-- <th>Quantity</th> -->
                 <th>Weight</th>
             </tr>
         </ng-template>
@@ -256,7 +256,7 @@
                 <td>{{ row.RawMaterial }}</td>
                 <td>{{ row.WarehouseLocation }}</td>
                 <td>{{ row.Warehouse_Name }}</td>
-                <td>{{ row.QuantityPerWarehouse | number }}</td>
+                <!-- <td>{{ row.QuantityPerWarehouse | number }}</td> -->
                 <td>{{ row.WeightPerWarehouse | number }}</td>
             </tr>
         </ng-template>

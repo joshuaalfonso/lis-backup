@@ -8,19 +8,29 @@
 <app-content-header [title]="'Unloading Transaction'"></app-content-header>
 
 
-<div class="radio-inputs">
-    <label class="radio">
-        <input checked="" name="radio" type="radio" value="1" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
-        <span class="name" [class.active]="value == 1"> Local </span>
-    </label>
-    <label class="radio">
-        <input name="radio" type="radio" value="2" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
-        <span class="name" [class.active]="value == 2"> Import </span>
-    </label>
-    <label class="radio" *ngIf="verifiedView">
-        <input name="radio" type="radio" value="3" [(ngModel)]="value"  (ngModelChange)="getverified()"/>
-        <span class="name" [class.active]="value == 3"> Verified </span>
-    </label>
+<div class="flex justify-content-between align-items-center">
+    <div class="radio-inputs">
+        <label class="radio">
+            <input checked="" name="radio" type="radio" value="1" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
+            <span class="name" [class.active]="value == 1"> Local </span>
+        </label>
+        <label class="radio">
+            <input name="radio" type="radio" value="2" [(ngModel)]="value"  (ngModelChange)="onFilterUnloading()"/>
+            <span class="name" [class.active]="value == 2"> Import </span>
+        </label>
+        <label class="radio" *ngIf="verifiedView">
+            <input name="radio" type="radio" value="3" [(ngModel)]="value"  (ngModelChange)="getverified()"/>
+            <span class="name" [class.active]="value == 3"> Verified </span>
+        </label>
+    </div>
+    
+    <!-- <input 
+        pInputText 
+        type="text" 
+        placeholder="Search keyword" 
+        (ngModelChange)="onSearchChange($event)"
+        [(ngModel)]="searchValue"
+    /> -->
 </div>
 
 
@@ -78,12 +88,12 @@
                     Date Unload
                     <p-sortIcon field="DateUnload.date" />
                 </th>
-                <th pSortableColumn="PONo" *ngIf="value == 1">   
+                <th pSortableColumn="PONo" *ngIf="value == 1 || value == 3">   
                     P.O #
                     <p-sortIcon field="PONo" />
                 </th>
                 <!-- <th *ngIf="value == 1"> P.O # </th> -->
-                <th *ngIf="value == 2"> MBL </th>
+                <th *ngIf="value == 2 || value == 3"> MBL </th>
                 <th  *ngIf="value == 2"> Packaging  </th>
                 <th> Dr # </th>
                 <!-- <th> Raw Material </th> -->
@@ -110,20 +120,40 @@
                     <span class="text"> {{ row.DateUnload.date | date: 'MMM dd, yyyy'}}</span> 
                     <span class="sub-text"> {{ row.DateUnload.date | date: 'EEEE' }} </span>
                 </td>
-                <td data-title="PO" *ngIf="value == 1">
-                    <span class="">{{ row.PONo}} </span> 
+                <td data-title="PO" *ngIf="value == 1 || value == 3">
+                    <span *ngIf="row.PONo" [innerHTML]="row.PONo | highlight:searchValue">
+                        {{ row.PONo}}
+                    </span>
+                    <span *ngIf="!row.PONo">-</span> 
+                    
                     <span 
+                        *ngIf="row.PONo"
                         class="sub-text white-space-nowrap overflow-hidden text-overflow-ellipsis" 
                         style="width: 150px;" 
                         pTooltip="{{ row.Supplier }}"  
                         tooltipPosition="top" 
+                        [innerHTML]="row.Supplier | highlight:searchValue"
                     > 
                         {{ row.Supplier }} 
                     </span>
+                    <span *ngIf="!row.MBL && !row.Supplier">-</span>
                 </td>
-                <td data-title="BL" *ngIf="value == 2">
-                    <span class="">{{ row.MBL}} </span> 
-                    <span class="sub-text  white-space-nowrap overflow-hidden text-overflow-ellipsis" style="width: 150px;"> {{ row.Supplier }} </span>
+                <td data-title="BL" *ngIf="value == 2 || value == 3">
+                    <span *ngIf="row.MBL" [innerHTML]="row.MBL | highlight:searchValue">
+                        {{ row.MBL}}
+                    </span>
+                    <span *ngIf="!row.MBL">-</span> 
+
+                    <span 
+                        *ngIf="row.MBL" 
+                        class="sub-text  white-space-nowrap overflow-hidden text-overflow-ellipsis" 
+                        style="width: 150px;"
+                        [innerHTML]="row.Supplier | highlight:searchValue"
+                    > 
+                        {{ row.Supplier }} 
+                    </span>
+                    <span *ngIf="!row.MBL && !row.Supplier">-</span>
+
                 </td>
                 <td data-title="Packaging"  *ngIf="value == 2">
                     <span class="">  {{ row.Packaging == 1 ? 'Containerized' : 'Bulk'}} </span> 

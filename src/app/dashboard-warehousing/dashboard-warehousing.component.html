@@ -1,7 +1,6 @@
 
 
 
-     <!-- cards location -->
     <div class="cards__container" *ngIf="!cardsLoading">
 
         <ng-template ngFor let-row [ngForOf]="warehouseLocation" let-i="index">
@@ -15,19 +14,19 @@
 
     </div>
 
-    <!-- cards location loading -->
+
     <app-cards-location-loader  
           *ngIf="cardsLoading"
      />
 
     <div class="transactions__container">
      
-          <!-- recent transaction container -->
+     
           <div class="surface-container flex flex-column">
 
                <h6 class="container__title ">Recent Transaction</h6>
 
-               <!-- tab component -->
+   
                <app-tab 
                     [selectedOption]="selectedOption" 
                     (setOption)="tabChange($event)"
@@ -35,14 +34,14 @@
 
                <div class="h-full overflow-y-auto">
 
-                    <!-- recent unload table component -->
+            
                     <app-dashboard-recent-unload 
                          [recentUnload]="recentUnload"
                          [unloadLoading]="unloadLoading"
                          *ngIf="selectedOption == 1"
                     />
 
-                      <!-- recent binload component -->
+     
                     <app-dashboard-recent-binload 
                          [recentBinload]="recentBinload" 
                          [selectedOption]="selectedOption"
@@ -54,7 +53,6 @@
                
           </div>
 
-          <!-- recent transfer  -->
           <div class="surface-container flex flex-column">
    
                <app-dashboard-recent-transfer />
@@ -65,7 +63,7 @@
 
      <div class="grid mb-3">
 
-          <!-- received table -->
+
           <div class="col-12 xl:col-9">
                <app-dashboard-received 
                     [landedShipping]="landedShipping"
@@ -73,7 +71,6 @@
                />
           </div>
 
-          <!-- rawmats list -->
           <div class="col-12 xl:col-3">
                <app-dashboard-rawmats 
                     [rawMaterial]="rawMaterial" 
@@ -86,115 +83,45 @@
 
 
 
-<!-- <div class="grid mb-3">
-          
-     <div class="col-12 xl:col-9">
-          <div class="surface-container flex flex-column">
 
-               <h6 class="container__title ">Received</h6>
+ <!-- <div class="card">
+     <table border="1">
 
-               <div class="flex-1 overflow-y-auto">
-                    <p-table [value]="landedShipping" [tableStyle]="{ 'min-width': '50rem' }" *ngIf="!unloadLoading" >
-                         <ng-template pTemplate="header">
-                              <tr class="hidden">
-                                   <th>ATA</th>
-                                   <th>BL</th>
-                                   <th>Raw Material</th>
-                                   <th>Served</th>
-                                   <th>Progress</th>
-                              </tr>
-                         </ng-template>
-     
-                         <ng-template pTemplate="body" let-row>
-                              <tr>
-                                   <td>
-                       
-                                        <span class="font-semibold"> 
-                                             {{row.ATA?.date | date: 'EEEE' }}
-                                        </span>
-                                        <span class="block text-xs font-medium text-500">
-                                             {{row.ATA?.date | date: 'MMM dd, yyyy' }}
-                                        </span>
-                                
-                                   </td>
-                                   <td>
-                                        <span class="font-medium" *ngIf="row.BL != 0">
-                                             {{ row.BL }} 
-                                        </span>
-                                        <span class="font-medium" *ngIf="row.MBL != 0">
-                                             {{ row.MBL }}
-                                        </span>
-                                        <span class="block text-xs text-500">
-                                             {{ row.Supplier }}
-                                        </span>
-                                   </td>
-                                   <td class="font-medium">
-                                        {{ row.RawMaterial }}
-                                        <span class="block text-xs font-medium text-500">  {{ row.Packaging === 1 ? 'Containerized' : 'Bulk' }} </span>
-                                   </td>
-                                   <td>
-                                        <span class="font-medium" *ngIf="row.NoOfContainer">
-                                             {{ row.Unloaded_Container }} / {{ row.NoOfContainer }} 
-                                             <span class="block text-xs font-medium text-500"> {{ row.Container }} </span>
-                                        </span>
-                                        <span class="font-medium" *ngIf="row.NoOfTruck">
-                                             {{ row.Unloaded_Truck }} / {{ row.NoOfTruck }}
-                                             <span class="block text-xs font-medium text-500"> Trucks </span>
-                                        </span>
-                                   </td>
-                                   <td class="w-7rem">
-                                        <p-progressBar 
-                                             [value]="getRoundedPercentage(row.Unloaded_Container, row.NoOfContainer, 1)" 
-                                             [style]="{ height: '6px'}" 
-                                             [showValue]="false"
-                                             *ngIf="row.NoOfContainer"
-                                        />
-                                        <p-progressBar 
-                                             [value]="getRoundedPercentage(row.Unloaded_Truck, row.NoOfTruck, 1)" 
-                                             [style]="{ height: '6px' }" 
-                                             [showValue]="false"
-                                             *ngIf="row.NoOfTruck"
-                                        />
-                                   </td>
-                               
-                              </tr>
-                         </ng-template>
-     
-                    </p-table>
-               </div>
+          <tr>
+               <th rowspan="2">Item Descriptopm</th>
+               <th>Item Descriptopm</th>
+          </tr>
 
-          </div>
-     </div>
+          <tr>
+               <th>Number of days buffer</th>
+          </tr>
 
-     <div class="col-12 xl:col-3">
+     </table>
+ </div> -->
 
-          <div class="surface-container flex flex-column">
-
-               <h6 class="container__title">Raw Materials</h6>
-     
-               <ul *ngIf="!rawmatsLoading" class="flex-1 overflow-y-auto">
-                    <ng-template ngFor let-location [ngForOf]="rawMaterial" let-i="index">
-                         <li class="border-left-3 border-primary-500">
-                              <span class="text-sm font-medium">{{ location.RawMaterial}}</span>
-                              <span class="text-sm font-semibold">{{ location.Weight | number }} KG</span>
-                         </li>
-                    </ng-template>
-               </ul>
-     
-               <div *ngIf="rawmatsLoading">
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-                    <p-skeleton width="100%" height="2.6rem" styleClass="mb-2"/>
-               </div>
-
-          </div>
-
-     </div>
-
-</div>
-</div> -->
+ <!-- <div class="table">
+     <p-table [tableStyle]="{ 'min-width': '50rem',  }">
+          <ng-template pTemplate="header">
+              <tr>
+                    <th rowspan="2">Item Description</th>
+                    <th rowspan="2">Stock On Hand</th>
+                    <th rowspan="2">Average Use</th>
+                    <th colspan="4">Icoming Within 30 days</th>
+              </tr>
+              <tr>
+                    <th>Number Of Days buffer</th>
+                    <th>Number Of Days buffer</th>
+                    <th>Number Of Days buffer</th>
+                    <th>Number Of Days buffer</th>
+               </tr>
+          </ng-template>
+          <ng-template pTemplate="body" >
+              <tr>
+                  <td>zxc</td>
+                  <td>zxc</td>
+                  <td>zxc</td>
+                  <td>zxc</td>
+              </tr>
+          </ng-template>
+      </p-table>
+ </div> -->

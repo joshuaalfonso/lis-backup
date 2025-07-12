@@ -16,7 +16,7 @@
     box-shadow: var(--input-box-shadow);
     color: var(--font-color);
 }
-:host ::ng-deep p-dropdown.disabled .p-dropdown{
+:host ::ng-deep p-dropdown.disabled .p-dropdown {
     background-color: gainsboro; 
     /* cursor: not-allowed; */
 }

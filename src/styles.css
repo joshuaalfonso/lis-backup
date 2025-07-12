@@ -401,6 +401,7 @@ input {
 
     background: var(--first-color);
     color: white;
+    border-radius: 2px;
 }
 
 @media screens and (min-width: 1024px) {

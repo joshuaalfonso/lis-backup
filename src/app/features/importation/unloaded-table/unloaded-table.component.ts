@@ -29,12 +29,8 @@ export class UnloadedTableComponent implements OnInit, OnChanges, OnDestroy{
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.searchValue = params['search']?.toLowerCase() || '';
-      console.log('Search:', this.searchValue);
-      // this.filterData(searchValue)
         
       this.unloadedBL = this.applyFilter(this.isLoading, this.AllUnloadedBL);
-
-
     });
   }
 
@@ -49,14 +45,15 @@ export class UnloadedTableComponent implements OnInit, OnChanges, OnDestroy{
   getUnloadBL2() {
     this.isLoading = true;
     this.subscriptions.add(
-        this.importationService.getUnloadedBL(this.selectedContractID).subscribe(
-            response => {
-                this.unloadedBL = response;
-                this.AllUnloadedBL = response;
-                this.unloadedBL = this.applyFilter(this.isLoading, this.AllUnloadedBL);
-                this.isLoading = false;
-            }
-        )
+      this.importationService.getUnloadedBL(this.selectedContractID).subscribe(
+        response => {
+          this.unloadedBL = response;
+          this.AllUnloadedBL = response;
+          this.isLoading = false;
+          this.unloadedBL = this.applyFilter(this.isLoading, this.AllUnloadedBL);
+          console.log(this.AllUnloadedBL)
+        }
+      )
     )
   }
 

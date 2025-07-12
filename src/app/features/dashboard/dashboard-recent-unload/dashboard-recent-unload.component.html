@@ -30,7 +30,7 @@
                          style="color: var(--primary-color);"
                          [routerLink]="['/unloading-transaction']"
                          [queryParams]="{ 
-                              po: row.PONo,
+                              search: row.PONo,
                               transactionId: row.isTransactionID,
                               status: row.Status,
                          }"
@@ -41,7 +41,7 @@
                          style="color: var(--primary-color);"
                          [routerLink]="['/unloading-transaction']"
                          [queryParams]="{ 
-                              bl: row.BLNumber,
+                              search: row.BLNumber,
                               transactionId: row.isTransactionID,
                               status: row.Status,
 

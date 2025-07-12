@@ -77,7 +77,7 @@ export class ReceivedTableComponent implements OnInit, OnDestroy, OnChanges{
       this.importationService.getReceived(this.selectedContractID).subscribe(
         response => {
           // console.log(response)
-          this.received = response;
+          // this.received = response;
           this.Allreceived = response;
           this.isLoading = false;
           this.received = this.applyFilter(this.isLoading, this.Allreceived);

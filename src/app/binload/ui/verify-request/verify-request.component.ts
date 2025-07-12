@@ -170,11 +170,12 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
     this.warehouseStockVisible = true
 
     this.subscriptions.add(
-      this.binloadService.getRawMatsPartitionStock(rawmatsValue).subscribe(
+      this.binloadService.getRawMatsPartitionStockVerify(rawmatsValue).subscribe(
         response => {
-          const data = response.filter((stock: any) => stock.WarehouseID === this.row.WarehouseID)
-          console.log(response)
-          this.warehouseStock = data.map((stock: any) => ({...stock,BinloadingID: 0, Quantity: 0, Weight: 0})).filter((stock: any) => (
+          const data = response.filter((stock: any) => stock.WarehouseID == this.row.WarehouseID)
+          // console.log(response)
+          // console.log(this.row.WarehouseID)
+          this.warehouseStock = data.map((stock: any) => ({...stock,BinloadingID: 0, BinloadingVerifyID: 0, Quantity: 0, Weight: 0})).filter((stock: any) => (
             !this.selectedStocks.some(selectedStock=> selectedStock.WarehousePartitionStockID === stock.WarehousePartitionStockID)
           ))
         }, 
@@ -187,7 +188,7 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
   }
 
   onSubmit() {
-    // console.log(this.binloadVerifyForm.value)
+    console.log(this.binloadVerifyForm.value)
     // console.log(this.selectedStocks)
 
 
@@ -203,6 +204,8 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
       UserID: this.UserID,
       BinloadingDetails: this.selectedStocks
     }
+
+    console.log(data)
 
     this.isLoading = true;
 
@@ -223,8 +226,6 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
 
         } 
         
-
-
       },
       error =>{ 
         console.error(error)

@@ -106,3 +106,22 @@
         width: 100%;
     }
 }
+
+
+table, th, td {
+    border: var(--card-border);
+}
+
+th {
+    text-align: center;
+}
+
+th, td {
+    font-size: var(--font-sm);
+}
+
+td {
+    font-weight: var(--font-500);
+}
+
+/* border: var(--card-border); */

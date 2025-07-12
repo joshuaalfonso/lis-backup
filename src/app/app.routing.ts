@@ -60,6 +60,7 @@ import { PlantComponent } from "./pages/plant/plant.component";
 import { PortOfDischarge } from "./pages/port-of-discharge/port-of-discharge.component";
 import { UnloadingComponent } from "./pages/unloading/unloading.component";
 import { ImportationComponent } from "./pages/importation/importation.component";
+import { RawmatsParametersComponent } from "./pages/rawmats-parameters/rawmats-parameters.component";
 
 
 
@@ -469,6 +470,14 @@ const routes: Routes = [
         data: {
             'role': '5.1'
         }
+    },
+    {
+        path: 'rawmats-parameters',
+        component: RawmatsParametersComponent,
+        canActivate: [AuthGuard],
+        // data: {
+        //     'role': '5.1'
+        // }
     },
     {
         path: 'login', 

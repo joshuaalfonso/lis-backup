@@ -207,6 +207,9 @@ import { ReceivedTableComponent } from './features/importation/received-table/re
 import { UnloadedTableComponent } from './features/importation/unloaded-table/unloaded-table.component';
 import { ShippingSearchComponent } from './features/importation/shipping-search/shipping-search.component';
 import { HighlightPipe } from './pages/importation/highlight.pipe';
+import { RawmatsParametersComponent } from './pages/rawmats-parameters/rawmats-parameters.component';
+import { RawmatsParametersTableComponent } from './features/rawmats-parameters/rawmats-parameters-table/rawmats-parameters-table.component';
+import { CreateEditParamsComponent } from './features/rawmats-parameters/create-edit-params/create-edit-params.component';
 
 
 
@@ -316,7 +319,10 @@ import { HighlightPipe } from './pages/importation/highlight.pipe';
     ReceivedTableComponent,
     UnloadedTableComponent,
     ShippingSearchComponent,
-    HighlightPipe
+    HighlightPipe,
+    RawmatsParametersComponent,
+    RawmatsParametersTableComponent,
+    CreateEditParamsComponent
   ],
   imports: [
     BrowserModule,

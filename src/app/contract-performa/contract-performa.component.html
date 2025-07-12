@@ -158,11 +158,10 @@
                     </p-tag>
                 </td> -->
                 <td alignFrozen="right" pFrozenColumn class="text-nowrap">
-                    {{ row.created_at.date | date: 'MMM dd, yyyy' }}
+                    {{ row.created_at.date ? (row.created_at.date | date: 'MMM dd, yyyy') : '-' }}
                 </td>
                 <!-- <p-tag [severity]="row.Status === 'Pending' ? 'warning' : row.Status ==='Completed' ? 'success' : ''">{{ row.Status }}</p-tag> -->
                 <td data-title="Action" class="text-center z-20" alignFrozen="right" pFrozenColumn *ngIf="edit">
-
 
                     <!-- (click)="contractOverlay.toggle($event)" -->
                     <i 

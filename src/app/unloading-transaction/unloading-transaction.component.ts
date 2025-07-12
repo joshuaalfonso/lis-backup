@@ -26,6 +26,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     unloadingTransaction: any[] = [];
+    AllUnloadingTransaction: any[] = [];
     unloadingError: Message[] = [];
     checker: any[] = [];
     truck: any[] = [];
@@ -123,7 +124,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     selectedRow = {};
 
-    searchText: string = '';
+    searchValue: string = '';
 
     private subscription: Subscription = new Subscription();
 
@@ -223,24 +224,23 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
 
         this.route.queryParamMap.subscribe(params => {
-            const po = params.get('po')?.toLowerCase() || '';
-            const bl = params.get('bl')?.toLowerCase() || '';
+            const search = params.get('search')?.toLowerCase() || '';
             const isTransactionId = params.get('transactionId')?.toLowerCase() || '';
-            const status = params.get('status')?.toLowerCase() || '';
-            console.log(po, bl, isTransactionId, status)
-            // apply filters using these values
-            // this.applyFilter();
+            const status = Number(params.get('status')?.toLowerCase()) || '';
+            console.log(search, isTransactionId, status)
+            this.searchValue = search;
 
-            if (status === '2') {
+            if (status === 2) {
                 this.value = 3;
                 this.getverified();
                 return
+            } else {
+                this.value = isTransactionId ? Number(isTransactionId) : 1;
             }
 
-            this.value = isTransactionId ? Number(isTransactionId) : 1;
             this.onFilterTab(this.value)
-
         });
+
         
         // this.getData();
         // this.onFilterUnloading();
@@ -306,6 +306,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     response => {
                         this.isLoading = false;
                         this.unloadingTransaction = response;
+                        this.AllUnloadingTransaction = response;
+                        this.unloadingTransaction = this.applyFilter(this.isLoading, this.AllUnloadingTransaction)
                     }, error => {
                         console.log(error);
                         this.isLoading = false;
@@ -313,6 +315,32 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     }
                 )
             )
+    }
+
+    onSearchChange(term: string): void {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { search: term },
+          queryParamsHandling: 'merge'
+      });
+    }
+
+    applyFilter(isLoading: boolean, data: any[]): any[] {
+        if (isLoading) return [];
+    
+        const search = this.searchValue?.toLowerCase().trim();
+    
+        if (!search) {
+            return [...data];
+        }
+    
+        return data.filter(item =>
+          Object.values(item).some(val =>
+            val !== null &&
+            val !== undefined &&
+            val.toString().toLowerCase().includes(search)
+          )
+      );
     }
 
     onFilterUnloading() {
@@ -364,6 +392,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                 response => {
                     this.isLoading = false;
                     this.unloadingTransaction = response;
+                    this.AllUnloadingTransaction = response;
+                    this.unloadingTransaction = this.applyFilter(this.isLoading, this.AllUnloadingTransaction)
                     
                 }, error => {
                     console.log(error);

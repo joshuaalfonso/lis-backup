@@ -175,6 +175,7 @@ export class WarehouseLocationComponent implements OnInit, OnDestroy{
 
         if (!this.userID) {
             alert('No logged in user');
+            console.log('undefined userID')
             return
         }
 

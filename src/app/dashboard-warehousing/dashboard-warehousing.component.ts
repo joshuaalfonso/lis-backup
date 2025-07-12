@@ -69,6 +69,7 @@ export class DashboardWarehousingComponent implements OnInit, OnDestroy {
         }
       )
     )
+
   }
 
   getRecentUnload() {
@@ -76,16 +77,16 @@ export class DashboardWarehousingComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.UnloadingService.getUnloadedToday().subscribe(
-          response => {
-            // console.log(response);
+        response => {
+          // console.log(response);
+          
+          this.recentUnload = response;
+          this.unloadLoading = false;
             
-            this.recentUnload = response;
-            this.unloadLoading = false;
-              
-          }, error => {
-            console.error(error);
-            this.unloadLoading = false;
-          }
+        }, error => {
+          console.error(error);
+          this.unloadLoading = false;
+        }
       )
     )
   }

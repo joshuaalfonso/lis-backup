@@ -43,14 +43,20 @@
 
         <ng-template pTemplate="header">
             <tr class="thead contract_row" >
-                <th pFrozenColumn>Contract #</th>
+                <th pFrozenColumn pSortableColumn="FromShipmentPeriod.date">
+                    Contract #
+                    <p-sortIcon field="row.FromShipmentPeriod.date" />
+                </th>
                 <th>Raw Material</th>
                 <th>Served</th>
                 <th>Packaging</th>
                 <th>Supplier</th>
                 <th>Port Of Discharge</th>
                 <th>Country Of Origin</th>
-                <th >Status</th>
+                <!-- <th >Status</th> -->
+                <th pFrozenColumn pSortableColumn="created_at.date">Created At 
+                    <p-sortIcon field="created_at.date" />
+                </th>
                 <th alignFrozen="right" pFrozenColumn *ngIf="edit"></th>
             </tr>
         </ng-template>
@@ -107,10 +113,14 @@
                 <td data-title="CountryOfOrigin">
                     {{ row.CountryOfOrigin }}
                 </td>
-                <td data-title="Status" >
+                <td alignFrozen="right" pFrozenColumn class="text-nowrap">
+                    {{ row.created_at.date | date: 'MMM dd, yyyy' }}
+                </td>
+                <!-- <td data-title="Status" >
                     <p-tag [severity]="row.Status === 'Active' ? 'success' : row.Status ==='Completed' ? 'info' : ''">
                         {{ row.Status }}
-                    </p-tag></td>
+                    </p-tag
+                ></td> -->
                 <td data-title="Action" class="text-center z-20" alignFrozen="right" pFrozenColumn *ngIf="edit">
 
                     <i 

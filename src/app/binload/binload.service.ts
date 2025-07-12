@@ -47,6 +47,10 @@ export class BinloadService {
         return this.http.get<any>( this.baseUrl + '/project/j_WarehouseDetailRawMats.php?id=' + id);
     }
 
+    getRawMatsPartitionStockVerify(id: any) {
+        return this.http.get<any>( this.baseUrl + '/project/j_WarehouseDetailRawMatsVerify.php?id=' + id);
+    }
+
     insertBinloadRequest(binloadRequest: BinloadRequest) {
         return this.http.post( this.baseUrl + '/project/b_BinloadingRequest.php', binloadRequest );
     }

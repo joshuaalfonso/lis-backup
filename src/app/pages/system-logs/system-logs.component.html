@@ -188,7 +188,7 @@
                     <span class="sub-text">{{ row.ModuleName || '-'}}</span>
                 </td>
                 <td>{{ row.Activity || '-'}}</td>
-                <td>{{ row.UpdatedData ? row.UpdatedData : '-'}}</td>
+                <td>{{ row.UpdatedData == 0 ? '-' : row.UpdatedData}}</td>
                 <td>{{ (row.Time.date | date: 'MM/dd/yyyy hh:mm a') || '-' }}</td>
             </tr>
         </ng-template>
