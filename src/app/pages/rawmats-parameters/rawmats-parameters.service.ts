@@ -15,7 +15,11 @@ export class RawMatsParametersService {
     ){}
 
     getRawMatsParams() {
-        return this.http.get<any>( this.baseUrl + '/project/a')
+        return this.http.get<any>( this.baseUrl + '/project/lab/a_RawMaterialList.php')
+    }
+
+    setParams(data: any[]) {
+        return this.http.post<any>( this.baseUrl + 'project/lab/b_SetParameters.php', data )
     }
 
     // getData() {

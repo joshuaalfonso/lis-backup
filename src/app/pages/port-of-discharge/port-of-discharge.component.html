@@ -36,7 +36,7 @@
         #dt1  
         [value]="portOfDischarge" 
         [tableStyle]="{ 'width': '100%' }" 
-        [globalFilterFields]="['Broker', 'ContactPerson', 'ContactNumber']"
+        [globalFilterFields]="['PortOfDischarge']"
     >
 
     <ng-template pTemplate="caption">
@@ -47,6 +47,7 @@
                 type="text" 
                 class="p-inputtext-lg pl-3 input__search" 
                 placeholder="Search" 
+                (input)="onGlobalFilter(dt1, $event)"
             />
 
             <button 
@@ -66,7 +67,10 @@
     <ng-template pTemplate="header">
         <tr class="thead">
             <th>#</th>
-            <th>Port Of Discharge</th>
+            <th pSortableColumn="PortOfDischarge">   
+                Port Of Discharge
+                <p-sortIcon field="PortOfDischarge" />
+            </th>
             <th *ngIf="edit"></th>
         </tr>
     </ng-template>

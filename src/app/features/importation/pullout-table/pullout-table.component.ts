@@ -16,6 +16,8 @@ export class PulloutTableComponent implements OnInit, OnDestroy{
 
   @Input() userID: any;
 
+  @Input() edit: boolean = false;
+
   @Output() getShippingTransaction = new EventEmitter;
 
   @ViewChild(PulloutDialogComponent) pullOutDialogComp!: PulloutDialogComponent;

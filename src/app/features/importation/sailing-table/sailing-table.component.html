@@ -26,47 +26,44 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th pFrozenColumn class="z-50">
-                    Lot
+                <th pSortableColumn="Lot">
+                    Lot <p-sortIcon field="Lot" />
                 </th>
-                <th>
-                    Quantity
+                <th pSortableColumn="Quantity">
+                    Quantity <p-sortIcon field="Quantity" />
                 </th>
-                <th>
-                    BL
+                <th pSortableColumn="BL">
+                    BL <p-sortIcon field="BL" />
                 </th>
-
-                <th>
-                    Containers/Trucks
+                <th pSortableColumn="NoOfContainer">
+                    NoOfContainer <p-sortIcon field="NoOfContainer" />
                 </th>
-                <th>
-                    Product
+                <th pSortableColumn="RawMaterial">
+                    Product <p-sortIcon field="RawMaterial" />
                 </th>
-                <th>
-                    Port Of Discharge
+                <th pSortableColumn="PortOfDischarge">
+                    Port Of Discharge <p-sortIcon field="PortOfDischarge" />
                 </th>
-
-                <th >
-                    ETD
+                <th pSortableColumn="ETD.date">
+                    ETD <p-sortIcon field="ETD.date" />
                 </th>
-                <th>
-                    ETA
+                <th pSortableColumn="ETA.date">
+                    ETA <p-sortIcon field="ETA.date" />
                 </th>
-
-                <th>
-                    Broker
+                <th pSortableColumn="Broker">
+                    Broker <p-sortIcon field="Broker" />
                 </th>
              
                 <th>
                     SPS IC
                 </th>         
 
-                <th  pTooltip="ADVANCE DOCUMENTS RECEIVED" tooltipPosition="top">
-                    Adv Docs Rec
+                <th  pTooltip="ADVANCE DOCUMENTS RECEIVED" tooltipPosition="top" pSortableColumn="AdvanceDocumentsReceived.date">
+                    Adv Docs Rec <p-sortIcon field="AdvanceDocumentsReceived.date" />
                 </th>
                
-                <th>
-                    Broker Assigned
+                <th pSortableColumn="DateDocsReceivedByBroker.date">
+                    Broker Assigned <p-sortIcon field="DateDocsReceivedByBroker.date" />
                 </th>
             
                 <th >

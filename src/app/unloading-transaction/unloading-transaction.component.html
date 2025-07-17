@@ -107,8 +107,14 @@
                     <p-sortIcon field="Weight" />
                 </th>
                 <!-- <th> Weight </th> -->
-                <th> Warehouse </th>
-                <th> Checker </th>
+                <th pSortableColumn="Warehouse_Name">   
+                    Warehouse
+                    <p-sortIcon field="Warehouse_Name" />
+                </th>
+                <th pSortableColumn="Name">   
+                    Checker
+                    <p-sortIcon field="Name" />
+                </th>
                 <!-- <th> Verified </th> -->
                 <th *ngIf="edit">  </th>
             </tr>

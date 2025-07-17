@@ -49,9 +49,18 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Supplier</th>
-                <th>Contact Person</th>
-                <th>Contact Number</th>
+                <th pSortableColumn="ShippingLine">   
+                    Shipping Line
+                    <p-sortIcon field="ShippingLine" />
+                </th>
+                <th pSortableColumn="ContactPerson">   
+                    Contact Person
+                    <p-sortIcon field="ContactPerson" />
+                </th>
+                <th pSortableColumn="ContactNumber">   
+                    Contact Number
+                    <p-sortIcon field="ContactNumber" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

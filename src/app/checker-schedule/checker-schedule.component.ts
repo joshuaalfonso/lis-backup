@@ -10,6 +10,7 @@ import { UsersService } from "../pages/users/users.service";
 import { SystemLogsService } from "../pages/system-logs/system-logs.service";
 import { WarehouseLocationService } from "../pages/warehouse-location/warehouse-location.service";
 import { PlantService } from "../pages/plant/plant.service";
+import { Table } from "primeng/table";
 
 
 
@@ -326,6 +327,11 @@ export class CheckerScheduleComponent implements OnInit, OnDestroy{
         this.checkerScheduleForm.get('LocationID')?.updateValueAndValidity();
         this.checkerScheduleForm.get('PlantID')?.updateValueAndValidity();
 
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        table.filterGlobal(inputValue, 'contains');
     }
 
 }

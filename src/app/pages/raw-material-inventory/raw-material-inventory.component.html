@@ -123,13 +123,31 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th>Date</th>
-                <th>Raw Material</th>
+                <th pSortableColumn="InventoryDate.date">   
+                    Date
+                    <p-sortIcon field="InventoryDate.date" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
                 <th>Begin </th>
-                <th>Incoming</th>
-                <th>OutGoing</th>
-                <th>Condemn </th>
-                <th>Ending</th>
+                <th pSortableColumn="IncomingWeight">   
+                    Incoming
+                    <p-sortIcon field="IncomingWeight" />
+                </th>
+                <th pSortableColumn="BinloadingWeight">   
+                    OutGoing
+                    <p-sortIcon field="BinloadingWeight" />
+                </th>
+                <th pSortableColumn="CondemWeight">   
+                    Condemn
+                    <p-sortIcon field="CondemWeight" />
+                </th>
+                <th pSortableColumn="EndingWeight">   
+                    Ending
+                    <p-sortIcon field="EndingWeight" />
+                </th>
             </tr>
         </ng-template>
 

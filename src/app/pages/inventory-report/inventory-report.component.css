@@ -1,9 +1,9 @@
-td, th {
-    /* text-align: center; */
+th, td {
     font-size: var(--font-sm);
 }
-
+th {
+    font-weight: var(--font-700);
+}
 td {
-    color: var(--font-color);
     font-weight: var(--font-500);
 }

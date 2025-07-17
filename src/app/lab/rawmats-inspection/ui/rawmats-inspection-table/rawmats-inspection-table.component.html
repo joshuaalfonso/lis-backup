@@ -9,7 +9,7 @@
         #dt1 
         [value]="rawMatsInspection" 
         [tableStyle]="{ 'width': '100%' }" 
-        [globalFilterFields]="['InspectionDate', 'SampleCode', 'RawMaterial', 'DRNumber', 'DRNumber', 'DateTimeReleased']"
+        [globalFilterFields]="['InspectionDate.date', 'SampleCode', 'RawMaterial', 'DRNumber', 'DateTimeReleased.date']"
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
@@ -50,15 +50,30 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Inspection Date</th>
-                <th>Sample Code</th>
-                <th>Raw Material</th>
-                <th>DR #</th>
+                <th pSortableColumn="InspectionDate.date">   
+                  Inspection Date
+                    <p-sortIcon field="InspectionDate.date" />
+                </th>
+                <th pSortableColumn="SampleCode">   
+                  Sample Code
+                    <p-sortIcon field="SampleCode" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="DRNumber">   
+                    DR #
+                    <p-sortIcon field="DRNumber" />
+                </th>
                 <th>Status</th>
                 <!-- <th>Supplier</th>
-                <th>Plate No</th>
-                <th>Container #</th> -->
-                <th> Date Released </th>
+                  <th>Plate No</th>
+                  <th>Container #</th> -->
+                  <th pSortableColumn="DateTimeReleased.date">   
+                      Date Released 
+                      <p-sortIcon field="DateTimeReleased.date" />
+                  </th>
                 <th> Remarks </th>
                 <th> </th>
             </tr>
@@ -70,7 +85,7 @@
                     {{ rowIndex + 1}}
                 </td>
                 <td>
-                    {{ row.InspectionDate?.date | date: 'MM/dd/yyyy' }}
+                    {{ row.InspectionDate?.date | date: 'MM-dd-yyyy' }}
                 </td>
                 <td>
                     {{ row.SampleCode }}

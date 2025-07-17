@@ -94,7 +94,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
 
         this.route.queryParams.subscribe(params => {
             this.searchValue = params['search']?.toLowerCase() || '';
-            console.log('Search:', this.searchValue);
+            // console.log('Search:', this.searchValue);
             // this.filterData(searchValue)
             
             if (this.statusValue === 1 || this.statusValue === 2 || this.statusValue === 3) {

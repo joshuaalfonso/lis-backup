@@ -192,7 +192,7 @@ th,td {
     display: inline-block;
     /* width: auto; */
     font-size: var(--font-sm);
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
   
   /* .radio-inputs .radio {

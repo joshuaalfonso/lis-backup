@@ -29,7 +29,7 @@
         #dt1 
         [value]="users" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['UName', 'ModuleName']"
+        [globalFilterFields]="['UName', 'ModuleName', 'Department', 'ContactNo', 'EmailAdd']"
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]" 
@@ -54,9 +54,14 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Username</th>
-                <!-- <th>Password</th> -->
-                <th>Name</th>
+                <th pSortableColumn="UName">   
+                    Username
+                    <p-sortIcon field="UName" />
+                </th>
+                <th pSortableColumn="Name">   
+                    Name
+                    <p-sortIcon field="Name" />
+                </th>
                 <th>Contact #</th>
                 <th>Email</th>
                 <th *ngIf="edit"></th>

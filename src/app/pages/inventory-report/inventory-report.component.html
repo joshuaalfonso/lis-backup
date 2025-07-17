@@ -1,0 +1,136 @@
+<app-content-header 
+    [title]="'Inventory Report'"
+></app-content-header>
+
+
+
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+
+
+<div 
+    class="table" 
+    *ngIf="!isLoading"
+>
+
+    <p-table 
+        #dt1 
+        [value]="inventory" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RawMaterial', 'Category']"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        responsiveLayout="stack" 
+        [breakpoint]="'1100px'" 
+    >
+
+        <ng-template pTemplate="caption">
+
+            <div class="flex gap-2 mb-4 ">
+                <span class="p-float-label">
+                    <p-calendar 
+                        id="from_date" 
+                        [showIcon]="true"  
+                        [(ngModel)]="dateFrom"
+                        [style]="{'width': '200px'}"
+                        [showTime]="true"
+                        (ngModelChange)="onFilterChange()"
+                    ></p-calendar>
+                    <label 
+                        for="from_date" 
+                        appendTo="body" 
+                     
+                    >
+                        Start date
+                    </label>
+                </span>
+                
+                <span class="p-float-label">
+                    <p-calendar 
+                        id="to_date" 
+                        [showIcon]="true" 
+                        [(ngModel)]="dateTo" 
+                        [style]="{'width': '200px'}"
+                        [showTime]="true"
+                        (ngModelChange)="onFilterChange()"
+                    ></p-calendar>
+                    <label 
+                        for="to_date" 
+                        appendTo="body" 
+                     
+                    >
+                        End date
+                    </label>
+                </span>
+            </div>
+
+          
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>#</th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <!-- <th pSortableColumn="Category">   
+                    Category
+                    <p-sortIcon field="Category" />
+                </th> -->
+                <th pSortableColumn="RawMaterialStock">   
+                    Stock
+                    <p-sortIcon field="RawMaterialStock" />
+                </th>
+                <th pSortableColumn="Unloading_Weight" >   
+                    Unloaded
+                    <p-sortIcon field="Unloading_Weight" />
+                </th>
+                <th pSortableColumn="Binload_Weight">   
+                    Binloaded
+                    <p-sortIcon field="Binload_Weight" />
+                </th>
+            
+            </tr>
+        </ng-template>
+      
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr  *ngIf="!isLoading">
+                <td>  
+                    <span class="p-column-title">#</span> 
+                    {{ rowIndex + 1 }} 
+                </td>
+                <td>
+                    <span class="p-column-title">Raw Material</span> 
+                    {{ row.RawMaterial }}
+                    <span class="sub-text">{{ row.Category }}</span>
+                </td>
+                <!-- <td>
+                    <span class="p-column-title">Category</span> 
+                    {{ row.Category }}
+                </td> -->
+                <td>
+                    <span class="p-column-title">Stock</span> 
+                    {{ row.RawMaterialStock | number }} kg
+                </td>
+                <td >
+                    <span class="p-column-title">Unloading_Weight</span> 
+                    {{ row.Unloading_Weight | number}} kg
+                </td>
+                <td >
+                    <span class="p-column-title">Binload_Weight</span> 
+                    {{ row.Binload_Weight | number}} kg
+                </td>
+                    
+                
+            </tr>
+        </ng-template>
+
+
+    </p-table>
+
+</div>

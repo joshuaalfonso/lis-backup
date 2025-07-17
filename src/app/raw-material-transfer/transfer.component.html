@@ -10,54 +10,44 @@
 <!-- ======= SEARCH, ADD, EXPORT ======= -->
 <div class="controls">
     <!-- (input)="onGlobalFilter(dt1, $event)" -->
-    <input 
-        pInputText 
-        type="text" 
-        class="p-inputtext-lg pl-3 input__search" 
-        placeholder="Search" 
-    />
 
+    <!-- <button 
+        pButton 
+        pRipple 
+        class="add__btn" 
+        (click)="showTransferRequestDialog()" 
+        *ngIf="insert && value == 0"
+    >
+        <i class='bx bx-plus'></i> 
+        <span>New Request</span>
+    </button> -->
+</div>
+
+
+<div class="flex align-items-center justify-content-between mb-3">
+    <div class="radio-inputs" >
+
+        <ng-template ngFor let-row [ngForOf]="stateOptions" let-i="index" >
+            
+            <label class="radio">
+                <input checked="" name="radio" type="radio" [value]="row.value" [(ngModel)]="value"  (ngModelChange)="getData()"/>
+                <span class="name" [class.active]="value == row.value"> {{ row.label }} </span>
+            </label>
+    
+        </ng-template>
+    
+    </div>
+    
     <button 
         pButton 
         pRipple 
         class="add__btn" 
         (click)="showTransferRequestDialog()" 
-        *ngIf="insert"
+        *ngIf="insert && value == 0"
     >
         <i class='bx bx-plus'></i> 
         <span>New Request</span>
     </button>
-    <!-- <button pButton pRipple class="p-button-info export__btn" *ngIf="generateReport"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button> -->
-</div>
-
-
-<div class="radio-inputs" >
-
-    <ng-template ngFor let-row [ngForOf]="stateOptions" let-i="index" >
-        
-        <label class="radio">
-            <input checked="" name="radio" type="radio" [value]="row.value" [(ngModel)]="value"  (ngModelChange)="getData()"/>
-            <span class="name" [class.active]="value == row.value"> {{ row.label }} </span>
-        </label>
-
-    </ng-template>
-
-    <!-- <label class="radio" *ngIf="dispatcherView">
-            <input checked="" name="radio" type="radio" value="0" [(ngModel)]="value"  (ngModelChange)="getData()"/>
-            <span class="name" [class.active]="value == 0"> Preparation </span>
-    </label>
-    <label class="radio" *ngIf="sourceCheckerView">
-            <input name="radio" type="radio" value="1" [(ngModel)]="value"  (ngModelChange)="getData()"/>
-            <span class="name" [class.active]="value == 1"> Source </span>
-    </label>
-    <label class="radio" *ngIf="destinationView">
-            <input name="radio" type="radio" value="2" [(ngModel)]="value"  (ngModelChange)="getData()"/>
-            <span class="name" [class.active]="value == 2"> Destination </span>
-    </label>
-    <label class="radio" *ngIf="completedView">
-            <input name="radio" type="radio" value="3" [(ngModel)]="value"  (ngModelChange)="getData()"/>
-            <span class="name" [class.active]="value == 3"> Completed </span>
-    </label> -->
 </div>
 
 <p-messages 
@@ -70,39 +60,64 @@
 
 <!-- ======= TABLE ======= -->
 <div class="table">
-    <div class="table-view">
-        <p-selectButton 
-            [options]="viewOptions" 
-            [(ngModel)]="viewValue" 
-            optionLabel="label" 
-            optionValue="value"
-        >
-            <ng-template pTemplate="item" let-option>
-                <i [ngClass]="option.icon"></i>
-            </ng-template>
-        </p-selectButton>
-    </div>
+
 
     <!-- ======= Dispatcher Request Table ======= -->
     <p-table  
-        #dt1 
+        #transferTable 
         [value]="transferRequest" 
         dataKey="DispatcherRequestID" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['PlantName']" 
-        [paginator]="true"
+        [globalFilterFields]="['RequestDate.date', 'RawMaterial', 'FromWarehouseLocation', 'ToWarehouseLocation']" 
+        [paginator]="transferRequest.length > 10"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
         *ngIf="value == 0  && viewValue == 'table' && !isLoading"
     >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <input 
+                    (input)="onGlobalFilter(transferTable, $event)"
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                />
+                <!-- <p-selectButton 
+                    [options]="viewOptions" 
+                    [(ngModel)]="viewValue" 
+                    optionLabel="label" 
+                    optionValue="value"
+                    [style]="{'margin': '0'}"
+                >
+                    <ng-template pTemplate="item" let-option>
+                        <i [ngClass]="option.icon"></i>
+                    </ng-template>
+                </p-selectButton> -->
+            </div>
+        </ng-template>
+
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th style="width: 5rem"></th>
-                <th>Request Date</th>
-                <th>Raw Material</th>
-                <th>Request Weight</th>
-                <th>Source</th>
-                <th>Destination</th>
+                <th pSortableColumn="RequestDate.date">
+                    Request Date <p-sortIcon field="RequestDate.date" />
+                </th>
+                <th pSortableColumn="RawMaterial">
+                    Raw Material <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="RequestWeight">
+                    Request Weight <p-sortIcon field="RequestWeight" />
+                </th>
+                <th  pSortableColumn="FromWarehouseLocation">   
+                    Source
+                    <p-sortIcon field="FromWarehouseLocation" />
+                </th>
+                <th  pSortableColumn="ToWarehouseLocation">   
+                    Destination
+                    <p-sortIcon field="ToWarehouseLocation" />
+                </th>
                 <th>Status</th>
                 <!-- <th>Progress</th> -->
                 <th>Actions</th>
@@ -315,10 +330,13 @@
 
     <!-- Source Destination Table View -->
     <p-table 
-        #dt1 
+        #sourceDestinationTable 
         [value]="transfer" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['TransferCode','DateTransfer.date', 'RawMaterial']" 
+        [globalFilterFields]="['TransferCode','DateTransfer.date', 'RawMaterial', 'FromWarehouseLocation', 'ToWarehouseLocation', 'PlateNo', 'DriverName']" 
+        [paginator]="transfer.length > 10"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
         *ngIf="(value == 1 || value == 2) && viewValue == 'table'"
     >
         <!-- <ng-template pTemplate="caption">
@@ -334,16 +352,51 @@
                 </div>
             </div>
         </ng-template> -->
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <input 
+                    (input)="onGlobalFilter(sourceDestinationTable, $event)"
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                />
+            </div>
+        </ng-template>
+
+
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th>Transfer Code</th>
-                <th>Date Transfer</th>
+                <th pSortableColumn="TransferCode">   
+                    Transfer Code
+                    <p-sortIcon field="TransferCode" />
+                </th>
+                <th pSortableColumn="DateTransfer.date">   
+                    Date Transfer
+                    <p-sortIcon field="DateTransfer.date" />
+                </th>
                 <th>Transfer Type</th>
-                <th>Raw Material</th>
-                <th *ngIf="value == 1">Source</th>
-                <th *ngIf="value == 2">Destination</th>
-                <th>Plate No</th>
-                <th>Driver</th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th *ngIf="value == 1" pSortableColumn="FromWarehouseLocation">   
+                    Source
+                    <p-sortIcon field="FromWarehouseLocation" />
+                </th>
+                <th *ngIf="value == 2" pSortableColumn="ToWarehouseLocation">   
+                    Destination
+                    <p-sortIcon field="ToWarehouseLocation" />
+                </th>
+                <th pSortableColumn="PlateNo">   
+                    Plate No
+                    <p-sortIcon field="PlateNo" />
+                </th>
+                <th pSortableColumn="DriverName">   
+                    Driver
+                    <p-sortIcon field="DriverName" />
+                </th>
             
                 <!-- <th>Status</th> -->
             
@@ -499,21 +552,48 @@
 
     <!-- ======= Completed Table ======= -->
     <p-table  
-        #dt1 
+        #completedTable 
         [value]="transfer" 
         dataKey="DispatcherRequestID" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['PlantName']" 
+        [globalFilterFields]="['RequestDate.date', 'RawMaterial', 'FromWarehouseLocation', 'ToWarehouseLocation']" 
+        [paginator]="transfer.length > 0"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
         *ngIf="value == 3  && viewValue == 'table' && !isLoading"
     >
+
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <input 
+                    (input)="onGlobalFilter(completedTable, $event)"
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                />
+            </div>
+        </ng-template>
+
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th [style]="{width: '1rem'}"></th>
-                <th>Request Date</th>
-                <th>Raw Material</th>
-                <!-- <th>Request Weight</th> -->
-                <th>Source</th>
-                <th>Destination</th>
+                <th pSortableColumn="RequestDate.date">   
+                    Request Date
+                    <p-sortIcon field="RequestDate.date" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="FromWarehouseLocation">   
+                    Source
+                    <p-sortIcon field="FromWarehouseLocation" />
+                </th>
+                <th pSortableColumn="ToWarehouseLocation">   
+                    Destination
+                    <p-sortIcon field="ToWarehouseLocation" />
+                </th>
                 <th>Status</th>
                 <th>Served</th>
                 <th>Progress</th>
@@ -1062,6 +1142,7 @@
     [style]="{ width: '35vw' }" 
     [draggable]="false" 
     [resizable]="false"
+    
 >
     <form 
         [formGroup]="transferRequestForm" 
@@ -1169,12 +1250,22 @@
             ></p-inputNumber> 
         </div>
 
-        <button 
+        <!-- <button 
             pButton 
             pRipple 
             label="Submit" 
             class="bg-indigo-500 border-round border-none submit"
-        ></button>
+        ></button> -->
+
+       <div class="flex justify-content-end">
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check"
+            />
+       </div>
+            <!-- [loading]="submitLoading" 
+            [disabled]="!rawMatsForm.valid" -->
 
     </form>
 </p-dialog>
@@ -1358,13 +1449,24 @@
         </div>
 
 
-        <button 
+        <!-- <button 
             pButton 
             pRipple 
             label="Submit" 
             class="bg-indigo-500 border-round border-none submit" 
             [disabled]="!transferForm.valid"
-        ></button>
+        ></button> -->
+
+        <div class="flex justify-content-end">
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check"
+                [disabled]="!transferForm.valid"
+            />
+       </div>
+
+
 
     </form>
 </p-dialog>
@@ -1586,14 +1688,24 @@
         <input type="text" style="display: none;"/>
 
 
-        <button 
+        <!-- <button 
             pButton 
             pRipple 
             label="Submit" 
             class="bg-indigo-500 border-round border-none submit" 
             [disabled]="!sourceCheckerForm.valid" 
             (click)="onSubmitSourceForm()"
-        ></button>
+        ></button> -->
+
+        <div class="flex justify-content-end">
+            <p-button 
+                type="submit"
+                label="Submit" 
+                icon="pi pi-check"
+                [disabled]="!sourceCheckerForm.valid" 
+                (click)="onSubmitSourceForm()"
+            />
+       </div>
 
     </form>
 </p-dialog>
@@ -2009,7 +2121,7 @@
 
 
 
-       <div class="flex justify-content-end">
+       <div class="flex justify-content-end gap-1">
 
             <button 
                 type="button" 
@@ -2034,6 +2146,16 @@
                 [disabled]="!destinationForm.valid"
                 class="p-button-text">
             </button>
+
+            <!-- <div class="flex justify-content-end">
+                <p-button 
+                    type="submit"
+                    label="Submit" 
+                    icon="pi pi-check"
+                    (click)="onSubmitDestinationForm()"
+                    [disabled]="!destinationForm.valid"
+                />
+           </div> -->
 
             <!-- <button 
                 pButton 

@@ -33,7 +33,10 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Module</th>
+                <th pSortableColumn="ModuleName">   
+                    Module
+                    <p-sortIcon field="ModuleName" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

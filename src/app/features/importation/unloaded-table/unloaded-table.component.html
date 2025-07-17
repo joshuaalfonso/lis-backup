@@ -12,13 +12,34 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th style="width: 5rem"></th>
-                <th>MBL</th>
-                <th>BL</th>
-                <th>Raw Material</th>
-                <th>Quantity</th>
-                <th>Supplier</th>
-                <th>No Of Unloaded</th>
-                <th>Total Weight</th>
+                <th pSortableColumn="MBL">   
+                    MBL
+                    <p-sortIcon field="MBL" />
+                </th>
+                <th pSortableColumn="BL">   
+                    BL
+                    <p-sortIcon field="BL" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="Quantity">   
+                    Quantity
+                    <p-sortIcon field="Quantity" />
+                </th>
+                <th pSortableColumn="Supplier">   
+                    Supplier
+                    <p-sortIcon field="Supplier" />
+                </th>
+                <th pSortableColumn="NoofLoaded">   
+                    No Of Unloaded
+                    <p-sortIcon field="NoofLoaded" />
+                </th>
+                <th pSortableColumn="TotalWeight">   
+                    Total Weight
+                    <p-sortIcon field="TotalWeight" />
+                </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-expanded="expanded">

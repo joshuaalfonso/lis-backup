@@ -1,1 +1,202 @@
-<p>rawmats-parameters-table works!</p>
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="errorMessage" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="errorMessage" 
+/>
+
+<div 
+    class="table" 
+    *ngIf="!isLoading && errorMessage.length == 0"
+>
+
+    <p-table 
+        #dt1 
+        [value]="rawMaterials" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RawMaterial', 'Category']"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        responsiveLayout="stack" 
+        [breakpoint]="'1100px'" 
+    >
+
+        <ng-template pTemplate="caption">
+
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                    />
+                    <!-- (input)="onGlobalFilter(dt1, $event)" -->
+
+
+            </div>
+
+          
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>#</th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="Category">   
+                    Category
+                    <p-sortIcon field="Category" />
+                </th>
+            
+              
+                <!-- <th *ngIf="edit"></th> -->
+                <th>Edit</th>
+            </tr>
+        </ng-template>
+      
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr  *ngIf="!isLoading">
+                <td>  
+                    <span class="p-column-title">#</span> 
+                    {{ rowIndex + 1 }} 
+                </td>
+                <td>
+                    <span class="p-column-title">Raw Material</span> 
+                    {{ row.RawMaterial }}
+                </td>
+                <td>
+                    <span class="p-column-title">Standard</span> 
+                    {{ getParamsName(row.StandardDetail) }}
+                </td>
+             
+
+                <!-- <td data-title="Actions" *ngIf="edit"> -->
+                <td data-title="Actions">
+
+                    <span class="p-column-title"></span> 
+
+                    <i 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" 
+                        (click)="action.toggle($event)"
+                    ></i>
+
+
+                </td>
+
+                <p-overlayPanel #action>
+
+                    <div class="actions-overlay">
+                        <p (click)="showDialog()">
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p>
+                    </div>
+                </p-overlayPanel>
+                
+            </tr>
+        </ng-template>
+
+
+    </p-table>
+
+</div>
+
+
+
+<!-- <p-dropdown 
+    [options]="parameters" 
+    [(ngModel)]="row.ParameterID" 
+    [ngModelOptions]="{standalone: true}" 
+    optionLabel="Parameter" 
+    placeholder="select" 
+    appendTo="body"
+    optionValue="ParameterID"
+    [showClear]="true"
+    (ngModelChange)="onSelectParameter($event, rowIndex)"
+/> -->
+
+
+<p-dialog 
+    header="Standard" 
+    [modal]="true" 
+    [(visible)]="visible" 
+    [style]="{ width: '45rem' }"
+    (onHide)="closeDialog()"
+>
+    <span class="p-text-secondary block mb-5">Update your information.</span>
+    <!-- <div class="flex align-items-center gap-3 mb-3">
+        <label for="username" class="font-semibold w-6rem">Username</label>
+        <input pInputText id="username" class="flex-auto" autocomplete="off" />
+    </div> -->
+
+    <table 
+        class="w-full p-fluid mb-3" 
+        style="table-layout: auto; border-collapse: separate; border-spacing: 10px;"
+    >
+        <tr>
+            <th>Parameters</th>
+            <th>Standard</th>
+            <th></th>
+        </tr>
+
+        <tbody *ngFor="let row of standardDetails; let i = index">
+            <tr>
+                <td [style]="{'width': '50%'}">
+                    <p-dropdown 
+                        [options]="parameters" 
+                        [(ngModel)]="row.ParameterID"
+                        optionLabel="Parameter" 
+                        placeholder="select" 
+                        appendTo="body"
+                        optionValue="ParameterID"
+                        [showClear]="true"
+                    />
+                </td>
+                <td>
+                    <p-inputNumber  [(ngModel)]="row.StandardValue"/>
+                </td>
+                <td>
+                    <p-button 
+                        label="" 
+                        icon="pi pi-times" 
+                        styleClass="p-button-circle p-button-text bg-red-50 text-red-700" 
+                        [style]="{'background': 'var(--highlight-bg)'}"
+                        (click)="removeStandard(i)"
+                    />
+                </td>
+            </tr>
+            
+        </tbody>
+        <tr>
+            <td>
+                <p-button 
+            label="" 
+            icon="pi pi-plus" 
+            styleClass="p-button-circle p-button-text" 
+            [style]="{'background': 'var(--highlight-bg)'}"
+            (onClick)="addStandard()" 
+        />
+            </td>
+        </tr>
+
+    </table>
+
+
+    <div class="flex justify-content-end gap-2">
+        <!-- styleClass="p-button-rounded p-button-text" -->
+        <p-button label="Cancel" styleClass="p-button-rounded p-button-text" (onClick)="visible = false" />
+        <p-button label="Apply changes" (onClick)="visible = false" />
+    </div>
+</p-dialog>
+

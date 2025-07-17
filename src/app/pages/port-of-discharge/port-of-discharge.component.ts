@@ -6,6 +6,7 @@ import { Message, MessageService } from "primeng/api";
 import { AuthService } from "src/app/auth/auth.service";
 import { UsersService } from "src/app/pages/users/users.service";
 import { SystemLogsService } from "src/app/pages/system-logs/system-logs.service";
+import { Table } from "primeng/table";
 
 
 @Component({
@@ -206,6 +207,11 @@ export class PortOfDischarge implements OnInit, OnDestroy{
             PortOfDischarge: data.PortOfDischarge,
             UserID: data.UserID,
         })
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        table.filterGlobal(inputValue, 'contains');
     }
 
 }

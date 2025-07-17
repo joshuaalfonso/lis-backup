@@ -19,7 +19,10 @@
       #dt1 
       [value]="checkerSchedule" 
       [tableStyle]="{ 'width': '100%' }" 
-      [globalFilterFields]="['RawMaterial']"
+      [globalFilterFields]="['Name', 'PlantName', 'WarehouseLocation', 'DateRotation.date']"
+      [paginator]="!isLoading"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
     >
 
         <ng-template pTemplate="caption">
@@ -30,6 +33,7 @@
                     type="text" 
                     class="p-inputtext-lg pl-3 input__search" 
                     placeholder="Search" 
+                    (input)="onGlobalFilter(dt1, $event)"
                 />
             
                 <button 
@@ -48,11 +52,17 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th></th>
-                <th>Name</th>
+              <th></th>
+              <th pSortableColumn="Name" >   
+                Name
+                <p-sortIcon field="Name" />
+              </th>
                 <th>Type</th>
                 <th>Designation</th>
-                <th>Date Rotation</th>
+                <th pSortableColumn="DateRotation.date" >   
+                  Date Rotation
+                  <p-sortIcon field="DateRotation.date" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

@@ -93,11 +93,27 @@
                     Request Date
                     <p-sortIcon field="RequestDate.date" />
                 </th>
-                <th>Plant</th>
-                <th>Raw Material</th>
+                <th pSortableColumn="PlantName">   
+                    Plant
+                    <p-sortIcon field="PlantName" />
+                </th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
                 <th>Request</th>
-                <th>Location</th>
-                <th>Plate #</th>
+                <th pSortableColumn="WarehouseLocation">   
+                    Location
+                    <p-sortIcon field="WarehouseLocation" />
+                </th>
+                <th pSortableColumn="PlateNo">   
+                    Plate #
+                    <p-sortIcon field="PlateNo" />
+                </th>
+                <th pSortableColumn="Name">   
+                    Dispatcher
+                    <p-sortIcon field="Name" />
+                </th>
                 <th>Dispatcher</th>
                 <th *ngIf="edit">Actions</th>
             </tr>

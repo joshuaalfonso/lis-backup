@@ -19,7 +19,7 @@
         #dt1 
         [value]="bank" 
         [tableStyle]="{ 'width': '100%'}" 
-        [globalFilterFields]="['Supplier', 'Address', 'ContactPerson', 'ContactNumber']" 
+        [globalFilterFields]="['Bank', 'BankName']" 
     >
 
         <ng-template pTemplate="caption">
@@ -30,6 +30,7 @@
                     type="text" 
                     class="p-inputtext-lg pl-3 input__search" 
                     placeholder="Search"
+                    (input)="onGlobalFilter(dt1, $event)"
                 />
                 <button 
                     pButton 
@@ -48,8 +49,14 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Bank</th>
-                <th>Bank Name</th>
+                <th pSortableColumn="Bank">   
+                    Bank
+                    <p-sortIcon field="Bank" />
+                </th>
+                <th pSortableColumn="BankName">   
+                    BankName
+                    <p-sortIcon field="BankName" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

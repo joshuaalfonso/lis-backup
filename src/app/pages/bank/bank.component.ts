@@ -6,6 +6,7 @@ import { Message, MessageService } from "primeng/api";
 import { AuthService } from "../../auth/auth.service";
 import { UsersService } from "../users/users.service";
 import { SystemLogsService } from "../system-logs/system-logs.service";
+import { Table } from "primeng/table";
 
 
 @Component({
@@ -213,6 +214,11 @@ export class BankComponent implements OnInit, OnDestroy{
             BankName: data.BankName,
             UserID: null
         })
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        table.filterGlobal(inputValue, 'contains');
     }
 
 }

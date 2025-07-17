@@ -107,7 +107,7 @@
                     <span class="p-column-title">Status</span> 
                     <span class="in-stock" *ngIf="row.Weight > row.MinimumWeight"> In Stock </span>
                     <span class="low-stock" *ngIf="row.Weight < row.MinimumWeight && row.Weight > 0"> Low Stock </span>
-                    <span class="no-stock" *ngIf="row.Weight === 0"> No Stock </span>
+                    <span class="no-stock" *ngIf="row.Weight === 0 || row.Weight < 0"> No Stock </span>
                 </td>
                 <td data-title="Actions" *ngIf="edit">
 

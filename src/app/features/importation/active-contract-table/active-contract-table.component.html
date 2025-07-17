@@ -47,12 +47,20 @@
                     Contract #
                     <p-sortIcon field="row.FromShipmentPeriod.date" />
                 </th>
-                <th>Raw Material</th>
-                <th>Served</th>
+                <th pSortableColumn="RawMaterial">
+                    RawMaterial <p-sortIcon field="RawMaterial" />
+                </th>
+                <th pSortableColumn="Served_Container">
+                    Served <p-sortIcon field="Served_Container" />
+                </th>
                 <th>Packaging</th>
-                <th>Supplier</th>
+                <th pSortableColumn="Supplier">
+                    Supplier <p-sortIcon field="Supplier" />
+                </th>
                 <th>Port Of Discharge</th>
-                <th>Country Of Origin</th>
+                <th pSortableColumn="CountryOfOrigin">
+                    Country Of Origin <p-sortIcon field="CountryOfOrigin" />
+                </th>
                 <!-- <th >Status</th> -->
                 <th pFrozenColumn pSortableColumn="created_at.date">Created At 
                     <p-sortIcon field="created_at.date" />
@@ -189,7 +197,7 @@
     </p-table>
   
     <div class="text-center my-3" *ngIf="isLoading">
-      <app-loader></app-loader>
+        <app-loader></app-loader>
     </div>
 
 </div>

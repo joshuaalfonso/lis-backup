@@ -55,9 +55,18 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Checker</th>
-                <th>Contact #</th>
-                <th>Email</th>
+                <th pSortableColumn="CheckerName" >   
+                    Checker
+                    <p-sortIcon field="CheckerName" />
+                </th>
+                <th pSortableColumn="ContactNo" >   
+                    Contact #
+                    <p-sortIcon field="ContactNo" />
+                </th>
+                <th pSortableColumn="EmailAdd" >   
+                    Email
+                    <p-sortIcon field="EmailAdd" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

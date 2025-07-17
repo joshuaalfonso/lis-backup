@@ -210,6 +210,7 @@ import { HighlightPipe } from './pages/importation/highlight.pipe';
 import { RawmatsParametersComponent } from './pages/rawmats-parameters/rawmats-parameters.component';
 import { RawmatsParametersTableComponent } from './features/rawmats-parameters/rawmats-parameters-table/rawmats-parameters-table.component';
 import { CreateEditParamsComponent } from './features/rawmats-parameters/create-edit-params/create-edit-params.component';
+import { InventoryReportComponent } from './pages/inventory-report/inventory-report.component';
 
 
 
@@ -322,7 +323,8 @@ import { CreateEditParamsComponent } from './features/rawmats-parameters/create-
     HighlightPipe,
     RawmatsParametersComponent,
     RawmatsParametersTableComponent,
-    CreateEditParamsComponent
+    CreateEditParamsComponent,
+    InventoryReportComponent
   ],
   imports: [
     BrowserModule,

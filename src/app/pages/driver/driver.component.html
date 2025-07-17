@@ -48,7 +48,10 @@
 
     <ng-template pTemplate="header">
         <tr class="thead">
-            <th>Driver Name</th>
+            <th pSortableColumn="DriverName" >   
+              Driver Name
+              <p-sortIcon field="DriverName" />
+            </th>
             <th>Contact Number</th>
             <th *ngIf="edit"></th>
         </tr>

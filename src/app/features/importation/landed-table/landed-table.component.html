@@ -24,44 +24,43 @@
 
         <ng-template pTemplate="header">
             <tr class="thead">
+
                 <th>
-                    BL
+                    BL 
                 </th>
 
                 <th>
                     Containers/Trucks
                 </th>
-                <th>
-                    Product
+                <th pSortableColumn="RawMaterial">
+                    Product <p-sortIcon field="RawMaterial" />
                 </th>
                 <th>
                     Port Of Discharge
                 </th>
-                <th>
-                    Broker
+                <th pSortableColumn="Broker">
+                    Broker <p-sortIcon field="Broker" />
                 </th>
-
-                <th >
-                    ATA
+                <th pSortableColumn="ATA.date">
+                    ATA <p-sortIcon field="ATA.date" />
                 </th>
-
-                <th>
-                    Storage Free Time
+                <th pSortableColumn="StorageLastFreeDate.date">
+                    Storage Free Time <p-sortIcon field="StorageLastFreeDate.date" />
                 </th>
-                <th>
-                    Detention Free Time
+                <th pSortableColumn="DetentionDate.date">
+                    Detention Free Time <p-sortIcon field="DetentionDate.date" />
                 </th>
-                <th>
-                    Date Of Last Charge
+                <th pSortableColumn="DateofDischarge.date">
+                    Date Of Last Charge <p-sortIcon field="DateofDischarge.date" />
                 </th>
-                <th>
-                    Original Documents
+                <th pSortableColumn="OriginalDocsAvailavilityDate.date">
+                    Original Documents <p-sortIcon field="OriginalDocsAvailavilityDate.date" />
                 </th>
-                <th>
-                    Duties & Taxes
+                <th pSortableColumn="LodgementDate.date">
+                    Duties & Taxes <p-sortIcon field="LodgementDate.date" />
                 </th>
-                <th>
-                    Gatepass
+                <th pSortableColumn="GatepassRecieved.date">
+                    Gatepass <p-sortIcon field="GatepassRecieved.date" />
                 </th>
             
                 <th >

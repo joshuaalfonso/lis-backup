@@ -55,9 +55,18 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Supplier</th>
-                <th>Origin</th>
-                <th>Address</th>
+                <th pSortableColumn="Supplier" >   
+                    Supplier
+                    <p-sortIcon field="Supplier" />
+                </th>
+                <th pSortableColumn="Origin" >   
+                    Origin
+                    <p-sortIcon field="Origin" />
+                </th>
+                <th pSortableColumn="Address" >   
+                    Address
+                    <p-sortIcon field="Address" />
+                </th>
                 <th>Currency</th>
                 <th ></th>
             </tr>

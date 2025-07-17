@@ -174,7 +174,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         {
                             title: 'Stocking',
                             routerLink: '/stocking',
-                            view: true,
+                            view: false,
+                        },
+                        {
+                            title: 'Report',
+                            routerLink: '/inventory-report',
+                            view: false,
                         },
                     ],
                 },
@@ -295,7 +300,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
                     {
                         title: 'Importation',
                         icon: 'assets/icons/icon-ship.svg',
-                        routerLink: '/contract-performa',
+                        routerLink: '/importation',
                         isCollapse: false,
                         view: false,
                     },
@@ -513,6 +518,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                             break;
                         case '5.1' :
                             this.menus[3].subMenu[2].view = true;
+                            break;
+                        case '5.2.1' :
+                            this.menus[1].subMenu[2].subMenu[3].view = true;
+                            break;
+                        case '5.3.1' :
+                            this.menus[1].subMenu[2].subMenu[2].view = true;
                             break;
                         default:
                             break;

@@ -6,6 +6,7 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { AuthService } from "../../auth/auth.service";
 import { UsersService } from "../users/users.service";
 import { SystemLogsService } from "../system-logs/system-logs.service";
+import { Table } from "primeng/table";
 
 
 
@@ -244,6 +245,11 @@ export class ContainerTypeComponent implements OnInit, OnDestroy {
                 // this.MessageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
             }
         });
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        table.filterGlobal(inputValue, 'contains');
     }
 
 }

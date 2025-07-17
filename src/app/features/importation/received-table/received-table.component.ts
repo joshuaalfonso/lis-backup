@@ -38,7 +38,6 @@ export class ReceivedTableComponent implements OnInit, OnDestroy, OnChanges{
         
       this.received = this.applyFilter(this.isLoading, this.Allreceived);
 
-
     });
 
   }

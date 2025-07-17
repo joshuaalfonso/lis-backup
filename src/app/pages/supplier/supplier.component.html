@@ -57,10 +57,22 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Supplier</th>
-                <th>Origin</th>
-                <th>Address</th>
-                <th>Contact Person</th>
+                <th pSortableColumn="Supplier" >   
+                    Supplier
+                    <p-sortIcon field="Supplier" />
+                </th>
+                <th pSortableColumn="Origin" >   
+                    Origin
+                    <p-sortIcon field="Origin" />
+                </th>
+                <th pSortableColumn="Address" >   
+                    Address
+                    <p-sortIcon field="Address" />
+                </th>
+                <th pSortableColumn="ContactPerson" >   
+                    Contact Person
+                    <p-sortIcon field="ContactPerson" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

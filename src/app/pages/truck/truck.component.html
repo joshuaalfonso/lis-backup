@@ -70,10 +70,18 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Plate No</th>
-                <th>Trucking</th>
-                <!-- <th>Truck Type</th> -->
-                <th>Description</th>
+                <th pSortableColumn="PlateNo" >   
+                    Plate No
+                    <p-sortIcon field="PlateNo" />
+                </th>
+                <th pSortableColumn="TruckingName" >   
+                    Trucking
+                    <p-sortIcon field="TruckingName" />
+                </th>
+                <th pSortableColumn="Description" >   
+                    Description
+                    <p-sortIcon field="Description" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

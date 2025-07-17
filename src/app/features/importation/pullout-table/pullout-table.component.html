@@ -17,16 +17,16 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th style="width: 5rem"></th>
-                <th>
-                    MBL
+                <th pSortableColumn="MBL">
+                    MBL <p-sortIcon field="MBL" />
                 </th>
-                <th>
-                    Supplier
+                <th pSortableColumn="Supplier">
+                    Supplier <p-sortIcon field="Supplier" />
                 </th>
-                <th>
-                    Broker
+                <th pSortableColumn="Broker">
+                    Broker <p-sortIcon field="Broker" />
                 </th>
-                <th>
+                <th *ngIf="edit">
                     Action
                 </th>
             </tr>
@@ -68,7 +68,7 @@
                     <span *ngIf="!row.Broker">-</span>
                 </td>
 
-                <td data-title="Action">
+                <td data-title="Action" *ngIf="edit">
                     <button 
                         pButton 
                         pRipple 

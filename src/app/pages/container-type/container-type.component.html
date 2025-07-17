@@ -6,13 +6,6 @@
 
 <app-content-header [title]="'Profile / Container Type'"></app-content-header>
 
-<!-- ==== SEARCH, ADD , EXPORT ==== -->
-<!-- <div class="controls">
-    <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"  />
-    <button pButton pRipple class="add__btn" (click)="showDialog()"><i class='bx bx-plus'></i> <span>Add Item</span></button>
-    <button pButton pRipple class="p-button-info export__btn"><i class='bx bx-file mr-1' ></i> <span>Export File</span></button>
-</div> -->
-
 
 <div class="text-center my-3" *ngIf="isLoading">
     <app-loader></app-loader>
@@ -27,12 +20,12 @@
 
 <!-- ===== TABLE ====== -->
 <div class="table" *ngIf="!isLoading && containerTypeError.length === 0">
-    <p-table #dt1 [value]="containerType" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['RawMaterial']">
+    <p-table #dt1 [value]="containerType" [tableStyle]="{ 'width': '100%' }" [globalFilterFields]="['Container']">
 
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between mb-2">
 
-                <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"  />
+                <input pInputText type="text" class="p-inputtext-lg pl-3 input__search" placeholder="Search"  (input)="onGlobalFilter(dt1, $event)"/>
                 <button pButton pRipple class="add__btn" (click)="showDialog()" *ngIf="insert"><i class='bx bx-plus'></i> <span>Add Item</span></button>
 
             </div>
@@ -41,7 +34,10 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Container Type</th>
+                <th pSortableColumn="Container">   
+                    Container Type
+                    <p-sortIcon field="Container" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

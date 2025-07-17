@@ -86,9 +86,18 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Location</th>
-                <th>Total </th>
-                <th>Capacity</th>
+                <th pSortableColumn="WarehouseLocation">   
+                    Location
+                    <p-sortIcon field="WarehouseLocation" />
+                </th>
+                <th pSortableColumn="TotalWeight">   
+                    Total
+                    <p-sortIcon field="TotalWeight" />
+                </th>
+                <th pSortableColumn="MaximumCapacity">   
+                    Capacity
+                    <p-sortIcon field="MaximumCapacity" />
+                </th>
                 <th *ngIf="edit"></th>
             </tr>
         </ng-template>

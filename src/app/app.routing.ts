@@ -61,6 +61,7 @@ import { PortOfDischarge } from "./pages/port-of-discharge/port-of-discharge.com
 import { UnloadingComponent } from "./pages/unloading/unloading.component";
 import { ImportationComponent } from "./pages/importation/importation.component";
 import { RawmatsParametersComponent } from "./pages/rawmats-parameters/rawmats-parameters.component";
+import { InventoryReportComponent } from "./pages/inventory-report/inventory-report.component";
 
 
 
@@ -148,7 +149,10 @@ const routes: Routes = [
     {
         path: 'stocking',
         component: StockingComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            'role': '5.3.1'
+        }
     },
     {
         path: 'contract-po', 
@@ -272,7 +276,15 @@ const routes: Routes = [
         component: WarehouseInventoryComponent, 
         canActivate: [AuthGuard, HasRoleGuard],
         data: {
-            role: '2.5.1'
+            role: '2.6.1'
+        }
+    },
+    {
+        path: 'inventory-report', 
+        component: InventoryReportComponent, 
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            role: '5.2.1'
         }
     },
     {
@@ -366,46 +378,46 @@ const routes: Routes = [
             'role': '2.10.1'
         }
     },
-    {
-        path: 'indentor', 
-        component: IndentorComponent, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'weighing-transaction', 
-        component: WeighingTransactionComponent, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'weighing-transaction-detail', 
-        component: WeighingTransactionDetailsComponent, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'shipping-transaction', 
-        component: ShippingTransaction, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'shipping-document', 
-        component: ShippingDocumentComponent, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'dispatcher', 
-        component: DispatcherComponent, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'checker-type', 
-        component: CheckerType, 
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'weigher', 
-        component: WeigherComponent, 
-        canActivate: [AuthGuard]
-    },
+    // {
+    //     path: 'indentor', 
+    //     component: IndentorComponent, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'weighing-transaction', 
+    //     component: WeighingTransactionComponent, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'weighing-transaction-detail', 
+    //     component: WeighingTransactionDetailsComponent, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'shipping-transaction', 
+    //     component: ShippingTransaction, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'shipping-document', 
+    //     component: ShippingDocumentComponent, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'dispatcher', 
+    //     component: DispatcherComponent, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'checker-type', 
+    //     component: CheckerType, 
+    //     canActivate: [AuthGuard]
+    // },
+    // {
+    //     path: 'weigher', 
+    //     component: WeigherComponent, 
+    //     canActivate: [AuthGuard]
+    // },
     {
         path: 'bank', 
         component: BankComponent, 

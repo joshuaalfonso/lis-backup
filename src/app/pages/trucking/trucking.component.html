@@ -54,8 +54,14 @@
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>#</th>
-                <th>Trucking Name</th>
-                <th>Contact Person</th>
+                <th pSortableColumn="TruckingName" >   
+                    Trucking Name
+                    <p-sortIcon field="TruckingName" />
+                </th>
+                <th pSortableColumn="ContactPerson" >   
+                    Contact Person
+                    <p-sortIcon field="ContactPerson" />
+                </th>
                 <th>Contact Number</th>
                 <th></th>
             </tr>

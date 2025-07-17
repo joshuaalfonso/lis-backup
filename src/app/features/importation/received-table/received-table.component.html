@@ -11,58 +11,72 @@
     >
         <ng-template pTemplate="header">
             <tr class="thead">
-                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
-                    MBL
+                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0" pSortableColumn="MBL">
+                    MBL <p-sortIcon field="MBL" />
                 </th>
-                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
-                    BL
+                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0" pSortableColumn="BL">
+                    BL  <p-sortIcon field="BL" />
                 </th>
-                <th>Shipping Line</th>
-                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
-                    No Of Truck
+                <th pSortableColumn="ShippingLine">   
+                    Shipping Line
+                    <p-sortIcon field="ShippingLine" />
                 </th>
-                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
-                    No Of Container
+                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0" pSortableColumn="NoOfTruck">
+                    No Of Truck <p-sortIcon field="NoOfTruck" />
                 </th>
-                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0" pSortableColumn="NoOfContainer">
+                    No Of Container <p-sortIcon field="NoOfContainer" />
+                </th>
+                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0" >
                     Container Type
                 </th>
-                <th>
+                <th pSortableColumn="RawMaterial">   
                     Raw Material
+                    <p-sortIcon field="RawMaterial" />
                 </th>
-                <th>
+                <th pSortableColumn="Supplier">   
                     Supplier
+                    <p-sortIcon field="Supplier" />
                 </th>
-                <th>
+                <th pSortableColumn="PortOfDischarge">   
                     Port Of Discharge
+                    <p-sortIcon field="PortOfDischarge" />
                 </th>
-                <th>
+                <th pSortableColumn="Broker">   
                     Broker
+                    <p-sortIcon field="Broker" />
                 </th>
-                <th>
+                <th pSortableColumn="ATA.date">   
                     ATA
+                    <p-sortIcon field="ATA.date" />
                 </th>
-                <th>
+                <th pSortableColumn="StorageLastFreeDate.date">   
                     Storage (LFD)
+                    <p-sortIcon field="StorageLastFreeDate.date" />
                 </th>
-            
-                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
+                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0" pSortableColumn="Balance_Truck">   
                     Balance at Port(Truck)
+                    <p-sortIcon field="Balance_Truck" />
                 </th>
-                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0" pSortableColumn="Balance_Container">
                     Balance at Port(Container)
-                </th>
-                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                    <p-sortIcon field="Balance_Container" />
+                </th> 
+                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0"  pSortableColumn="Pulled_Out">
                     Total Pulled Out
+                    <p-sortIcon field="Pulled_Out" />
                 </th>
-                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
+                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0" pSortableColumn="Withdrawn">
                     Withdrawn
+                    <p-sortIcon field="Withdrawn" />
                 </th>
-                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
+                <th *ngIf="selectedPackaging === 2 || selectedPackaging == 0" pSortableColumn="Unloaded_Truck">
                     Unloaded Truck
-                </th>
-                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                    <p-sortIcon field="Unloaded_Truck" />
+                </th> 
+                <th *ngIf="selectedPackaging === 1 || selectedPackaging == 0" pSortableColumn="Unloaded_Container">
                     Unloaded Container
+                    <p-sortIcon field="Unloaded_Container" />
                 </th>
             </tr>
         </ng-template>
@@ -123,19 +137,19 @@
                 <td data-title="DetentionDate" *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
                     {{ row.Balance_Truck == 0 ? '-' : row.Balance_Truck }}
                 </td>
-                <td data-title="DetentionDate" *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                <td data-title="Balance Container" *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
                     {{ row.Balance_Container == 0 ? '-' : row.Balance_Container }}
                 </td>
-                <td data-title="DetentionDate" *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                <td data-title="Pulled Out" *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
                     {{ row.Pulled_Out == 0 ? '-' : row.Pulled_Out }}
                 </td>
                 <td data-title="DetentionDate" *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
-                    {{ row.Unloaded_Truck == 0 ? '-' : row.Withdrawn}}
+                    {{ row.Withdrawn == 0 ? '-' : row.Withdrawn}}
                 </td>
-                <td data-title="DetentionDate" *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
+                <td data-title="Unloaded Truck" *ngIf="selectedPackaging === 2 || selectedPackaging == 0">
                     {{ row.Unloaded_Truck == 0 ? '-' : row.Unloaded_Truck}}
                 </td>
-                <td data-title="DetentionDate" *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
+                <td data-title="Unloaded Container" *ngIf="selectedPackaging === 1 || selectedPackaging == 0">
                     {{ row.Unloaded_Container == 0 ? '-' : row.Unloaded_Container }}
                 </td>
             </tr>
