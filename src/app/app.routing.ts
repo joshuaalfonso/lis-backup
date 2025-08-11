@@ -20,18 +20,10 @@ import { SalesAgentComponent } from "./sales-agent/sales-agent.component";
 import { ContainerTypeComponent } from "./pages/container-type/container-type.component";
 import { ContractPerformaComponent } from "./contract-performa/contract-performa.component";
 import { DriverComponent } from "./pages/driver/driver.component";
-import { IndentorComponent } from "./indentor/indentor.component";
-import { WeighingTransactionComponent } from "./weighing-transaction/weighing.component";
 import { ProductionOutputComponent } from "./production-output/production-output.component";
-import { ShippingTransaction } from "./shipping-transaction/shipping-transaction.component";
-import { ShippingDocumentComponent } from "./shipping-document/shipping-document.component";
-import { WeighingTransactionDetailsComponent } from "./weighing-transaction-details/weighing-transaction-details.component";
 import { UnloadingTransactionComponent } from "./unloading-transaction/unloading-transaction.component";
 import { AddDeliveryComponent } from "./delivery-add/add-delivery.component";
 import { BinloadingComponent } from "./binload/binload.component";
-import { DispatcherComponent } from "./dispatcher/dispatcher.component";
-import { CheckerType } from "./checker-type/checker-type.component";
-import { WeigherComponent } from "./weigher/weigher.component";
 import { WarehouseInventoryComponent } from "./rm-warehouse-inventory/warehouse-inventory.component";
 import { BankComponent } from "./pages/bank/bank.component";
 import { RawMatsPOComponent } from "./rawmats-po/rawmats-po.component";
@@ -46,7 +38,6 @@ import { SecurityComponent } from "./features/profile-settings/security/security
 import { RawmatsInspectionComponent } from "./lab/rawmats-inspection/rawmats-inspection.component";
 import { SystemLogsComponent } from "./pages/system-logs/system-logs.component";
 import { UnloadingDetailComponent } from "./unloading-detail/unloading-detail.component";
-import { TransferDetailComponent } from "./transfer-detail/transfer-detail.component";
 import { StockingComponent } from "./pages/stocking/stocking.component";
 import { RawMaterialInventoryComponent } from "./pages/raw-material-inventory/raw-material-inventory.component";
 import { WarehouseComponent } from "./pages/warehouse/warehouse.component";
@@ -62,6 +53,7 @@ import { UnloadingComponent } from "./pages/unloading/unloading.component";
 import { ImportationComponent } from "./pages/importation/importation.component";
 import { RawmatsParametersComponent } from "./pages/rawmats-parameters/rawmats-parameters.component";
 import { InventoryReportComponent } from "./pages/inventory-report/inventory-report.component";
+import { RawMaterialStandardComponent } from "./pages/raw-material-standard/raw-material-standard.component";
 
 
 
@@ -269,7 +261,10 @@ const routes: Routes = [
     {
         path: 'rawmats-inspection', 
         component: RawmatsInspectionComponent, 
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            role: '3.6.1'
+        }
     },
     {
         path: 'warehouse-inventory', 
@@ -490,6 +485,14 @@ const routes: Routes = [
         // data: {
         //     'role': '5.1'
         // }
+    },
+    {
+        path: 'raw-material-standard',
+        component: RawMaterialStandardComponent,
+        canActivate: [AuthGuard, HasRoleGuard],
+        data: {
+            role: '3.6.1'
+        }
     },
     {
         path: 'login', 

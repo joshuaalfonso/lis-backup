@@ -162,8 +162,21 @@ export class ImportationComponent implements OnInit, OnDestroy {
             .subscribe(
                 response => {
                     this.isLoading = false;
-                    this.contract = response;
-                    // console.log(this.contract)
+
+                    this.contract = response.map(item => {
+                        let fromShipmentPeriodStr = item.FromShipmentPeriod?.date || '';
+                        const formattedFromShipmentPeriod = fromShipmentPeriodStr.split(" ")[0];
+
+                        let createdAtStr = item.created_at?.date || '';
+                        const formattedCreatedAt = createdAtStr.split(" ")[0];
+
+                        return {
+                            ...item,
+                            FormattedFromShipmentPeriod: new Date(formattedFromShipmentPeriod),
+                            FormattedCreatedAt: new Date(formattedCreatedAt)
+                        }
+                    })
+
                 },
                 err => {
                     this.isLoading = false

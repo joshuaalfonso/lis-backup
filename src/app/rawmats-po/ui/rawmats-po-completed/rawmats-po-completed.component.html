@@ -35,10 +35,20 @@
                 <th pSortableColumn="PONo">   
                     PO #
                     <p-sortIcon field="PONo" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedPODate" 
+                        display="menu" 
+                    />
                 </th>
                 <th pSortableColumn="DeliveryDate">   
                     Delivery Date
                     <p-sortIcon field="DeliveryDate" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedDeliveryDate" 
+                        display="menu" 
+                    />
                 </th>
                 <th pSortableColumn="PRNumber">   
                     PR #
@@ -47,6 +57,37 @@
                 <th pSortableColumn="RawMaterial">   
                     Raw Material
                     <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterial" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Trucking Picker</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterial" 
+                                optionValue="RawMaterial"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th>Progress</th>
                 <th>   

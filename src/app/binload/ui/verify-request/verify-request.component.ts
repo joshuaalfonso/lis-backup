@@ -224,6 +224,16 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
           });
           this.visible = false;
 
+        } else if( response === 2) {
+
+          this.MessageService.add({ 
+              severity: 'success', 
+              summary: 'Success', 
+              detail: 'Successfully verified!', 
+              life: 3000 
+          });
+          this.visible = false;
+
         } 
         
       },

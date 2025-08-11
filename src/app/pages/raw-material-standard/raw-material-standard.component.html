@@ -1,0 +1,26 @@
+
+
+
+
+
+<app-content-header [title]="'Raw Material Standard'" />
+
+
+
+<app-raw-material-standard-table 
+    [rawMaterialStandard]="rawMaterialStandard"
+    [isLoading]="isLoading"
+    [errorMessage]="errorMessage"
+    (showDialog)="showDialog($event)"
+/>
+
+
+<app-create-edit-standard  
+    [rawMaterials]="rawMaterials"
+    [parameters]="parameters"
+    [visible]="visible"
+    [selectedRow]="selectedRow"
+    [userID]="userID"
+    (closeDialog)="closeDialog()"
+    (getRawMaterialStandard)="getRawMaterialStandard()"
+/>

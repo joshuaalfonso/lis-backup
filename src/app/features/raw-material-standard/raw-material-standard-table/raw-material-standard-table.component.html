@@ -1,0 +1,144 @@
+
+<div class="text-center my-3" *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
+
+<p-messages 
+    [(value)]="errorMessage" 
+    [enableService]="false" 
+    [closable]="false"
+    *ngIf="errorMessage" 
+/>
+
+<!-- {{ onFilterParameters() | json }}  -->
+
+<div 
+    class="table" 
+    *ngIf="!isLoading && errorMessage.length == 0"
+>
+
+    <p-table 
+        #dt1 
+        [value]="rawMaterialStandard" 
+        [tableStyle]="{ 'width': '100%' }" 
+        [globalFilterFields]="['RawMaterial', 'Category']"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        responsiveLayout="stack" 
+        [breakpoint]="'1100px'" 
+    >
+
+        <ng-template pTemplate="caption">
+
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                />
+                    <!-- (input)="onGlobalFilter(dt1, $event)" -->
+
+                <button 
+                    pButton 
+                    pRipple 
+                    class="add__btn" 
+                    (click)="showDialog.emit()"
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Create</span>
+                </button>
+
+            </div>
+
+          
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr class="thead">
+                <th>#</th>
+                <th pSortableColumn="RawMaterial">   
+                    Raw Material
+                    <p-sortIcon field="RawMaterial" />
+                </th>
+                <th>   
+                    Standard/s
+                </th>
+            
+              
+                <!-- <th *ngIf="edit"></th> -->
+                <th>Edit</th>
+            </tr>
+        </ng-template>
+      
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr  *ngIf="!isLoading">
+                <td>  
+                    <span class="p-column-title">#</span> 
+                    {{ rowIndex + 1 }} 
+                </td>
+                <td>
+                    <span class="p-column-title">Raw Material</span> 
+                    {{ row.RawMaterial }}
+                </td>
+                <td>
+                    <span class="p-column-title">Standard</span> 
+                    {{ getParamsName(row.StandardDetail) }}
+                </td>
+             
+
+                <!-- <td data-title="Actions" *ngIf="edit"> -->
+                <td data-title="Actions">
+
+                    <span class="p-column-title"></span> 
+
+                    <i 
+                        class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" 
+                        (click)="action.toggle($event)"
+                    ></i>
+
+
+                </td>
+
+                <p-overlayPanel #action>
+
+                    <div class="actions-overlay">
+                        <!-- <p (click)="showDialog(row)"> -->
+                        <p (click)="showDialog.emit(row)">
+                            <svg  width="15px" height="15px">
+                                <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
+                            </svg>
+                            Edit
+                        </p>
+                    </div>
+                </p-overlayPanel>
+                
+            </tr>
+        </ng-template>
+
+
+    </p-table>
+
+</div>
+
+
+
+<!-- <p-dropdown 
+    [options]="parameters" 
+    [(ngModel)]="row.ParameterID" 
+    [ngModelOptions]="{standalone: true}" 
+    optionLabel="Parameter" 
+    placeholder="select" 
+    appendTo="body"
+    optionValue="ParameterID"
+    [showClear]="true"
+    (ngModelChange)="onSelectParameter($event, rowIndex)"
+/> -->
+
+
+
+
+
+

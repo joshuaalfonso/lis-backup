@@ -231,7 +231,7 @@ export class RawmatsInspectionFormComponent implements OnInit, OnDestroy {
       ParameterResultID: selectedParameterResultID
     };
     
-    // console.log(this.analysisInformation);
+    console.log(parameterObject);
     
   }
 

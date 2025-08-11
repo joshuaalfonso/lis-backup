@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {  FormControl, FormGroup, Validators } from "@angular/forms";
 import { RawMatsPOService } from "./rawmats-po.service";
 import {  Subscription, take } from "rxjs";
@@ -19,7 +19,7 @@ import { TruckService } from "../pages/truck/truck.service";
     templateUrl: 'rawmats-po.component.html',
     styleUrls: ['rawmats-po.component.css']
 })
-export class RawMatsPOComponent implements OnInit{
+export class RawMatsPOComponent implements OnInit, OnDestroy{
 
     rawMatsPO: any[] = [];
     isLoading: boolean = false;
@@ -103,6 +103,10 @@ export class RawMatsPOComponent implements OnInit{
         this.logRawMatsPOView();
     }
 
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
+
     getUserAccess(UserID: string) {
         this.subscription.add(
             this.UsersService.getUserAccess(UserID).subscribe(
@@ -148,8 +152,23 @@ export class RawMatsPOComponent implements OnInit{
             this.subscription.add(
                 observable.subscribe(
                     response => {
-                        this.rawMatsPO = response;
                         this.isLoading = false;
+
+                        this.rawMatsPO =  response.map((item: any) => {
+                            
+                            let PODateStr = item.PODate?.date || '';
+                            const formattedPODate = PODateStr.split(" ")[0];
+
+                            let DeliveryDateStr = item.DeliveryDate?.date || '';
+                            const formattedDeliveryDate = DeliveryDateStr.split(" ")[0];
+
+                            return {
+                                ...item,
+                                FormattedPODate: new Date(formattedPODate),
+                                FormattedDeliveryDate: new Date(formattedDeliveryDate)
+                            }
+                        })
+
                     },
                     error => {
                         this.isLoading = false;

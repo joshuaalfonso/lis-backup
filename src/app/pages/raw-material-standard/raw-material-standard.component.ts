@@ -1,19 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, take } from 'rxjs';
-import { RawMatsParametersService } from './rawmats-parameters.service';
+import { Component } from '@angular/core';
 import { Message } from 'primeng/api';
+import { Subscription, take } from 'rxjs';
+import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
 import { RawMatsInspectionService } from 'src/app/lab/rawmats-inspection/rawmats-inspection.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
+import { RawMaterialStandardService } from './raw-material-standard.service';
 
 @Component({
-  selector: 'app-rawmats-parameters',
-  templateUrl: './rawmats-parameters.component.html',
-  styleUrls: ['./rawmats-parameters.component.css']
+  selector: 'app-raw-material-standard',
+  templateUrl: './raw-material-standard.component.html',
+  styleUrls: ['./raw-material-standard.component.css']
 })
-export class RawmatsParametersComponent implements OnInit, OnDestroy{
+export class RawMaterialStandardComponent {
 
-  rawMaterials = [] = [];
+  rawMaterials: any[] = [];
+  rawMaterialStandard: any[] = [];
   isLoading: boolean = false;
   errorMessage: Message[] = [];
 
@@ -23,8 +24,12 @@ export class RawmatsParametersComponent implements OnInit, OnDestroy{
 
   userID!: string;
 
+  visible: boolean = false;
+
+  selectedRow: any;
+
   constructor(
-    private ramatsParametersService: RawMatsParametersService,
+    private rawMaterialStandardService: RawMaterialStandardService,
     private rawMaterialService: RawMaterialsService,
     private rawmatsInnspectionService: RawMatsInspectionService,
     private authService: AuthService
@@ -32,8 +37,9 @@ export class RawmatsParametersComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void { 
     this.getUser();
-    this.getRawMatsParams();
+    this.getRawMaterialList();
     this.getParameterList();
+    this.getRawMaterialStandard();
   }
 
   ngOnDestroy(): void {
@@ -48,7 +54,7 @@ export class RawmatsParametersComponent implements OnInit, OnDestroy{
     })
   }
 
-  getRawMatsParams() {
+  getRawMaterialList() {
     this.subsciprtions.add(
       this.rawMaterialService.getRawMatsData().subscribe(
         reponse => {
@@ -75,6 +81,30 @@ export class RawmatsParametersComponent implements OnInit, OnDestroy{
         }
       )
     )
+  }
+
+  getRawMaterialStandard() {
+    this.subsciprtions.add(
+      this.rawMaterialStandardService.getRawMaterialStandard().subscribe(
+        response => {
+          this.rawMaterialStandard = response;
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    )
+  }
+
+  showDialog(data = null) {
+    console.log(data)
+    this.visible = true;
+    this.selectedRow = data;
+  }
+
+  closeDialog() {
+    this.visible = false;
+    this.selectedRow = null;
   }
 
 }

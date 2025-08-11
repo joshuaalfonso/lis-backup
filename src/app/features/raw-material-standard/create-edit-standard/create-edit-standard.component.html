@@ -1,0 +1,133 @@
+
+
+
+<p-dialog 
+    header="Raw Material Standard" 
+    [modal]="true" 
+    [(visible)]="visible" 
+    [style]="{ width: '45rem' }"
+    [draggable]="false"
+    (onHide)="handleCloseDialog()"
+>
+
+    <form
+        [formGroup]="rawMaterialStandardForm" 
+        class="p-fluid flex flex-column gap-3" 
+        (ngSubmit)="onSubmit()"
+    >
+
+        <div class="flex flex-column gap-3">
+            <label 
+                for="rawMaterial" 
+                class="font-semibold"
+            >
+                Raw Material
+            </label>
+
+            <p-dropdown 
+                [options]="rawMaterials"  
+                placeholder="Select item" 
+                optionLabel="RawMaterial"
+                optionValue="RawMaterialID"  
+                inputId="float-label"
+                formControlName="RawMaterialID"
+                [showClear]="true"
+            ></p-dropdown>
+
+        </div>
+
+        <label 
+                for="rawMaterial" 
+                class="font-semibold"
+            >
+                Standard Details
+            </label>
+
+        <table 
+            class="w-full mb-3" 
+            style="table-layout: auto; border-collapse: separate; border-spacing: 10px;"
+        >
+            <tr>
+                <th>Parameters</th>
+                <th>Standard</th>
+                <th>Value</th>
+                <th></th>
+            </tr>
+
+            <tbody *ngFor="let row of standardDetails; let i = index">
+                <tr>
+                    <td [style]="{'width': '50%'}">
+                        <p-dropdown 
+                            [options]="parameters" 
+                            [(ngModel)]="row.ParameterID"
+                            [ngModelOptions]="{standalone: true}" 
+                            optionLabel="Parameter" 
+                            placeholder="select" 
+                            appendTo="body"
+                            optionValue="ParameterID"
+                            [showClear]="true"
+                            (ngModelChange)="onSelectParameter(row.ParameterID, i)"
+                            [styleClass]=" parameterError(row) ? 'border-1 border-red-300' : ''"
+                        />
+                    </td>
+                    <td>
+                        {{ row.OperatorName || '-' }}
+                    </td>
+                    <td>
+                        <p-inputNumber
+                            *ngIf="row.OperatorID !== 3"  
+                            [(ngModel)]="row.Value"  
+                            [ngModelOptions]="{standalone: true}" 
+                            [styleClass]=" parameterValueError(row) ? 'border-1 border-red-300 border-round' : ''"
+                        />
+
+                        <p-dropdown 
+                            [options]="positiveNegative" 
+                            [(ngModel)]="row.Value"
+                            [ngModelOptions]="{standalone: true}" 
+                            optionLabel="label" 
+                            placeholder="select" 
+                            appendTo="body"
+                            optionValue="value"
+                            [showClear]="true"
+                            *ngIf="row.OperatorID === 3"
+                        />
+
+                    </td>
+                    <td>
+                        <p-button 
+                            label="" 
+                            icon="pi pi-times" 
+                            styleClass="p-button-circle p-button-text bg-red-50 text-red-700" 
+                            [style]="{'background': 'var(--highlight-bg)'}"
+                            (click)="removeStandard(i)"
+                        />
+                    </td>
+                </tr>
+                
+            </tbody>
+
+
+            <tr>
+                <td>
+                    <p-button 
+                        label="" 
+                        icon="pi pi-plus" 
+                        styleClass="p-button-circle p-button-text" 
+                        [style]="{'background': 'var(--highlight-bg)'}"
+                        (onClick)="addStandard()" 
+                    />
+                </td>
+            </tr>
+
+        </table>
+    </form>
+
+
+    <div class="flex justify-content-end gap-2">
+        <!-- styleClass="p-button-rounded p-button-text" -->
+        <p-button label="Cancel" styleClass="p-button-rounded p-button-text" (onClick)="handleCloseDialog()" />
+        <p-button label="{{ selectedRow ? 'Apply changes' : 'Create' }}" type="button" (click)="onSubmit()"/>
+    </div>
+
+</p-dialog>

@@ -46,24 +46,177 @@
                 <th pFrozenColumn pSortableColumn="FromShipmentPeriod.date">
                     Contract #
                     <p-sortIcon field="row.FromShipmentPeriod.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedFromShipmentPeriod" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="RawMaterial">
-                    RawMaterial <p-sortIcon field="RawMaterial" />
+                    RawMaterial 
+                    <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterial" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Raw Material</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterial" 
+                                optionValue="RawMaterial"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="Served_Container">
                     Served <p-sortIcon field="Served_Container" />
                 </th>
-                <th>Packaging</th>
-                <th pSortableColumn="Supplier">
-                    Supplier <p-sortIcon field="Supplier" />
+                <th>
+                    Packaging
+                    <p-columnFilter 
+                        field="Packaging" 
+                        matchMode="equals" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Packaging Picker</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <!-- <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="packaging" 
+                                optionValue="PackagingID"
+                                optionLabel="Packaging"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.Packaging }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect> -->
+                            <p-dropdown 
+                                [ngModel]="value" 
+                                [options]="packaging" 
+                                optionValue="PackagingID"
+                                optionLabel="Packaging"
+                                (onChange)="filter($event.value)" 
+                                placeholder="Any"
+                            />
+                               
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
-                <th>Port Of Discharge</th>
+                <th pSortableColumn="Supplier">
+                    Supplier 
+                    <p-sortIcon field="Supplier" />
+                    <p-columnFilter 
+                        field="Supplier" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Supplier Picker</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="supplier" 
+                                optionValue="Supplier"
+                                optionLabel="Supplier"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.Supplier }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    Port Of Discharge
+                    <p-columnFilter 
+                        field="PortOfDischarge" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <!-- <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Por</span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="portOfDischarge" 
+                                optionValue="PortOfDischarge"
+                                optionLabel="PortOfDischarge"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.PortOfDischarge }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
                 <th pSortableColumn="CountryOfOrigin">
                     Country Of Origin <p-sortIcon field="CountryOfOrigin" />
                 </th>
                 <!-- <th >Status</th> -->
                 <th pFrozenColumn pSortableColumn="created_at.date">Created At 
                     <p-sortIcon field="created_at.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedCreatedAt" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th alignFrozen="right" pFrozenColumn *ngIf="edit"></th>
             </tr>
@@ -80,7 +233,8 @@
                 <td data-title="Contract No" pFrozenColumn >
                     <span class="">{{ row.ContractNo }}</span> 
                     <span class="sub-text">  
-                        {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }} 
+                        <!-- {{ getDate(row.FromShipmentPeriod) + ' - ' + getDate(row.ToShipmentPeriod) }}  -->
+                        {{ getFormattedDate(row.FromShipmentPeriod?.date)  + ' - ' + getFormattedDate(row.ToShipmentPeriod.date) }} 
                     </span>
                 </td>
                 <td data-title="RawMaterialID" class="white-space-nowrap">

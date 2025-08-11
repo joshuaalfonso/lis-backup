@@ -404,6 +404,44 @@ input {
     border-radius: 2px;
 }
 
+.p-inputwrapper {
+    font-size: var(--font-sm);
+}
+
+.p-column-filter-constraint {
+    padding: 10px;
+}
+
+.p-column-filter-buttonbar {
+    padding: 10px;
+}
+
+.p-multiselect-items-wrapper ul {
+    padding: 0;
+}
+
+/* padding: 6px 10px; */
+.p-multiselect-items-wrapper li {
+    font-size: var(--font-sm);
+}
+
+.p-column-filter-buttonbar button {
+    font-size: var(--font-xs);
+}
+
+.p-multiselect-filter-container input{
+    font-size: var(--font-xs);
+}
+
+.p-multiselect-label {
+    padding: 8px 6px;
+    font-size: var(--font-sm);
+}
+
+.p-column-filter-overlay span {
+    font-size: var(--font-sm);
+}
+
 @media screens and (min-width: 1024px) {
         
 }

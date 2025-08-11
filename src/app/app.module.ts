@@ -211,6 +211,9 @@ import { RawmatsParametersComponent } from './pages/rawmats-parameters/rawmats-p
 import { RawmatsParametersTableComponent } from './features/rawmats-parameters/rawmats-parameters-table/rawmats-parameters-table.component';
 import { CreateEditParamsComponent } from './features/rawmats-parameters/create-edit-params/create-edit-params.component';
 import { InventoryReportComponent } from './pages/inventory-report/inventory-report.component';
+import { RawMaterialStandardComponent } from './pages/raw-material-standard/raw-material-standard.component';
+import { RawMaterialStandardTableComponent } from './features/raw-material-standard/raw-material-standard-table/raw-material-standard-table.component';
+import { CreateEditStandardComponent } from './features/raw-material-standard/create-edit-standard/create-edit-standard.component';
 
 
 
@@ -324,7 +327,10 @@ import { InventoryReportComponent } from './pages/inventory-report/inventory-rep
     RawmatsParametersComponent,
     RawmatsParametersTableComponent,
     CreateEditParamsComponent,
-    InventoryReportComponent
+    InventoryReportComponent,
+    RawMaterialStandardComponent,
+    RawMaterialStandardTableComponent,
+    CreateEditStandardComponent
   ],
   imports: [
     BrowserModule,

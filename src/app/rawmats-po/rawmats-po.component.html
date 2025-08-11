@@ -28,6 +28,7 @@
 
 <app-rawmats-po-table 
     [rawMatsPO]="rawMatsPO" 
+    [rawMaterial]="rawMaterial" 
     [isLoading]="isLoading"
     [insert]="insert" 
     [edit]="edit"
@@ -38,6 +39,7 @@
 />
 
 <app-rawmats-po-completed 
+    [rawMaterial]="rawMaterial" 
     [rawMatsPO]="rawMatsPO" 
     [isLoading]="isLoading"
     *ngIf="tabValue == 2"

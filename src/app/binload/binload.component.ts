@@ -308,7 +308,16 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.subscription.add(
           this.BinloadService.getBinloadVerified().subscribe(
             response => {
-              this.binloadRequest = response;
+            //   this.binloadRequest = response;
+              this.binloadRequest = response.map((item: any) => {
+                    let requestDateStr = item.RequestDate?.date || '';
+                    const formattedRequestDate = requestDateStr ? new Date(requestDateStr.split("  ")[0]) : '';                     
+
+                    return {
+                        ...item,
+                        FormattedRequestDate: formattedRequestDate
+                    }
+                })
               this.isLoading = false;
             }, 
             // error => {
@@ -335,7 +344,15 @@ export class BinloadingComponent implements OnInit, OnDestroy {
         this.subscription.add(
             this.BinloadService.getBinloadRequest(this.UserID).subscribe(
                 response => {
-                    this.binloadRequest = response;
+                    this.binloadRequest = response.map((item: any) => {
+                        let requestDateStr = item.RequestDate?.date || '';
+                        const formattedRequestDate = requestDateStr ? new Date(requestDateStr.split("  ")[0]) : '';                     
+    
+                        return {
+                            ...item,
+                            FormattedRequestDate: formattedRequestDate
+                        }
+                    })
                     this.isLoading = false;
                 },
                 error => {

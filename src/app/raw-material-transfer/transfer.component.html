@@ -102,10 +102,44 @@
             <tr class="thead">
                 <th style="width: 5rem"></th>
                 <th pSortableColumn="RequestDate.date">
-                    Request Date <p-sortIcon field="RequestDate.date" />
+                    Request Date 
+                    <p-sortIcon field="RequestDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedRequestDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="RawMaterial">
                     Raw Material <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterialID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterials" 
+                                optionValue="RawMaterialID"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="RequestWeight">
                     Request Weight <p-sortIcon field="RequestWeight" />
@@ -380,6 +414,32 @@
                 <th pSortableColumn="RawMaterial">   
                     Raw Material
                     <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterialID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterials" 
+                                optionValue="RawMaterialID"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th *ngIf="value == 1" pSortableColumn="FromWarehouseLocation">   
                     Source
@@ -581,10 +641,43 @@
                 <th pSortableColumn="RequestDate.date">   
                     Request Date
                     <p-sortIcon field="RequestDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedRequestDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="RawMaterial">   
                     Raw Material
                     <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterialID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterials" 
+                                optionValue="RawMaterialID"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="FromWarehouseLocation">   
                     Source

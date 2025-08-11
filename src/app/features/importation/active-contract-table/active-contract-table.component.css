@@ -17,3 +17,8 @@ td {
     pointer-events: none;
     opacity: 0.33;
 }
+
+::ng-deep .p-dropdown-item {
+    padding: 6px 12px;
+    font-size: var(--font-sm);
+}

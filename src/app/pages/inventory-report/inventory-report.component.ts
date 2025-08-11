@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventoryReportService } from './inventory-report.service';
+import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
 
 
 @Component({
@@ -18,13 +19,17 @@ export class InventoryReportComponent implements OnInit, OnDestroy{
   dateFrom = new Date();
   dateTo = new Date();
 
+  rawMaterial: any[] = [];
+
 
   constructor(
-    private inventoryReportService: InventoryReportService
+    private inventoryReportService: InventoryReportService,
+    private rawMaterialService: RawMaterialsService
   ) {}
 
   ngOnInit(): void {
     this.getInventoryReport();
+    this.getRawMaterial();
   }
 
   ngOnDestroy(): void {
@@ -74,7 +79,17 @@ export class InventoryReportComponent implements OnInit, OnDestroy{
       this.getInventoryReport();
     }
 
-
   }
+
+  getRawMaterial() {
+    this.subscriptions.add(
+        this.rawMaterialService.getRawMatsData().subscribe(
+            (response) => {
+                this.rawMaterial = response;
+                // console.log(response)
+            }
+        )
+    )
+}
 
 }

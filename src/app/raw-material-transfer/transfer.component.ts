@@ -398,7 +398,18 @@ export class TransferComponent implements OnInit, OnDestroy {
             this.TransferService.getTransferRequest().subscribe(
                 response => {
                     this.isLoading = false;
-                    this.transferRequest = response;
+
+                    // console.log(response)
+                    this.transferRequest = response.map((item: any) => {
+                        const rawDateStr = item.RequestDate?.date;
+                        const requestDate = rawDateStr ? new Date(rawDateStr) : null;
+                        return {
+                            ...item,
+                            FormattedRequestDate:  requestDate ?? ''
+                        }
+                    })
+
+
                     this.paginatedCards = this.transferRequest.slice(this.first, this.first + this.rows);
                 }, 
                 err => {

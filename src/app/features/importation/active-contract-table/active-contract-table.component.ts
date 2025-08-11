@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ImportationService } from 'src/app/pages/importation/importation.service';
 import { Table } from 'primeng/table';
@@ -7,7 +7,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
     selector: 'app-active-contract-table',
     templateUrl: './active-contract-table.component.html',
-    styleUrls: ['./active-contract-table.component.css']
+    styleUrls: ['./active-contract-table.component.css'],
+    // encapsulation: ViewEncapsulation.None
 })
 export class ActiveContractTableComponent implements OnInit, OnDestroy{
 
@@ -43,6 +44,17 @@ export class ActiveContractTableComponent implements OnInit, OnDestroy{
     subscriptions: Subscription = new Subscription;
 
     position: string = 'center';
+    
+    packaging: any[] = [
+        {
+            PackagingID: 1,
+            Packaging: 'Containerized'
+        },
+        {
+            PackagingID: 2,
+            Packaging: 'Bulk'
+        }
+    ]
 
     constructor(
         private importationService: ImportationService,
@@ -51,7 +63,7 @@ export class ActiveContractTableComponent implements OnInit, OnDestroy{
     ) {}
 
     ngOnInit(): void {
-
+       
     }   
 
     ngOnDestroy(): void {
@@ -71,6 +83,10 @@ export class ActiveContractTableComponent implements OnInit, OnDestroy{
 
         return dateValue;
     }
+
+    getFormattedDate(date: Date | null): string {
+        return date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : 'no data';
+      }
 
     // contract overlay
     toggleContractOverlay(event: MouseEvent, overlay: any) {

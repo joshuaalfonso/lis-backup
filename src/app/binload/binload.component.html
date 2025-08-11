@@ -92,19 +92,104 @@
                 <th pSortableColumn="RequestDate.date">   
                     Request Date
                     <p-sortIcon field="RequestDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedRequestDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="PlantName">   
                     Plant
                     <p-sortIcon field="PlantName" />
+                    <p-columnFilter 
+                        field="PlantID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="plant" 
+                                optionValue="PlantID"
+                                optionLabel="PlantName"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.PlantName }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="RawMaterial">   
                     Raw Material
                     <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterialID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterial" 
+                                optionValue="RawMaterialID"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th>Request</th>
                 <th pSortableColumn="WarehouseLocation">   
                     Location
                     <p-sortIcon field="WarehouseLocation" />
+                    <p-columnFilter 
+                        field="WarehouseID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="warehouse" 
+                                optionValue="WarehouseID"
+                                optionLabel="Warehouse_Name"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.WarehouseLocation + ' - ' + option.Warehouse_Name }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="PlateNo">   
                     Plate #
@@ -114,7 +199,6 @@
                     Dispatcher
                     <p-sortIcon field="Name" />
                 </th>
-                <th>Dispatcher</th>
                 <th *ngIf="edit">Actions</th>
             </tr>
         </ng-template>

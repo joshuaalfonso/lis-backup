@@ -23,12 +23,13 @@ export interface ActiveContractList {
     SupplierAddress: string
     PortOfDischargeID: number
     PortOfDischarge: string
-    FromShipmentPeriod: FromShipmentPeriod
-    ToShipmentPeriod: ToShipmentPeriod
+    FromShipmentPeriod: DateObject
+    ToShipmentPeriod: DateObject
     CountryOfOrigin: string
     UnitPrice: number
     Status: string
     UserID: string
+    created_at: DateObject
 }
   
 export interface FromShipmentPeriod {
@@ -38,6 +39,12 @@ export interface FromShipmentPeriod {
 }
   
 export interface ToShipmentPeriod {
+    date: string
+    timezone_type: number
+    timezone: string
+}
+
+export interface DateObject {
     date: string
     timezone_type: number
     timezone: string

@@ -14,6 +14,7 @@ export class RawmatsPoTableComponent {
   @Input() insert: boolean = false;
   @Input() edit: boolean = false;
   @Input() rawMatsPOError: any[] = [];
+  @Input() rawMaterial: any[] = [];
   @Output() openModal = new EventEmitter<void>();
   @Output() poCompleted = new EventEmitter<void>();
 

@@ -77,6 +77,12 @@ input {
     padding: 7px 0;
 }
 
+/* :host ::ng-deep {
+    .p-column-filter-constraints {
+        height: .5rem;
+        background: red;
+    }
+} */
 
 :host ::ng-deep .p-dropdown {
     background: var(--surface-color);

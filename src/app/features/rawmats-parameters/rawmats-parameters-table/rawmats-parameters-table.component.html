@@ -10,6 +10,8 @@
     *ngIf="errorMessage" 
 />
 
+<!-- {{ onFilterParameters() | json }}  -->
+
 <div 
     class="table" 
     *ngIf="!isLoading && errorMessage.length == 0"
@@ -36,9 +38,18 @@
                     type="text" 
                     class="p-inputtext-lg pl-3 input__search" 
                     placeholder="Search" 
-                    />
+                />
                     <!-- (input)="onGlobalFilter(dt1, $event)" -->
 
+                <button 
+                    pButton 
+                    pRipple 
+                    class="add__btn" 
+                    (click)="showDialog()"
+                >
+                    <i class='bx bx-plus'></i> 
+                    <span>Create</span>
+                </button>
 
             </div>
 
@@ -52,10 +63,9 @@
                     Raw Material
                     <p-sortIcon field="RawMaterial" />
                 </th>
-                <th pSortableColumn="Category">   
-                    Category
-                    <p-sortIcon field="Category" />
-                </th>
+                <!-- <th>   
+                    Parameters
+                </th> -->
             
               
                 <!-- <th *ngIf="edit"></th> -->
@@ -73,10 +83,10 @@
                     <span class="p-column-title">Raw Material</span> 
                     {{ row.RawMaterial }}
                 </td>
-                <td>
+                <!-- <td>
                     <span class="p-column-title">Standard</span> 
                     {{ getParamsName(row.StandardDetail) }}
-                </td>
+                </td> -->
              
 
                 <!-- <td data-title="Actions" *ngIf="edit"> -->
@@ -95,7 +105,8 @@
                 <p-overlayPanel #action>
 
                     <div class="actions-overlay">
-                        <p (click)="showDialog()">
+                        <!-- <p (click)="showDialog(row)"> -->
+                        <p>
                             <svg  width="15px" height="15px">
                                 <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
                             </svg>
@@ -128,22 +139,56 @@
 
 
 <p-dialog 
-    header="Standard" 
+    header="Raw Material Standard" 
     [modal]="true" 
     [(visible)]="visible" 
     [style]="{ width: '45rem' }"
     (onHide)="closeDialog()"
 >
-    <span class="p-text-secondary block mb-5">Update your information.</span>
+    <!-- <span class="p-text-secondary block mb-5">{{ rawMaterialStandardForm.value.RawMaterial }}</span> -->
+
     <!-- <div class="flex align-items-center gap-3 mb-3">
         <label for="username" class="font-semibold w-6rem">Username</label>
         <input pInputText id="username" class="flex-auto" autocomplete="off" />
     </div> -->
 
-    <table 
-        class="w-full p-fluid mb-3" 
-        style="table-layout: auto; border-collapse: separate; border-spacing: 10px;"
+    <form
+        [formGroup]="rawMaterialStandardForm" 
+        class="p-fluid" 
+        (ngSubmit)="onSubmit()"
     >
+
+        <div class="flex flex-column gap-3">
+            <label 
+                for="rawMaterial" 
+                class="font-semibold"
+            >
+                Raw Material
+            </label>
+
+            <p-dropdown 
+                [options]="rawMaterials"  
+                placeholder="Select item" 
+                optionLabel="RawMaterial"
+                optionValue="RawMaterialID"  
+                inputId="float-label"
+                formControlName="RawMaterialID"
+                [showClear]="true"
+            ></p-dropdown>
+
+            <!-- <input 
+                pInputText 
+                id="rawMaterial" 
+                class="flex-auto" 
+                autocomplete="off" 
+                formControlName="RawMaterial"
+            /> -->
+        </div>
+
+        <table 
+            class="w-full mb-3" 
+            style="table-layout: auto; border-collapse: separate; border-spacing: 10px;"
+        >
         <tr>
             <th>Parameters</th>
             <th>Standard</th>
@@ -156,6 +201,7 @@
                     <p-dropdown 
                         [options]="parameters" 
                         [(ngModel)]="row.ParameterID"
+                        [ngModelOptions]="{standalone: true}" 
                         optionLabel="Parameter" 
                         placeholder="select" 
                         appendTo="body"
@@ -164,7 +210,10 @@
                     />
                 </td>
                 <td>
-                    <p-inputNumber  [(ngModel)]="row.StandardValue"/>
+                    <p-inputNumber  
+                        [(ngModel)]="row.Value"  
+                        [ngModelOptions]="{standalone: true}" 
+                    />
                 </td>
                 <td>
                     <p-button 
@@ -191,12 +240,14 @@
         </tr>
 
     </table>
+    </form>
 
 
     <div class="flex justify-content-end gap-2">
         <!-- styleClass="p-button-rounded p-button-text" -->
         <p-button label="Cancel" styleClass="p-button-rounded p-button-text" (onClick)="visible = false" />
-        <p-button label="Apply changes" (onClick)="visible = false" />
+        <p-button label="Apply changes" type="button" (click)="onSubmit()"/>
     </div>
 </p-dialog>
+
 

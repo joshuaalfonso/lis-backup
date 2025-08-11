@@ -74,7 +74,37 @@
                 <th>#</th>
                 <th pSortableColumn="Warehouse_Name">   
                     Warehouse
-                    <p-sortIcon field="Warehouse_Name" />
+                    <p-columnFilter 
+                        field="WarehouseLocation" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Trucking Picker</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="location" 
+                                optionValue="WarehouseLocation"
+                                optionLabel="WarehouseLocation"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.WarehouseLocation }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="TotalWeight">   
                     Total

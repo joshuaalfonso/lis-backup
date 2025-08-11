@@ -376,6 +376,10 @@ export class TruckComponent implements OnInit, OnDestroy{
         table.filterGlobal(inputValue, 'contains');
     }
 
+    onFilterChange(event: any) {
+        console.log(event)
+    }
+
 }
 
 interface ResponseData{

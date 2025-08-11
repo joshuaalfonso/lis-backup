@@ -301,20 +301,29 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
 
     onFilterTab(isTransactionID: number) {
         this.isLoading = true;
-            this.subscription.add(
-                this.UnloadingTransactionService.filterUnloadingTransaction({id: isTransactionID, checkerID: this.userID}).subscribe(
-                    response => {
-                        this.isLoading = false;
-                        this.unloadingTransaction = response;
-                        this.AllUnloadingTransaction = response;
-                        this.unloadingTransaction = this.applyFilter(this.isLoading, this.AllUnloadingTransaction)
-                    }, error => {
-                        console.log(error);
-                        this.isLoading = false;
-                        this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
-                    }
-                )
+        this.subscription.add(
+            this.UnloadingTransactionService.filterUnloadingTransaction({id: isTransactionID, checkerID: this.userID}).subscribe(
+                response => {
+                    this.isLoading = false;
+                    const data = response.map((item: any) => {
+                        let dateUnloadStr = item.DateUnload?.date || '';
+                        const formattedDateUnload = dateUnloadStr.split(" ")[0];
+                        return {    
+                            ...item,
+                            FormattedDateUnload: new Date(formattedDateUnload)
+                        }
+
+                    })
+                    this.unloadingTransaction = data;
+                    this.AllUnloadingTransaction = data;
+                    this.unloadingTransaction = this.applyFilter(this.isLoading, this.AllUnloadingTransaction)
+                }, error => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
+                }
             )
+        )
     }
 
     onSearchChange(term: string): void {
@@ -322,10 +331,11 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
           relativeTo: this.route,
           queryParams: { search: term },
           queryParamsHandling: 'merge'
-      });
+        });
     }
 
     applyFilter(isLoading: boolean, data: any[]): any[] {
+
         if (isLoading) return [];
     
         const search = this.searchValue?.toLowerCase().trim();
@@ -340,24 +350,25 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             val !== undefined &&
             val.toString().toLowerCase().includes(search)
           )
-      );
+        );
+        
     }
 
     onFilterUnloading() {
             
-            this.isLoading = true;
-            this.subscription.add(
-                this.UnloadingTransactionService.filterUnloadingTransaction({id: this.value, checkerID: this.userID}).subscribe(
-                    response => {
-                        this.isLoading = false;
-                        this.unloadingTransaction = response;
-                    }, error => {
-                        console.log(error);
-                        this.isLoading = false;
-                        this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
-                    }
-                )
+        this.isLoading = true;
+        this.subscription.add(
+            this.UnloadingTransactionService.filterUnloadingTransaction({id: this.value, checkerID: this.userID}).subscribe(
+                response => {
+                    this.isLoading = false;
+                    this.unloadingTransaction = response;
+                }, error => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.unloadingError = [{ severity: 'error', detail: 'There was an error  fetching data' }]
+                }
             )
+        )
 
     }
 

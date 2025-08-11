@@ -52,7 +52,7 @@
     <p-table #dt1 
         [value]="unloadingTransaction" 
         [tableStyle]="{ 'width': '100%' }" 
-        [globalFilterFields]="['PONo', 'MBL', 'RawMaterial', 'ContainerNumber', 'DrNumber', 'Supplier', 'CheckerName']" 
+        [globalFilterFields]="['PONo', 'MBL', 'RawMaterial', 'ContainerNumber', 'DrNumber', 'Supplier', 'CheckerName', 'Name']" 
         [scrollable]="true" 
         [paginator]="!isLoading"
         [rows]="10"
@@ -87,19 +87,107 @@
                 <th pSortableColumn="DateUnload.date">   
                     Date Unload
                     <p-sortIcon field="DateUnload.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedDateUnload" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="PONo" *ngIf="value == 1 || value == 3">   
                     P.O #
                     <p-sortIcon field="PONo" />
+                    <p-columnFilter 
+                        field="SupplierID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="localSupplier" 
+                                optionValue="SupplierID"
+                                optionLabel="Supplier"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.Supplier }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <!-- <th *ngIf="value == 1"> P.O # </th> -->
-                <th *ngIf="value == 2 || value == 3"> MBL </th>
+                <th *ngIf="value == 2 || value == 3"> 
+                    MBL
+                    <p-columnFilter 
+                        field="SupplierID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="supplier" 
+                                optionValue="SupplierID"
+                                optionLabel="Supplier"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.Supplier }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter> 
+                </th>
                 <th  *ngIf="value == 2"> Packaging  </th>
                 <th> Dr # </th>
                 <!-- <th> Raw Material </th> -->
                 <th pSortableColumn="RawMaterial">   
                     Raw Material
                     <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterial" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterial" 
+                                optionValue="RawMaterial"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
 
                 <th pSortableColumn="Weight">   
@@ -110,6 +198,32 @@
                 <th pSortableColumn="Warehouse_Name">   
                     Warehouse
                     <p-sortIcon field="Warehouse_Name" />
+                    <p-columnFilter 
+                        field="WarehouseID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="warehouse" 
+                                optionValue="WarehouseID"
+                                optionLabel="Warehouse_Name"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.WarehouseLocation + ' - ' + option.Warehouse_Name }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="Name">   
                     Checker

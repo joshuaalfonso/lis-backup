@@ -10,6 +10,8 @@ export class RawmatsPoCompletedComponent {
 
   @Input() rawMatsPO: any[] = [];
   @Input() isLoading: boolean = false;
+  @Input() rawMaterial: any[] = [];
+  
 
   onGlobalFilter(table: Table, event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;

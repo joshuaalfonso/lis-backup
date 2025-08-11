@@ -74,9 +74,45 @@
                     Plate No
                     <p-sortIcon field="PlateNo" />
                 </th>
-                <th pSortableColumn="TruckingName" >   
+                <!-- <th pSortableColumn="TruckingName" >   
                     Trucking
                     <p-sortIcon field="TruckingName" />
+                </th> -->
+                <th style="min-width:15rem">
+                    <div class="flex align-items-center">
+                        Trucking
+                        <p-columnFilter 
+                            field="TruckingName" 
+                            matchMode="in" 
+                            display="menu" 
+                            [showMatchModes]="false" 
+                            [showOperator]="false" 
+                            [showAddButton]="false"
+                            [showApplyButton]="false"
+                        >
+                            <ng-template pTemplate="header">
+                                <div class="px-3 pt-3 pb-0">
+                                    <span class="font-bold">Trucking Picker</span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-multiSelect 
+                                    [ngModel]="value" 
+                                    [options]="trucking" 
+                                    optionValue="TruckingName"
+                                    optionLabel="TruckingName"
+                                    placeholder="Select" 
+                                    (onChange)="filter($event.value)" 
+                                >
+                                    <ng-template let-option pTemplate="item">
+                                        <div class="inline-block vertical-align-middle">
+                                            <span class="ml-1 mt-1">{{ option.TruckingName }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </ng-template>
+                        </p-columnFilter>
+                    </div>
                 </th>
                 <th pSortableColumn="Description" >   
                     Description

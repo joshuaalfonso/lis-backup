@@ -8,19 +8,19 @@ import { environment } from "src/app/environments/environment";
 @Injectable({providedIn: 'root'})
 export class RawMatsParametersService {
 
-    baseUrl = environment.backend.baseURL;
+    // baseUrl = environment.backend.baseURL;
 
-    constructor(
-        private http: HttpClient
-    ){}
+    // constructor(
+    //     private http: HttpClient
+    // ){}
 
-    getRawMatsParams() {
-        return this.http.get<any>( this.baseUrl + '/project/lab/a_RawMaterialList.php')
-    }
+    // getRawMatsParams() {
+    //     return this.http.get<any>( this.baseUrl + '/project/lab/a_RawMaterialList.php')
+    // }
 
-    setParams(data: any[]) {
-        return this.http.post<any>( this.baseUrl + 'project/lab/b_SetParameters.php', data )
-    }
+    // setParams(data: any) {
+    //     return this.http.post<any>( this.baseUrl + 'project/lab/b_SetParameters.php', data )
+    // }
 
     // getData() {
     //     return this.http.get<any>( this.baseUrl + '/project/a_bank.php');
