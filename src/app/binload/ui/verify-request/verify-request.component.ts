@@ -85,7 +85,6 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
       'UserID': new FormControl(null),
     })
 
-
     if (this.row) {
       this.binloadVerifyForm.patchValue({
         BinloadRequestID: this.row.BinloadRequestID,
@@ -190,7 +189,6 @@ export class VerifyRequestComponent implements OnInit, OnDestroy{
   onSubmit() {
     console.log(this.binloadVerifyForm.value)
     // console.log(this.selectedStocks)
-
 
     const data = {
       BinloadRequestID: this.binloadVerifyForm.value.BinloadRequestID,
