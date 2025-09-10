@@ -4,6 +4,19 @@ import { Subscription } from 'rxjs';
 import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
 import { StockingService } from './stocking.service';
 
+
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
+
+interface ExportColumn {
+  title: string;
+  dataKey: string;
+}
+
+
 @Component({
   selector: 'app-stocking',
   templateUrl: './stocking.component.html',
@@ -16,6 +29,10 @@ export class StockingComponent implements OnInit, OnDestroy{
 
   subscriptions: Subscription = new Subscription;
 
+  cols: Column[] = [];
+
+  exportColumns: ExportColumn[] = [];
+
   constructor(
     private rawMaterialService: RawMaterialsService,
     private stockingService: StockingService
@@ -24,6 +41,17 @@ export class StockingComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
 
     this.getRawMaterials();
+
+    this.cols = [
+      { field: 'RawMaterial', header: 'Raw Material' },
+      { field: 'TotalQty', header: 'Actual Quantity' },
+      { field: 'TotalWeight', header: 'Actual Weight' },
+      { field: 'TotalQtyVerify', header: 'Verified Quantity' },
+      { field: 'TotalWeightVerify', header: 'Verified Weight' },
+    ];
+
+    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+
   }
 
   ngOnDestroy(): void {

@@ -32,14 +32,34 @@
     *ngIf="warehouseInventoryError" 
 />
 
+
 <!-- ======= TABLE ======= -->
-<div class="table" *ngIf="value === 1 && !isLoading && warehouseInventoryError.length === 0">
+<div class="table" *ngIf="value === 1 && !isLoading ">
+
     <p-table  
         #dt1 
         [value]="rawMatsInventory"  
         [tableStyle]="{ 'width': '100%'}" 
         [globalFilterFields]="['RawMaterial', 'InventoryDate.date']" 
+        [columns]="cols" 
+        [exportHeader]="'customExportHeader'" 
     >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between mb-2">
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn p-button-info" 
+                        (click)="dt1.exportCSV()"
+                        styleClass="p-button-success"
+                        >
+                        <i class='bx bx-file text-2xl'></i> 
+                    </button>
+
+
+            </div>
+        </ng-template>
         <ng-template pTemplate="header">
             <tr class="thead">
                 <th>Inventory Date</th>

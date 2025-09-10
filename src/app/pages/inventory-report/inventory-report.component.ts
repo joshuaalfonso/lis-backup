@@ -4,11 +4,25 @@ import { InventoryReportService } from './inventory-report.service';
 import { RawMaterialsService } from 'src/app/raw-materials/raw-materials.service';
 
 
+
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
+
+interface ExportColumn {
+  title: string;
+  dataKey: string;
+}
+
 @Component({
   selector: 'app-inventory-report',
   templateUrl: './inventory-report.component.html',
   styleUrls: ['./inventory-report.component.css']
 })
+
+
 export class InventoryReportComponent implements OnInit, OnDestroy{
 
   inventory: any[] = [];
@@ -21,6 +35,9 @@ export class InventoryReportComponent implements OnInit, OnDestroy{
 
   rawMaterial: any[] = [];
 
+  cols: Column[] = [];
+
+  exportColumns: ExportColumn[] = [];
 
   constructor(
     private inventoryReportService: InventoryReportService,
@@ -30,6 +47,17 @@ export class InventoryReportComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.getInventoryReport();
     this.getRawMaterial();
+
+
+    this.cols = [
+      { field: 'RawMaterial', header: 'Raw Material' },
+      { field: 'Category', header: 'Category' },
+      { field: 'Unloading_Weight', header: 'Unloading Weight' },
+      { field: 'Binload_Weight', header: 'Binload Weight' },
+      { field: 'RawMaterialStock', header: 'RawMaterial Stock' },
+    ];
+
+    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
   }
 
   ngOnDestroy(): void {
@@ -42,7 +70,7 @@ export class InventoryReportComponent implements OnInit, OnDestroy{
       this.inventoryReportService.getRawMaterialInventoryReport(this.formatDate(this.dateFrom), this.formatDate(this.dateTo)).subscribe(
       // this.inventoryReportService.getRawMaterialInventoryReport(this.dateFrom.toLocaleString(),this.dateTo.toLocaleString()).subscribe(
         response => {
-          console.log(response);
+          // console.log(response);
           this.inventory = response;
           this.isLoading = false;
         },

@@ -26,6 +26,8 @@
         [rowsPerPageOptions]="[5, 10, 20]"
         responsiveLayout="stack" 
         [breakpoint]="'1100px'" 
+        [columns]="cols" 
+        [exportHeader]="'customExportHeader'" 
     >
 
         <ng-template pTemplate="caption">
@@ -66,6 +68,17 @@
                         End date
                     </label>
                 </span>
+
+                <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn p-button-info" 
+                        (click)="dt1.exportCSV()"
+                        styleClass="p-button-success"
+                        >
+                        <i class='bx bx-file text-2xl'></i> 
+                    </button>
+
             </div>
 
           

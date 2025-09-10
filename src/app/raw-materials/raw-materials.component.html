@@ -15,17 +15,18 @@
     [insert]="insert"
     [edit]="edit"
     [stockView]="stockView"
+    [generateReport]="generateReport"
     (openDialog)="openDialog($event)"
     (getData)="getData()"
 />
 
-
 <!-- ======= MODAL FORM ======== -->
-
 <app-raw-materials-modal 
     [visible]="visible" 
     [selectedRawMaterial]="selectedRawMaterial"
     [userID]="userID"
+    [rawMaterialCategory]="rawMaterialCategory"
+    [UnitOfMeasure]="UnitOfMeasure"
     (getData)="getData()"
     (closeDialog)="closeDialog()"
 />

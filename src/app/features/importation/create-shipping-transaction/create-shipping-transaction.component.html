@@ -802,8 +802,9 @@
                 icon="pi pi-times" 
                 label="Cancel" 
                 styleClass="p-button-rounded p-button-text"
-                (click)="shippingDialogVisisble = false"
-            ></p-button>
+                (click)="closeShippingDialog.emit()"
+                ></p-button>
+                <!-- (click)="shippingDialogVisisble = false" -->
 
             <p-button 
                 type="submit"

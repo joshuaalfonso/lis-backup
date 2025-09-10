@@ -106,8 +106,8 @@ export class CreateShippingTransactionComponent implements OnChanges{
 
 
   ngOnChanges(): void {
-    if (this.row) {
-
+    if (this.row?.ShippingTransactionID && this.row?.ContractPerformaID) {
+      console.log(this.row.ShippingTransactionID, this.row?.ContractPerformaID)
       this.shippingTransactionForm.patchValue({
         // ContractPerformaID: this.row.ContractPerformaID,
         // ContractNo: this.row.ContractNo,
@@ -164,8 +164,24 @@ export class CreateShippingTransactionComponent implements OnChanges{
         Remarks: this.row.Remarks || null,
         UserID: this.row.UserID,
       })
-    } else {
-      this.shippingTransactionForm.reset();
+    } 
+    
+    else if (this.row?.ContractPerformaID && !this.row?.ShippingTransactionID) {
+      this.shippingTransactionForm.patchValue({
+        ContractPerformaID: this.row.ContractPerformaID,
+        ContractNo: this.row.ContractNo,
+        RawMaterialID: this.row.RawMaterialID,
+        SupplierID: this.row.SupplierID,
+        SupplierAddress: this.row.SupplierAddress,
+        Packaging: this.row.Packaging
+      })
+    }
+    
+    else {
+      this.shippingTransactionForm.reset({
+        ShippingTransactionID: 0
+      });
+      // console.log(this.shippingTransactionForm.value)
     }
 
   }
@@ -231,6 +247,12 @@ export class CreateShippingTransactionComponent implements OnChanges{
     this.importationService.saveShippingTransaction(data).pipe(take(1)).subscribe(
       response => {
         if( response === 1) {
+          this.messageService.add({ 
+            severity: 'success', 
+            summary: 'Success', 
+            detail: 'Successfully created', 
+            life: 3000 
+          });
           this.getShippingTransaction.emit();
           this.closeShippingDialog.emit()
           this.isSubmitting = false;

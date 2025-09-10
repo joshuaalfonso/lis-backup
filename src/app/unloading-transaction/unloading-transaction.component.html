@@ -116,6 +116,7 @@
                                 optionLabel="Supplier"
                                 placeholder="Select" 
                                 (onChange)="filter($event.value)" 
+                                [autofocusFilter]="false"
                             >
                                 <ng-template let-option pTemplate="item">
                                     <div class="inline-block vertical-align-middle">
@@ -320,16 +321,6 @@
                     </button> --> 
 
                     <div class="flex gap-2">
-                        <!-- <button pButton pRipple 
-                            class="delete__btn" 
-                            class="p-button-primay p-2 border-round" 
-                            (click)="confirmVerify('center', row)"  
-                            pTooltip="Verify"
-                            tooltipPosition="top"
-                            *ngIf="row.Status == 1 && verifiedView"
-                        >
-                            <i class='pi pi-check' ></i>
-                        </button> -->
 
 
                         <!-- Add weight  -->
@@ -343,17 +334,6 @@
                             <i class='pi pi pi-plus' ></i>
                         </button>      
 
-                        <!-- edit weight -->
-                        <!-- <button pButton pRipple 
-                            class="p-button-success p-2 border-round" 
-                            (click)="onSelect(row, unloadingModal)"  
-                            pTooltip="Edit Weight"
-                            tooltipPosition="top"
-                            *ngIf="row.Status == 1"
-                        >
-                            <i class='pi pi pi-pencil' ></i>
-                        </button>   -->
-
                         <!-- get image -->
                         <button pButton pRipple 
                             class="p-button-info p-2 border-round" 
@@ -365,13 +345,6 @@
                             <i class='pi pi pi-image' ></i>
                         </button>   
 
-                        <!-- <app-edit-weight 
-                            *ngIf="row.Status == 1"
-                            [value]="value"
-                            [po]="po"
-                            [bl]="bl"
-                        /> -->
-                        
                         <button pButton pRipple 
                             class="p-button-primary p-2 border-round"  
                             pTooltip="Verify"

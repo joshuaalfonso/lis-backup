@@ -214,6 +214,8 @@ import { InventoryReportComponent } from './pages/inventory-report/inventory-rep
 import { RawMaterialStandardComponent } from './pages/raw-material-standard/raw-material-standard.component';
 import { RawMaterialStandardTableComponent } from './features/raw-material-standard/raw-material-standard-table/raw-material-standard-table.component';
 import { CreateEditStandardComponent } from './features/raw-material-standard/create-edit-standard/create-edit-standard.component';
+import { RawMaterialCategoryComponent } from './pages/raw-material-category/raw-material-category.component';
+import { RawMaterialPackagingComponent } from './pages/raw-material-packaging/raw-material-packaging.component';
 
 
 
@@ -330,7 +332,9 @@ import { CreateEditStandardComponent } from './features/raw-material-standard/cr
     InventoryReportComponent,
     RawMaterialStandardComponent,
     RawMaterialStandardTableComponent,
-    CreateEditStandardComponent
+    CreateEditStandardComponent,
+    RawMaterialCategoryComponent,
+    RawMaterialPackagingComponent
   ],
   imports: [
     BrowserModule,

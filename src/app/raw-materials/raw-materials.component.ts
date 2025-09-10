@@ -7,12 +7,18 @@ import { UsersService } from "../pages/users/users.service";
 import { AuthService } from "../auth/auth.service";
 import { RawMaterial } from "./raw-materials.model";
 import { SystemLogsService } from "../pages/system-logs/system-logs.service";
+import { RawMaterialCategoryService } from "../pages/raw-material-category/raw-material-category.service";
+import { RawMaterialCategoryList } from "../pages/raw-material-category/raw-material-category.model";
+import { RawMaterialPackagingService } from "../pages/raw-material-packaging/raw-material-packaging.service";
+import { RawMaterialPackagingList } from "../pages/raw-material-packaging/raw-material-packaging.model";
 
 @Component({
     selector: 'app-raw-materials',
     templateUrl: './raw-materials.component.html',
     styleUrls: ['./raw-materials.component.css']
 })
+
+
 export class RawMaterialsComponent implements OnInit, OnDestroy {
 
     rawMaterials: RawMaterial[] = [];
@@ -31,6 +37,9 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
     userID: string = '';
     token!: string | null;
 
+    rawMaterialCategory: RawMaterialCategoryList[] = [];
+    UnitOfMeasure: RawMaterialPackagingList[] = [];
+
     private subscription: Subscription = new Subscription();
 
     constructor( 
@@ -39,7 +48,9 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
         private ConfirmationService: ConfirmationService,
         private auth: AuthService,
         private UsersService: UsersService,
-        private SystemLogsService: SystemLogsService
+        private SystemLogsService: SystemLogsService,
+        private rawMaterialCategoryService: RawMaterialCategoryService,
+        private rawMaterialPackagingService: RawMaterialPackagingService
     ){}
 
     ngOnInit(): void {
@@ -58,7 +69,8 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
 
         this.getData();
         this.logRawMaterialView();
-
+        this.getRawMaterialCategory();
+        this.getUnitOfMeasure();
     }
 
     // ==== GET RAW MATERIALS DATA ====
@@ -87,7 +99,7 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
 
                     for (let i = 0; i < userRights.length; i++) {
                         switch (userRights[i].AccessRight.trim()) {
-                            case '2.1.1':
+                            case '2.1.1': 
                                 this.view = true;
                                 break;
                             case '2.1.2':
@@ -138,6 +150,37 @@ export class RawMaterialsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+    }
+
+    getRawMaterialCategory() {
+        this.subscription.add(
+            this.rawMaterialCategoryService.rawMaterialCategoryList().subscribe({
+
+                next: (response) => {
+                    this.rawMaterialCategory = response;
+                },
+
+                error: (error) => {
+                    console.error(error)
+                }
+
+            })
+        )
+    }
+
+    getUnitOfMeasure() {
+        this.subscription.add(
+            this.rawMaterialPackagingService.rawMaterialPackagingList().subscribe({
+
+                next: (response) => {
+                    this.UnitOfMeasure = response;
+                },
+
+                error: (error) => {
+                    console.error(error);
+                }
+            })
+        )
     }
 
     openDialog(rawMaterial: any) {

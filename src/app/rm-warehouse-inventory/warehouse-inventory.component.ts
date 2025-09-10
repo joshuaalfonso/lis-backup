@@ -5,7 +5,16 @@ import { SystemLogsService } from "../pages/system-logs/system-logs.service";
 import { AuthService } from "../auth/auth.service";
 import { Message } from "primeng/api";
 
-
+interface Column {
+    field: string;
+    header: string;
+    customExportHeader?: string;
+  }
+  
+  interface ExportColumn {
+    title: string;
+    dataKey: string;
+  }
 
 @Component({
     selector: 'app-warehouse-inventory',
@@ -30,6 +39,10 @@ export class WarehouseInventoryComponent implements OnInit, OnDestroy{
 
     private subscription: Subscription = new Subscription();
 
+    cols: Column[] = [];
+
+    exportColumns: ExportColumn[] = [];
+
     constructor(
         private WarehouseInventoryService: WarehouseInventoryService,
         private SystemLogsService: SystemLogsService,
@@ -41,6 +54,23 @@ export class WarehouseInventoryComponent implements OnInit, OnDestroy{
         this.getUser();
         this.getData();
         this.logWarehouseInventoryView();
+
+        this.cols = [
+            { field: 'FormattedInventoryDate', header: 'Date' },
+            { field: 'RawMaterial', header: 'Raw Material' },
+            { field: 'BeginQty', header: 'Begin Quantity' },
+            { field: 'BeginWeight', header: 'Begin Weight' },
+            { field: 'IncomingQty', header: 'Incoming Quantity' },
+            { field: 'IncomingWeight', header: 'Incoming Weight' },
+            { field: 'BinloadingQty', header: 'Outgoing Quantity' },
+            { field: 'BinloadingWeight', header: 'Outgoing Weight' },
+            { field: 'CondemQty', header: 'Condemned Quantity' },
+            { field: 'CondemWeight', header: 'Condemned Weight' },
+            { field: 'EndingQty', header: 'Ending Quantity' },
+            { field: 'EndingWeight', header: 'Ending Weight' },
+        ];
+      
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
 
     }
 
@@ -64,7 +94,9 @@ export class WarehouseInventoryComponent implements OnInit, OnDestroy{
             this.subscription.add(
                 this.WarehouseInventoryService.getWarehouseInventoryData().subscribe(
                     response => {
-                        this.rawMatsInventory = response;
+                        this.rawMatsInventory = response.map((item: any) => (
+                            {...item, FormattedInventoryDate: new Date(item.InventoryDate.date).toLocaleDateString()}
+                        ));
                         this.isLoading = false;
                     },
                     error => {

@@ -23,6 +23,8 @@ export class PulloutTableComponent implements OnInit, OnDestroy{
   @ViewChild(PulloutDialogComponent) pullOutDialogComp!: PulloutDialogComponent;
 
   trucking: any[] = [];
+  @Input() supplier: any[] = [];
+  @Input() broker: any[] = [];
 
   PullOutDetail: any[] = [];
 

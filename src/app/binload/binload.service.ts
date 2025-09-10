@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { environment } from "../environments/environment";
 import { catchError, throwError, tap, BehaviorSubject } from "rxjs";
+import { Uom } from "../raw-materials/raw-materials.model";
 
 @Injectable({providedIn: 'root'})
 export class BinloadService {
@@ -20,7 +21,7 @@ export class BinloadService {
         return this.http.get<any>( this.baseUrl + '/project/a_Binloading.php?id=' + UserID);
     }
     getBinloadUom() {
-        return this.http.get<any>( this.baseUrl + '/project/a_BinloadingUom.php');
+        return this.http.get<Uom[]>( this.baseUrl + '/project/a_BinloadingUom.php');
     }
 
     saveBinload(binloadOBJ: any) {

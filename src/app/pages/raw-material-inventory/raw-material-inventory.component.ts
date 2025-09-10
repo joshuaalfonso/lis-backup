@@ -12,7 +12,16 @@ import { AuthService } from "src/app/auth/auth.service";
 import { SystemLogsService } from "src/app/pages/system-logs/system-logs.service";
 
 
-
+interface Column {
+    field: string;
+    header: string;
+    customExportHeader?: string;
+  }
+  
+  interface ExportColumn {
+    title: string;
+    dataKey: string;
+  }
 
 @Component({
     selector: 'app-raw-material-inventory',
@@ -55,6 +64,10 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
 
     userID!: string;
 
+    cols: Column[] = [];
+
+    exportColumns: ExportColumn[] = [];
+
     private subscription: Subscription = new Subscription();
 
     constructor(
@@ -89,6 +102,23 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
             'EndingPrice': new FormControl(null)
         })
 
+        this.cols = [
+            { field: 'FormattedInventoryDate', header: 'Date' },
+            { field: 'RawMaterial', header: 'Raw Material' },
+            { field: 'BeginQty', header: 'Begin Quantity' },
+            { field: 'BeginWeight', header: 'Begin Weight' },
+            { field: 'IncomingQty', header: 'Incoming Quantity' },
+            { field: 'IncomingWeight', header: 'Incoming Weight' },
+            { field: 'BinloadingQty', header: 'Outgoing Quantity' },
+            { field: 'BinloadingWeight', header: 'Outgoing Weight' },
+            { field: 'CondemQty', header: 'Condemned Quantity' },
+            { field: 'CondemWeight', header: 'Condemned Weight' },
+            { field: 'EndingQty', header: 'Ending Quantity' },
+            { field: 'EndingWeight', header: 'Ending Weight' },
+        ];
+      
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+
         this.auth.user.subscribe(
             user => {
                 if (user) {
@@ -110,11 +140,11 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
                     let userRights = response;
 
                     for (let i = 0; i < userRights.length; i++) {
-                        switch (userRights[i].AccessRight) {
+                        switch (userRights[i].AccessRight.trim()) {
                             case 3.1:
                                 this.view = true;
                                 break;
-                            case 3.4:
+                            case '5.2.1':
                                 this.generateReport = true;
                                 break;
                             default:
@@ -156,7 +186,9 @@ export class RawMaterialInventoryComponent implements OnInit, OnDestroy{
             this.RawMaterialInventoryService.FilterData( this.formatDate(this.fromDate),  this.formatDate(this.toDate)).subscribe(
                 response => {
                     this.isLoading = false;
-                    this.inventory = response;
+                    this.inventory = response.map((item: any) => (
+                        {...item, FormattedInventoryDate: new Date(item.InventoryDate.date).toLocaleDateString()}
+                    ));
                     this.filterInventory = [...this.inventory];
                     // this.filterInventory = response;
                     // this.isReset = true;

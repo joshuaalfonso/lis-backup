@@ -29,6 +29,8 @@
         [paginator]="filteredWarehouses.length > 10 ? true : false"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
+        [columns]="cols" 
+        [exportHeader]="'customExportHeader'" 
     >
 
         <ng-template pTemplate="caption">
@@ -53,6 +55,17 @@
                         placeholder="Search" 
                         (input)="onGlobalFilter(dt1, $event)"
                     /> -->
+
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn p-button-info" 
+                        (click)="dt1.exportCSV()"
+                        styleClass="p-button-success"
+                        *ngIf="generateReport"
+                        >
+                        <i class='bx bx-file text-2xl'></i> 
+                    </button>
                 </div>
 
                 <button 

@@ -18,7 +18,11 @@ export class SailingTableComponent implements OnInit{
 
   @Output() showShippingDialog = new EventEmitter()
   @Output() onRemoveShipping = new EventEmitter()
-  @Output() confirmDeleteShippingTransaction = new EventEmitter()
+  @Output() confirmDeleteShippingTransaction = new EventEmitter();
+
+  @Input() rawMaterial: any[] = [];
+  @Input() portOfDischarge: any[] = [];
+  @Input() broker: any[] = [];
 
   position: string = 'center';
 

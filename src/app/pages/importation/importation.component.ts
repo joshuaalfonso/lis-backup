@@ -192,7 +192,21 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.importationService.getShippingTransactionFilter(this.statusValue, this.selectedContractID)
             .subscribe(response => {
-                this.allShippingTransactions = response;
+                this.allShippingTransactions = response.map((item: any) => ({
+                    ...item,
+                    FormattedETD: item.ETD?.date ? new Date(item.ETD.date) : null,
+                    FormattedETA: item.ETA?.date ? new Date(item.ETA.date) : null,
+                    FormattedATA: item.ATA?.date ? new Date(item.ATA.date) : null,
+                    FormattedAdvanceDocumentsReceived: item.AdvanceDocumentsReceived?.date ? new Date(item.AdvanceDocumentsReceived.date) : null,
+                    FormattedDateDocsReceivedByBroker: item.DateDocsReceivedByBroker?.date ? new Date(item.DateDocsReceivedByBroker.date) : null,
+                    FormattedStorageLastFreeDate: item.StorageLastFreeDate?.date ? new Date(item.StorageLastFreeDate.date) : null,
+                    FormattedDetentionDate: item.DetentionDate?.date ? new Date(item.DetentionDate.date) : null,
+                    FormattedDateofDischarge: item.DateofDischarge?.date ? new Date(item.DateofDischarge.date) : null,
+                    FormattedOriginalDocsAvailavilityDate: item.OriginalDocsAvailavilityDate?.date ? new Date(item.OriginalDocsAvailavilityDate.date) : null,
+                    FormattedLodgementDate: item.LodgementDate?.date ? new Date(item.LodgementDate.date) : null,
+                    FormattedGatepassRecieved: item.GatepassRecieved?.date ? new Date(item.GatepassRecieved.date) : null,
+                }));
+                // console.log(this.allShippingTransactions)
                 this.shippingTransaction = response;
                 this.shippingTransactionIsLoading = false;
                 this.shippingTransaction = this.applyFilter(this.shippingTransactionIsLoading, this.allShippingTransactions);
@@ -412,7 +426,7 @@ export class ImportationComponent implements OnInit, OnDestroy {
         this.selectedShippingRow = row || null;
         this.shippingDialogVisisble = true;
         // console.log(this.shippingDialogVisisble)
-        console.log(row);
+        // console.log(row);
         this.shippingDialogComp.maximize();
     }
 

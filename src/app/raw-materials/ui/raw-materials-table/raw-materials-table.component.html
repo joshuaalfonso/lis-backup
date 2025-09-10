@@ -25,20 +25,43 @@
         [rowsPerPageOptions]="[5, 10, 20]"
         responsiveLayout="stack" 
         [breakpoint]="'1100px'" 
+        [columns]="cols" 
+        [exportHeader]="'customExportHeader'" 
     >
 
         <ng-template pTemplate="caption">
 
             <div class="flex align-items-center justify-content-between mb-2">
 
-                <input 
-                    pInputText 
-                    type="text" 
-                    class="p-inputtext-lg pl-3 input__search" 
-                    placeholder="Search" 
-                    [(ngModel)]="value" 
-                    (input)="onGlobalFilter(dt1, $event)"
-                />
+                <div>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        class="p-inputtext-lg pl-3 input__search" 
+                        placeholder="Search" 
+                        [(ngModel)]="value" 
+                        (input)="onGlobalFilter(dt1, $event)"
+                    />
+
+                    <!-- <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn" 
+                        (click)="dt1.exportCSV()"
+                    >
+                        <i class='bx bx-file'></i> 
+                    </button> -->
+                    <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn p-button-info" 
+                        (click)="dt1.exportCSV()"
+                        styleClass="p-button-success"
+                        *ngIf="generateReport"
+                    >
+                        <i class='bx bx-file text-2xl'></i> 
+                    </button>
+                </div>
 
                 <button 
                     pButton 
@@ -89,11 +112,12 @@
                 </td>
                 <td>
                     <span class="p-column-title">Raw Material</span> 
-                    {{ row.RawMaterial }}
+                    {{ row.RawMaterial }} 
                 </td>
                 <td>
                     <span class="p-column-title">Category</span> 
-                    {{ row.Category }}
+                    {{ row.Category || '-'}} 
+                    <!-- {{ row.Packaging ? '(' + row.Packaging + ')' : ''  }} -->
                 </td>
                 <td *ngIf="stockView">
                     <span class="p-column-title">Quantity</span> 

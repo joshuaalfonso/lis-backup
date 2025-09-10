@@ -165,6 +165,9 @@
 
 
 <app-sailing-table
+    [rawMaterial]="rawMaterial"
+    [portOfDischarge]="portOfDischarge"
+    [broker]="broker"
     [shippingTransaction]="shippingTransaction"
     [shippingTransactionIsLoading]="shippingTransactionIsLoading"
     [edit]="edit"
@@ -177,6 +180,9 @@
 />
 
 <app-landed-table 
+    [rawMaterial]="rawMaterial"
+    [portOfDischarge]="portOfDischarge"
+    [broker]="broker"
     [shippingTransaction]="shippingTransaction"
     [shippingTransactionIsLoading]="shippingTransactionIsLoading"
     (showShippingDialog)="showShippingDialog($event)"
@@ -188,6 +194,8 @@
 />
 
 <app-pullout-table 
+    [supplier]="supplier"
+    [broker]="broker"
     [shippingTransaction]="shippingTransaction"
     [shippingTransactionIsLoading]="shippingTransactionIsLoading"
     (getShippingTransaction)="getShippingTransaction()"

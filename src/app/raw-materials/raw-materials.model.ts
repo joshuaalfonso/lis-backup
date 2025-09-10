@@ -10,3 +10,9 @@ export interface RawMaterial {
     Category: string, 
     UserID: string
 }
+
+
+export interface Uom {
+    BinloadUomID: number,
+    BinloadUom: string
+}

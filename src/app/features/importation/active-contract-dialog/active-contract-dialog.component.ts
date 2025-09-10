@@ -120,8 +120,12 @@ export class ActiveContractDialogComponent implements OnDestroy, OnChanges{
             return;
         } 
 
+        const supplierID = event.value;
+        const supplier = this.supplier.find((item) => item.SupplierID === supplierID);
+        console.log(supplier)
+
         this.contractPerformaform.patchValue({
-            SupplierAddress: event.value.Address
+            SupplierAddress: supplier.Address
         })
     }
 

@@ -17,6 +17,8 @@ export class SailingToLandedComponent implements OnChanges{
   @Output() closeLandedDialog = new EventEmitter;
   @Output() handeRemoveShipping = new EventEmitter;
 
+  isSubmitting: boolean = false;
+
   landedForm = new FormGroup({
     'ShippingTransactionID': new FormControl(0),
     'ATA': new FormControl(null as Date | null, Validators.required)
@@ -44,6 +46,8 @@ export class SailingToLandedComponent implements OnChanges{
       return;
     }
 
+    this.isSubmitting = true;
+
     const data = {
       ShippingTransactionID: this.selectedShippingID,
       ATA: this.landedForm.value.ATA?.toLocaleDateString() || null,
@@ -51,7 +55,7 @@ export class SailingToLandedComponent implements OnChanges{
 
     this.importationService.sailingToLanded(data).pipe(take(1)).subscribe(
       response => {
-        console.log(response)
+        this.isSubmitting = false;        
         if (response === 2) {
           this.messageService.add({
             severity: 'success', 
@@ -64,6 +68,7 @@ export class SailingToLandedComponent implements OnChanges{
         }
       },
       err => {
+        this.isSubmitting= false;
         console.log(err)
         this.messageService.add({
           severity: 'error', 

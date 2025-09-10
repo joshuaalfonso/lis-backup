@@ -42,6 +42,15 @@
                     (input)="onGlobalFilter(dt1, $event)"
                 /> -->
 
+                <input 
+                    pInputText 
+                    type="text" 
+                    class="p-inputtext-lg pl-3 input__search" 
+                    placeholder="Search" 
+                    [(ngModel)]="searchText"
+                    (input)="onSearchChange()"
+                />
+
                 <button 
                     pButton 
                     pRipple 
@@ -52,15 +61,6 @@
                     <i class='bx bx-plus'></i> 
                     <span>Add Item</span>
                 </button>
-
-                <input 
-                    pInputText 
-                    type="text" 
-                    class="p-inputtext-lg pl-3 input__search" 
-                    placeholder="Search" 
-                    [(ngModel)]="searchText"
-                    (input)="onSearchChange()"
-                />
 
                 <!-- <button (click)="applyFilter(2)">Add params</button> -->
 

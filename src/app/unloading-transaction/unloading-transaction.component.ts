@@ -404,7 +404,7 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
                     this.isLoading = false;
                     this.unloadingTransaction = response;
                     this.AllUnloadingTransaction = response;
-                    this.unloadingTransaction = this.applyFilter(this.isLoading, this.AllUnloadingTransaction)
+                    this.unloadingTransaction = this.applyFilter(this.isLoading, this.AllUnloadingTransaction || [])
                     
                 }, error => {
                     console.log(error);
@@ -687,6 +687,8 @@ export class UnloadingTransactionComponent implements OnInit, OnDestroy{
             Status:this.unloadingTransactionForm.value.Status,
             UserID: this.userID
         }
+
+        console.log(data)
  
         formData.append('data', JSON.stringify({data:data}));
 

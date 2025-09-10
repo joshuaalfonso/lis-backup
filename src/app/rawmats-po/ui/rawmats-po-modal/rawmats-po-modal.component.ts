@@ -138,7 +138,7 @@ export class RawmatsPoModalComponent implements OnChanges{
       data
     )
 
-    authObs.subscribe(response =>{
+    authObs.subscribe(response => {
       this.submitLoading = false;
 
       if( response === 1) {

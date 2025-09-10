@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CheckerService } from "./checker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription, take } from "rxjs";
+import { Observable, Subscription, debounceTime, distinctUntilChanged, switchMap, take } from "rxjs";
 import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { CheckerTypeService } from "../checker-type/checker-type.service";
@@ -63,7 +63,10 @@ export class CheckerComponent implements OnInit,OnDestroy{
         this.getData();
         this.getCheckerType();
         this.logCheckerkView();
+
+
     }
+
 
     getData() {
         this.isLoading = true;

@@ -25,11 +25,13 @@
         [rowsPerPageOptions]="[5, 10, 20]"
         responsiveLayout="stack" 
         [breakpoint]="'1100px'" 
+        [columns]="cols" 
+        [exportHeader]="'customExportHeader'" 
     >
 
         <ng-template pTemplate="caption">
 
-            <div class="flex align-items-center justify-content-between mb-2">
+            <div class="flex align-items-center  mb-2">
 
                 <input 
                     pInputText 
@@ -38,6 +40,16 @@
                     placeholder="Search" 
                     (input)="onGlobalFilter(dt1, $event)"
                 />
+
+                <button 
+                    pButton 
+                    pRipple 
+                    class="add__btn p-button-info" 
+                    (click)="dt1.exportCSV()"
+                    styleClass="p-button-success"
+                >
+                    <i class='bx bx-file text-2xl'></i> 
+                </button>
 
             </div>
 
@@ -55,9 +67,8 @@
                     Actual Stocking <p-sortIcon field="TotalWeight" />
                 </th>
                 <th pSortableColumn="TotalWeightVerify">   
-                    Actual Stocking <p-sortIcon field="TotalWeightVerify" />
+                    Verified Stocking <p-sortIcon field="TotalWeightVerify" />
                 </th>
-                
             </tr>
         </ng-template>
       

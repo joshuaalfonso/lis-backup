@@ -8,6 +8,17 @@ import { UsersService } from "src/app/pages/users/users.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { SystemLogsService } from "src/app/pages/system-logs/system-logs.service";
 
+interface Column {
+    field: string;
+    header: string;
+    customExportHeader?: string;
+  }
+  
+  interface ExportColumn {
+    title: string;
+    dataKey: string;
+  }
+
 
 @Component({
     selector: 'app-warehouse',
@@ -45,6 +56,10 @@ export class WarehouseComponent implements OnInit, OnDestroy{
 
     private subscription: Subscription = new Subscription();
 
+    cols: Column[] = [];
+
+    exportColumns: ExportColumn[] = [];
+
     constructor(
         private WarehouseService: WarehouseService,
         private MessageService: MessageService,
@@ -81,6 +96,17 @@ export class WarehouseComponent implements OnInit, OnDestroy{
         this.getData();
         this.getWarehouseLocation();
         this.logWarehouseView();
+
+
+        this.cols = [
+            { field: 'WarehouseLocation', header: 'Location' },
+            { field: 'Warehouse_Name', header: 'Warehouse' },
+            { field: 'TotalQuantity', header: 'Total Quantity' },
+            { field: 'TotalWeight', header: 'Total Weight' }
+          ];
+      
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+
     }
 
     getUserAccess(UserID: string) {
@@ -123,7 +149,14 @@ export class WarehouseComponent implements OnInit, OnDestroy{
         this.subscription.add(
             this.WarehouseService.getWarehouseData().subscribe( 
                 response => {
-                    this.warehouse = response;
+                    this.warehouse = response.map((item: any) => (
+                        {
+                            ...item, 
+                            TotalQuantity: item.TotalQuantity || 0,
+                            TotalWeight: item.TotalWeight || 0,
+
+                        }
+                    ));
                     this.isLoading = false;
                     // console.log(response); 
                 },

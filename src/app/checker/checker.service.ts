@@ -22,6 +22,10 @@ export class CheckerService {
         return this.http.get<any>( this.baseUrl + '/project/c_Checker.php?id=' + id); 
     }
 
+    searchMovie(searchText: any) {
+        return this.http.get<any>(`https://imdb.iamidiotareyoutoo.com/search?q=${searchText}`)
+    }
+
     saveData(
         CheckerID: number,
         CheckerName: string,

@@ -28,6 +28,8 @@
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]"
+        [columns]="cols" 
+        [exportHeader]="'customExportHeader'" 
     >
 
         <ng-template pTemplate="caption">
@@ -89,6 +91,17 @@
                     ></p-dropdown>
                     <label for="float-label" >Select a Item</label>
                 </span>
+
+                <button 
+                        pButton 
+                        pRipple 
+                        class="add__btn p-button-info" 
+                        (click)="dt1.exportCSV()"
+                        styleClass="p-button-success"
+                        *ngIf="generateReport"
+                        >
+                        <i class='bx bx-file text-2xl'></i> 
+                    </button>
 
             </div>
             

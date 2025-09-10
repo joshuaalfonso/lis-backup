@@ -34,33 +34,171 @@
                 </th>
                 <th pSortableColumn="RawMaterial">
                     Product <p-sortIcon field="RawMaterial" />
+                    <p-columnFilter 
+                        field="RawMaterial" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="header">
+                            <div class="px-3 pt-3 pb-0">
+                                <span class="font-bold">Raw Material</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="rawMaterial" 
+                                optionValue="RawMaterial"
+                                optionLabel="RawMaterial"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.RawMaterial }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th>
                     Port Of Discharge
+                    <p-columnFilter 
+                        field="PortOfDischarge" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="portOfDischarge" 
+                                optionValue="PortOfDischarge"
+                                optionLabel="PortOfDischarge"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.PortOfDischarge }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="Broker">
                     Broker <p-sortIcon field="Broker" />
+                    <p-columnFilter 
+                        field="BrokerID" 
+                        matchMode="in" 
+                        display="menu" 
+                        [showMatchModes]="false" 
+                        [showOperator]="false" 
+                        [showAddButton]="false"
+                        [showApplyButton]="false"
+                    >
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect 
+                                [ngModel]="value" 
+                                [options]="broker" 
+                                optionValue="BrokerID"
+                                optionLabel="Broker"
+                                placeholder="Select" 
+                                (onChange)="filter($event.value)" 
+                            >
+                                <ng-template let-option pTemplate="item">
+                                    <div class="inline-block vertical-align-middle">
+                                        <span class="ml-1 mt-1">{{ option.Broker }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
                 </th>
                 <th pSortableColumn="ATA.date">
                     ATA <p-sortIcon field="ATA.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedETA" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="StorageLastFreeDate.date">
-                    Storage Free Time <p-sortIcon field="StorageLastFreeDate.date" />
+                    Storage Free Time 
+                    <p-sortIcon field="StorageLastFreeDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedStorageLastFreeDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="DetentionDate.date">
-                    Detention Free Time <p-sortIcon field="DetentionDate.date" />
+                    Detention Free Time 
+                    <p-sortIcon field="DetentionDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedDetentionDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="DateofDischarge.date">
-                    Date Of Last Charge <p-sortIcon field="DateofDischarge.date" />
+                    Date Of Last Charge 
+                    <p-sortIcon field="DateofDischarge.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedDateofDischarge" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="OriginalDocsAvailavilityDate.date">
-                    Original Documents <p-sortIcon field="OriginalDocsAvailavilityDate.date" />
+                    Original Documents 
+                    <p-sortIcon field="OriginalDocsAvailavilityDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedOriginalDocsAvailavilityDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="LodgementDate.date">
-                    Duties & Taxes <p-sortIcon field="LodgementDate.date" />
+                    Duties & Taxes 
+                    <p-sortIcon field="LodgementDate.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedLodgementDate" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
                 <th pSortableColumn="GatepassRecieved.date">
-                    Gatepass <p-sortIcon field="GatepassRecieved.date" />
+                    Gatepass 
+                    <p-sortIcon field="GatepassRecieved.date" />
+                    <p-columnFilter 
+                        type="date" 
+                        field="FormattedGatepassRecieved" 
+                        display="menu" 
+                        [showAddButton]="false"
+                        [showOperator]="false" 
+                    />
                 </th>
             
                 <th >

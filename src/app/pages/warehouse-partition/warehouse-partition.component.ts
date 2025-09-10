@@ -9,7 +9,16 @@ import { UsersService } from "src/app/pages/users/users.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { SystemLogsService } from "src/app/pages/system-logs/system-logs.service";
 
-
+interface Column {
+    field: string;
+    header: string;
+    customExportHeader?: string;
+  }
+  
+  interface ExportColumn {
+    title: string;
+    dataKey: string;
+  }
 
 @Component({
     selector: 'app-warehouse-partition',
@@ -46,6 +55,10 @@ export class WarehousePartition implements OnInit, OnDestroy {
 
     private subscription: Subscription = new Subscription();
 
+    cols: Column[] = [];
+
+    exportColumns: ExportColumn[] = [];
+
     constructor(
         private WarehousePartitionService: WarehousePartitionService,
         private MessageService: MessageService,
@@ -67,6 +80,16 @@ export class WarehousePartition implements OnInit, OnDestroy {
             'UserID': new FormControl(0)
         });
 
+        this.cols = [
+            { field: 'WarehouseLocation', header: 'Location' },
+            { field: 'Warehouse_Name', header: 'Warehouse' },
+            { field: 'WarehousePartitionName', header: 'Partition' },
+            { field: 'TotalQuantity', header: 'Total Quantity' },
+            { field: 'TotalWeight', header: 'Total Weight' }
+          ];
+      
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+
         this.subscription.add(
             this.auth.user.subscribe(
                 user => {
@@ -77,6 +100,15 @@ export class WarehousePartition implements OnInit, OnDestroy {
                 }
             )
         )
+
+        this.cols = [
+            { field: 'WarehouseLocation', header: 'Location' },
+            { field: 'Warehouse_Name', header: 'Warehouse' },
+            { field: 'TotalQuantity', header: 'Total Quantity' },
+            { field: 'TotalWeight', header: 'Total Weight' }
+          ];
+      
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
 
         this.getData();
         this.getWarehouse();

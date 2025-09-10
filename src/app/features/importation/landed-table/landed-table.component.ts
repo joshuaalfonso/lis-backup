@@ -21,6 +21,10 @@ export class LandedTableComponent implements OnInit{
 
   searchValue: string = '';
 
+  @Input() rawMaterial: any[] = [];
+  @Input() portOfDischarge: any[] = [];
+  @Input() broker: any[] = [];
+
   constructor(
     private route: ActivatedRoute,
   ) {}

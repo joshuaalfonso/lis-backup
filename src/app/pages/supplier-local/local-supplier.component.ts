@@ -89,7 +89,7 @@ export class LocalSupplier implements OnInit, OnDestroy {
     }
 
     getUser() {
-        this.AuthService.user.subscribe(
+        this.AuthService.user.pipe(take(1)).subscribe(
             user => {
                 if (user) {
                     this.userID = user.user_id;

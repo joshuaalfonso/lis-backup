@@ -18,6 +18,7 @@
     *ngIf="checkerError" 
 />
 
+
 <!-- ======= TABLE ======= -->
 <div class="table" *ngIf="!isLoading && checkerError.length === 0">
 
@@ -26,6 +27,9 @@
         [value]="checker" 
         [tableStyle]="{ 'width': '100%'}" 
         [globalFilterFields]="['CheckerName']" 
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
     >
 
         <ng-template pTemplate="caption">
@@ -38,16 +42,6 @@
                     placeholder="Search" 
                     (input)="onGlobalFilter(dt1, $event)"
                 />
-                <!-- <button 
-                    pButton 
-                    pRipple 
-                    class="add__btn" 
-                    (click)="showDialog()"
-                    *ngIf="insert"
-                >
-                    <i class='bx bx-plus'></i> 
-                    <span>Add Item</span>
-                </button> -->
 
             </div>
         </ng-template>
@@ -78,41 +72,6 @@
                 <td  data-title="Contact #">{{ row.ContactNo == 0 ? '-' : row.ContactNo  }}</td>
                 <td  data-title="Email">{{ row.EmailAdd }}</td>
                 <td  data-title="Actions" *ngIf="edit">
-                    <!-- <button 
-                        pButton 
-                        pRipple 
-                        class="edit__btn" 
-                        class="p-button-success p-2 border-round mr-2" 
-                        (click)="onSelect(row)"
-                    >
-                        <i class='bx bx-edit-alt'></i>
-                    </button>
-                    <button 
-                        pButton 
-                        pRipple 
-                        class="delete__btn" 
-                        class="p-button-danger p-2 border-round" 
-                        (click)="confirm2($event, row.CheckerID)"
-                    >
-                        <i class='bx bx-trash' ></i>
-                    </button> -->
-                    <!-- <i class="pi pi-ellipsis-v cursor-pointer hover:text-indigo-500 p-2 border-circle" (click)="action.toggle($event)"></i>
-                    <p-overlayPanel #action>
-                        <div class="actions-overlay">
-                            <p (click)="onSelect(row)">
-                                <svg  width="15px" height="15px">
-                                    <use href="assets/icons/icon-file-edit.svg#Layer_1"></use>
-                                </svg>
-                                Edit
-                            </p>
-                            <p>
-                                <svg  width="15px" height="15px">
-                                <use href="assets/icons/icon-file-delete.svg#delete"></use>
-                            </svg>
-                            Delete
-                        </p>
-                        </div>
-                    </p-overlayPanel> -->
 
                 </td>
             </tr>

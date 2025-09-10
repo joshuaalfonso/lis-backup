@@ -4,6 +4,7 @@
     [modal]="true" 
     [breakpoints]="{ '1200px': '500px' }" 
     [style]="{ width: '35vw' }" 
+    [draggable]="false"
 >
     <form 
         [formGroup]="landedForm" 
@@ -22,13 +23,13 @@
         </div>
   
         <div class="flex justify-content-end ">
-            <button 
-                pButton 
-                pRipple 
+            <p-button 
+                type="submit"
                 label="Submit" 
-                class="bg-indigo-500 border-round border-none submit" 
+                icon="pi pi-check"
                 [disabled]="!landedForm.valid"
-            ></button>
+                [loading]="isSubmitting"
+            />
         </div>
   
     </form>

@@ -324,12 +324,12 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         routerLink: '/transfer',
                         view: false,
                     },
-                    {
-                        title: 'Inspection',
-                        icon: 'assets/icons/icon-microscope.svg',
-                        routerLink: '/rawmats-inspection',
-                        view: false,
-                    }
+                    // {
+                    //     title: 'Inspection',
+                    //     icon: 'assets/icons/icon-microscope.svg',
+                    //     routerLink: '/rawmats-inspection',
+                    //     view: false,
+                    // }
                 ]
             }, 
             {
@@ -489,9 +489,9 @@ export class SidebarComponent implements OnInit, OnDestroy{
                         case '3.5.1' :
                             this.menus[2].subMenu[4].view = true;
                             break
-                        case '3.6.1' :
-                            this.menus[2].subMenu[5].view = true;
-                            break
+                        // case '3.6.1' :
+                        //     this.menus[2].subMenu[5].view = true;
+                        //     break
                         case '4.1.1' :
                             this.menus[3].subMenu[0].subMenu[0].view = true;
                             break

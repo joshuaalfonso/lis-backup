@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { RawMaterialsService } from '../../raw-materials.service';
-import { RawMaterial } from '../../raw-materials.model';
+import { RawMaterial, Uom } from '../../raw-materials.model';
+import { RawMaterialCategoryList } from 'src/app/pages/raw-material-category/raw-material-category.model';
+import { RawMaterialPackagingList } from 'src/app/pages/raw-material-packaging/raw-material-packaging.model';
 
 @Component({
   selector: 'app-raw-materials-modal',
@@ -15,6 +17,8 @@ export class RawMaterialsModalComponent implements OnChanges{
   @Input() visible: boolean = false;
   @Input() selectedRawMaterial: any;
   @Input() userID!: string;
+  @Input() rawMaterialCategory: RawMaterialCategoryList[] =[];
+  @Input() UnitOfMeasure: RawMaterialPackagingList[] =[];
   @Output() getData = new EventEmitter<void>();
   @Output() closeDialog = new EventEmitter<void>();
 
@@ -28,6 +32,8 @@ export class RawMaterialsModalComponent implements OnChanges{
     'MinimumQuantity': new FormControl(null, Validators.required),
     'MinimumWeight': new FormControl(null, Validators.required),
     'Category': new FormControl(null, Validators.required),
+    'CategoryID': new FormControl(null, Validators.required),
+    'PackagingID': new FormControl(null, Validators.required),
     'UserID': new FormControl(0),
   });
 
@@ -43,6 +49,7 @@ export class RawMaterialsModalComponent implements OnChanges{
         ...this.selectedRawMaterial,
         UserID: this.userID
       })
+      console.log(this.selectedRawMaterial)
     } else {
       this.rawMatsForm.reset({
         RawMaterialID: 0,

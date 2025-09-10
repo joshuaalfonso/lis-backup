@@ -11,3 +11,7 @@
     border-radius: 5px;
     padding: 8px 10px;
 }
+
+:host ::ng-deep .p-dropdown .p-dropdown-label {
+    border: none;
+}
